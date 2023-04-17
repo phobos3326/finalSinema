@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/item_view"
     android:layout_width="wrap_content"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_margin="2dp"
     app:cardBackgroundColor="@color/white"
 
@@ -14,27 +14,29 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="150dp"
+        android:layout_width="111dp"
         android:layout_height="match_parent">
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imageView"
             android:layout_width="111dp"
             android:layout_height="156dp"
             android:scaleType="center"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/avatars" />
+            tools:srcCompat="@tools:sample/avatars"
+            app:shapeAppearanceOverlay="@style/RoundedSquare"
+            />
 
 
         <TextView
             android:id="@+id/back"
             android:layout_width="17dp"
             android:layout_height="9dp"
-
             android:layout_marginStart="88dp"
             android:layout_marginTop="6dp"
             android:background="@color/purple_700"
+            android:textColor="@color/black"
 
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

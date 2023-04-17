@@ -6,20 +6,21 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import com.example.skillsinema.R
-import com.example.skillsinema.adapter.ViewPagerAdapter
-import com.example.skillsinema.databinding.FragmentMainBinding
+import androidx.lifecycle.lifecycleScope
+import com.example.skillsinema.adapter.MyAdapter
 
-class MainFragment : Fragment(), ViewPagerAdapter.ConditionViewPager {
+import com.example.skillsinema.databinding.FragmentMainBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+
+class MainFragment : Fragment() {
 
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
-
-
-    private val data = mutableListOf<String>()
-
-
+    private val pageAdapter = MyAdapter()
+val scope = CoroutineScope(Dispatchers.Default)
 
     companion object {
         fun newInstance() = MainFragment()
@@ -32,8 +33,7 @@ class MainFragment : Fragment(), ViewPagerAdapter.ConditionViewPager {
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         // TODO: Use the ViewModel
 
-//        binding.viewPager.adapter =ViewPagerAdapter(data,this)
-        addToList()
+
 
     }
 
@@ -43,26 +43,22 @@ class MainFragment : Fragment(), ViewPagerAdapter.ConditionViewPager {
     ): View {
 
         _binding = FragmentMainBinding.inflate(inflater, container,false)
-        binding.viewPager.adapter =ViewPagerAdapter(data,this)
-
 
 
         return (binding.root)
 
     }
 
-    private fun addToList() {
-        for (item in 1..20) {
-            data.add("item $item")
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+
+            binding.viewPager.adapter =pageAdapter
+            pageAdapter.addToList()
         }
-    }
 
-    override fun condition(position: Int, fullSize: Int) {
-
-        if (position == fullSize) {
-
-        }
-        Toast.makeText(requireContext(), "$position / $fullSize", Toast.LENGTH_SHORT).show()
 
     }
 

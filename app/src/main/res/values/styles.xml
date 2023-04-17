@@ -7,4 +7,8 @@
         <item name="colorAccent">@color/purple_700</item>
     </style>
 
+    <style name="RoundedSquare">
+        <item name="cornerSize">10%</item>
+    </style>
+
 </resources>
