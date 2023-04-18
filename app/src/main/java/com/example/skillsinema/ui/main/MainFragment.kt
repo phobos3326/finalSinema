@@ -56,7 +56,7 @@ val scope = CoroutineScope(Dispatchers.Default)
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
 
             binding.viewPager.adapter =pageAdapter
-            pageAdapter.addToList()
+            pageAdapter.setData()
         }
 
 
