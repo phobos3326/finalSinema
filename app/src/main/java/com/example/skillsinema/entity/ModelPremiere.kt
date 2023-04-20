@@ -1,16 +1,12 @@
 package com.example.skillsinema.entity
 
 
+import com.example.skillsinema.adapter.ModelPremiereDTO
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class ModelPremiere(
-    @Json(name = "items")
-    val items: List<Item>,
-    @Json(name = "total")
-    val total: Int
-) {
+class ModelPremiere(override val premiere: List<Item>) :ModelPremiereDTO{
     @JsonClass(generateAdapter = true)
     data class Item(
         @Json(name = "countries")

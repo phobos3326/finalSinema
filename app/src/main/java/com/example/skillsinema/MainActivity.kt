@@ -6,8 +6,9 @@ import androidx.fragment.app.Fragment
 import com.example.skillsinema.databinding.ActivityMainBinding
 import com.example.skillsinema.ui.main.MainFragment
 import com.example.skillsinema.ui.main.ThirdFragment
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding

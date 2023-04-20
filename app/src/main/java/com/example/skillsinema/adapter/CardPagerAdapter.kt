@@ -7,6 +7,8 @@ import com.example.skillsinema.adapter.Const.END
 import com.example.skillsinema.adapter.Const.NOEND
 import com.example.skillsinema.databinding.ItemBinding
 import com.example.skillsinema.databinding.SecondItemBinding
+import com.example.skillsinema.entity.ModelPremiere
+import javax.inject.Inject
 
 /*
 class ViewPagerAdapter() :
@@ -46,17 +48,18 @@ class ViewPagerAdapter() :
 }
 
 class ViewPagerViewHolder(val binding: ItemBinding) : RecyclerView.ViewHolder(binding.root)*/
-class MyAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MyAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    var myViewType = MyViewType(1, 0, hasImage = HasEnd.FALSE)
+    private var premiere: List<ModelPremiere.Item> = emptyList()
+    var myViewType = MyViewType(1, "0", hasImage = HasEnd.FALSE)
     var data = mutableListOf<MyViewType>()
 
     //var photoUrl=""
-    fun setData() {
-        addToList()
-        notifyDataSetChanged()
-    }
-
+    /* fun setData() {
+         addToList()
+         notifyDataSetChanged()
+     }
+ */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding = ItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         val binding2 = SecondItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -92,19 +95,20 @@ class MyAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return if (data[position].hasImage == HasEnd.FALSE) NOEND else END
     }
 
-    var a = myViewType
-    fun addToList() {
+
+    fun addToList(prem: List<ModelPremiere.Item>) {
+        this.premiere=prem
+        var a = myViewType
         for (item in 1..20) {
-            a.title=item
-            if (item!=20){
+            a.title = premiere[item].premiereRu
+            if (item != 20) {
                 data.add(myViewType.copy())
-            }else{
-                a.hasImage= HasEnd.TRUE
+            } else {
+                a.hasImage = HasEnd.TRUE
                 data.add(myViewType.copy())
             }
-
-
         }
+        notifyDataSetChanged()
     }
 
 }
@@ -113,7 +117,7 @@ class MyViewHolder(var binding1: ItemBinding) : RecyclerView.ViewHolder(binding1
     fun bind(myViewType: MyViewType) {
         myViewType.typePosition = NOEND
         myViewType.hasImage = HasEnd.FALSE
-        binding1.textView.text = myViewType.title.toString()
+        binding1.textView.text = myViewType.title
     }
 }
 
@@ -121,7 +125,7 @@ class MyViewHolder2(var binding2: SecondItemBinding) : RecyclerView.ViewHolder(b
     fun bind(myViewType: MyViewType) {
         myViewType.typePosition = END
         myViewType.hasImage = HasEnd.TRUE
-        binding2.textView2.text = myViewType.title.toString()
+        binding2.textView2.text = myViewType.title
     }
 }
 
@@ -131,8 +135,8 @@ enum class HasEnd {
 
 data class MyViewType(
     var typePosition: Int,
-    var title: Int,
-    var hasImage: HasEnd
+    var title: String,
+    var hasImage: HasEnd,
 )
 
 private object Const {
