@@ -7,7 +7,7 @@ import com.example.skillsinema.adapter.Const.END
 import com.example.skillsinema.adapter.Const.NOEND
 import com.example.skillsinema.databinding.ItemBinding
 import com.example.skillsinema.databinding.SecondItemBinding
-import com.example.skillsinema.entity.ModelPremiere
+
 import javax.inject.Inject
 
 /*
@@ -50,7 +50,7 @@ class ViewPagerAdapter() :
 class ViewPagerViewHolder(val binding: ItemBinding) : RecyclerView.ViewHolder(binding.root)*/
 class MyAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var premiere: List<ModelPremiere.Item> = emptyList()
+    //private var premiere: List<ModelPremiere.Item> = emptyList()
     var myViewType = MyViewType(1, "0", hasImage = HasEnd.FALSE)
     var data = mutableListOf<MyViewType>()
 
@@ -96,7 +96,7 @@ class MyAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
 
-    fun addToList(prem: List<ModelPremiere.Item>) {
+/*    fun addToList(prem: List<ModelPremiere.Item>) {
         this.premiere=prem
         var a = myViewType
         for (item in 1..20) {
@@ -109,7 +109,7 @@ class MyAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.ViewHo
             }
         }
         notifyDataSetChanged()
-    }
+    }*/
 
 }
 

@@ -1,22 +1,18 @@
 package com.example.skillsinema.entity
 
 
-/*
-import com.example.skillsinema.adapter.ModelPremiereDTO
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-class ModelPremiere(
-    @Json(name = "premiere")
-    override val premiere: List<Item>
-    ) :ModelPremiereDTO{
-    @JsonClass(generateAdapter = true)
+interface Model {
+    val items: List<Item>
+
     data class Item(
         @Json(name = "countries")
         val countries: List<Country>,
         @Json(name = "duration")
-        val duration: Int,
+        val duration: Int?,
         @Json(name = "genres")
         val genres: List<Genre>,
         @Json(name = "kinopoiskId")
@@ -32,18 +28,18 @@ class ModelPremiere(
         @Json(name = "premiereRu")
         val premiereRu: String,
         @Json(name = "year")
-        val year: Int
-    ) {
-        @JsonClass(generateAdapter = true)
+        val year: Int)
+
+    {
+
         data class Country(
             @Json(name = "country")
             val country: String
         )
 
-        @JsonClass(generateAdapter = true)
         data class Genre(
             @Json(name = "genre")
             val genre: String
         )
     }
-}*/
+}

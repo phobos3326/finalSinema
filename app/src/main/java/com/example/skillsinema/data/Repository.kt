@@ -1,6 +1,8 @@
 package com.example.skillsinema.data
 
-import com.example.skillsinema.entity.ModelPremiere
+import com.example.skillsinema.adapter.DataDTO
+import com.example.skillsinema.entity.Model
+
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -22,7 +24,7 @@ import javax.inject.Inject
 class Repository @Inject constructor() {
 
     @Provides
-    suspend fun getPremiere(): ModelPremiere {
+    suspend fun getPremiere(): Model {
         delay(2000)
         return retrofitInstance().getFilms()
     }
@@ -41,7 +43,7 @@ class Repository @Inject constructor() {
         .add(KotlinJsonAdapterFactory())
         .build()
 
-    fun retrofit(): Retrofit? {
+    private fun retrofit(): Retrofit? {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
@@ -55,7 +57,7 @@ class Repository @Inject constructor() {
     interface ApiInterface {
         @Headers("X-API-KEY: $api_key")
         @GET("films/premieres?year=2023&month=APRIL")
-        suspend fun getFilms(): ModelPremiere
+        suspend fun getFilms(): DataDTO
 
 
 

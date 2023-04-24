@@ -9,7 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.example.skillsinema.adapter.Adapter
 import com.example.skillsinema.adapter.MyAdapter
+import com.example.skillsinema.data.Repository
 
 import com.example.skillsinema.databinding.FragmentMainBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -17,19 +19,22 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainFragment : Fragment() {
+class MainFragment @Inject constructor() : Fragment() {
+
+
 
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
-    private val pageAdapter = MyAdapter()
+    private val adapter = Adapter()
     val scope = CoroutineScope(Dispatchers.Default)
 
-    private val mainViewModel:MainViewModel by viewModels()
+    private val mainViewModel: MainViewModel by viewModels()
 
     companion object {
-        fun newInstance() = MainFragment()
+       // fun newInstance() = MainFragment()
     }
 
     private lateinit var viewModel: MainViewModel
@@ -50,7 +55,7 @@ class MainFragment : Fragment() {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
 
 
-        return (binding.root)
+        return binding.root
 
     }
 
@@ -59,13 +64,17 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.modelPremiere.collect {
-                binding.viewPager.adapter = pageAdapter
+           // val repository = Repository().getPremiere().items
 
-                pageAdapter.addToList(it)
+            mainViewModel.modelPremiere.collect {
+                binding.viewPager.adapter = adapter
+
+                adapter.setData(it)
                 Log.d("TAG", "${it.size}")
 
             }
+
+
 
         }
 

@@ -5,7 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.skillsinema.data.Repository
 import com.example.skillsinema.domain.GetPremiereUseCase
-import com.example.skillsinema.entity.ModelPremiere
+import com.example.skillsinema.entity.Model
+
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -17,7 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(private val data: GetPremiereUseCase) : ViewModel() {
-    private val _premiereModel = MutableStateFlow<List<ModelPremiere.Item>>(emptyList())
+    private val _premiereModel = MutableStateFlow<List<Model.Item>>(emptyList())
     val modelPremiere = _premiereModel.asStateFlow()
 
     init {
@@ -29,11 +30,11 @@ class MainViewModel @Inject constructor(private val data: GetPremiereUseCase) : 
     private fun loadPremieres() {
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching {
-                data.executeGetPremiere().premiere
+                data.executeGetPremiere().items
             }.fold(
                 onSuccess = {
                     _premiereModel.value = it
-                    Log.d("MainViewModel", (it ?: " load").toString())
+                    //Log.d("MainViewModel", (it ?: " load").toString())
                 },
                 onFailure = { Log.d("MainViewModel", it.message ?: "not load") }
             )
