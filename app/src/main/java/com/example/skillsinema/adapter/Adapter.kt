@@ -17,7 +17,7 @@ class Adapter @Inject constructor():RecyclerView.Adapter<Adapter.ViewHolder>() {
 
     private var data:List<Model.Item> = emptyList()
 
-fun setData(premiere: List<Model.Item>){
+fun addData(premiere: List<Model.Item>){
     this.data =premiere
     notifyDataSetChanged()
 }

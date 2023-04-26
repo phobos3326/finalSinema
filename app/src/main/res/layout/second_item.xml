@@ -2,18 +2,39 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="111dp"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="показать все"
+    <View
+        android:id="@+id/ellipse_1"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/ellipse_1"
+        android:elevation="51dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.089"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.099" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <View
+        android:id="@+id/arrow"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/arrow"
+        app:layout_constraintBottom_toBottomOf="@+id/ellipse_1"
+        app:layout_constraintEnd_toEndOf="@+id/ellipse_1"
+        app:layout_constraintStart_toStartOf="@+id/ellipse_1"
+        app:layout_constraintTop_toTopOf="@+id/ellipse_1" />
+
+
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
