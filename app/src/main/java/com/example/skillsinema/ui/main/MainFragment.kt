@@ -77,7 +77,7 @@ class MainFragment @Inject constructor() : Fragment() {
     }
 
 
-    private fun onItemClick(item: MyViewType) {
+    private fun onItemClick(item: Model.Item) {
         bundle.putInt("Arg", item.kinopoiskId)
         findNavController().navigate(R.id.action_mainFragment_to_itemInfoFragment, bundle)
 

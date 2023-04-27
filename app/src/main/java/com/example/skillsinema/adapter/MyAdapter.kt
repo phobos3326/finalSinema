@@ -24,7 +24,7 @@ class MyAdapter @Inject constructor(private val onClick: (Model.Item) -> Unit) :
         val binding = ItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         val binding2 = SecondItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return if (viewType == NOEND) {
-            MyViewHolder(binding,onClick)
+            MyViewHolder(binding)
         } else {
             MyViewHolder2(binding2)
         }
@@ -78,7 +78,7 @@ class MyAdapter @Inject constructor(private val onClick: (Model.Item) -> Unit) :
 }
 
 class MyViewHolder @Inject constructor(
-    private val onClick: (Model.Item) -> Unit,
+   //private val onClick: (Model.Item) -> Unit,
     private var binding1: ItemBinding
 ) : RecyclerView.ViewHolder(binding1.root) {
     fun bind(myViewType: MyViewType) {

@@ -16,8 +16,8 @@ class ItemInfoFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(com.example.skillsinema.ARG_PARAM1)
-            param2 = it.getString(com.example.skillsinema.ARG_PARAM2)
+           // param1 = it.getString(com.example.skillsinema.ARG_PARAM1)
+         //   param2 = it.getString(com.example.skillsinema.ARG_PARAM2)
         }
     }
 
@@ -43,8 +43,8 @@ class ItemInfoFragment : Fragment() {
         fun newInstance(param1: String, param2: String) =
             ItemInfoFragment().apply {
                 arguments = Bundle().apply {
-                    putString(com.example.skillsinema.ARG_PARAM1, param1)
-                    putString(com.example.skillsinema.ARG_PARAM2, param2)
+                    //putString(com.example.skillsinema.ARG_PARAM1, param1)
+                    //putString(com.example.skillsinema.ARG_PARAM2, param2)
                 }
             }
     }
