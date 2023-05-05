@@ -26,9 +26,9 @@ class MainActivity : AppCompatActivity() {
 
        binding.bottomNavigationView.setOnNavigationItemSelectedListener {
             when(it.itemId){
-                R.id.home->setCurrentFragment(firstFragment)
-                R.id.find->setCurrentFragment(secondFragment)
-                R.id.person->setCurrentFragment(thirdFragment)
+                R.id.home_fragment->setCurrentFragment(firstFragment)
+                R.id.find_fragment->setCurrentFragment(secondFragment)
+                R.id.person_fragment->setCurrentFragment(thirdFragment)
 
             }
             true
@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setCurrentFragment(fragment: Fragment)=
         supportFragmentManager.beginTransaction().apply {
-            replace(R.id.flFragment,fragment)
+            replace(R.id.nav_host_fragment,fragment)
             commit()
         }
 

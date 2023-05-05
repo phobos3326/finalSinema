@@ -1,7 +1,9 @@
 package com.example.skillsinema.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.skillsinema.adapter.Const.END
 import com.example.skillsinema.adapter.Const.NOEND
@@ -16,7 +18,9 @@ class MyAdapter @Inject constructor(private val onClick: (Model.Item) -> Unit) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var premiere: List<Model.Item> = emptyList()
-    var myViewType = MyViewType(0, 1, "0", hasImage = HasEnd.FALSE)
+    var myViewType = MyViewType(0, 1, "0", HasEnd.FALSE, "")
+
+    //lateinit var myViewType : MyViewType
     var data = mutableListOf<MyViewType>()
 
 
@@ -31,11 +35,28 @@ class MyAdapter @Inject constructor(private val onClick: (Model.Item) -> Unit) :
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val item = data.getOrNull(position)
+        val item = premiere.getOrNull(position)
 
-        if (getItemViewType(position) == NOEND) {
-            (holder as MyViewHolder).bind(data[position])
-        } else (holder as MyViewHolder2).bind(data[position])
+        /*  if (getItemViewType(position) == NOEND) {
+              (holder as MyViewHolder).bind(data[position])
+          } else (holder as MyViewHolder2).bind(data[position])*/
+
+        when (holder.itemViewType) {
+            NOEND -> {
+                val viewHolder = holder as MyViewHolder
+                viewHolder.bind(data[position])
+                viewHolder.itemView.setOnClickListener {
+
+                    onClick(item!!)
+                }
+            }
+            END -> {
+                val viewHolder = holder as MyViewHolder2
+                viewHolder.itemView.setOnClickListener {
+                    Toast.makeText(holder.itemView.context, "Clicked: ", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
 
 
     }
@@ -50,22 +71,35 @@ class MyAdapter @Inject constructor(private val onClick: (Model.Item) -> Unit) :
     }
 
     fun addToList(prem: List<Model.Item>) {
-        this.premiere = prem
-        premiere.forEachIndexed { index, it ->
-            if (index < 20) {
-                myViewType.hasImage = HasEnd.FALSE
-                myViewType.title = it.nameRu
-                myViewType.itemPosition = index
-                myViewType.item = it
-                data.add(myViewType.copy())
+
+        if (premiere.isEmpty()) {
+            this.premiere = prem
+            premiere.forEachIndexed { index, it ->
+                if (index < 20) {
+                    myViewType.hasImage = HasEnd.FALSE
+                    myViewType.title = it.nameRu
+                    myViewType.itemPosition = index
+                    myViewType.item = it
+
+                    val sb = StringBuilder()
+                    it.genres.forEach {
+                        sb.append(it)
+                    }
+                    myViewType.genre=sb.toString()
+
+                    Log.d("TAGGENRE", it.genres.joinToString())
+                    data.add(myViewType.copy())
 
 
-            } else if (index == 21) {
-                myViewType.hasImage = HasEnd.TRUE
-                myViewType.title = "посмотреть все"
-                data.add(myViewType.copy())
+                } else if (index == 21) {
+                    myViewType.hasImage = HasEnd.TRUE
+                    myViewType.title = "посмотреть все"
+                    data.add(myViewType.copy())
+                }
             }
         }
+
+
         notifyDataSetChanged()
 
 
@@ -78,19 +112,20 @@ class MyAdapter @Inject constructor(private val onClick: (Model.Item) -> Unit) :
 }
 
 class MyViewHolder @Inject constructor(
-   //private val onClick: (Model.Item) -> Unit,
+    //private val onClick: (Model.Item) -> Unit,
     private var binding1: ItemBinding
 ) : RecyclerView.ViewHolder(binding1.root) {
     fun bind(myViewType: MyViewType) {
         myViewType.typePosition = NOEND
         myViewType.hasImage = HasEnd.FALSE
         binding1.textView.text = myViewType.title
+        binding1.textViewGenre.text = myViewType.genre
 
-       /* binding1.root.setOnClickListener {
-            myViewType.let {
-                onClick(it.item)
-            }
-        }*/
+        /* binding1.root.setOnClickListener {
+             myViewType.let {
+                 onClick(it.item)
+             }
+         }*/
 
     }
 
@@ -121,8 +156,11 @@ data class MyViewType(
     var typePosition: Int,
     var title: String,
     var hasImage: HasEnd,
+    var genre: String,
+
 
     ) {
+    //lateinit var genre:String
     lateinit var item: Model.Item
 }
 
