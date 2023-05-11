@@ -2,7 +2,12 @@ package com.example.skillsinema
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.example.skillsinema.databinding.ActivityMainBinding
 import com.example.skillsinema.ui.main.MainFragment
 import com.example.skillsinema.ui.main.ThirdFragment
@@ -18,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val firstFragment=MainFragment()
+    /*    val firstFragment=MainFragment()
         val secondFragment=SecondFragment()
         val thirdFragment= ThirdFragment()
 
@@ -32,7 +37,21 @@ class MainActivity : AppCompatActivity() {
 
             }
             true
-        }
+        }*/
+
+
+        val navView =binding.bottomNavigationView
+        val navController =findNavController(R.id.nav_host_fragment)
+       val appBarConfiguration = AppBarConfiguration(
+           setOf(
+               R.id.home_fragment, R.id.find_fragment, R.id.person_fragment
+           )
+       )
+
+        setupActionBarWithNavController(navController,appBarConfiguration)
+        navView.setupWithNavController(navController)
+
+
 
     }
 
