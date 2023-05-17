@@ -1,7 +1,9 @@
 package com.example.skillsinema.data
 
 import com.example.skillsinema.adapter.DataDTO
+import com.example.skillsinema.adapter.FilmDTO
 import com.example.skillsinema.entity.Model
+import com.example.skillsinema.entity.ModelFilmDetails
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -16,6 +18,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Headers
+import retrofit2.http.Path
 import retrofit2.http.Query
 import javax.inject.Inject
 
@@ -23,11 +26,19 @@ import javax.inject.Inject
 @InstallIn(SingletonComponent::class)
 class Repository @Inject constructor() {
 
+   // @Inject private val filmId: Int? = null
+
     @Provides
     suspend fun getPremiere(): Model {
         delay(2000)
         return retrofitInstance().getFilms()
     }
+
+    @Provides
+    suspend fun getFilmDetails(filmId: Int): ModelFilmDetails{
+        return retrofitInstance2().filmDetails(filmId)
+    }
+
 
     private val BASE_URL = "https://kinopoiskapiunofficial.tech/api/v2.2/"
 
@@ -52,6 +63,7 @@ class Repository @Inject constructor() {
     }
 
     fun retrofitInstance(): ApiInterface = retrofit()!!.create(ApiInterface::class.java)
+    fun retrofitInstance2(): ApiInterface2 = retrofit()!!.create(ApiInterface2::class.java)
 
 
     interface ApiInterface {
@@ -60,9 +72,17 @@ class Repository @Inject constructor() {
         suspend fun getFilms(): DataDTO
 
 
+    }
 
 
+    interface ApiInterface2 {
 
+        @Headers("X-API-KEY: $api_key")
+        @GET("films/{id}")
+
+        suspend fun filmDetails(
+            @Path(value = "id") id:Int
+        ): FilmDTO
 
     }
 

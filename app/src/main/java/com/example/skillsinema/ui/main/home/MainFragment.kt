@@ -1,4 +1,4 @@
-package com.example.skillsinema.ui.main
+package com.example.skillsinema.ui.main.home
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -7,40 +7,37 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.example.skillsinema.R
-import com.example.skillsinema.adapter.Adapter
 import com.example.skillsinema.adapter.MyAdapter
-import com.example.skillsinema.adapter.MyViewType
-import com.example.skillsinema.data.Repository
 
 import com.example.skillsinema.databinding.FragmentMainBinding
 import com.example.skillsinema.entity.Model
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainFragment @Inject constructor() : Fragment() {
 
 
-
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
-    private val adapter = MyAdapter {onItemClick(it)}
+    private val adapter = MyAdapter { onItemClick(it) }
     val scope = CoroutineScope(Dispatchers.Default)
 
     private val mainViewModel: MainViewModel by viewModels()
+    //val viewModel: MainViewModel by hiltNavGraphViewModels(R.id.my_graph)
 
-    val bundle =Bundle()
+    val bundle = Bundle()
 
     companion object {
-       // fun newInstance() = MainFragment()
+        // fun newInstance() = MainFragment()
     }
 
     private lateinit var viewModel: MainViewModel
@@ -58,6 +55,10 @@ class MainFragment @Inject constructor() : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
+
+
+       // obtainNavHostFragment(parentFragmentManager,"home_fragment", R.navigation.home_nav_graph,)
+
         return binding.root
     }
 
@@ -81,6 +82,24 @@ class MainFragment @Inject constructor() : Fragment() {
         bundle.putInt("Arg", item.kinopoiskId)
         findNavController().navigate(R.id.action_mainFragment_to_itemInfoFragment, bundle)
 
+    }
+
+    private fun obtainNavHostFragment(
+        fragmentManager: FragmentManager,
+        fragmentTag: String,
+        navGraphId: Int,
+        containerId: Int
+    ): NavHostFragment {
+        // If the Nav Host fragment exists, return it
+        val existingFragment = fragmentManager.findFragmentByTag(fragmentTag) as NavHostFragment?
+        existingFragment?.let { return it }
+
+        // Otherwise, create it and return it.
+        val navHostFragment = NavHostFragment.create(navGraphId)
+        fragmentManager.beginTransaction()
+            .add(containerId, navHostFragment, fragmentTag)
+            .commitNow()
+        return navHostFragment
     }
 
 }

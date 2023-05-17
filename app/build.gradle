@@ -84,6 +84,7 @@ dependencies {
 
     implementation "com.google.dagger:hilt-android:2.44"
     kapt "com.google.dagger:hilt-compiler:2.44"
+    implementation 'androidx.hilt:hilt-navigation-fragment:1.0.0'
 
 
     implementation(platform("com.squareup.okhttp3:okhttp-bom:4.10.0"))

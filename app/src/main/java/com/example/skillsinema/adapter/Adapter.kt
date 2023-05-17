@@ -11,6 +11,7 @@ import kotlinx.coroutines.NonDisposableHandle
 import kotlinx.coroutines.NonDisposableHandle.parent
 import javax.inject.Inject
 
+/*
 class Adapter @Inject constructor():RecyclerView.Adapter<Adapter.ViewHolder>() {
 
 
@@ -39,4 +40,4 @@ fun addData(premiere: List<Model.Item>){
     override fun getItemCount(): Int {
        return data.size
     }
-}
+}*/

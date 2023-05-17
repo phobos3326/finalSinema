@@ -1,14 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.ItemInfoFragment">
+    tools:context=".ui.main.ItemInfo.ItemInfoFragment"
+    tools:layout_editor_absoluteX="1dp"
+    tools:layout_editor_absoluteY="1dp">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <ImageView
+        android:id="@+id/filmPreviewImageView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="информация о фильме" />
+        android:layout_height="400dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/avatars" />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/filmManeTextView"
+        android:layout_width="280dp"
+        android:layout_height="70dp"
+        android:gravity="center_horizontal"
+        android:text="TextView"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toBottomOf="@+id/filmPreviewImageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="@+id/filmPreviewImageView"
+        app:layout_constraintTop_toTopOf="@+id/filmPreviewImageView"
+        app:layout_constraintVertical_bias="0.681" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

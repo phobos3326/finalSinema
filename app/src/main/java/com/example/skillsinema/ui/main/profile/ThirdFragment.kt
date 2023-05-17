@@ -1,4 +1,4 @@
-package com.example.skillsinema.ui.main
+package com.example.skillsinema.ui.main.profile
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
