@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.skillsinema.data.Repository
 import com.example.skillsinema.domain.GetFilmDetailUseCase
 import com.example.skillsinema.entity.ModelFilmDetails
+import dagger.Provides
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,11 +16,16 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ItemInfoViewModel @Inject constructor(private  val dataFilm:GetFilmDetailUseCase, val repository: Repository):ViewModel() {
-    private val _film= MutableLiveData<ModelFilmDetails.Film>()
-    val film =_film
+class ItemInfoViewModel @Inject constructor(private val dataFilm: GetFilmDetailUseCase) :
+    ViewModel() {
+    private val _film = MutableLiveData<ModelFilmDetails.Film>()
+    //private val _film= MutableStateFlow<ModelFilmDetails.Film>()
 
-    var id:Int =0
+
+    val film = _film
+
+
+    var id: Int = 0
 
     init {
         viewModelScope.launch {
@@ -28,21 +34,23 @@ class ItemInfoViewModel @Inject constructor(private  val dataFilm:GetFilmDetailU
         }
     }
 
-     fun loadFilm( ) {
 
-       // film.value?.kinopoiskId=id
+    fun loadFilm() {
 
+        // film.value?.kinopoiskId=id
 
 
         viewModelScope.launch(Dispatchers.Default) {
-           // repository.getFilmDetails(id).film
+            // repository.getFilmDetails(id).film
             kotlin.runCatching {
-                dataFilm.executeGetFilm(id).film
+                dataFilm.executeGetFilm(id)
             }.fold(
                 onSuccess = {
-                    _film.value=it
+                    _film.value = it.film
                 },
-                onFailure = { Log.d("ItemInfoViewModel", it.message ?: "not load" )}
+                onFailure = {
+                    Log.d("ItemInfoViewModel", it.message ?: "not load")
+                }
             )
         }
     }

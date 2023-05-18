@@ -6,6 +6,7 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 interface ModelFilmDetails {
+    @Json(name = "film")
     val film:Film
 
     data class Film(

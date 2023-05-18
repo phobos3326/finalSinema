@@ -76,10 +76,8 @@ class Repository @Inject constructor() {
 
 
     interface ApiInterface2 {
-
         @Headers("X-API-KEY: $api_key")
         @GET("films/{id}")
-
         suspend fun filmDetails(
             @Path(value = "id") id:Int
         ): FilmDTO

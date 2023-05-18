@@ -19,11 +19,11 @@
         tools:src="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/filmManeTextView"
+        android:id="@+id/filmTextView"
         android:layout_width="280dp"
         android:layout_height="70dp"
         android:gravity="center_horizontal"
-        android:text="TextView"
+
         android:textSize="40sp"
         app:layout_constraintBottom_toBottomOf="@+id/filmPreviewImageView"
         app:layout_constraintEnd_toEndOf="parent"

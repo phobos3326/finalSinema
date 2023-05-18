@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
+
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
@@ -32,7 +33,7 @@ class MainFragment @Inject constructor() : Fragment() {
     val scope = CoroutineScope(Dispatchers.Default)
 
     private val mainViewModel: MainViewModel by viewModels()
-    //val viewModel: MainViewModel by hiltNavGraphViewModels(R.id.my_graph)
+   // val mainViewModel: MainViewModel by hiltNavGraphViewModels(R.id.nav_graph)
 
     val bundle = Bundle()
 

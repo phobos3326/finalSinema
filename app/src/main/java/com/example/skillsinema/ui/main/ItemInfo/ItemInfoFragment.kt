@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.example.skillsinema.R
 import com.example.skillsinema.databinding.FragmentItemInfoBinding
+import com.example.skillsinema.entity.ModelFilmDetails
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -54,10 +55,11 @@ class ItemInfoFragment : Fragment() {
 
         lifecycleScope.launch {
             viewModel.id=id!!
-            viewModel.film.observe(viewLifecycleOwner, Observer {
+            viewModel.film.observe(viewLifecycleOwner, Observer<ModelFilmDetails.Film> {
+
 
                 //viewModel.loadFilm()
-                binding.filmManeTextView.text = it.nameRu
+                binding.filmTextView.text= it.nameRu
             })
 
         }

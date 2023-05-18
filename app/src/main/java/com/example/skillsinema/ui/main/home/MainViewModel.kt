@@ -15,6 +15,7 @@ import com.example.skillsinema.domain.GetPremiereUseCase
 import com.example.skillsinema.entity.Model
 import dagger.Module
 import dagger.Provides
+import dagger.assisted.Assisted
 import dagger.hilt.InstallIn
 
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,7 +32,7 @@ import javax.inject.Singleton
 class MainViewModel @Inject constructor(
    // @ApplicationContext private val context: ApplicationContext,
     private val data: GetPremiereUseCase,
-   // private val navController: NavController
+    //private val navController: NavController
 ) : ViewModel() {
     private val _premiereModel = MutableStateFlow<List<Model.Item>>(emptyList())
     val modelPremiere = _premiereModel.asStateFlow()
