@@ -38,7 +38,7 @@ class SecondFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragmen
         //
-        newInstance(param1, param2)
+        //newInstance(param1, param2)
         return inflater.inflate(R.layout.fragment_second, container, false)
     }
 

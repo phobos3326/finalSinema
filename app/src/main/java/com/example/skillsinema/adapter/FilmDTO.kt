@@ -1,5 +1,7 @@
 package com.example.skillsinema.adapter
 
 import com.example.skillsinema.entity.ModelFilmDetails
+import com.squareup.moshi.JsonClass
 
-class FilmDTO() :ModelFilmDetails
+@JsonClass(generateAdapter = true)
+class FilmDTO(override val film: ModelFilmDetails.Film) :ModelFilmDetails

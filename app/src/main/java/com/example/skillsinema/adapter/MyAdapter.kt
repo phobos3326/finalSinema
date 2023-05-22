@@ -1,10 +1,12 @@
 package com.example.skillsinema.adapter
 
+import android.media.Rating
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.skillsinema.adapter.Const.END
 import com.example.skillsinema.adapter.Const.NOEND
 import com.example.skillsinema.databinding.ItemBinding
@@ -18,13 +20,15 @@ class MyAdapter @Inject constructor(private val onClick: (Model.Item) -> Unit) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var premiere: List<Model.Item> = emptyList()
-    var myViewType = MyViewType(0, 1, "0", HasEnd.FALSE, "")
 
-    //lateinit var myViewType : MyViewType
+    var myViewType = MyViewType(0, 1, "0", HasEnd.FALSE, "", "", 0)
+
+    // lateinit var myViewType: MyViewType
     var data = mutableListOf<MyViewType>()
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        //myViewType
         val binding = ItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         val binding2 = SecondItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return if (viewType == NOEND) {
@@ -37,9 +41,6 @@ class MyAdapter @Inject constructor(private val onClick: (Model.Item) -> Unit) :
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = premiere.getOrNull(position)
 
-        /*  if (getItemViewType(position) == NOEND) {
-              (holder as MyViewHolder).bind(data[position])
-          } else (holder as MyViewHolder2).bind(data[position])*/
 
         when (holder.itemViewType) {
             NOEND -> {
@@ -72,6 +73,7 @@ class MyAdapter @Inject constructor(private val onClick: (Model.Item) -> Unit) :
 
     fun addToList(prem: List<Model.Item>) {
 
+
         if (premiere.isEmpty()) {
             this.premiere = prem
             premiere.forEachIndexed { index, it ->
@@ -79,13 +81,15 @@ class MyAdapter @Inject constructor(private val onClick: (Model.Item) -> Unit) :
                     myViewType.hasImage = HasEnd.FALSE
                     myViewType.title = it.nameRu
                     myViewType.itemPosition = index
-                    myViewType.item = it
+                    myViewType.rating=it.duration
+                    //myViewType. = it
+                    myViewType.image = it.posterUrlPreview
 
                     val sb = StringBuilder()
                     it.genres.forEach {
                         sb.append(it)
                     }
-                    myViewType.genre=sb.toString()
+                    myViewType.genre = sb.toString()
 
                     Log.d("TAGGENRE", it.genres.joinToString())
                     data.add(myViewType.copy())
@@ -115,11 +119,21 @@ class MyViewHolder @Inject constructor(
     //private val onClick: (Model.Item) -> Unit,
     private var binding1: ItemBinding
 ) : RecyclerView.ViewHolder(binding1.root) {
+    //lateinit var myViewType: MyViewType
     fun bind(myViewType: MyViewType) {
+        // lateinit var myViewType: MyViewType
         myViewType.typePosition = NOEND
         myViewType.hasImage = HasEnd.FALSE
         binding1.textView.text = myViewType.title
         binding1.textViewGenre.text = myViewType.genre
+        binding1.textViewRating.text = "0"
+
+        myViewType.let {
+            Glide.with(binding1.imageView)
+                .load(it.image)
+                .into(binding1.imageView)
+
+        }
 
         /* binding1.root.setOnClickListener {
              myViewType.let {
@@ -157,11 +171,14 @@ data class MyViewType(
     var title: String,
     var hasImage: HasEnd,
     var genre: String,
+    var image: String,
+    var rating: Int?
 
 
-    ) {
+) {
+
     //lateinit var genre:String
-    lateinit var item: Model.Item
+//    lateinit var item: Model.Item
 }
 
 private object Const {

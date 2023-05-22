@@ -99,7 +99,10 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp")
     implementation("com.squareup.okhttp3:logging-interceptor")
 
-
+//Glide
+    implementation 'com.github.bumptech.glide:glide:4.15.1'
+    // Skip this if you don't want to use integration libraries or configure Glide.
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.15.1'
 
 
     def nav_version = "2.5.3"

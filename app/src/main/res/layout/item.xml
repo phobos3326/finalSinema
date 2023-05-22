@@ -17,7 +17,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="111dp"
         android:layout_height="match_parent"
-        android:background="@color/black">
+        >
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imageView"
@@ -34,7 +34,7 @@
         <TextView
             android:id="@+id/back"
             android:layout_width="17dp"
-            android:layout_height="9dp"
+            android:layout_height="11dp"
             android:layout_marginStart="88dp"
             android:layout_marginTop="6dp"
             android:background="@color/purple_700"
@@ -44,13 +44,13 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textViewRover"
-            android:layout_width="9dp"
-            android:layout_height="6dp"
+            android:id="@+id/textViewRating"
+            android:layout_width="13dp"
+            android:layout_height="12dp"
 
             android:text="8.0"
             android:textColor="@color/white"
-            android:textSize="6sp"
+            android:textSize="8sp"
             android:textStyle="normal"
             app:layout_constraintBottom_toBottomOf="@+id/back"
             app:layout_constraintEnd_toEndOf="@+id/back"

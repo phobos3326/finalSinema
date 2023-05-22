@@ -8,7 +8,7 @@ import com.squareup.moshi.JsonClass
 interface ModelFilmDetails {
     @Json(name = "film")
     val film:Film
-
+    @JsonClass(generateAdapter = true)
     data class Film(
         @Json(name = "completed")
         val completed: Boolean?,
