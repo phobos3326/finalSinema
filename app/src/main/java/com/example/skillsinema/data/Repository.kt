@@ -1,9 +1,13 @@
 package com.example.skillsinema.data
 
+import com.example.skillsinema.adapter.BestFilms
 import com.example.skillsinema.adapter.DataDTO
-import com.example.skillsinema.adapter.FilmDTO
+//import com.example.skillsinema.adapter.FilmDTO
+import com.example.skillsinema.adapter.ModelFilmDetails
+import com.example.skillsinema.entity.BestFilmDTO
+import com.example.skillsinema.entity.FilmDTO
 import com.example.skillsinema.entity.Model
-import com.example.skillsinema.entity.ModelFilmDetails
+//import com.example.skillsinema.entity.ModelFilmDetails
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -35,8 +39,13 @@ class Repository @Inject constructor() {
     }
 
     @Provides
-    suspend fun getFilmDetails(filmId: Int): ModelFilmDetails{
+    suspend fun getFilmDetails(filmId: Int): FilmDTO{
         return retrofitInstance2().filmDetails(filmId)
+    }
+
+    @Provides
+    suspend fun getTopFilm():BestFilmDTO{
+        return retrofitInstanceTopFilms().topFilms()
     }
 
 
@@ -64,6 +73,7 @@ class Repository @Inject constructor() {
 
     fun retrofitInstance(): ApiInterface = retrofit()!!.create(ApiInterface::class.java)
     fun retrofitInstance2(): ApiInterface2 = retrofit()!!.create(ApiInterface2::class.java)
+    fun retrofitInstanceTopFilms(): ApiInterfaceTopFilms = retrofit()!!.create(ApiInterfaceTopFilms::class.java)
 
 
     interface ApiInterface {
@@ -80,7 +90,16 @@ class Repository @Inject constructor() {
         @GET("films/{id}")
         suspend fun filmDetails(
             @Path(value = "id") id:Int
-        ): FilmDTO
+        ): ModelFilmDetails
+
+    }
+
+    interface ApiInterfaceTopFilms {
+        @Headers("X-API-KEY: $api_key")
+        @GET("films/top?type=TOP_250_BEST_FILMS")
+        suspend fun topFilms(
+           // @Path(value = "id") id:Int
+        ): BestFilms
 
     }
 

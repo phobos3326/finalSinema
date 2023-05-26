@@ -4,14 +4,11 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.skillsinema.data.Repository
+import com.example.skillsinema.adapter.ModelFilmDetails
 import com.example.skillsinema.domain.GetFilmDetailUseCase
-import com.example.skillsinema.entity.ModelFilmDetails
-import dagger.Provides
+//import com.example.skillsinema.entity.ModelFilmDetails
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,9 +17,8 @@ class ItemInfoViewModel @Inject constructor(private val dataFilm: GetFilmDetailU
     ViewModel() {
     private val _film = MutableLiveData<ModelFilmDetails.Film>()
     //private val _film= MutableStateFlow<ModelFilmDetails.Film>()
-
-
-    val film = _film
+    //val film = _film as StateFlow<*>
+    val film11 = _film
 
 
     var id: Int = 0

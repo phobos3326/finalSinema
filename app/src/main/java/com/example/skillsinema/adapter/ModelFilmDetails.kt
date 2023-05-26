@@ -1,19 +1,19 @@
-package com.example.skillsinema.entity
+package com.example.skillsinema.adapter
 
+import com.example.skillsinema.entity.FilmDTO
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-interface ModelFilmDetails {
-    @Json(name = "film")
-    val film:Film
+class ModelFilmDetails(override val film: Film):FilmDTO{
+
     @JsonClass(generateAdapter = true)
-    data class Film(
+    data class Film (
         @Json(name = "completed")
         val completed: Boolean?,
         @Json(name = "countries")
-        val countries: List<Country?>?,
+        val countries: List<Country>?,
         @Json(name = "coverUrl")
         val coverUrl: String?,
         @Json(name = "description")
@@ -25,7 +25,7 @@ interface ModelFilmDetails {
         @Json(name = "filmLength")
         val filmLength: Int?,
         @Json(name = "genres")
-        val genres: List<Genre?>?,
+        val genres: List<Genre>?,
         @Json(name = "has3D")
         val has3D: Boolean?,
         @Json(name = "hasImax")

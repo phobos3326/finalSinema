@@ -8,9 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import com.example.skillsinema.R
+import com.example.skillsinema.adapter.ModelFilmDetails
 import com.example.skillsinema.databinding.FragmentItemInfoBinding
-import com.example.skillsinema.entity.ModelFilmDetails
+//import com.example.skillsinema.entity.ModelFilmDetails
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -55,7 +55,7 @@ class ItemInfoFragment : Fragment() {
 
         lifecycleScope.launch {
             viewModel.id=id!!
-            viewModel.film.observe(viewLifecycleOwner, Observer<ModelFilmDetails.Film> {
+            viewModel.film11.observe(viewLifecycleOwner, Observer<ModelFilmDetails.Film> {
 
 
                 //viewModel.loadFilm()

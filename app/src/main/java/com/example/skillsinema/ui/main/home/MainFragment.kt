@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.example.skillsinema.R
+import com.example.skillsinema.adapter.AdapterBestFilm
 import com.example.skillsinema.adapter.MyAdapter
 
 import com.example.skillsinema.databinding.FragmentMainBinding
@@ -21,6 +22,7 @@ import com.example.skillsinema.entity.Model
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -30,7 +32,12 @@ class MainFragment @Inject constructor() : Fragment() {
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
     private val adapter = MyAdapter { onItemClick(it) }
+
+    private val adapterBestFilms = AdapterBestFilm()
+
+
     val scope = CoroutineScope(Dispatchers.Default)
+    val scope2 = CoroutineScope(Dispatchers.Default)
 
     private val mainViewModel: MainViewModel by viewModels()
    // val mainViewModel: MainViewModel by hiltNavGraphViewModels(R.id.nav_graph)
@@ -75,7 +82,18 @@ class MainFragment @Inject constructor() : Fragment() {
 
             }
 
+
         }
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            mainViewModel.topFilmModel.collect{
+                binding.TopFilmsRecyclerView.adapter= adapterBestFilms
+                adapterBestFilms.addToList(it)
+            }
+        }
+
+
+
+
     }
 
 
