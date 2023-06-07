@@ -14,15 +14,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.example.skillsinema.R
-import com.example.skillsinema.adapter.AdapterBestFilm
-import com.example.skillsinema.adapter.MyAdapter
 
 import com.example.skillsinema.databinding.FragmentMainBinding
 import com.example.skillsinema.entity.Model
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -33,14 +32,15 @@ class MainFragment @Inject constructor() : Fragment() {
     private val binding get() = _binding!!
     private val adapter = MyAdapter { onItemClick(it) }
 
-    private val adapterBestFilms = AdapterBestFilm()
+    //private val adapterBestFilms = AdapterBestFilm()
 
+    private val pagedAdapter = PagedAdapterBestFilm()
 
     val scope = CoroutineScope(Dispatchers.Default)
     val scope2 = CoroutineScope(Dispatchers.Default)
 
     private val mainViewModel: MainViewModel by viewModels()
-   // val mainViewModel: MainViewModel by hiltNavGraphViewModels(R.id.nav_graph)
+    // val mainViewModel: MainViewModel by hiltNavGraphViewModels(R.id.nav_graph)
 
     val bundle = Bundle()
 
@@ -65,7 +65,7 @@ class MainFragment @Inject constructor() : Fragment() {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
 
 
-       // obtainNavHostFragment(parentFragmentManager,"home_fragment", R.navigation.home_nav_graph,)
+        // obtainNavHostFragment(parentFragmentManager,"home_fragment", R.navigation.home_nav_graph,)
 
         return binding.root
     }
@@ -78,21 +78,31 @@ class MainFragment @Inject constructor() : Fragment() {
             mainViewModel.modelPremiere.collect {
                 binding.viewPager.adapter = adapter
                 adapter.addToList(it)
-                Log.d("TAG", "${it.size}")
+               // Log.d("TAG", "${it.size}")
 
             }
 
 
         }
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            mainViewModel.topFilmModel.collect{
-                binding.TopFilmsRecyclerView.adapter= adapterBestFilms
-                adapterBestFilms.addToList(it)
+      /*  viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            mainViewModel.topFilmModel.collect {
+                *//*binding.TopFilmsRecyclerView.adapter = adapterBestFilms
+                adapterBestFilms.addToList(it)*//*
+
+
+
             }
-        }
+        }*/
 
 
 
+
+        viewModel.pagedFilms.onEach {
+            binding.TopFilmsRecyclerView.adapter=pagedAdapter
+            pagedAdapter.submitData(it)
+            //pagedAdapter.addToList(it)
+            Log.d("TAG", "${it}")
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
 
     }
 

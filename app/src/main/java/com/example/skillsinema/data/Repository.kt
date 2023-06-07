@@ -2,11 +2,10 @@ package com.example.skillsinema.data
 
 import com.example.skillsinema.adapter.BestFilms
 import com.example.skillsinema.adapter.DataDTO
+import com.example.skillsinema.adapter.Film
 //import com.example.skillsinema.adapter.FilmDTO
 import com.example.skillsinema.adapter.ModelFilmDetails
-import com.example.skillsinema.entity.BestFilmDTO
-import com.example.skillsinema.entity.FilmDTO
-import com.example.skillsinema.entity.Model
+import com.example.skillsinema.entity.*
 //import com.example.skillsinema.entity.ModelFilmDetails
 
 import com.squareup.moshi.Moshi
@@ -30,7 +29,7 @@ import javax.inject.Inject
 @InstallIn(SingletonComponent::class)
 class Repository @Inject constructor() {
 
-   // @Inject private val filmId: Int? = null
+    // @Inject private val filmId: Int? = null
 
     @Provides
     suspend fun getPremiere(): Model {
@@ -39,18 +38,17 @@ class Repository @Inject constructor() {
     }
 
     @Provides
-    suspend fun getFilmDetails(filmId: Int): FilmDTO{
+    suspend fun getFilmDetails(filmId: Int): FilmDTO {
         return retrofitInstance2().filmDetails(filmId)
     }
 
     @Provides
-    suspend fun getTopFilm():BestFilmDTO{
-        return retrofitInstanceTopFilms().topFilms()
+    suspend fun getTopFilm(page: Int): List<Movie> {
+        return retrofitInstanceTopFilms().topFilms(page).films
     }
 
 
     private val BASE_URL = "https://kinopoiskapiunofficial.tech/api/v2.2/"
-
 
 
     private val logInterceptor = HttpLoggingInterceptor()
@@ -71,9 +69,15 @@ class Repository @Inject constructor() {
             .build()
     }
 
-    fun retrofitInstance(): ApiInterface = retrofit()!!.create(ApiInterface::class.java)
-    fun retrofitInstance2(): ApiInterface2 = retrofit()!!.create(ApiInterface2::class.java)
-    fun retrofitInstanceTopFilms(): ApiInterfaceTopFilms = retrofit()!!.create(ApiInterfaceTopFilms::class.java)
+
+
+
+
+
+    private fun retrofitInstance(): ApiInterface = retrofit()!!.create(ApiInterface::class.java)
+    private fun retrofitInstance2(): ApiInterface2 = retrofit()!!.create(ApiInterface2::class.java)
+    private fun retrofitInstanceTopFilms(): ApiInterfaceTopFilms =
+        retrofit()!!.create(ApiInterfaceTopFilms::class.java)
 
 
     interface ApiInterface {
@@ -89,7 +93,7 @@ class Repository @Inject constructor() {
         @Headers("X-API-KEY: $api_key")
         @GET("films/{id}")
         suspend fun filmDetails(
-            @Path(value = "id") id:Int
+            @Path(value = "id") id: Int
         ): ModelFilmDetails
 
     }
@@ -97,9 +101,7 @@ class Repository @Inject constructor() {
     interface ApiInterfaceTopFilms {
         @Headers("X-API-KEY: $api_key")
         @GET("films/top?type=TOP_250_BEST_FILMS")
-        suspend fun topFilms(
-           // @Path(value = "id") id:Int
-        ): BestFilms
+        suspend fun topFilms(@Query("page") page: Int): PagedMovieList
 
     }
 

@@ -1,11 +1,9 @@
 package com.example.skillsinema.entity
 
 import com.example.skillsinema.adapter.BestFilms
+import com.example.skillsinema.adapter.Film
 import com.squareup.moshi.Json
 
-interface BestFilmDTO {
-
-    val films: List<BestFilms.Film>
-
-    val pagesCount: Int?
-}
+data class BestFilmDTO(
+    override val films: List<Film>, override val pagesCount: Int
+    ) :BestFilms

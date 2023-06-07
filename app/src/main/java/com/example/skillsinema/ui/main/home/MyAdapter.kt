@@ -1,4 +1,4 @@
-package com.example.skillsinema.adapter
+package com.example.skillsinema.ui.main.home
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -6,25 +6,30 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.skillsinema.adapter.AdapterBestFilm.Const.END
-import com.example.skillsinema.adapter.AdapterBestFilm.Const.NOEND
+
+import com.example.skillsinema.ui.main.home.MyAdapter.Const.END
+import com.example.skillsinema.ui.main.home.MyAdapter.Const.NOEND
 import com.example.skillsinema.databinding.ItemBinding
 import com.example.skillsinema.databinding.SecondItemBinding
+import com.example.skillsinema.entity.Model
+
 import javax.inject.Inject
 
-class AdapterBestFilm @Inject constructor(
-    //private val onClick:(BestFilms.Film)->Unit
-):RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+class MyAdapter @Inject constructor(private val onClick: (Model.Item) -> Unit) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var premiere: List<BestFilms.Film> = emptyList()
+    private var premiere: List<Model.Item> = emptyList()
+    //private var bestFilms: List<BestFilms.Film> = emptyList()
 
-    var myViewType = MyViewType(0, 1, "0", HasEnd.FALSE, "", "", "")
+    var myViewType = MyViewType(0, 1, "0", HasEnd.FALSE, "", "", 0)
 
     // lateinit var myViewType: MyViewType
     var data = mutableListOf<MyViewType>()
 
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        //myViewType
         val binding = ItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         val binding2 = SecondItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return if (viewType == NOEND) {
@@ -44,7 +49,7 @@ class AdapterBestFilm @Inject constructor(
                 viewHolder.bind(data[position])
                 viewHolder.itemView.setOnClickListener {
 
-                  //  onClick(item!!)
+                    onClick(item!!)
                 }
             }
             END -> {
@@ -54,7 +59,10 @@ class AdapterBestFilm @Inject constructor(
                 }
             }
         }
+
+
     }
+
 
     override fun getItemCount(): Int {
         return data.size
@@ -64,18 +72,17 @@ class AdapterBestFilm @Inject constructor(
         return if (data[position].hasImage == HasEnd.FALSE) NOEND else END
     }
 
-
-    fun addToList(prem: List<BestFilms.Film>) {
+    fun addToList(prem: List<Model.Item>) {
 
 
         if (premiere.isEmpty()) {
             this.premiere = prem
             premiere.forEachIndexed { index, it ->
-                if (index < 19) {
+                if (index < 20) {
                     myViewType.hasImage = HasEnd.FALSE
                     myViewType.title = it.nameRu
                     myViewType.itemPosition = index
-                    myViewType.rating=it.rating
+                    myViewType.rating=it.duration
                     //myViewType. = it
                     myViewType.image = it.posterUrlPreview
 
@@ -89,7 +96,7 @@ class AdapterBestFilm @Inject constructor(
                     data.add(myViewType.copy())
 
 
-                } else if (index == 20) {
+                } else if (index == 21) {
                     myViewType.hasImage = HasEnd.TRUE
                     myViewType.title = "посмотреть все"
                     data.add(myViewType.copy())
@@ -102,6 +109,7 @@ class AdapterBestFilm @Inject constructor(
 
 
     }
+
 
     companion object {
         const val VIEW_TYPE_1 = 0
@@ -117,14 +125,14 @@ class AdapterBestFilm @Inject constructor(
             // lateinit var myViewType: MyViewType
             myViewType.typePosition = NOEND
             myViewType.hasImage = HasEnd.FALSE
-            binding1.textView.text = myViewType.title
+            binding1.title.text = myViewType.title
             binding1.textViewGenre.text = myViewType.genre
-            binding1.textViewRating.text = myViewType.rating
+            binding1.textViewRating.text = "0"
 
             myViewType.let {
-                Glide.with(binding1.imageView)
+                Glide.with(binding1.poster)
                     .load(it.image)
-                    .into(binding1.imageView)
+                    .into(binding1.poster)
 
             }
 
@@ -166,7 +174,7 @@ class AdapterBestFilm @Inject constructor(
         var hasImage: HasEnd,
         var genre: String,
         var image: String,
-        var rating: String
+        var rating: Int?
 
 
     ) {
@@ -181,4 +189,6 @@ class AdapterBestFilm @Inject constructor(
     }
 
 }
+
+
 
