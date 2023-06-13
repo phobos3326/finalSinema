@@ -42,13 +42,11 @@ class MyAdapter @Inject constructor(private val onClick: (Model.Item) -> Unit) :
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = premiere.getOrNull(position)
 
-
         when (holder.itemViewType) {
             NOEND -> {
                 val viewHolder = holder as MyViewHolder
                 viewHolder.bind(data[position])
                 viewHolder.itemView.setOnClickListener {
-
                     onClick(item!!)
                 }
             }
@@ -59,8 +57,6 @@ class MyAdapter @Inject constructor(private val onClick: (Model.Item) -> Unit) :
                 }
             }
         }
-
-
     }
 
 

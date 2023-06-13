@@ -42,7 +42,7 @@ class MainViewModel @Inject constructor(
     var bundle = Bundle()
 
 
-    val pagedFilms :Flow<PagingData<Movie>> =Pager(
+   val pagedFilms :Flow<PagingData<Movie>> =Pager(
         config = PagingConfig(pageSize = 5),
         pagingSourceFactory = {pagingSource}
     ).flow.cachedIn(viewModelScope)
