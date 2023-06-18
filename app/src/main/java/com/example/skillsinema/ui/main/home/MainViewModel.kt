@@ -19,11 +19,10 @@ import com.example.skillsinema.entity.Movie
 
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.reflect.jvm.internal.impl.load.java.lazy.descriptors.DeclaredMemberIndex.Empty
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -36,22 +35,76 @@ class MainViewModel @Inject constructor(
     private val _premiereModel = MutableStateFlow<List<Model.Item>>(emptyList())
     val modelPremiere = _premiereModel.asStateFlow()
 
-    private val _topFilmModel = MutableStateFlow<List<Film>>(emptyList())
+    private var _topFilmModel = MutableStateFlow<List<Any?>>(emptyList())
     val topFilmModel = _topFilmModel.asStateFlow()
 
     var bundle = Bundle()
+    //var listMovie: List<Movie> = emptyList()
 
 
-   val pagedFilms :Flow<PagingData<Movie>> =Pager(
-        config = PagingConfig(pageSize = 5),
-        pagingSourceFactory = {pagingSource}
+    val pagedFilms: Flow<PagingData<Movie>> = Pager(
+        config = PagingConfig(
+            pageSize = 20,
+            enablePlaceholders = true
+
+        ),
+        pagingSourceFactory = { pagingSource }
     ).flow.cachedIn(viewModelScope)
+
+    /*  fun getPagedFilms(): Flow<PagingData<Movie>> {
+          return Pager(
+              config = PagingConfig(pageSize = 20),
+              pagingSourceFactory = { pagingSource }
+          ).flow.cachedIn(viewModelScope)
+      }*/
+
+    suspend fun aa(): MutableList<Movie> {
+        val listMovie: MutableList<Movie> = emptyList<Movie>().toMutableList()
+        repeat(5) {
+            pagedFilms.map { pd ->
+                _topFilmModel.value = (pd.toList())
+
+            }
+            Log.d("TTT", "${listMovie.size}")
+        }
+        return listMovie
+    }
+
+    val pagedFilms1: Flow<PagingData<Movie>> = Pager(
+        config = PagingConfig(pageSize = 20),
+        pagingSourceFactory = { pagingSource }
+    ).flow.cachedIn(viewModelScope)
+
+
+    @Suppress("UNCHECKED_CAST")
+    private suspend fun <T : Any> PagingData<T>.toList(): List<T> {
+        val flow = PagingData::class.java.getDeclaredField("flow").apply {
+            isAccessible = true
+        }.get(this) as Flow<Any?>
+        val pageEventInsert = flow.single()
+        val pageEventInsertClass = Class.forName("androidx.paging.PageEvent\$Insert")
+        val pagesField = pageEventInsertClass.getDeclaredField("pages").apply {
+            isAccessible = true
+        }
+        val pages = pagesField.get(pageEventInsert) as List<Any?>
+        val transformablePageDataField =
+            Class.forName("androidx.paging.TransformablePage").getDeclaredField("data").apply {
+                isAccessible = true
+            }
+        val listItems =
+            pages.flatMap { transformablePageDataField.get(it) as List<*> }
+
+        return listItems as List<T>
+    }
+
 
     init {
         viewModelScope.launch {
             loadPremieres()
+            aa()
+            pagedFilms
         }
-       // pagedFilms
+        // pagedFilms
 
     }
 
@@ -72,9 +125,11 @@ class MainViewModel @Inject constructor(
     }
 
 
-  /*  private fun loadTopFilms() {
+    private fun loadTopFilms() {
+
+        //  flowOf(PagingData.from(listOf(Movie)).toList() == listOf(model)
         //navController.navigate(R.id.action_mainFragment_to_itemInfoFragment, bundle)
-        viewModelScope.launch(Dispatchers.IO) {
+        /*viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching {
                 topFilmsUseCase.executeTopFilm()
             }.fold(
@@ -84,8 +139,10 @@ class MainViewModel @Inject constructor(
                 },
                 onFailure = { Log.d("MainViewModelloadTopFilms", it.message ?: "not load") }
             )
-        }
-    }*/
+        }*/
+
+
+    }
 }
 
 

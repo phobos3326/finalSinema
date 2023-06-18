@@ -15,6 +15,13 @@ class FilmPagingSourse @Inject constructor(val repository:MoviePagedListReposito
 
     override fun getRefreshKey(state: PagingState<Int, Movie>): Int? = FIRST_PAGE
 
+   /* override fun getRefreshKey(state: PagingState<Int, Movie>): Int? {
+        return state.anchorPosition?.let {
+            state.closestPageToPosition(it)?.prevKey?.plus(1)
+                ?: state.closestPageToPosition(it)?.nextKey?.minus(1)
+        }
+    }*/
+
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Movie> {
 
         val page = params.key ?: FIRST_PAGE
@@ -25,8 +32,10 @@ class FilmPagingSourse @Inject constructor(val repository:MoviePagedListReposito
             onSuccess = {
                 LoadResult.Page(
                     data = it,
+
                     prevKey = null,
-                    nextKey = if (it.isEmpty()) null else page +1
+                   // nextKey =  null
+                   nextKey = if (it.isEmpty()) null else page+1
 
                 )
             },
@@ -35,6 +44,11 @@ class FilmPagingSourse @Inject constructor(val repository:MoviePagedListReposito
             }
         )
     }
+
+
+
+
+
 
     private companion object{
         private val  FIRST_PAGE = 1

@@ -33,7 +33,7 @@ class Repository @Inject constructor() {
 
     @Provides
     suspend fun getPremiere(): Model {
-        delay(2000)
+        //delay(2000)
         return retrofitInstance().getFilms()
     }
 
