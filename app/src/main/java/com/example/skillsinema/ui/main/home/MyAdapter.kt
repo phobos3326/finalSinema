@@ -92,7 +92,7 @@ class MyAdapter @Inject constructor(private val onClick: (Model.Item) -> Unit) :
                     data.add(myViewType.copy())
 
 
-                } else if (index == 21) {
+                } else if (index == 20) {
                     myViewType.hasImage = HasEnd.TRUE
                     myViewType.title = "посмотреть все"
                     data.add(myViewType.copy())

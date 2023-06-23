@@ -12,19 +12,20 @@ import com.example.skillsinema.ui.main.home.AdapterBestFilm.Const.END
 import com.example.skillsinema.ui.main.home.AdapterBestFilm.Const.NOEND
 import com.example.skillsinema.databinding.ItemBinding
 import com.example.skillsinema.databinding.SecondItemBinding
+import kotlinx.coroutines.delay
 import javax.inject.Inject
 
 class AdapterBestFilm @Inject constructor(
     //private val onClick:(BestFilms.Film)->Unit
-):RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
-    private var premiere: List<Film> = emptyList()
+    // private  var premiere: MutableList<Film> = emptyList()
 
     var myViewType = MyViewType(0, 1, "0", HasEnd.FALSE, "", "", "")
 
     // lateinit var myViewType: MyViewType
-    var data = mutableListOf<MyViewType>()
+    var data = ArrayDeque(mutableListOf<MyViewType>())
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding = ItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -37,7 +38,7 @@ class AdapterBestFilm @Inject constructor(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val item = premiere.getOrNull(position)
+        //val item = premiere.getOrNull(position)
 
 
         when (holder.itemViewType) {
@@ -46,7 +47,7 @@ class AdapterBestFilm @Inject constructor(
                 viewHolder.bind(data[position])
                 viewHolder.itemView.setOnClickListener {
 
-                  //  onClick(item!!)
+                    //  onClick(item!!)
                 }
             }
             END -> {
@@ -63,45 +64,55 @@ class AdapterBestFilm @Inject constructor(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (data[position].hasImage == HasEnd.FALSE) NOEND else END
+
+        if (data[position].hasImage == HasEnd.FALSE) return NOEND else return END
     }
 
 
-    fun addToList(prem: List<Film>) {
+    suspend fun addToList(prem: List<Film>) {
+repeat(21){
+    data.add(myViewType.copy())
+}
 
 
-        if (premiere.isEmpty()) {
-            this.premiere = prem
-            premiere.forEachIndexed { index, it ->
-                if (index < 20) {
-                    myViewType.hasImage = HasEnd.FALSE
-                    myViewType.title = it.nameRu
-                    myViewType.itemPosition = index
-                    myViewType.rating=it.rating
-                    //myViewType. = it
-                    myViewType.image = it.posterUrlPreview
-
-                    val sb = StringBuilder()
-                    it.genres.forEach {
-                        sb.append(it)
-                    }
-                    myViewType.genre = sb.toString()
-
-                    Log.d("TAGGENRE", it.genres.joinToString())
-                    data.add(myViewType.copy())
+        val premiere = prem.toMutableList()
 
 
-                } else if (index == 21) {
-                    myViewType.hasImage = HasEnd.TRUE
-                    myViewType.title = "посмотреть все"
-                    data.add(myViewType.copy())
-                }
-            }
-        }
+
+      //if (premiere.isEmpty()){
 
 
-        notifyDataSetChanged()
+          premiere.forEachIndexed { index, it ->
 
+
+              // val lastIndex = it
+              // if (index < 20) {
+              myViewType.hasImage = HasEnd.FALSE
+              myViewType.title = it.nameRu
+              myViewType.itemPosition = index
+              myViewType.rating = it.rating
+              //myViewType. = it
+              myViewType.image = it.posterUrlPreview
+
+              val sb = StringBuilder()
+              it.genres.forEach {
+                  sb.append(it)
+              }
+              myViewType.genre = sb.toString()
+
+              Log.d("TAGGENRE", it.genres.joinToString())
+              //data.add (myViewType.copy())
+              data[index] = myViewType.copy()
+
+
+       //   }
+
+
+      }
+
+       /* myViewType.hasImage = HasEnd.TRUE
+        myViewType.title = "посмотреть все"
+        data.add( myViewType.copy())*/
 
     }
 

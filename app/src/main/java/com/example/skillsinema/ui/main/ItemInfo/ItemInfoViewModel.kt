@@ -22,7 +22,7 @@ class ItemInfoViewModel @Inject constructor(private val dataFilm: GetFilmDetailU
 
 
     var id: Int = 0
-
+    //Log.d("ItemInfoViewModel", "${id}" )
     init {
         viewModelScope.launch {
             loadFilm()
@@ -40,12 +40,14 @@ class ItemInfoViewModel @Inject constructor(private val dataFilm: GetFilmDetailU
             // repository.getFilmDetails(id).film
             kotlin.runCatching {
                 dataFilm.executeGetFilm(id)
+              //  Log.d("ItemInfoViewModel", "${id}" )
             }.fold(
                 onSuccess = {
                     _film.value = it.film
+                    Log.d("ItemInfoViewModel", "${it.film}" )
                 },
                 onFailure = {
-                    Log.d("ItemInfoViewModel", it.message ?: "not load")
+                    Log.d("1ItemInfoViewModel", it.message ?: "not load")
                 }
             )
         }

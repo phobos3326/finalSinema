@@ -38,13 +38,13 @@ class Repository @Inject constructor() {
     }
 
     @Provides
-    suspend fun getFilmDetails(filmId: Int): FilmDTO {
-        return retrofitInstance2().filmDetails(filmId)
+    suspend fun getFilmDetails(id: Int): FilmDTO {
+        return retrofitInstance2().filmDetails(id)
     }
 
     @Provides
-    suspend fun getTopFilm(page: Int): List<Movie> {
-        return retrofitInstanceTopFilms().topFilms(page).films
+    suspend fun getTopFilm(): List<Film> {
+        return retrofitInstanceTopFilms().topFilms().films
     }
 
 
@@ -70,10 +70,6 @@ class Repository @Inject constructor() {
     }
 
 
-
-
-
-
     private fun retrofitInstance(): ApiInterface = retrofit()!!.create(ApiInterface::class.java)
     private fun retrofitInstance2(): ApiInterface2 = retrofit()!!.create(ApiInterface2::class.java)
     private fun retrofitInstanceTopFilms(): ApiInterfaceTopFilms =
@@ -94,14 +90,17 @@ class Repository @Inject constructor() {
         @GET("films/{id}")
         suspend fun filmDetails(
             @Path(value = "id") id: Int
+            // @Query("id") id:Int
         ): ModelFilmDetails
 
     }
 
     interface ApiInterfaceTopFilms {
         @Headers("X-API-KEY: $api_key")
-        @GET("films/top?type=TOP_250_BEST_FILMS")
-        suspend fun topFilms(@Query("page") page: Int): PagedMovieList
+        @GET("films/top?type=TOP_250_BEST_FILMS&page=1")
+        suspend fun topFilms(
+            // @Query("page") page: Int
+        ): BestFilmDTO
 
     }
 

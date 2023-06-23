@@ -17,6 +17,7 @@ import com.example.skillsinema.entity.Movie
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -29,7 +30,7 @@ class MainFragment @Inject constructor() : Fragment() {
     private val binding get() = _binding!!
     private val adapter = MyAdapter { onItemClick(it) }
 
-    //private val adapterBestFilms = AdapterBestFilm()
+    private val adapterBestFilms = AdapterBestFilm()
 
     private val pagedAdapter = PagedAdapterBestFilm {onItemClick(it)}
 
@@ -81,26 +82,27 @@ class MainFragment @Inject constructor() : Fragment() {
 
 
         }
-      /*  viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             mainViewModel.topFilmModel.collect {
-                *//*binding.TopFilmsRecyclerView.adapter = adapterBestFilms
-                adapterBestFilms.addToList(it)*//*
+                binding.TopFilmsRecyclerView.adapter = adapterBestFilms
+                //delay(100L)
+                adapterBestFilms.addToList(it)
 
 
 
             }
-        }*/
+        }
 
 
 
 
-        viewModel.pagedFilms.onEach {
+       /* viewModel.pagedFilms.onEach {
             binding.TopFilmsRecyclerView.adapter=pagedAdapter
             pagedAdapter.submitData(it)
             //val subList: List<Movie> = dataList.subList(0, 10)
             //pagedAdapter.addToList(it)
             Log.d("TAG", "${it}")
-        }.launchIn(viewLifecycleOwner.lifecycleScope)
+        }.launchIn(viewLifecycleOwner.lifecycleScope)*/
 
     }
 

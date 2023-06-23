@@ -1,6 +1,7 @@
 package com.example.skillsinema.ui.main.ItemInfo
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -52,6 +53,8 @@ class ItemInfoFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val id= arguments?.getInt("Arg")
+        Log.d("FRAGMENT ITEM", id.toString())
+        //binding.filmTextView.text="55435465"
 
         lifecycleScope.launch {
             viewModel.id=id!!
@@ -59,7 +62,7 @@ class ItemInfoFragment : Fragment() {
 
 
                 //viewModel.loadFilm()
-                binding.filmTextView.text= it.nameRu
+                binding.filmTextView.text= "it.nameRu"
             })
 
         }
