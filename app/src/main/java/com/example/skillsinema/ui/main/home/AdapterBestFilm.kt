@@ -93,7 +93,7 @@ class AdapterBestFilm @Inject constructor(
 
     override fun submitList(list: List<Film>?) {
         val newList = list?.toMutableList()
-        if (newList?.size ?: 0 >= 19) {
+        if ((newList?.size ?: 0) >= 19) {
             val lastItem=list?.get(19)
             if (lastItem != null) {
                 newList?.add(lastItem)
