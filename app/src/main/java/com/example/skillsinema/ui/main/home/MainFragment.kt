@@ -98,8 +98,10 @@ class MainFragment @Inject constructor() : Fragment() {
         viewModel.topFilmModel.onEach {
             binding.TopFilmsRecyclerView.adapter = adapterBestFilms
             //dapterBestFilms.loading = false
+            binding.TopFilmsRecyclerView.scrollToPosition(1)
             adapterBestFilms.submitList(it)
             //adapterBestFilms.loading =true
+
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
 

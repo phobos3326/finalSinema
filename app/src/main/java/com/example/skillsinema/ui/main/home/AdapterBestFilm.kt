@@ -1,5 +1,6 @@
 package com.example.skillsinema.ui.main.home
 
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -21,6 +22,7 @@ import javax.inject.Inject
 
 class AdapterBestFilm @Inject constructor(
     //private val onClick:(BestFilms.Film)->Unit
+
 ) : ListAdapter<Film, RecyclerView.ViewHolder>(DiffUtilCallback()) {
 
 
@@ -46,17 +48,20 @@ class AdapterBestFilm @Inject constructor(
         } else {
             MyViewHolder2(binding2)
         }
+
     }
 
+
+
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-       // val item = getOrNull(position)
+        // val item = getOrNull(position)
 
         /*if (holder is MyViewHolder) {
             holder.bind(getItem(position))
         } else if (holder is MyViewHolder2){
             holder.bind()
         }*/
-      //  val viewHolder = holder as MyViewHolder
+        //  val viewHolder = holder as MyViewHolder
 
 
         /*    when (holder.itemViewType) {
@@ -76,58 +81,19 @@ class AdapterBestFilm @Inject constructor(
                 }
             }*/
 
-        if (getItemViewType(position) == NOEND){
-            val item =getItem(position)
+        if (getItemViewType(position) == NOEND) {
+            val item = getItem(position)
             (holder as MyViewHolder).bind(item)
-        }else{
+        } else {
             (holder as MyViewHolder2).bind()
         }
+
+
     }
 
-
-  /*  var loading: Boolean = false
-        set(value) {
-            if (field != value) {
-                field = value
-                if (value) {
-                    notifyItemInserted(itemCount)
-                } else {
-                    notifyItemRemoved(itemCount)
-                }
-            }
-        }*/
-
-
-
-
-    /*var loading: Boolean = false
-        set(value) {
-            if (field!=value) {
-                field = value
-                if (value) {
-                    notifyItemInserted(itemCount)
-                } else {
-                    notifyItemRemoved(itemCount)
-                }
-            }
-        }*/
-
-    var flag=Boolean
-    fun flag():Boolean {
-        if (itemCount == 20) {
-            notifyItemInserted(itemCount)
-            return true
-        } else {
-            return false
-        }
-    }
-
-    /*override fun getItemViewType(position: Int): Int {
-        return if (position == itemCount-1  && loading) END else NOEND
-    }*/
 
     override fun getItemViewType(position: Int): Int {
-        return if (position == itemCount-1) {
+        return if (position == itemCount - 1) {
             END
         } else {
             NOEND
@@ -139,75 +105,15 @@ class AdapterBestFilm @Inject constructor(
     }
 
     override fun getItemCount(): Int {
-        return super.getItemCount()+1
+        return super.getItemCount() + 1
     }
 
-    /*override fun getItemCount(): Int {
-        return data.size
-    }*/
-
-    /*override fun getItemViewType(position: Int): Int {
-
-        if (data[position].hasImage == HasEnd.FALSE) return NOEND else return END
-    }
-*/
-
-    suspend fun addToList(prem: List<Film>) {
-        /* repeat(21) {
-             data.add(myViewType.copy())
-         }
- */
-
-        val premiere = prem.toMutableList()
-
-
-        //if (premiere.isEmpty()){
-
-
-        premiere.forEachIndexed { index, it ->
-
-
-            // val lastIndex = it
-            // if (index < 20) {
-            myViewType.hasImage = HasEnd.FALSE
-            myViewType.title = it.nameRu
-            myViewType.itemPosition = index
-            myViewType.rating = it.rating
-            //myViewType. = it
-            myViewType.image = it.posterUrlPreview
-
-            val sb = StringBuilder()
-            it.genres.forEach {
-                sb.append(it)
-            }
-            myViewType.genre = sb.toString()
-
-            Log.d("TAGGENRE", it.genres.joinToString())
-            //data.add (myViewType.copy())
-            data[index] = myViewType.copy()
-
-
-            //   }
-
-
-        }
-
-        myViewType.hasImage = HasEnd.TRUE
-        myViewType.title = "посмотреть все"
-        data.add(myViewType.copy())
-
-    }
-
-    companion object {
-        const val VIEW_TYPE_1 = 0
-        const val VIEW_TYPE_2 = 1
-    }
 
     class MyViewHolder @Inject constructor(
-        //private val onClick: (Model.Item) -> Unit,
+
         private var binding1: ItemBinding
     ) : RecyclerView.ViewHolder(binding1.root) {
-        //lateinit var myViewType: MyViewType
+
         fun bind(film: Film) {
             // lateinit var myViewType: MyViewType
             val isEnd = false
@@ -238,11 +144,11 @@ class AdapterBestFilm @Inject constructor(
     class MyViewHolder2 @Inject constructor(
 
         private var binding2: SecondItemBinding
-    ):RecyclerView.ViewHolder(binding2.root) {
+    ) : RecyclerView.ViewHolder(binding2.root) {
         fun bind() {
             //myViewType.typePosition = END
             //myViewType.hasImage = HasEnd.TRUE
-           // binding2.textView2.text = myViewType.title
+            // binding2.textView2.text = myViewType.title
 
 
         }
