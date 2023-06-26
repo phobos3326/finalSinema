@@ -91,6 +91,11 @@ class AdapterBestFilm @Inject constructor(
 
     }
 
+    override fun submitList(list: MutableList<Film>?) {
+
+
+        super.submitList(list)
+    }
 
     override fun getItemViewType(position: Int): Int {
         return if (position == itemCount - 1) {
