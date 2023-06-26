@@ -4,115 +4,197 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+
+
 import com.bumptech.glide.Glide
-import com.example.skillsinema.adapter.BestFilms
+
 import com.example.skillsinema.adapter.Film
 import com.example.skillsinema.ui.main.home.AdapterBestFilm.Const.END
 import com.example.skillsinema.ui.main.home.AdapterBestFilm.Const.NOEND
 import com.example.skillsinema.databinding.ItemBinding
 import com.example.skillsinema.databinding.SecondItemBinding
-import kotlinx.coroutines.delay
+
 import javax.inject.Inject
 
 class AdapterBestFilm @Inject constructor(
     //private val onClick:(BestFilms.Film)->Unit
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+) : ListAdapter<Film, RecyclerView.ViewHolder>(DiffUtilCallback()) {
 
 
-    // private  var premiere: MutableList<Film> = emptyList()
+    class DiffUtilCallback : DiffUtil.ItemCallback<Film>() {
+        override fun areItemsTheSame(oldItem: Film, newItem: Film): Boolean = oldItem == newItem
+
+        override fun areContentsTheSame(oldItem: Film, newItem: Film): Boolean = oldItem == newItem
+    }
+
+    private var premiere: List<Film> = emptyList()
 
     var myViewType = MyViewType(0, 1, "0", HasEnd.FALSE, "", "", "")
 
     // lateinit var myViewType: MyViewType
     var data = ArrayDeque(mutableListOf<MyViewType>())
 
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding = ItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         val binding2 = SecondItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return if (viewType == NOEND) {
-            MyViewHolder(binding)
+            return MyViewHolder(binding)
         } else {
             MyViewHolder2(binding2)
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        //val item = premiere.getOrNull(position)
+       // val item = getOrNull(position)
+
+        /*if (holder is MyViewHolder) {
+            holder.bind(getItem(position))
+        } else if (holder is MyViewHolder2){
+            holder.bind()
+        }*/
+      //  val viewHolder = holder as MyViewHolder
 
 
-        when (holder.itemViewType) {
-            NOEND -> {
-                val viewHolder = holder as MyViewHolder
-                viewHolder.bind(data[position])
-                viewHolder.itemView.setOnClickListener {
+        /*    when (holder.itemViewType) {
+                NOEND -> {
+                    val viewHolder = holder as MyViewHolder
+                    viewHolder.bind(data[position])
+                    viewHolder.itemView.setOnClickListener {
 
-                    //  onClick(item!!)
+                        //  onClick(item!!)
+                    }
                 }
-            }
-            END -> {
-                val viewHolder = holder as MyViewHolder2
-                viewHolder.itemView.setOnClickListener {
-                    Toast.makeText(holder.itemView.context, "Clicked: ", Toast.LENGTH_SHORT).show()
+                END -> {
+                    val viewHolder = holder as MyViewHolder2
+                    viewHolder.itemView.setOnClickListener {
+                        Toast.makeText(holder.itemView.context, "Clicked: ", Toast.LENGTH_SHORT).show()
+                    }
                 }
-            }
+            }*/
+
+        if (getItemViewType(position) == NOEND){
+            val item =getItem(position)
+            (holder as MyViewHolder).bind(item)
+        }else{
+            (holder as MyViewHolder2).bind()
         }
     }
 
-    override fun getItemCount(): Int {
-        return data.size
+
+  /*  var loading: Boolean = false
+        set(value) {
+            if (field != value) {
+                field = value
+                if (value) {
+                    notifyItemInserted(itemCount)
+                } else {
+                    notifyItemRemoved(itemCount)
+                }
+            }
+        }*/
+
+
+
+
+    /*var loading: Boolean = false
+        set(value) {
+            if (field!=value) {
+                field = value
+                if (value) {
+                    notifyItemInserted(itemCount)
+                } else {
+                    notifyItemRemoved(itemCount)
+                }
+            }
+        }*/
+
+    var flag=Boolean
+    fun flag():Boolean {
+        if (itemCount == 20) {
+            notifyItemInserted(itemCount)
+            return true
+        } else {
+            return false
+        }
     }
 
+    /*override fun getItemViewType(position: Int): Int {
+        return if (position == itemCount-1  && loading) END else NOEND
+    }*/
+
     override fun getItemViewType(position: Int): Int {
+        return if (position == itemCount-1) {
+            END
+        } else {
+            NOEND
+        }
+    }
+
+    private fun isHeaderPosition(position: Int): Boolean {
+        return position == 0
+    }
+
+    override fun getItemCount(): Int {
+        return super.getItemCount()+1
+    }
+
+    /*override fun getItemCount(): Int {
+        return data.size
+    }*/
+
+    /*override fun getItemViewType(position: Int): Int {
 
         if (data[position].hasImage == HasEnd.FALSE) return NOEND else return END
     }
-
+*/
 
     suspend fun addToList(prem: List<Film>) {
-repeat(21){
-    data.add(myViewType.copy())
-}
-
+        /* repeat(21) {
+             data.add(myViewType.copy())
+         }
+ */
 
         val premiere = prem.toMutableList()
 
 
-
-      //if (premiere.isEmpty()){
-
-
-          premiere.forEachIndexed { index, it ->
+        //if (premiere.isEmpty()){
 
 
-              // val lastIndex = it
-              // if (index < 20) {
-              myViewType.hasImage = HasEnd.FALSE
-              myViewType.title = it.nameRu
-              myViewType.itemPosition = index
-              myViewType.rating = it.rating
-              //myViewType. = it
-              myViewType.image = it.posterUrlPreview
-
-              val sb = StringBuilder()
-              it.genres.forEach {
-                  sb.append(it)
-              }
-              myViewType.genre = sb.toString()
-
-              Log.d("TAGGENRE", it.genres.joinToString())
-              //data.add (myViewType.copy())
-              data[index] = myViewType.copy()
+        premiere.forEachIndexed { index, it ->
 
 
-       //   }
+            // val lastIndex = it
+            // if (index < 20) {
+            myViewType.hasImage = HasEnd.FALSE
+            myViewType.title = it.nameRu
+            myViewType.itemPosition = index
+            myViewType.rating = it.rating
+            //myViewType. = it
+            myViewType.image = it.posterUrlPreview
+
+            val sb = StringBuilder()
+            it.genres.forEach {
+                sb.append(it)
+            }
+            myViewType.genre = sb.toString()
+
+            Log.d("TAGGENRE", it.genres.joinToString())
+            //data.add (myViewType.copy())
+            data[index] = myViewType.copy()
 
 
-      }
+            //   }
 
-       /* myViewType.hasImage = HasEnd.TRUE
+
+        }
+
+        myViewType.hasImage = HasEnd.TRUE
         myViewType.title = "посмотреть все"
-        data.add( myViewType.copy())*/
+        data.add(myViewType.copy())
 
     }
 
@@ -126,17 +208,17 @@ repeat(21){
         private var binding1: ItemBinding
     ) : RecyclerView.ViewHolder(binding1.root) {
         //lateinit var myViewType: MyViewType
-        fun bind(myViewType: MyViewType) {
+        fun bind(film: Film) {
             // lateinit var myViewType: MyViewType
-            myViewType.typePosition = NOEND
-            myViewType.hasImage = HasEnd.FALSE
-            binding1.title.text = myViewType.title
-            binding1.textViewGenre.text = myViewType.genre
-            binding1.textViewRating.text = myViewType.rating
+            val isEnd = false
 
-            myViewType.let {
+            binding1.title.text = film.nameRu
+            // binding1.textViewGenre.text = myViewType.genre
+            binding1.textViewRating.text = film.rating
+
+            film.let {
                 Glide.with(binding1.poster)
-                    .load(it.image)
+                    .load(it.posterUrlPreview)
                     .into(binding1.poster)
 
             }
@@ -156,12 +238,11 @@ repeat(21){
     class MyViewHolder2 @Inject constructor(
 
         private var binding2: SecondItemBinding
-    ) :
-        RecyclerView.ViewHolder(binding2.root) {
-        fun bind(myViewType: MyViewType) {
-            myViewType.typePosition = END
-            myViewType.hasImage = HasEnd.TRUE
-            //binding2.textView2.text = myViewType.title
+    ):RecyclerView.ViewHolder(binding2.root) {
+        fun bind() {
+            //myViewType.typePosition = END
+            //myViewType.hasImage = HasEnd.TRUE
+           // binding2.textView2.text = myViewType.title
 
 
         }

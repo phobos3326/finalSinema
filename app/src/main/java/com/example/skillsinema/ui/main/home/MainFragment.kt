@@ -32,7 +32,7 @@ class MainFragment @Inject constructor() : Fragment() {
 
     private val adapterBestFilms = AdapterBestFilm()
 
-    private val pagedAdapter = PagedAdapterBestFilm {onItemClick(it)}
+    private val pagedAdapter = PagedAdapterBestFilm { onItemClick(it) }
 
     val scope = CoroutineScope(Dispatchers.Default)
     val scope2 = CoroutineScope(Dispatchers.Default)
@@ -74,35 +74,42 @@ class MainFragment @Inject constructor() : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             mainViewModel.modelPremiere.collect {
+
                 binding.viewPager.adapter = adapter
+
                 adapter.addToList(it)
-               // Log.d("TAG", "${it.size}")
+                // Log.d("TAG", "${it.size}")
 
             }
 
 
         }
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            mainViewModel.topFilmModel.collect {
-                binding.TopFilmsRecyclerView.adapter = adapterBestFilms
-                //delay(100L)
-                adapterBestFilms.addToList(it)
+        /* viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+             mainViewModel.topFilmModel.collect {
+                 binding.TopFilmsRecyclerView.adapter = adapterBestFilms
+                 //delay(100L)
+                 adapterBestFilms.submitList(it)
 
 
 
-            }
-        }
+             }
+         }*/
+
+        viewModel.topFilmModel.onEach {
+            binding.TopFilmsRecyclerView.adapter = adapterBestFilms
+            //dapterBestFilms.loading = false
+            adapterBestFilms.submitList(it)
+            //adapterBestFilms.loading =true
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
 
 
-
-
-       /* viewModel.pagedFilms.onEach {
-            binding.TopFilmsRecyclerView.adapter=pagedAdapter
-            pagedAdapter.submitData(it)
-            //val subList: List<Movie> = dataList.subList(0, 10)
-            //pagedAdapter.addToList(it)
-            Log.d("TAG", "${it}")
-        }.launchIn(viewLifecycleOwner.lifecycleScope)*/
+        /*  viewModel.pagedFilms.onEach {
+              binding.TopFilmsRecyclerView.adapter=pagedAdapter
+              pagedAdapter.submitData(it)
+              //val subList: List<Movie> = dataList.subList(0, 10)
+              //pagedAdapter.addToList(it)
+              Log.d("TAG", "${it}")
+          }.launchIn(viewLifecycleOwner.lifecycleScope)*/
 
     }
 
@@ -118,7 +125,6 @@ class MainFragment @Inject constructor() : Fragment() {
         findNavController().navigate(R.id.action_mainFragment_to_itemInfoFragment, bundle)
 
     }
-
 
 
 }
