@@ -91,14 +91,20 @@ class AdapterBestFilm @Inject constructor(
 
     }
 
-    override fun submitList(list: MutableList<Film>?) {
-
+    override fun submitList(list: List<Film>?) {
+        val newList = list?.toMutableList()
+        if (newList?.size ?: 0 >= 19) {
+            val lastItem=list?.get(19)
+            if (lastItem != null) {
+                newList?.add(lastItem)
+            } // Add the header item to the list
+        }
 
         super.submitList(list)
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (position == itemCount - 1) {
+        return if (position == itemCount - 1 && itemCount >=19) {
             END
         } else {
             NOEND
@@ -109,8 +115,18 @@ class AdapterBestFilm @Inject constructor(
         return position == 0
     }
 
-    override fun getItemCount(): Int {
+    /*override fun getItemCount(): Int {
         return super.getItemCount() + 1
+    }*/
+
+
+    override fun getItemCount(): Int {
+        val itemCount = super.getItemCount()
+        return if (itemCount >= 20) {
+            itemCount + 1 // Add one for the header item
+        } else {
+            itemCount
+        }
     }
 
 
