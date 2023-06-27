@@ -2,14 +2,11 @@ package com.example.skillsinema.data
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.skillsinema.adapter.BestFilms
-import com.example.skillsinema.adapter.Film
-import com.example.skillsinema.adapter.ModelFilmDetails
-import com.example.skillsinema.entity.BestFilmDTO
 import com.example.skillsinema.entity.Movie
+import com.example.skillsinema.repository.MoviePagedListRepository
 import javax.inject.Inject
 
-class FilmPagingSourse @Inject constructor(val repository:MoviePagedListRepository) :
+class FilmPagingSourse @Inject constructor(val repository: MoviePagedListRepository) :
     PagingSource<Int, Movie>() {
 
 

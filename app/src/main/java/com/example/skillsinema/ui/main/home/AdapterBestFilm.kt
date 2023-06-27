@@ -1,10 +1,7 @@
 package com.example.skillsinema.ui.main.home
 
-import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -13,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
 import com.example.skillsinema.adapter.Film
-import com.example.skillsinema.adapter.ModelFilmDetails
 import com.example.skillsinema.ui.main.home.AdapterBestFilm.Const.END
 import com.example.skillsinema.ui.main.home.AdapterBestFilm.Const.NOEND
 import com.example.skillsinema.databinding.ItemBinding

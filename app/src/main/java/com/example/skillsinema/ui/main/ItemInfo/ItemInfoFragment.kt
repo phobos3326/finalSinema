@@ -10,12 +10,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
-import com.example.skillsinema.adapter.ModelFilmDetails
+import com.example.skillsinema.entity.ModelFilmDetails
 import com.example.skillsinema.databinding.FragmentItemInfoBinding
 //import com.example.skillsinema.entity.ModelFilmDetails
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -63,7 +61,7 @@ class ItemInfoFragment : Fragment() {
                 binding.filmTextView.text= it.nameRu
 
                 Glide.with(this@ItemInfoFragment)
-                    .load(it.coverUrl)
+                    .load(it.posterUrl)
                     .into(binding.filmPreviewImageView)
 
             })

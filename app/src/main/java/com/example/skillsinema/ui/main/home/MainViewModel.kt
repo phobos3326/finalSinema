@@ -1,5 +1,6 @@
 package com.example.skillsinema.ui.main.home
 
+import android.icu.text.DateFormatSymbols
 import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.util.Log
@@ -9,9 +10,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.example.skillsinema.adapter.BestFilms
 import com.example.skillsinema.adapter.Film
-import com.example.skillsinema.adapter.ModelFilmDetails
 import com.example.skillsinema.data.FilmPagingSourse
 import com.example.skillsinema.domain.GetPremiereUseCase
 import com.example.skillsinema.domain.GetTopFilmsUseCase
@@ -25,7 +24,6 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
-import kotlin.reflect.jvm.internal.impl.load.java.lazy.descriptors.DeclaredMemberIndex.Empty
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -63,15 +61,21 @@ class MainViewModel @Inject constructor(
 
     }
 
-    val sdf = SimpleDateFormat("MM")
+
 
 
     private fun loadPremieres() {
-        val month=sdf.format(Date())
+        val calendar = Calendar.getInstance()
+        val monthNumber = calendar.get(Calendar.MONTH)
+        val monthName = DateFormatSymbols().months[monthNumber]
+        val year = SimpleDateFormat("yyyy")
+        val currentYear = year.format(Date())
+
+      Log.d("MONTH", "$monthName, $currentYear")
         //navController.navigate(R.id.action_mainFragment_to_itemInfoFragment, bundle)
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching {
-                data.executeGetPremiere().items
+                data.executeGetPremiere( currentYear.toInt(), monthName).items
             }.fold(
                 onSuccess = {
                     _premiereModel.value = it

@@ -1,8 +1,5 @@
-package com.example.skillsinema.entity
+package com.example.skillsinema.data
 
-
-
-import com.example.skillsinema.adapter.ModelFilmDetails
 
 //@JsonClass(generateAdapter = true)
 interface FilmDTO {

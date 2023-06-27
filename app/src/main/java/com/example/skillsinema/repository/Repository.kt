@@ -1,10 +1,9 @@
-package com.example.skillsinema.data
+package com.example.skillsinema.repository
 
-import com.example.skillsinema.adapter.BestFilms
-import com.example.skillsinema.adapter.DataDTO
 import com.example.skillsinema.adapter.Film
+import com.example.skillsinema.data.BestFilmDTO
+import com.example.skillsinema.data.DataDTO
 //import com.example.skillsinema.adapter.FilmDTO
-import com.example.skillsinema.adapter.ModelFilmDetails
 import com.example.skillsinema.entity.*
 //import com.example.skillsinema.entity.ModelFilmDetails
 
@@ -14,7 +13,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.delay
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -32,9 +30,9 @@ class Repository @Inject constructor() {
     // @Inject private val filmId: Int? = null
 
     @Provides
-    suspend fun getPremiere(): Model {
+    suspend fun getPremiere(year: Int, month: String): Model {
         //delay(2000)
-        return retrofitInstance().getFilms()
+        return retrofitInstance().getFilms(year,month)
     }
 
     @Provides
@@ -79,8 +77,10 @@ class Repository @Inject constructor() {
     interface ApiInterface {
         @Headers("X-API-KEY: $api_key")
 
-        @GET("films/premieres?year=2023&month=APRIL")
+        @GET("films/premieres?")
         suspend fun getFilms(
+            @Query("year") year:Int,
+            @Query("month") month:String
 
         ): DataDTO
 

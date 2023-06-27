@@ -1,4 +1,4 @@
-package com.example.skillsinema.entity
+package com.example.skillsinema.data
 
 import com.example.skillsinema.adapter.BestFilms
 import com.example.skillsinema.adapter.Film

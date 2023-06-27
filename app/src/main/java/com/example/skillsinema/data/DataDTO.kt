@@ -1,4 +1,4 @@
-package com.example.skillsinema.adapter
+package com.example.skillsinema.data
 
 import com.example.skillsinema.entity.Model
 

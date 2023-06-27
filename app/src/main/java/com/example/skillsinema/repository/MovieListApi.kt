@@ -1,4 +1,4 @@
-package com.example.skillsinema.data
+package com.example.skillsinema.repository
 
 
 import com.example.skillsinema.entity.PagedMovieList

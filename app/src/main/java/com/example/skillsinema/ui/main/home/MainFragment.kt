@@ -1,7 +1,6 @@
 package com.example.skillsinema.ui.main.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,14 +11,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.skillsinema.R
 import com.example.skillsinema.adapter.Film
-import com.example.skillsinema.adapter.ModelFilmDetails
 import com.example.skillsinema.databinding.FragmentMainBinding
 import com.example.skillsinema.entity.Model
-import com.example.skillsinema.entity.Movie
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
