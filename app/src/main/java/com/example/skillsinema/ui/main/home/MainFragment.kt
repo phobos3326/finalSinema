@@ -11,6 +11,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.skillsinema.R
+import com.example.skillsinema.adapter.Film
+import com.example.skillsinema.adapter.ModelFilmDetails
 import com.example.skillsinema.databinding.FragmentMainBinding
 import com.example.skillsinema.entity.Model
 import com.example.skillsinema.entity.Movie
@@ -30,7 +32,7 @@ class MainFragment @Inject constructor() : Fragment() {
     private val binding get() = _binding!!
     private val adapter = MyAdapter { onItemClick(it) }
 
-    private val adapterBestFilms = AdapterBestFilm()
+    private val adapterBestFilms = AdapterBestFilm {onItemDetailClick(it)}
 
    // private val pagedAdapter = PagedAdapterBestFilm { onItemClick(it) }
 
@@ -122,8 +124,8 @@ class MainFragment @Inject constructor() : Fragment() {
 
     }
 
-    private fun onItemClick(item: Movie) {
-        bundle.putInt("Arg", item.kinopoiskId)
+    private fun onItemDetailClick(item: Film) {
+        bundle.putInt("Arg", item.filmId)
         findNavController().navigate(R.id.action_mainFragment_to_itemInfoFragment, bundle)
 
     }

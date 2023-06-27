@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
 import com.example.skillsinema.adapter.Film
+import com.example.skillsinema.adapter.ModelFilmDetails
 import com.example.skillsinema.ui.main.home.AdapterBestFilm.Const.END
 import com.example.skillsinema.ui.main.home.AdapterBestFilm.Const.NOEND
 import com.example.skillsinema.databinding.ItemBinding
@@ -21,9 +22,9 @@ import com.example.skillsinema.databinding.SecondItemBinding
 import javax.inject.Inject
 
 class AdapterBestFilm @Inject constructor(
-    //private val onClick:(BestFilms.Film)->Unit
+    private val onClick: (Film) -> Unit
 
-): ListAdapter<Film, RecyclerView.ViewHolder>(DiffUtilCallback()) {
+) : ListAdapter<Film, RecyclerView.ViewHolder>(DiffUtilCallback()) {
 
 
     class DiffUtilCallback : DiffUtil.ItemCallback<Film>() {
@@ -48,6 +49,10 @@ class AdapterBestFilm @Inject constructor(
         if (getItemViewType(position) == NOEND) {
             val item = getItem(position)
             (holder as MyViewHolder).bind(item)
+            holder.itemView.setOnClickListener {
+                                        onClick(item!!)
+
+            }
         } else {
             (holder as MyViewHolder2).bind()
         }
@@ -86,7 +91,7 @@ class AdapterBestFilm @Inject constructor(
 
     class MyViewHolder @Inject constructor(
         private var binding1: ItemBinding
-    ): RecyclerView.ViewHolder(binding1.root) {
+    ) : RecyclerView.ViewHolder(binding1.root) {
         fun bind(film: Film) {
             binding1.title.text = film.nameRu
             binding1.textViewRating.text = film.rating
@@ -101,7 +106,7 @@ class AdapterBestFilm @Inject constructor(
 
     class MyViewHolder2 @Inject constructor(
         private var binding2: SecondItemBinding
-    ): RecyclerView.ViewHolder(binding2.root) {
+    ) : RecyclerView.ViewHolder(binding2.root) {
         fun bind() {
             //myViewType.typePosition = END
             //myViewType.hasImage = HasEnd.TRUE

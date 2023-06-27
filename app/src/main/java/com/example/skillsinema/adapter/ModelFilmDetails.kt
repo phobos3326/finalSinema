@@ -33,7 +33,7 @@ import com.squareup.moshi.JsonClass
         @Json(name = "isTicketsAvailable")
         val isTicketsAvailable: Boolean?,
         @Json(name = "kinopoiskId")
-        var kinopoiskId: Int?,
+        var kinopoiskId: Int,
         @Json(name = "lastSync")
         val lastSync: String?,
         @Json(name = "logoUrl")
