@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.skillsinema.DataRepository
 import com.example.skillsinema.entity.ModelFilmDetails
 import com.example.skillsinema.domain.GetFilmDetailUseCase
 //import com.example.skillsinema.entity.ModelFilmDetails
@@ -12,21 +13,33 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ItemInfoViewModel @Inject constructor(private val dataFilm: GetFilmDetailUseCase) :
+class ItemInfoViewModel @Inject constructor(
+    private var dataRepository: DataRepository,
+    private val dataFilm: GetFilmDetailUseCase) :
     ViewModel() {
     private val _film = MutableLiveData<ModelFilmDetails>()
     //private val _film= MutableStateFlow<ModelFilmDetails.Film>()
     //val film = _film as StateFlow<*>
     val film = _film
 
+    fun getValue(): Int {
+        return dataRepository.id
+    }
 
-    var id: Int = 0
+    fun setValue(value: Int) {
+        dataRepository.id = value
+    }
+
+
     //Log.d("ItemInfoViewModel", "${id}" )
     init {
         viewModelScope.launch {
             loadFilm()
 
         }
+        getValue()
+
+
     }
 
 
@@ -38,7 +51,8 @@ class ItemInfoViewModel @Inject constructor(private val dataFilm: GetFilmDetailU
         viewModelScope.launch {
             // repository.getFilmDetails(id).film
             kotlin.runCatching {
-                dataFilm.executeGetFilm(id)
+
+                dataFilm.executeGetFilm(getValue())
               //  Log.d("ItemInfoViewModel", "${id}" )
             }.fold(
                 onSuccess = {

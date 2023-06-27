@@ -2,6 +2,7 @@ package com.example.skillsinema.repository
 
 
 
+import com.example.skillsinema.adapter.Film
 import com.example.skillsinema.entity.Movie
 import dagger.Module
 import dagger.Provides
@@ -13,7 +14,7 @@ import javax.inject.Inject
 @InstallIn(SingletonComponent::class)
 class MoviePagedListRepository @Inject constructor() {
     @Provides
-    suspend fun getTopFilm(page:Int):List<Movie> {
-        return retrofit.topList(1).films
+    suspend fun getTopFilm(page:Int):List<Film> {
+        return retrofit.topList(page).films
     }
 }

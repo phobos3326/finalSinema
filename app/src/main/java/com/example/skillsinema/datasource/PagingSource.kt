@@ -2,15 +2,16 @@ package com.example.skillsinema.data
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.example.skillsinema.adapter.Film
 import com.example.skillsinema.entity.Movie
 import com.example.skillsinema.repository.MoviePagedListRepository
 import javax.inject.Inject
 
 class FilmPagingSourse @Inject constructor(val repository: MoviePagedListRepository) :
-    PagingSource<Int, Movie>() {
+    PagingSource<Int, Film>() {
 
 
-    override fun getRefreshKey(state: PagingState<Int, Movie>): Int? = FIRST_PAGE
+    override fun getRefreshKey(state: PagingState<Int, Film>): Int? = FIRST_PAGE
 
    /* override fun getRefreshKey(state: PagingState<Int, Movie>): Int? {
         return state.anchorPosition?.let {
@@ -19,7 +20,7 @@ class FilmPagingSourse @Inject constructor(val repository: MoviePagedListReposit
         }
     }*/
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Movie> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Film> {
 
         val page = params.key ?: FIRST_PAGE
 

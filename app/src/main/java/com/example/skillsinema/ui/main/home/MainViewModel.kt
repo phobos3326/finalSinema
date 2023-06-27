@@ -10,6 +10,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.example.skillsinema.DataRepository
 import com.example.skillsinema.adapter.Film
 import com.example.skillsinema.data.FilmPagingSourse
 import com.example.skillsinema.domain.GetPremiereUseCase
@@ -28,6 +29,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     // @ApplicationContext private val context: ApplicationContext,
+    private var dataRepository: DataRepository,
     private val data: GetPremiereUseCase,
     private val topFilmsUseCase: GetTopFilmsUseCase,
     private val pagingSource: FilmPagingSourse
@@ -41,7 +43,7 @@ class MainViewModel @Inject constructor(
 
     var bundle = Bundle()
 
-    val pagedFilms: Flow<PagingData<Movie>> = Pager(
+    val pagedFilms: Flow<PagingData<Film>> = Pager(
         config = PagingConfig(
             pageSize = 20,
             enablePlaceholders = true
@@ -94,6 +96,7 @@ class MainViewModel @Inject constructor(
         //navController.navigate(R.id.action_mainFragment_to_itemInfoFragment, bundle)
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching {
+
                 topFilmsUseCase.executeTopFilm()
             }.fold(
                 onSuccess = {

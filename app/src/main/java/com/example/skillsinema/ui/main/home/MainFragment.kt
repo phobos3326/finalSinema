@@ -44,11 +44,11 @@ class MainFragment @Inject constructor() : Fragment() {
         // fun newInstance() = MainFragment()
     }
 
-    private lateinit var viewModel: MainViewModel
+    //private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        //viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         // TODO: Use the ViewModel
 
 
@@ -70,6 +70,10 @@ class MainFragment @Inject constructor() : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.SHOWALL.setOnClickListener {
+            findNavController().navigate(R.id.action_home_fragment_to_showAllFragment)
+        }
+
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             mainViewModel.modelPremiere.collect {
 
@@ -82,18 +86,9 @@ class MainFragment @Inject constructor() : Fragment() {
 
 
         }
-        /* viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-             mainViewModel.topFilmModel.collect {
-                 binding.TopFilmsRecyclerView.adapter = adapterBestFilms
-                 //delay(100L)
-                 adapterBestFilms.submitList(it)
 
 
-
-             }
-         }*/
-
-        viewModel.topFilmModel.onEach {
+        mainViewModel.topFilmModel.onEach {
             binding.TopFilmsRecyclerView.adapter = adapterBestFilms
             //dapterBestFilms.loading = false
             binding.TopFilmsRecyclerView.scrollToPosition(1)
@@ -103,13 +98,7 @@ class MainFragment @Inject constructor() : Fragment() {
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
 
-        /*  viewModel.pagedFilms.onEach {
-              binding.TopFilmsRecyclerView.adapter=pagedAdapter
-              pagedAdapter.submitData(it)
-              //val subList: List<Movie> = dataList.subList(0, 10)
-              //pagedAdapter.addToList(it)
-              Log.d("TAG", "${it}")
-          }.launchIn(viewLifecycleOwner.lifecycleScope)*/
+
 
     }
 

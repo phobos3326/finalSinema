@@ -1,5 +1,6 @@
 package com.example.skillsinema.repository
 
+import com.example.skillsinema.DataRepository
 import com.example.skillsinema.adapter.Film
 import com.example.skillsinema.data.BestFilmDTO
 import com.example.skillsinema.data.DataDTO
@@ -25,9 +26,12 @@ import javax.inject.Inject
 
 @Module
 @InstallIn(SingletonComponent::class)
-class Repository @Inject constructor() {
+class Repository @Inject constructor(
 
-    // @Inject private val filmId: Int? = null
+) {
+
+
+
 
     @Provides
     suspend fun getPremiere(year: Int, month: String): Model {
@@ -36,8 +40,9 @@ class Repository @Inject constructor() {
     }
 
     @Provides
-    suspend fun getFilmDetails(id: Int): ModelFilmDetails {
-        return retrofitInstance2().filmDetails(id)
+    suspend fun getFilmDetails(value: Int): ModelFilmDetails {
+
+        return retrofitInstance2().filmDetails(value)
     }
 
     @Provides

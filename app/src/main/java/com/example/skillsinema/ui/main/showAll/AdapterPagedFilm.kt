@@ -1,26 +1,28 @@
-package com.example.skillsinema.ui.main.home
+package com.example.skillsinema.ui.main.showAll
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
+
 import androidx.recyclerview.widget.RecyclerView
 
 
 import com.bumptech.glide.Glide
 
 import com.example.skillsinema.adapter.Film
-import com.example.skillsinema.ui.main.home.AdapterBestFilm.Const.END
-import com.example.skillsinema.ui.main.home.AdapterBestFilm.Const.NOEND
+
 import com.example.skillsinema.databinding.ItemBinding
 import com.example.skillsinema.databinding.SecondItemBinding
+import com.example.skillsinema.entity.Movie
+import com.example.skillsinema.ui.main.showAll.AdapterPagedFilm.Const.NOEND
 
 import javax.inject.Inject
 
-class AdapterBestFilm @Inject constructor(
-    private val onClick: (Film) -> Unit,
+class AdapterPagedFilm @Inject constructor(
+   // private val onClick: (Film) -> Unit,
 
-) : ListAdapter<Film, RecyclerView.ViewHolder>(DiffUtilCallback()) {
+) : PagingDataAdapter<Film, RecyclerView.ViewHolder>(DiffUtilCallback()) {
 
 
     class DiffUtilCallback : DiffUtil.ItemCallback<Film>() {
@@ -44,9 +46,9 @@ class AdapterBestFilm @Inject constructor(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (getItemViewType(position) == NOEND) {
             val item = getItem(position)
-            (holder as MyViewHolder).bind(item)
+            (holder as MyViewHolder).bind(item!!)
             holder.itemView.setOnClickListener {
-                                        onClick(item!!)
+                                      //  onClick(item!!)
 
             }
         } else {
@@ -54,7 +56,7 @@ class AdapterBestFilm @Inject constructor(
         }
     }
 
-    override fun submitList(list: List<Film>?) {
+  /*  override fun submitList(list: List<Film>?) {
         val newList = list?.toMutableList()
         if ((newList?.size ?: 0) >= 19) {
             val lastItem = list?.get(19)
@@ -64,25 +66,25 @@ class AdapterBestFilm @Inject constructor(
         }
 
         super.submitList(list)
-    }
+    }*/
 
-    override fun getItemViewType(position: Int): Int {
+    /*override fun getItemViewType(position: Int): Int {
         return if (position == itemCount - 1 && itemCount >= 19) {
             END
         } else {
             NOEND
         }
-    }
+    }*/
 
 
-    override fun getItemCount(): Int {
+   /* override fun getItemCount(): Int {
         val itemCount = super.getItemCount()
         return if (itemCount >= 20) {
             itemCount + 1
         } else {
             itemCount
         }
-    }
+    }*/
 
 
     class MyViewHolder @Inject constructor(
