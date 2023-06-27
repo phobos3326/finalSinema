@@ -40,8 +40,6 @@ class MainViewModel @Inject constructor(
     val topFilmModel = _topFilmModel.asStateFlow()
 
     var bundle = Bundle()
-    //var listMovie: List<Movie> = emptyList()
-
 
     val pagedFilms: Flow<PagingData<Movie>> = Pager(
         config = PagingConfig(
@@ -51,33 +49,6 @@ class MainViewModel @Inject constructor(
         ),
         pagingSourceFactory = { pagingSource }
     ).flow.cachedIn(viewModelScope)
-
-    /*  fun getPagedFilms(): Flow<PagingData<Movie>> {
-          return Pager(
-              config = PagingConfig(pageSize = 20),
-              pagingSourceFactory = { pagingSource }
-          ).flow.cachedIn(viewModelScope)
-      }*/
-
-    /*  suspend fun aa(): MutableList<Movie> {
-          val listMovie: MutableList<Movie> = emptyList<Movie>().toMutableList()
-          repeat(5) {
-              pagedFilms.map { pd ->
-                  _topFilmModel.value = (pd.toList())
-
-              }
-              Log.d("TTT", "${listMovie.size}")
-          }
-          return listMovie
-      }
-
-      val pagedFilms1: Flow<PagingData<Movie>> = Pager(
-          config = PagingConfig(pageSize = 20),
-          pagingSourceFactory = { pagingSource }
-      ).flow.cachedIn(viewModelScope)*/
-
-
-
 
 
     init {

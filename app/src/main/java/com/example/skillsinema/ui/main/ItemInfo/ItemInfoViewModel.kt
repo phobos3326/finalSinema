@@ -3,6 +3,7 @@ package com.example.skillsinema.ui.main.ItemInfo
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import com.example.skillsinema.adapter.ModelFilmDetails
 import com.example.skillsinema.domain.GetFilmDetailUseCase
@@ -15,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ItemInfoViewModel @Inject constructor(private val dataFilm: GetFilmDetailUseCase) :
     ViewModel() {
-    private val _film = MutableLiveData<ModelFilmDetails.Film>()
+    private val _film = MutableLiveData<ModelFilmDetails>()
     //private val _film= MutableStateFlow<ModelFilmDetails.Film>()
     //val film = _film as StateFlow<*>
     val film11 = _film
@@ -36,15 +37,15 @@ class ItemInfoViewModel @Inject constructor(private val dataFilm: GetFilmDetailU
         // film.value?.kinopoiskId=id
 
 
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch {
             // repository.getFilmDetails(id).film
             kotlin.runCatching {
                 dataFilm.executeGetFilm(id)
               //  Log.d("ItemInfoViewModel", "${id}" )
             }.fold(
                 onSuccess = {
-                    _film.value = it.film
-                    Log.d("ItemInfoViewModel", "${it.film}" )
+                    _film.value = it
+                    Log.d("ItemInfoViewModel", "${it}" )
                 },
                 onFailure = {
                     Log.d("1ItemInfoViewModel", it.message ?: "not load")

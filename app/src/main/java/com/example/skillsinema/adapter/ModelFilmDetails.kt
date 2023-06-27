@@ -6,10 +6,8 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-class ModelFilmDetails(override val film: Film):FilmDTO{
 
-    @JsonClass(generateAdapter = true)
-    data class Film (
+    data class ModelFilmDetails (
         @Json(name = "completed")
         val completed: Boolean?,
         @Json(name = "countries")
@@ -115,4 +113,3 @@ class ModelFilmDetails(override val film: Film):FilmDTO{
     }
 
 
-}

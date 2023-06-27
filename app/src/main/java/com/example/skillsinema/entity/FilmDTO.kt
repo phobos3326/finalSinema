@@ -7,7 +7,7 @@ import com.example.skillsinema.adapter.ModelFilmDetails
 //@JsonClass(generateAdapter = true)
 interface FilmDTO {
    // @Json(name = "film")
-    val film:ModelFilmDetails.Film
+    //val film:ModelFilmDetails
   /*  @JsonClass(generateAdapter = true)
     data class Film(
         @Json(name = "completed")

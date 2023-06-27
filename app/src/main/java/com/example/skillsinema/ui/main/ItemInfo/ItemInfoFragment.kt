@@ -13,6 +13,8 @@ import com.example.skillsinema.adapter.ModelFilmDetails
 import com.example.skillsinema.databinding.FragmentItemInfoBinding
 //import com.example.skillsinema.entity.ModelFilmDetails
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -31,9 +33,6 @@ class ItemInfoFragment : Fragment() {
         arguments?.let {
 
 
-
-            // param1 = it.getString(com.example.skillsinema.ARG_PARAM1)
-            //   param2 = it.getString(com.example.skillsinema.ARG_PARAM2)
         }
     }
 
@@ -42,9 +41,7 @@ class ItemInfoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-
         _binding = FragmentItemInfoBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
@@ -54,18 +51,20 @@ class ItemInfoFragment : Fragment() {
 
         val id= arguments?.getInt("Arg")
         Log.d("FRAGMENT ITEM", id.toString())
-        //binding.filmTextView.text="55435465"
+
 
         lifecycleScope.launch {
             viewModel.id=id!!
-            viewModel.film11.observe(viewLifecycleOwner, Observer<ModelFilmDetails.Film> {
+            viewModel.film11.observe(viewLifecycleOwner, Observer<ModelFilmDetails> {
 
 
-                //viewModel.loadFilm()
-                binding.filmTextView.text= "it.nameRu"
+
+                binding.filmTextView.text= it.nameRu
             })
 
         }
+
+
 
     }
 

@@ -38,7 +38,7 @@ class Repository @Inject constructor() {
     }
 
     @Provides
-    suspend fun getFilmDetails(id: Int): FilmDTO {
+    suspend fun getFilmDetails(id: Int): ModelFilmDetails {
         return retrofitInstance2().filmDetails(id)
     }
 
