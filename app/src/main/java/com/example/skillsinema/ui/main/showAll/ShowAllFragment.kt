@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.skillsinema.R
+import com.example.skillsinema.adapter.Film
 
 import com.example.skillsinema.databinding.FragmentShowAllBinding
 import com.example.skillsinema.entity.Model
@@ -29,7 +30,7 @@ class ShowAllFragment : Fragment() {
 
     val bundle =Bundle()
 
-    private val adapterPagedFilm =AdapterPagedFilm()
+    private val adapterPagedFilm =AdapterPagedFilm {onItemClick(it)}
 
     companion object {
         //fun newInstance() = ShowAllFragment()
@@ -61,9 +62,9 @@ class ShowAllFragment : Fragment() {
     }
 
 
-    private fun onItemClick(item: Model.Item) {
-        bundle.putInt("Arg", item.kinopoiskId)
-        findNavController().navigate(R.id.action_mainFragment_to_itemInfoFragment, bundle)
+    private fun onItemClick(item: Film) {
+        bundle.putString("Arg", binding.textView.text.toString())
+        findNavController().navigate(R.id.action_showAllFragment_to_itemInfoFragment, bundle)
 
     }
 

@@ -36,5 +36,9 @@
         android:id="@+id/showAllFragment"
         android:name="com.example.skillsinema.ui.main.showAll.ShowAllFragment"
         android:label="fragment_show_all"
-        tools:layout="@layout/fragment_show_all" />
+        tools:layout="@layout/fragment_show_all" >
+        <action
+            android:id="@+id/action_showAllFragment_to_itemInfoFragment"
+            app:destination="@id/itemInfoFragment" />
+    </fragment>
 </navigation>

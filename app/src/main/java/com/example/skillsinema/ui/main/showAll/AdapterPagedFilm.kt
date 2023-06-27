@@ -20,7 +20,7 @@ import com.example.skillsinema.ui.main.showAll.AdapterPagedFilm.Const.NOEND
 import javax.inject.Inject
 
 class AdapterPagedFilm @Inject constructor(
-   // private val onClick: (Film) -> Unit,
+    private val onClick: (Film) -> Unit,
 
 ) : PagingDataAdapter<Film, RecyclerView.ViewHolder>(DiffUtilCallback()) {
 
@@ -34,26 +34,22 @@ class AdapterPagedFilm @Inject constructor(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding = ItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         val binding2 = SecondItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return if (viewType == NOEND) {
+
             return MyViewHolder(binding)
-        } else {
-            MyViewHolder2(binding2)
-        }
+
 
     }
 
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (getItemViewType(position) == NOEND) {
+
             val item = getItem(position)
             (holder as MyViewHolder).bind(item!!)
             holder.itemView.setOnClickListener {
-                                      //  onClick(item!!)
+                                       onClick(item!!)
 
             }
-        } else {
-            (holder as MyViewHolder2).bind()
-        }
+
     }
 
   /*  override fun submitList(list: List<Film>?) {
