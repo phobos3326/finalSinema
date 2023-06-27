@@ -1,5 +1,6 @@
 package com.example.skillsinema.ui.main.home
 
+import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -22,6 +23,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 import kotlin.reflect.jvm.internal.impl.load.java.lazy.descriptors.DeclaredMemberIndex.Empty
 
@@ -61,8 +63,11 @@ class MainViewModel @Inject constructor(
 
     }
 
+    val sdf = SimpleDateFormat("MM")
+
 
     private fun loadPremieres() {
+        val month=sdf.format(Date())
         //navController.navigate(R.id.action_mainFragment_to_itemInfoFragment, bundle)
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching {

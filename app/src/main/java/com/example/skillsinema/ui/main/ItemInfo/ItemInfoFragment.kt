@@ -56,7 +56,7 @@ class ItemInfoFragment : Fragment() {
 
         lifecycleScope.launch {
             viewModel.id=id!!
-            viewModel.film11.observe(viewLifecycleOwner, Observer<ModelFilmDetails> {
+            viewModel.film.observe(viewLifecycleOwner, Observer<ModelFilmDetails> {
 
 
 

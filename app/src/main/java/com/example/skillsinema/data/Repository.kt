@@ -78,8 +78,11 @@ class Repository @Inject constructor() {
 
     interface ApiInterface {
         @Headers("X-API-KEY: $api_key")
+
         @GET("films/premieres?year=2023&month=APRIL")
-        suspend fun getFilms(): DataDTO
+        suspend fun getFilms(
+
+        ): DataDTO
 
 
     }

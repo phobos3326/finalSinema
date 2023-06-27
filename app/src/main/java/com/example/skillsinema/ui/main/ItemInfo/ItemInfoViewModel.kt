@@ -19,7 +19,7 @@ class ItemInfoViewModel @Inject constructor(private val dataFilm: GetFilmDetailU
     private val _film = MutableLiveData<ModelFilmDetails>()
     //private val _film= MutableStateFlow<ModelFilmDetails.Film>()
     //val film = _film as StateFlow<*>
-    val film11 = _film
+    val film = _film
 
 
     var id: Int = 0
