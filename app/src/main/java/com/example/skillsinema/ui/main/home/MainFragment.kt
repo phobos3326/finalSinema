@@ -32,7 +32,7 @@ class MainFragment @Inject constructor() : Fragment() {
 
     private val adapterBestFilms = AdapterBestFilm()
 
-    private val pagedAdapter = PagedAdapterBestFilm { onItemClick(it) }
+   // private val pagedAdapter = PagedAdapterBestFilm { onItemClick(it) }
 
     val scope = CoroutineScope(Dispatchers.Default)
     val scope2 = CoroutineScope(Dispatchers.Default)
