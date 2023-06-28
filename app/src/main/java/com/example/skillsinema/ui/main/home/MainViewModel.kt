@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -13,11 +14,11 @@ import androidx.paging.cachedIn
 import com.example.skillsinema.DataRepository
 import com.example.skillsinema.adapter.Film
 import com.example.skillsinema.data.FilmPagingSourse
+import com.example.skillsinema.domain.FilteredFilmsUseCase
+import com.example.skillsinema.domain.FiltersUseCase
 import com.example.skillsinema.domain.GetPremiereUseCase
 import com.example.skillsinema.domain.GetTopFilmsUseCase
-
-import com.example.skillsinema.entity.Model
-import com.example.skillsinema.entity.Movie
+import com.example.skillsinema.entity.*
 
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -32,7 +33,9 @@ class MainViewModel @Inject constructor(
     private var dataRepository: DataRepository,
     private val data: GetPremiereUseCase,
     private val topFilmsUseCase: GetTopFilmsUseCase,
-    private val pagingSource: FilmPagingSourse
+    private val pagingSource: FilmPagingSourse,
+    private val filtersUseCase: FiltersUseCase,
+    private val filteredFilmsUseCase: FilteredFilmsUseCase
     //private val navController: NavController
 ) : ViewModel() {
     private val _premiereModel = MutableStateFlow<List<Model.Item>>(emptyList())
@@ -41,7 +44,21 @@ class MainViewModel @Inject constructor(
     private var _topFilmModel = MutableStateFlow<List<Film>>(emptyList())
     val topFilmModel = _topFilmModel.asStateFlow()
 
+
+    private var _filters = MutableStateFlow<List<ModelFilter>>(emptyList())
+    val filters = _filters.asStateFlow()
+
+
+
+    private var _filteredFilms = MutableStateFlow<List<ModelFilteredFilms1>>(emptyList())
+    val filteredFilms = _filteredFilms.asStateFlow()
+
+    var genre = 0
+    var country = 0
+
     var bundle = Bundle()
+
+    var listFilters = listOf<ModelFilter>()
 
     val pagedFilms: Flow<PagingData<Film>> = Pager(
         config = PagingConfig(
@@ -58,12 +75,12 @@ class MainViewModel @Inject constructor(
             loadPremieres()
             loadTopFilms()
             pagedFilms
+            loadFilters()
+            loadFilteredFilms()
         }
         // pagedFilms
 
     }
-
-
 
 
     private fun loadPremieres() {
@@ -73,11 +90,11 @@ class MainViewModel @Inject constructor(
         val year = SimpleDateFormat("yyyy")
         val currentYear = year.format(Date())
 
-      Log.d("MONTH", "$monthName, $currentYear")
+        Log.d("MONTH", "$monthName, $currentYear")
         //navController.navigate(R.id.action_mainFragment_to_itemInfoFragment, bundle)
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching {
-                data.executeGetPremiere( currentYear.toInt(), monthName).items
+                data.executeGetPremiere(currentYear.toInt(), monthName).items
             }.fold(
                 onSuccess = {
                     _premiereModel.value = it
@@ -110,6 +127,47 @@ class MainViewModel @Inject constructor(
 
 
     }
+
+
+    fun loadFilters() {
+        viewModelScope.launch {
+            kotlin.runCatching {
+                filtersUseCase.getFilters()
+            }.fold(
+                onSuccess = {
+                    _filters.value = listOf(it)
+                    listFilters = listOf(it)
+                    Log.d("MainViewModel2", (it ?: " load").toString())
+                },
+                onFailure = { Log.d("MainViewModelFilters", it.message ?: "not load") }
+            )
+        }
+
+        listFilters.forEach {
+            country = it.countries[1].id
+            genre = it.genres[11].id
+        }
+
+    }
+
+
+    fun loadFilteredFilms() {
+        viewModelScope.launch {
+            kotlin.runCatching {
+                filteredFilmsUseCase.getFilteredFilms()
+            }.fold(
+                onSuccess = {
+                    _filteredFilms.value= it
+                    Log.d("MainViewModelFilteredFilms", (it ?: " load").toString())
+                },
+                onFailure = {
+                    Log.d("MainViewModelFilteredFilms", it.message ?: "not load")
+                }
+            )
+        }
+    }
+
+
 }
 
 

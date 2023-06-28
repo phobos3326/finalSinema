@@ -12,7 +12,7 @@ class GetFilmDetailUseCase @Inject constructor(
 ) {
 
     suspend fun executeGetFilm(value: Int): ModelFilmDetails {
-        return repository.getFilmDetails(value)
+       return repository.getFilmDetails(value)
 
     }
 }

@@ -51,6 +51,16 @@ class Repository @Inject constructor(
     }
 
 
+    @Provides
+    suspend fun getFilters(): ModelFilter {
+        return retrofitInstanceFilters().filters()
+    }
+
+    @Provides
+    suspend fun getFilteredFilm(countries: Int, genre: Int): List<ModelFilteredFilms1> {
+        return retrofitInstanceFilteredFilms().filteredFilms(countries,genre)
+    }
+
 
     private val BASE_URL = "https://kinopoiskapiunofficial.tech/api/v2.2/"
 
@@ -79,6 +89,11 @@ class Repository @Inject constructor(
     private fun retrofitInstanceTopFilms(): ApiInterfaceTopFilms =
         retrofit()!!.create(ApiInterfaceTopFilms::class.java)
 
+    private fun retrofitInstanceFilters(): ApiInterfaceFilters =
+        retrofit()!!.create(ApiInterfaceFilters::class.java)
+
+    private fun retrofitInstanceFilteredFilms(): ApiInterfaceFilteredFilms =
+        retrofit()!!.create(ApiInterfaceFilteredFilms::class.java)
 
     interface ApiInterface {
         @Headers("X-API-KEY: $api_key")
@@ -110,6 +125,26 @@ class Repository @Inject constructor(
         suspend fun topFilms(
             // @Query("page") page: Int
         ): BestFilmDTO
+
+    }
+
+
+    interface ApiInterfaceFilters{
+        @Headers("X-API-KEY: $api_key")
+        @GET("films/filters")
+        suspend fun filters(
+
+        ):ModelFilter
+
+    }
+
+    interface ApiInterfaceFilteredFilms{
+        @Headers("X-API-KEY: $api_key")
+        @GET("films")
+        suspend fun filteredFilms(
+            @Query("countries") countries:Int,
+            @Query("genres") month:Int
+        ):List<ModelFilteredFilms1>
 
     }
 
