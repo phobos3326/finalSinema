@@ -1,6 +1,7 @@
 package com.example.skillsinema.ui.main.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,7 +29,9 @@ class MainFragment @Inject constructor() : Fragment() {
     private val binding get() = _binding!!
     private val adapter = MyAdapter { onItemClick(it) }
 
-    private val adapterBestFilms = AdapterBestFilm {onItemDetailClick(it)}
+    private val adapterBestFilms = AdapterBestFilm {
+        onItemDetailClick(it)
+    }
 
    // private val pagedAdapter = PagedAdapterBestFilm { onItemClick(it) }
 
@@ -71,7 +74,7 @@ class MainFragment @Inject constructor() : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.SHOWALL.setOnClickListener {
-            findNavController().navigate(R.id.action_home_fragment_to_showAllFragment)
+            onClickShowAll()
         }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
@@ -99,7 +102,13 @@ class MainFragment @Inject constructor() : Fragment() {
 
 
 
+    }
 
+
+
+
+    private fun onClickShowAll() {
+        findNavController().navigate(R.id.action_home_fragment_to_showAllFragment)
     }
 
 
@@ -111,7 +120,8 @@ class MainFragment @Inject constructor() : Fragment() {
 
     private fun onItemDetailClick(item: Film) {
         bundle.putInt("Arg", item.filmId)
-        findNavController().navigate(R.id.action_mainFragment_to_itemInfoFragment, bundle)
+        val qq = findNavController().navigate(R.id.action_mainFragment_to_itemInfoFragment, bundle)
+       val xx= findNavController().navigate(R.id.action_home_fragment_to_showAllFragment)
 
     }
 

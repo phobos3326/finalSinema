@@ -1,13 +1,20 @@
 package com.example.skillsinema.ui.main.home
 
+import android.service.autofill.OnClickAction
 import android.view.LayoutInflater
+import android.view.View
+import android.view.View.OnClickListener
 import android.view.ViewGroup
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.findNavController
+
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 
 
 import com.bumptech.glide.Glide
+import com.example.skillsinema.R
 
 import com.example.skillsinema.adapter.Film
 import com.example.skillsinema.ui.main.home.AdapterBestFilm.Const.END
@@ -18,16 +25,18 @@ import com.example.skillsinema.databinding.SecondItemBinding
 import javax.inject.Inject
 
 class AdapterBestFilm @Inject constructor(
-    private val onClick: (Film) -> Unit,
+    private val onClick: (Film) -> Unit
 
 ) : ListAdapter<Film, RecyclerView.ViewHolder>(DiffUtilCallback()) {
 
+    private var onClickListener: OnClickListener? = null
 
     class DiffUtilCallback : DiffUtil.ItemCallback<Film>() {
         override fun areItemsTheSame(oldItem: Film, newItem: Film): Boolean = oldItem == newItem
 
         override fun areContentsTheSame(oldItem: Film, newItem: Film): Boolean = oldItem == newItem
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding = ItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -46,11 +55,15 @@ class AdapterBestFilm @Inject constructor(
             val item = getItem(position)
             (holder as MyViewHolder).bind(item)
             holder.itemView.setOnClickListener {
-                                        onClick(item!!)
+                onClick(item!!)
+
 
             }
         } else {
             (holder as MyViewHolder2).bind()
+            holder.itemView.setOnClickListener {
+                it.findNavController().navigate(R.id.action_home_fragment_to_showAllFragment)
+            }
         }
     }
 
@@ -107,6 +120,7 @@ class AdapterBestFilm @Inject constructor(
             //myViewType.typePosition = END
             //myViewType.hasImage = HasEnd.TRUE
             // binding2.textView2.text = myViewType.title
+
 
         }
     }

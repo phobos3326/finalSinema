@@ -33,7 +33,7 @@ class AdapterPagedFilm @Inject constructor(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding = ItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        val binding2 = SecondItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+       // val binding2 = SecondItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
             return MyViewHolder(binding)
 
