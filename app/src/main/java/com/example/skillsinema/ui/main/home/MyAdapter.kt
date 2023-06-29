@@ -4,8 +4,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.skillsinema.R
 
 import com.example.skillsinema.ui.main.home.MyAdapter.Const.END
 import com.example.skillsinema.ui.main.home.MyAdapter.Const.NOEND
@@ -52,8 +54,8 @@ class MyAdapter @Inject constructor(private val onClick: (Model.Item) -> Unit) :
             }
             END -> {
                 val viewHolder = holder as MyViewHolder2
-                viewHolder.itemView.setOnClickListener {
-                    Toast.makeText(holder.itemView.context, "Clicked: ", Toast.LENGTH_SHORT).show()
+                holder.itemView.setOnClickListener {
+                    it.findNavController().navigate(R.id.action_home_fragment_to_showAllFragment)
                 }
             }
         }

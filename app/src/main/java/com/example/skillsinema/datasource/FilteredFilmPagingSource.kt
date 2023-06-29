@@ -1,17 +1,24 @@
 package com.example.skillsinema.datasource
 
 
-
+import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.skillsinema.adapter.Film
+import com.example.skillsinema.entity.ModelFilteredFilms1
 import com.example.skillsinema.entity.Movie
 import com.example.skillsinema.repository.MoviePagedListRepository
+import com.example.skillsinema.repository.Repository
 import javax.inject.Inject
-class FilteredFilmPagingSource @Inject constructor(val repository: MoviePagedListRepository) :
+
+class FilteredFilmPagingSource @Inject constructor(
+    val repository: Repository,
+    val dataSource: FiltersDataSource
+) :
     PagingSource<Int, Film>() {
 
-
+    var genre = 0
+    var countries = 0
     override fun getRefreshKey(state: PagingState<Int, Film>): Int? = FIRST_PAGE
 
     /* override fun getRefreshKey(state: PagingState<Int, Movie>): Int? {
@@ -23,20 +30,25 @@ class FilteredFilmPagingSource @Inject constructor(val repository: MoviePagedLis
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Film> {
 
+        dataSource.loadFilters().forEach {
+            countries = it.countries[1].id
+            genre = it.genres[11].id
+        }
         val page = params.key ?: FIRST_PAGE
 
         return kotlin.runCatching {
-            repository.getTopFilm(page)
+            repository.getFilteredFilm(page, countries, genre)
         }.fold(
             onSuccess = {
                 LoadResult.Page(
-                    data = it,
-
+                   data = it,
                     prevKey = null,
                     // nextKey =  null
-                    nextKey = if (it.isEmpty()) null else page+1
+                    nextKey = if (it.isEmpty()) null else page + 1
 
                 )
+
+
             },
             onFailure = {
                 LoadResult.Error(it)
@@ -45,14 +57,9 @@ class FilteredFilmPagingSource @Inject constructor(val repository: MoviePagedLis
     }
 
 
-
-
-
-
-    private companion object{
-        private val  FIRST_PAGE = 1
+    private companion object {
+        private val FIRST_PAGE = 1
     }
-
 
 
 }

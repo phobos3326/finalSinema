@@ -33,7 +33,9 @@ class MainFragment @Inject constructor() : Fragment() {
         onItemDetailClick(it)
     }
 
-   // private val pagedAdapter = PagedAdapterBestFilm { onItemClick(it) }
+    private val adapterFilteredFilms =AdapterFilteredFilms()
+
+    // private val pagedAdapter = PagedAdapterBestFilm { onItemClick(it) }
 
     val scope = CoroutineScope(Dispatchers.Default)
     val scope2 = CoroutineScope(Dispatchers.Default)
@@ -73,7 +75,7 @@ class MainFragment @Inject constructor() : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.SHOWALL.setOnClickListener {
+        binding.SHOWALL.setOnClickListener { View ->
             onClickShowAll()
         }
 
@@ -84,6 +86,7 @@ class MainFragment @Inject constructor() : Fragment() {
 
                 adapter.addToList(it)
                 // Log.d("TAG", "${it.size}")
+
 
             }
 
@@ -102,9 +105,15 @@ class MainFragment @Inject constructor() : Fragment() {
 
 
 
+        mainViewModel.pagedFilteredFilms.onEach {
+
+            binding.FilterFilmsRecyclerView.adapter =adapterFilteredFilms
+            adapterFilteredFilms.submitData(it)
+           Log.d("PDATA", "$it")
+
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
+
     }
-
-
 
 
     private fun onClickShowAll() {
@@ -113,6 +122,7 @@ class MainFragment @Inject constructor() : Fragment() {
 
 
     private fun onItemClick(item: Model.Item) {
+
         bundle.putInt("Arg", item.kinopoiskId)
         findNavController().navigate(R.id.action_mainFragment_to_itemInfoFragment, bundle)
 
@@ -120,9 +130,7 @@ class MainFragment @Inject constructor() : Fragment() {
 
     private fun onItemDetailClick(item: Film) {
         bundle.putInt("Arg", item.filmId)
-        val qq = findNavController().navigate(R.id.action_mainFragment_to_itemInfoFragment, bundle)
-       val xx= findNavController().navigate(R.id.action_home_fragment_to_showAllFragment)
-
+        findNavController().navigate(R.id.action_mainFragment_to_itemInfoFragment, bundle)
     }
 
 

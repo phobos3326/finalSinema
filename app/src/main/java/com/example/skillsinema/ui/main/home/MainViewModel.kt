@@ -14,6 +14,7 @@ import androidx.paging.cachedIn
 import com.example.skillsinema.DataRepository
 import com.example.skillsinema.adapter.Film
 import com.example.skillsinema.data.FilmPagingSourse
+import com.example.skillsinema.datasource.FilteredFilmPagingSource
 import com.example.skillsinema.domain.FilteredFilmsUseCase
 import com.example.skillsinema.domain.FiltersUseCase
 import com.example.skillsinema.domain.GetPremiereUseCase
@@ -34,6 +35,7 @@ class MainViewModel @Inject constructor(
     private val data: GetPremiereUseCase,
     private val topFilmsUseCase: GetTopFilmsUseCase,
     private val pagingSource: FilmPagingSourse,
+    private val filteredFilmPagingSource: FilteredFilmPagingSource,
     private val filtersUseCase: FiltersUseCase,
     private val filteredFilmsUseCase: FilteredFilmsUseCase
     //private val navController: NavController
@@ -44,11 +46,8 @@ class MainViewModel @Inject constructor(
     private var _topFilmModel = MutableStateFlow<List<Film>>(emptyList())
     val topFilmModel = _topFilmModel.asStateFlow()
 
-
     private var _filters = MutableStateFlow<List<ModelFilter>>(emptyList())
     val filters = _filters.asStateFlow()
-
-
 
     private var _filteredFilms = MutableStateFlow<List<ModelFilteredFilms1>>(emptyList())
     val filteredFilms = _filteredFilms.asStateFlow()
@@ -75,8 +74,8 @@ class MainViewModel @Inject constructor(
             loadPremieres()
             loadTopFilms()
             pagedFilms
-            loadFilters()
-            loadFilteredFilms()
+            pagedFilteredFilms
+            Log.d("FILTERED", "$pagedFilteredFilms")
         }
         // pagedFilms
 
@@ -151,13 +150,13 @@ class MainViewModel @Inject constructor(
     }
 
 
-    fun loadFilteredFilms() {
+   /* fun loadFilteredFilms() {
         viewModelScope.launch {
             kotlin.runCatching {
                 filteredFilmsUseCase.getFilteredFilms()
             }.fold(
                 onSuccess = {
-                    _filteredFilms.value= it
+                    _filteredFilms.value = it
                     Log.d("MainViewModelFilteredFilms", (it ?: " load").toString())
                 },
                 onFailure = {
@@ -165,7 +164,18 @@ class MainViewModel @Inject constructor(
                 }
             )
         }
-    }
+    }*/
+
+
+    val pagedFilteredFilms: Flow<PagingData<Film>> = Pager(
+        config = PagingConfig(
+            pageSize = 20,
+            enablePlaceholders = true
+
+        ),
+        pagingSourceFactory = { filteredFilmPagingSource }
+    ).flow.cachedIn(viewModelScope)
+
 
 
 }

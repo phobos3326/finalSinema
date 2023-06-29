@@ -17,6 +17,7 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Headers
@@ -57,9 +58,8 @@ class Repository @Inject constructor(
     }
 
     @Provides
-    suspend fun getFilteredFilm(countries: Int, genre: Int): List<ModelFilteredFilms1> {
-        return retrofitInstanceFilteredFilms().filteredFilms(countries,genre)
-    }
+    suspend fun getFilteredFilm(page: Int, countries: Int, genre: Int): List<Film> {
+        return retrofit.filteredFilms(page,countries,genre).items    }
 
 
     private val BASE_URL = "https://kinopoiskapiunofficial.tech/api/v2.2/"
@@ -83,6 +83,17 @@ class Repository @Inject constructor(
             .build()
     }
 
+    val retrofit = Retrofit
+        .Builder()
+        .client(
+            OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().also {
+                it.level = HttpLoggingInterceptor.Level.BODY
+            }).build()
+        )
+        .baseUrl("https://kinopoiskapiunofficial.tech/api/v2.2/")
+        .addConverterFactory(MoshiConverterFactory.create(moshi))
+        .build()
+        .create(ApiInterfaceFilteredFilms::class.java)
 
     private fun retrofitInstance(): ApiInterface = retrofit()!!.create(ApiInterface::class.java)
     private fun retrofitInstance2(): ApiInterface2 = retrofit()!!.create(ApiInterface2::class.java)
@@ -142,9 +153,10 @@ class Repository @Inject constructor(
         @Headers("X-API-KEY: $api_key")
         @GET("films")
         suspend fun filteredFilms(
+            @Query("page") page: Int,
             @Query("countries") countries:Int,
             @Query("genres") month:Int
-        ):List<ModelFilteredFilms1>
+        ):ModelFilteredFilms1
 
     }
 

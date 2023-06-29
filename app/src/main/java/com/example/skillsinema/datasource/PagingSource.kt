@@ -10,7 +10,6 @@ import javax.inject.Inject
 class FilmPagingSourse @Inject constructor(val repository: MoviePagedListRepository) :
     PagingSource<Int, Film>() {
 
-
     override fun getRefreshKey(state: PagingState<Int, Film>): Int? = FIRST_PAGE
 
    /* override fun getRefreshKey(state: PagingState<Int, Movie>): Int? {
@@ -21,20 +20,16 @@ class FilmPagingSourse @Inject constructor(val repository: MoviePagedListReposit
     }*/
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Film> {
-
         val page = params.key ?: FIRST_PAGE
-
        return kotlin.runCatching {
             repository.getTopFilm(page)
         }.fold(
             onSuccess = {
                 LoadResult.Page(
                     data = it,
-
                     prevKey = null,
                    // nextKey =  null
                    nextKey = if (it.isEmpty()) null else page+1
-
                 )
             },
             onFailure = {
