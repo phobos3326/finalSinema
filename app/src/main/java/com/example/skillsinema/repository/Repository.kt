@@ -48,18 +48,18 @@ class Repository @Inject constructor(
 
     @Provides
     suspend fun getTopFilm(): List<Film> {
-        return retrofitInstanceTopFilms().topFilms().films
+        return retrofitTopFilms.topFilms().films
     }
 
 
     @Provides
-    suspend fun getFilters(): ModelFilter {
-        return retrofitInstanceFilters().filters()
+    suspend fun getFilters(): List<ModelFilter.Genre> {
+        return retrofitInstanceFilters().filters().genres
     }
 
     @Provides
     suspend fun getFilteredFilm(page: Int, countries: Int, genre: Int): List<Film> {
-        return retrofit.filteredFilms(page,countries,genre).items    }
+        return retrofit.filteredFilms(page,countries,genre, 3, 10).items    }
 
 
     private val BASE_URL = "https://kinopoiskapiunofficial.tech/api/v2.2/"
@@ -82,6 +82,19 @@ class Repository @Inject constructor(
             .client(httpClientBuilder.build())
             .build()
     }
+
+
+    val retrofitTopFilms = Retrofit
+        .Builder()
+        .client(
+            OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().also {
+                it.level = HttpLoggingInterceptor.Level.BODY
+            }).build()
+        )
+        .baseUrl("https://kinopoiskapiunofficial.tech/api/v2.2/")
+        .addConverterFactory(MoshiConverterFactory.create(moshi))
+        .build()
+        .create(ApiInterfaceTopFilms::class.java)
 
     val retrofit = Retrofit
         .Builder()
@@ -155,7 +168,10 @@ class Repository @Inject constructor(
         suspend fun filteredFilms(
             @Query("page") page: Int,
             @Query("countries") countries:Int,
-            @Query("genres") month:Int
+            @Query("genres") month:Int,
+            @Query("ratingFrom") ratingFrom:Int,
+            @Query("ratingTo") ratingTo:Int,
+
         ):ModelFilteredFilms1
 
     }

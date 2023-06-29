@@ -2,18 +2,22 @@ package com.example.skillsinema.ui.main.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.skillsinema.R
 import com.example.skillsinema.adapter.Film
 import com.example.skillsinema.databinding.ItemBinding
 import com.example.skillsinema.databinding.SecondItemBinding
+import com.example.skillsinema.ui.main.home.AdapterFilteredFilms.Const.END
+import com.example.skillsinema.ui.main.home.AdapterFilteredFilms.Const.NOEND
 import javax.inject.Inject
 
 
 class AdapterFilteredFilms @Inject constructor(
-   // private val onClick: (Film) -> Unit,
+    private val onClick: (Film) -> Unit,
 
     ) : PagingDataAdapter<Film, RecyclerView.ViewHolder>(DiffUtilCallback()) {
 
@@ -28,7 +32,12 @@ class AdapterFilteredFilms @Inject constructor(
         val binding = ItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         // val binding2 = SecondItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
-        return MyViewHolder(binding)
+        val binding2 = SecondItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return if (viewType ==NOEND) {
+            return MyViewHolder(binding)
+        } else {
+            MyViewHolder2(binding2)
+        }
 
 
     }
@@ -36,11 +45,21 @@ class AdapterFilteredFilms @Inject constructor(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
-        val item = getItem(position)
-        (holder as MyViewHolder).bind(item!!)
-        holder.itemView.setOnClickListener {
-          //  onClick(item!!)
+        if (getItemViewType(position) == NOEND) {
+            val item = getItem(position)
+            if (item != null) {
+                (holder as MyViewHolder).bind(item)
+            }
+            holder.itemView.setOnClickListener {
+                onClick(item!!)
 
+
+            }
+        } else {
+            (holder as MyViewHolder2).bind()
+            holder.itemView.setOnClickListener {
+                it.findNavController().navigate(R.id.action_home_fragment_to_showAllFragment)
+            }
         }
 
     }
@@ -74,14 +93,20 @@ class AdapterFilteredFilms @Inject constructor(
              itemCount
          }
      }*/
-
+    override fun getItemViewType(position: Int): Int {
+        return if (position == itemCount - 1 && itemCount >= 19) {
+            END
+        } else {
+            NOEND
+        }
+    }
 
     class MyViewHolder @Inject constructor(
         private var binding1: ItemBinding
     ) : RecyclerView.ViewHolder(binding1.root) {
         fun bind(film: Film) {
-            binding1.title.text = film.nameRu
-            binding1.textViewRating.text = film.rating
+           binding1.title.text = film.nameRu
+            binding1.textViewRating.text = film.ratingKinopoisk.toString()
             film.let {
                 Glide.with(binding1.poster)
                     .load(it.posterUrlPreview)

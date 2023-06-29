@@ -8,7 +8,7 @@ import javax.inject.Inject
 class FiltersUseCase @Inject constructor(private val repository: Repository) {
 
 
-    suspend fun getFilters(): ModelFilter {
+    suspend fun getFilters(): List<ModelFilter.Genre> {
         return repository.getFilters()
     }
 

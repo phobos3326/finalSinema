@@ -63,7 +63,7 @@ class ShowAllFragment : Fragment() {
 
 
     private fun onItemClick(item: Film) {
-        bundle.putInt("Arg", item.filmId)
+        item.filmId?.let { bundle.putInt("Arg", it) }
         findNavController().navigate(R.id.action_showAllFragment_to_itemInfoFragment, bundle)
 
     }

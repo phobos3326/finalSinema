@@ -7,6 +7,7 @@ import android.view.View.OnClickListener
 import android.view.ViewGroup
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.findNavController
+import androidx.paging.PagingDataAdapter
 
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -53,7 +54,9 @@ class AdapterBestFilm @Inject constructor(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (getItemViewType(position) == NOEND) {
             val item = getItem(position)
-            (holder as MyViewHolder).bind(item)
+            if (item != null) {
+                (holder as MyViewHolder).bind(item)
+            }
             holder.itemView.setOnClickListener {
                 onClick(item!!)
 
@@ -67,7 +70,11 @@ class AdapterBestFilm @Inject constructor(
         }
     }
 
-    override fun submitList(list: List<Film>?) {
+
+
+
+
+   /* override fun submitList(list: List<Film>?) {
         val newList = list?.toMutableList()
         if ((newList?.size ?: 0) >= 19) {
             val lastItem = list?.get(19)
@@ -77,7 +84,7 @@ class AdapterBestFilm @Inject constructor(
         }
 
         super.submitList(list)
-    }
+    }*/
 
     override fun getItemViewType(position: Int): Int {
         return if (position == itemCount - 1 && itemCount >= 19) {

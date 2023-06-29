@@ -128,7 +128,7 @@ class MainViewModel @Inject constructor(
     }
 
 
-    fun loadFilters() {
+  /*  fun loadFilters() {
         viewModelScope.launch {
             kotlin.runCatching {
                 filtersUseCase.getFilters()
@@ -147,7 +147,7 @@ class MainViewModel @Inject constructor(
             genre = it.genres[11].id
         }
 
-    }
+    }*/
 
 
    /* fun loadFilteredFilms() {

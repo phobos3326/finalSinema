@@ -18,15 +18,15 @@ class FiltersDataSource @Inject constructor(
     lateinit var  useCase: FiltersUseCase
 
     @Provides
-    suspend fun loadFilters(): List<ModelFilter> {
-        var listFilters = listOf<ModelFilter>()
+    suspend fun loadFilters(): List<ModelFilter.Genre> {
+        var listFilters = listOf<ModelFilter.Genre>()
         kotlin.runCatching {
             useCase.getFilters()
         }.fold(
             onSuccess = {
 
-                listFilters = listOf(it)
-                Log.d("MainViewModel2", (it ?: " load").toString())
+                listFilters = it
+               Log.d("MainViewModel2", (it ?: " load").toString())
             },
             onFailure = { Log.d("MainViewModelFilters", it.message ?: "not load") }
         )

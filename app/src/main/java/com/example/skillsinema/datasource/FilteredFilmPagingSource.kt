@@ -18,7 +18,7 @@ class FilteredFilmPagingSource @Inject constructor(
     PagingSource<Int, Film>() {
 
     var genre = 0
-    var countries = 0
+    var countries = 1
     override fun getRefreshKey(state: PagingState<Int, Film>): Int? = FIRST_PAGE
 
     /* override fun getRefreshKey(state: PagingState<Int, Movie>): Int? {
@@ -31,24 +31,21 @@ class FilteredFilmPagingSource @Inject constructor(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Film> {
 
         dataSource.loadFilters().forEach {
-            countries = it.countries[1].id
-            genre = it.genres[11].id
+            //countries = it.countries[1].id
+            genre = it.id
         }
         val page = params.key ?: FIRST_PAGE
 
         return kotlin.runCatching {
-            repository.getFilteredFilm(page, countries, genre)
+            repository.getFilteredFilm(page, 1, 11)
         }.fold(
             onSuccess = {
                 LoadResult.Page(
-                   data = it,
+                  data = it,
                     prevKey = null,
                     // nextKey =  null
                     nextKey = if (it.isEmpty()) null else page + 1
-
                 )
-
-
             },
             onFailure = {
                 LoadResult.Error(it)

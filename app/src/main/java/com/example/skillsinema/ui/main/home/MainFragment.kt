@@ -33,41 +33,20 @@ class MainFragment @Inject constructor() : Fragment() {
         onItemDetailClick(it)
     }
 
-    private val adapterFilteredFilms =AdapterFilteredFilms()
+    private val adapterFilteredFilms = AdapterFilteredFilms {
+        onItemDetailClick(it)
+    }
 
-    // private val pagedAdapter = PagedAdapterBestFilm { onItemClick(it) }
-
-    val scope = CoroutineScope(Dispatchers.Default)
-    val scope2 = CoroutineScope(Dispatchers.Default)
 
     private val mainViewModel: MainViewModel by viewModels()
-    // val mainViewModel: MainViewModel by hiltNavGraphViewModels(R.id.nav_graph)
 
     val bundle = Bundle()
-
-    companion object {
-        // fun newInstance() = MainFragment()
-    }
-
-    //private lateinit var viewModel: MainViewModel
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        //viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        // TODO: Use the ViewModel
-
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
-
-
-        // obtainNavHostFragment(parentFragmentManager,"home_fragment", R.navigation.home_nav_graph,)
-
         return binding.root
     }
 
@@ -78,38 +57,24 @@ class MainFragment @Inject constructor() : Fragment() {
         binding.SHOWALL.setOnClickListener { View ->
             onClickShowAll()
         }
-
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             mainViewModel.modelPremiere.collect {
-
                 binding.viewPager.adapter = adapter
-
                 adapter.addToList(it)
-                // Log.d("TAG", "${it.size}")
-
-
             }
-
-
         }
-
 
         mainViewModel.topFilmModel.onEach {
             binding.TopFilmsRecyclerView.adapter = adapterBestFilms
-            //dapterBestFilms.loading = false
             binding.TopFilmsRecyclerView.scrollToPosition(1)
             adapterBestFilms.submitList(it)
-            //adapterBestFilms.loading =true
-
         }.launchIn(viewLifecycleOwner.lifecycleScope)
-
-
 
         mainViewModel.pagedFilteredFilms.onEach {
 
-            binding.FilterFilmsRecyclerView.adapter =adapterFilteredFilms
+            binding.FilterFilmsRecyclerView.adapter = adapterFilteredFilms
             adapterFilteredFilms.submitData(it)
-           Log.d("PDATA", "$it")
+            Log.d("PDATA", "$it")
 
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
@@ -120,18 +85,19 @@ class MainFragment @Inject constructor() : Fragment() {
         findNavController().navigate(R.id.action_home_fragment_to_showAllFragment)
     }
 
-
     private fun onItemClick(item: Model.Item) {
 
         bundle.putInt("Arg", item.kinopoiskId)
         findNavController().navigate(R.id.action_mainFragment_to_itemInfoFragment, bundle)
-
     }
 
     private fun onItemDetailClick(item: Film) {
-        bundle.putInt("Arg", item.filmId)
+        if (item.kinopoiskId == null) {
+            item.filmId?.let { bundle.putInt("Arg", it) }
+        } else {
+            item.kinopoiskId.let { bundle.putInt("Arg", it) }
+        }
         findNavController().navigate(R.id.action_mainFragment_to_itemInfoFragment, bundle)
     }
-
 
 }
