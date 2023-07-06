@@ -5,6 +5,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.SemanticsProperties.Text
+import androidx.compose.ui.text.input.KeyboardType.Companion.Text
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -48,7 +54,7 @@ class ItemInfoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val id= arguments?.getInt("Arg")
+        val id = arguments?.getInt("Arg")
         Log.d("FRAGMENT ITEM", id.toString())
 
 
@@ -57,9 +63,8 @@ class ItemInfoFragment : Fragment() {
             viewModel.film.observe(viewLifecycleOwner, Observer<ModelFilmDetails> {
 
 
-
-                binding.filmTextView.text= it.nameRu
-
+                binding.filmTextView.text = it.nameRu
+                binding.shortDescriptionTextView.text = it.shortDescription
                 Glide.with(this@ItemInfoFragment)
                     .load(it.posterUrl)
                     .into(binding.filmPreviewImageView)
@@ -69,8 +74,29 @@ class ItemInfoFragment : Fragment() {
         }
 
 
-
     }
+
+   /* @Composable
+    fun SimpleScreen() {
+        Column(Modifier.fillMaxSize()) {
+            Text(
+                text = stringResource(R.string.title),
+                style = MaterialTheme.typography.headlineMedium
+            )
+            Text(
+                text = stringResource(R.string.subtitle),
+                style = MaterialTheme.typography.headlineSmall
+            )
+            Text(
+                text = stringResource(R.string.body),
+                style = MaterialTheme.typography.bodyMedium
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Button(onClick = { *//* Handle click *//* }, Modifier.fillMaxWidth()) {
+                Text(text = stringResource(R.string.confirm))
+            }
+        }
+    }*/
 
     companion object {
         /**
