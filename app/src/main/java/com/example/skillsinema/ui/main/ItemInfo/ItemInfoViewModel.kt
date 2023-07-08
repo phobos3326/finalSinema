@@ -4,18 +4,25 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.*
 import com.example.skillsinema.DataRepository
+import com.example.skillsinema.adapter.Film
+import com.example.skillsinema.datasource.StaffDataSource
 import com.example.skillsinema.entity.ModelFilmDetails
 import com.example.skillsinema.domain.GetFilmDetailUseCase
+import com.example.skillsinema.entity.ModelStaffItem
 //import com.example.skillsinema.entity.ModelFilmDetails
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.reflect.jvm.internal.impl.descriptors.Visibilities.Private
 
 @HiltViewModel
 class ItemInfoViewModel @Inject constructor(
     private var dataRepository: DataRepository,
-    private val dataFilm: GetFilmDetailUseCase) :
+    private val dataFilm: GetFilmDetailUseCase,
+    private val pagingSource: StaffDataSource) :
     ViewModel() {
     private val _film = MutableLiveData<ModelFilmDetails>()
     //private val _film= MutableStateFlow<ModelFilmDetails.Film>()
@@ -65,5 +72,17 @@ class ItemInfoViewModel @Inject constructor(
             )
         }
     }
+
+
+
+    val pagedStaff: Flow<PagingData<ModelStaffItem>> = Pager(
+        config = PagingConfig(
+            pageSize = 20,
+            enablePlaceholders = true
+
+        ),
+        pagingSourceFactory = { pagingSource }
+    ).flow.cachedIn(viewModelScope)
+
 
 }

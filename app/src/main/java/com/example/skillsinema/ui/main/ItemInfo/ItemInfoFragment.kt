@@ -20,6 +20,7 @@ import com.example.skillsinema.entity.ModelFilmDetails
 import com.example.skillsinema.databinding.FragmentItemInfoBinding
 //import com.example.skillsinema.entity.ModelFilmDetails
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -32,6 +33,8 @@ class ItemInfoFragment : Fragment() {
     private val binding get() = _binding!!
 
     val viewModel: ItemInfoViewModel by viewModels()
+
+    val adapter =StaffAdaprer()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,6 +74,12 @@ class ItemInfoFragment : Fragment() {
 
             })
 
+        }
+
+
+        viewModel.pagedStaff.onEach {
+            binding.actorsRecycler.adapter =adapter
+            adapter.
         }
 
 

@@ -32,12 +32,10 @@ class Repository @Inject constructor(
 ) {
 
 
-
-
     @Provides
     suspend fun getPremiere(year: Int, month: String): Model {
         //delay(2000)
-        return retrofitInstance().getFilms(year,month)
+        return retrofitInstance().getFilms(year, month)
     }
 
     @Provides
@@ -59,10 +57,17 @@ class Repository @Inject constructor(
 
     @Provides
     suspend fun getFilteredFilm(page: Int, countries: Int, genre: Int): List<Film> {
-        return retrofit.filteredFilms(page,countries,genre, 3, 10).items    }
+        return retrofit.filteredFilms(page, countries, genre, 3, 10).items
+    }
+
+    @Provides
+    suspend fun getStaff( id: Int): List<ModelStaffItem> {
+        return retrofitStaff.staff(id).staffItem
+    }
 
 
     private val BASE_URL = "https://kinopoiskapiunofficial.tech/api/v2.2/"
+    private val BASE_URL2 = "https://kinopoiskapiunofficial.tech/api/v1/"
 
 
     private val logInterceptor = HttpLoggingInterceptor()
@@ -108,6 +113,20 @@ class Repository @Inject constructor(
         .build()
         .create(ApiInterfaceFilteredFilms::class.java)
 
+
+    val retrofitStaff = Retrofit
+        .Builder()
+        .client(
+            OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().also {
+                it.level = HttpLoggingInterceptor.Level.BODY
+            }).build()
+        )
+        .baseUrl(BASE_URL2)
+        .addConverterFactory(MoshiConverterFactory.create(moshi))
+        .build()
+        .create(ApiInterfaceStaff::class.java)
+
+
     private fun retrofitInstance(): ApiInterface = retrofit()!!.create(ApiInterface::class.java)
     private fun retrofitInstance2(): ApiInterface2 = retrofit()!!.create(ApiInterface2::class.java)
     private fun retrofitInstanceTopFilms(): ApiInterfaceTopFilms =
@@ -124,8 +143,8 @@ class Repository @Inject constructor(
 
         @GET("films/premieres?")
         suspend fun getFilms(
-            @Query("year") year:Int,
-            @Query("month") month:String
+            @Query("year") year: Int,
+            @Query("month") month: String
 
         ): DataDTO
 
@@ -153,26 +172,35 @@ class Repository @Inject constructor(
     }
 
 
-    interface ApiInterfaceFilters{
+    interface ApiInterfaceFilters {
         @Headers("X-API-KEY: $api_key")
         @GET("films/filters")
         suspend fun filters(
 
-        ):ModelFilter
+        ): ModelFilter
 
     }
 
-    interface ApiInterfaceFilteredFilms{
+    interface ApiInterfaceFilteredFilms {
         @Headers("X-API-KEY: $api_key")
         @GET("films")
         suspend fun filteredFilms(
             @Query("page") page: Int,
-            @Query("countries") countries:Int,
-            @Query("genres") month:Int,
-            @Query("ratingFrom") ratingFrom:Int,
-            @Query("ratingTo") ratingTo:Int,
+            @Query("countries") countries: Int,
+            @Query("genres") month: Int,
+            @Query("ratingFrom") ratingFrom: Int,
+            @Query("ratingTo") ratingTo: Int,
 
-        ):ModelFilteredFilms1
+            ): ModelFilteredFilms1
+
+    }
+
+    interface ApiInterfaceStaff {
+        @Headers("X-API-KEY: $api_key")
+        @GET("films/filters")
+        suspend fun staff(
+            @Query("filmId ") filmId:Int
+        ): ModelStaff
 
     }
 
