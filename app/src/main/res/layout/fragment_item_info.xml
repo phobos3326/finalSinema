@@ -48,8 +48,8 @@
                 android:id="@+id/shortDescriptionTextView"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:fontFamily="sans-serif-black"
                 android:text="54654"
@@ -57,8 +57,184 @@
                 app:layout_constraintTop_toBottomOf="@+id/filmPreviewImageView"
                 tools:layout_editor_absoluteX="0dp" />
 
+            <TextView xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/DescriptionTextView"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:fontFamily="sans-serif"
+                android:text="54654"
+                android:textColor="@color/black"
+                app:layout_constraintTop_toBottomOf="@+id/shortDescriptionTextView"
+                tools:layout_editor_absoluteX="0dp"
+                tools:text="@tools:sample/lorem" />
+
+            <TextView
+                android:id="@+id/featuredInTheFilm"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="sans-serif-black"
+                android:text="в фильме снимались"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/DescriptionTextView" />
+
+            <TextView
+                android:id="@+id/featuredInTheFilmAll"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:fontFamily="sans-serif-black"
+                android:text="27 >"
+                android:textColor="@color/purple_700"
+                app:layout_constraintEnd_toEndOf="parent"
+
+                app:layout_constraintTop_toBottomOf="@+id/DescriptionTextView" />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/actorsRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:layout_constraintTop_toBottomOf="@+id/featuredInTheFilm"
+                app:spanCount="4"
+                tools:layout_editor_absoluteX="8dp"
+                tools:listitem="@layout/actor_item" />
+
+
+            <TextView
+                android:id="@+id/staff"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="sans-serif-black"
+                android:text="в фильме снимались"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/actorsRecycler" />
+
+            <TextView
+                android:id="@+id/staffFilmAll"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:fontFamily="sans-serif-black"
+                android:text="27 >"
+                android:textColor="@color/purple_700"
+                app:layout_constraintEnd_toEndOf="parent"
+
+                app:layout_constraintTop_toBottomOf="@+id/actorsRecycler" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/staffRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:layout_constraintTop_toBottomOf="@+id/staff"
+                app:spanCount="4"
+                tools:layout_editor_absoluteX="8dp"
+                tools:listitem="@layout/actor_item" />
+
+
+            <TextView
+                android:id="@+id/galerie"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="sans-serif-black"
+                android:text="галерея"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/staffRecycler" />
+
+            <TextView
+                android:id="@+id/galerieFilmAll"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:fontFamily="sans-serif-black"
+                android:text="27 >"
+                android:textColor="@color/purple_700"
+                app:layout_constraintEnd_toEndOf="parent"
+
+                app:layout_constraintTop_toBottomOf="@+id/staffRecycler" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/galerieRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:layout_constraintTop_toBottomOf="@+id/galerie"
+                app:spanCount="1"
+                tools:layout_editor_absoluteX="8dp"
+                tools:listitem="@layout/galerie_item" />
+
+            <TextView
+                android:id="@+id/relatedMoviesAll"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:fontFamily="sans-serif-black"
+                android:text="27 >"
+                android:textColor="@color/purple_700"
+                app:layout_constraintEnd_toEndOf="parent"
+
+                app:layout_constraintTop_toBottomOf="@+id/galerieRecycler" />
+
+
+            <TextView
+                android:id="@+id/relatedMovies"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="sans-serif-black"
+                android:text="галерея"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/galerieRecycler" />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/relatedMoviesRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:layout_constraintTop_toBottomOf="@+id/relatedMovies"
+                app:spanCount="1"
+                tools:layout_editor_absoluteX="8dp"
+                tools:listitem="@layout/actor_item" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     </ScrollView>
 
