@@ -4,9 +4,10 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.skillsinema.domain.GetStaffUseCase
 import com.example.skillsinema.entity.ModelStaff
-import com.example.skillsinema.entity.ModelStaffItem
+
 import javax.inject.Inject
 
+/*
 class StaffDataSource @Inject constructor(private val useCase: GetStaffUseCase):PagingSource<Int, ModelStaffItem>() {
 
     override fun getRefreshKey(state: PagingState<Int, ModelStaffItem>): Int? =FIRST_PAGE
@@ -14,7 +15,8 @@ class StaffDataSource @Inject constructor(private val useCase: GetStaffUseCase):
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ModelStaffItem> {
         val page =params.key ?: FIRST_PAGE
 
-        return kotlin.runCatching {
+        */
+/*return kotlin.runCatching {
             useCase.getStaff()
         }.fold(
             onSuccess = {
@@ -27,7 +29,8 @@ class StaffDataSource @Inject constructor(private val useCase: GetStaffUseCase):
             onFailure = {
                 LoadResult.Error(it)
             }
-        )
+        )*//*
+
     }
 
 
@@ -39,4 +42,4 @@ class StaffDataSource @Inject constructor(private val useCase: GetStaffUseCase):
 
 
 
-}
+}*/

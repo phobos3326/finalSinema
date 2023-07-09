@@ -20,6 +20,7 @@ import com.example.skillsinema.domain.FiltersUseCase
 import com.example.skillsinema.domain.GetPremiereUseCase
 import com.example.skillsinema.domain.GetTopFilmsUseCase
 import com.example.skillsinema.entity.*
+import com.example.skillsinema.repository.RepositoryStaff
 
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -27,6 +28,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
+
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -37,7 +39,8 @@ class MainViewModel @Inject constructor(
     private val pagingSource: FilmPagingSourse,
     private val filteredFilmPagingSource: FilteredFilmPagingSource,
     private val filtersUseCase: FiltersUseCase,
-    private val filteredFilmsUseCase: FilteredFilmsUseCase
+    private val filteredFilmsUseCase: FilteredFilmsUseCase,
+    private val staff: RepositoryStaff
     //private val navController: NavController
 ) : ViewModel() {
     private val _premiereModel = MutableStateFlow<List<Model.Item>>(emptyList())
@@ -76,6 +79,7 @@ class MainViewModel @Inject constructor(
             pagedFilms
             pagedFilteredFilms
             Log.d("FILTERED", "$pagedFilteredFilms")
+            staff.parseJSON()
         }
         // pagedFilms
 

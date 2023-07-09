@@ -5,26 +5,28 @@ import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.skillsinema.R
 import com.example.skillsinema.databinding.ActorItemBinding
 import com.example.skillsinema.databinding.SecondItemBinding
-import com.example.skillsinema.entity.ModelStaffItem
+import com.example.skillsinema.entity.ModelStaff
+
 import com.example.skillsinema.ui.main.ItemInfo.StaffAdapter.Const.END
 import com.example.skillsinema.ui.main.ItemInfo.StaffAdapter.Const.NOEND
 import javax.inject.Inject
 
-class StaffAdapter
-    :PagingDataAdapter<ModelStaffItem, RecyclerView.ViewHolder>(DiffUtilCallback()) {
+class StaffAdapter()
+    :ListAdapter<ModelStaff.ModelStaffItem, RecyclerView.ViewHolder>(DiffUtilCallback()) {
 
     //private var onClickListener: View.OnClickListener? = null
 
-    class DiffUtilCallback : DiffUtil.ItemCallback<ModelStaffItem>() {
-        override fun areItemsTheSame(oldItem: ModelStaffItem, newItem: ModelStaffItem): Boolean = oldItem == newItem
+    class DiffUtilCallback : DiffUtil.ItemCallback<ModelStaff.ModelStaffItem>() {
+        override fun areItemsTheSame(oldItem: ModelStaff.ModelStaffItem, newItem: ModelStaff.ModelStaffItem): Boolean = oldItem == newItem
 
-        override fun areContentsTheSame(oldItem: ModelStaffItem, newItem: ModelStaffItem): Boolean = oldItem == newItem
+        override fun areContentsTheSame(oldItem: ModelStaff.ModelStaffItem, newItem: ModelStaff.ModelStaffItem): Boolean = oldItem == newItem
     }
 
 
@@ -97,7 +99,7 @@ class StaffAdapter
     class MyViewHolder @Inject constructor(
         private var binding1: ActorItemBinding
     ) : RecyclerView.ViewHolder(binding1.root) {
-        fun bind(film: ModelStaffItem) {
+        fun bind(film: ModelStaff.ModelStaffItem) {
             binding1.title.text = film.nameRu
             binding1.textViewGenre.text = film.professionText
             film.let {

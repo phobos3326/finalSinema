@@ -14,6 +14,7 @@ import com.example.skillsinema.R
 import com.example.skillsinema.adapter.Film
 import com.example.skillsinema.databinding.FragmentMainBinding
 import com.example.skillsinema.entity.Model
+import com.example.skillsinema.repository.RepositoryStaff
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -51,6 +52,8 @@ class MainFragment @Inject constructor() : Fragment() {
     }
 
 
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -76,7 +79,11 @@ class MainFragment @Inject constructor() : Fragment() {
             adapterFilteredFilms.submitData(it)
             Log.d("PDATA", "$it")
 
+
+
         }.launchIn(viewLifecycleOwner.lifecycleScope)
+
+
 
     }
 
