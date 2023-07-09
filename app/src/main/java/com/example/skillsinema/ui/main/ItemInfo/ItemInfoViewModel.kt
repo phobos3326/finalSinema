@@ -44,6 +44,9 @@ class ItemInfoViewModel @Inject constructor(
     private var _staff = MutableStateFlow<List<ModelStaff.ModelStaffItem>>(emptyList())
     val staff = _staff.asStateFlow()
 
+    var  actorList = mutableListOf<ModelStaff.ModelStaffItem>()
+
+
     fun getValue(): Int {
         return dataRepository.id
     }
@@ -63,7 +66,7 @@ class ItemInfoViewModel @Inject constructor(
 loadStaff()
 
         repositoryStaff.provideRetrofit()
-repositoryStaff.parseJSON()
+//repositoryStaff.parseJSON()
     }
 
 
@@ -110,8 +113,22 @@ repositoryStaff.parseJSON()
                 useCase.getStaff()
             }.fold(
                 onSuccess = {
-                    _staff.value = it!!
 
+
+
+                    it?.forEachIndexed {index, modelStaffItem ->
+                    if (modelStaffItem.professionKey.equals("ACTOR")){
+
+                           actorList.add(it[index])
+
+                       }else{
+                           val noActorList = mutableListOf(it)
+                           noActorList.add(it)
+                       }
+                    }
+
+
+                    _staff.value = actorList
                     Log.d("MainViewModel2", (it ?: " load").toString())
                 },
                 onFailure = { Log.d("MainViewModelloadTopFilms", it.message ?: "not load") }

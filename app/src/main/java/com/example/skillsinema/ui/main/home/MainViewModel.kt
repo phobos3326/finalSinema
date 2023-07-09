@@ -79,7 +79,7 @@ class MainViewModel @Inject constructor(
             pagedFilms
             pagedFilteredFilms
             Log.d("FILTERED", "$pagedFilteredFilms")
-            staff.parseJSON()
+            //staff.parseJSON()
         }
         // pagedFilms
 

@@ -29,7 +29,6 @@ class RepositoryStaff @Inject constructor() {
     private val BASE_URL2 = "https://kinopoiskapiunofficial.tech/api/v1/"
 
 
-    var qq = ""
 
     @Provides
     suspend fun getStaff(id: Int): List<ModelStaff.ModelStaffItem>? {
@@ -37,48 +36,6 @@ class RepositoryStaff @Inject constructor() {
 
 
     }
-
-  /*  @Provides
-    fun provideRetrofit(): ApiInterfaceStaff {
-        val loggingInterceptor = HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        }
-
-        val okHttpBuilder = OkHttpClient.Builder()
-            .addInterceptor(loggingInterceptor)
-
-        return Retrofit.Builder()
-            .baseUrl(BASE_URL2)
-            .addConverterFactory(MoshiConverterFactory.create())
-            .client(okHttpBuilder.build())
-            .build()
-            .create(ApiInterfaceStaff::class.java)
-    }*/
-
-
-   /* @POST("users/new")
-    fun createUser(@Body user: User?): Call<User?>? {
-    }
-
-    @Retention(AnnotationRetention.RUNTIME)
-    @JsonQualifier
-    annotation class WrappedRepoList
-
-    @JsonClass(generateAdapter = true)
-    data class RepoList(val items: List<ModelStaff>)
-
-
-        @WrappedRepoList
-        @FromJson
-        fun fromJson(json: RepoList): List<ModelStaff> {
-            return json.items
-        }
-
-        @ToJson
-        fun toJson(@WrappedRepoList value: List<ModelStaff>): RepoList {
-            throw UnsupportedOperationException()
-        }*/
-
 
     @Provides
     fun provideRetrofit(): ApiInterfaceStaff {
@@ -103,17 +60,7 @@ class RepositoryStaff @Inject constructor() {
 
 
 
-    val ee = " [\n" +
-            "  {" +
-            "    \"staffId\": 66539,\n" +
-            "    \"nameRu\": \"Винс Гиллиган\",\n" +
-            "    \"nameEn\": \"Vince Gilligan\",\n" +
-            "    \"description\": \"Neo\",\n" +
-            "    \"posterUrl\": \"https://st.kp.yandex.net/images/actor/66539.jpg\",\n" +
-            "    \"professionText\": \"Режиссеры\",\n" +
-            "    \"professionKey\": \"DIRECTOR\"\n" +
-            "  }\n" +
-            "]"
+
 
     private val logInterceptor = HttpLoggingInterceptor()
         .setLevel(HttpLoggingInterceptor.Level.BODY)
@@ -128,19 +75,9 @@ class RepositoryStaff @Inject constructor() {
 
 
 
-    /*val listType = Types.newParameterizedType(List::class.java, ModelStaff::class.java)
-   val adapter = moshi.adapter<List<ModelStaff.ModelStaffItem>>(listType)
-    val objects = adapter.fromJson(ee)*/
 
 
-    /*val cardsJsonResponse: String = ee
-    // We can just use a reified extension!
-    val adapter2 = moshi.adapter<List<ModelStaff.ModelStaffItem>>()
-    val cards: List<ModelStaff.ModelStaffItem> = adapter2.fromJson(cardsJsonResponse)*/
 
-    object jsonString {
-
-    }
 
     val retrofitStaff = Retrofit
         .Builder()
