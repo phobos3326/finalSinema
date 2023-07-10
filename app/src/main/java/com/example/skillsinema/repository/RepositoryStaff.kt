@@ -32,7 +32,7 @@ class RepositoryStaff @Inject constructor() {
 
     @Provides
     suspend fun getStaff(id: Int): List<ModelStaff.ModelStaffItem>? {
-       return retrofitStaff.staff(301).body()
+       return retrofitStaff.staff(id).body()
 
 
     }
@@ -114,7 +114,7 @@ class RepositoryStaff @Inject constructor() {
     }
 
     private companion object {
-        private const val api_key = "1006c25a-038b-47b4-b9f9-341f208b4ac3"
+        private const val api_key = "63101d70-3149-4782-99f8-dd1ba5fc4ab1"
     }
 
 

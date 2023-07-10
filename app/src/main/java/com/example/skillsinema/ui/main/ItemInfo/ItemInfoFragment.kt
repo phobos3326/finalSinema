@@ -35,7 +35,8 @@ class ItemInfoFragment : Fragment() {
 
     val viewModel: ItemInfoViewModel by viewModels()
 
-    val adapter =StaffAdapter()
+    val adapterActor =StaffAdapter()
+    val adapterNoActor =StaffAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,10 +80,15 @@ class ItemInfoFragment : Fragment() {
 
 
         viewModel.staff.onEach {
-            binding.actorsRecycler.adapter =adapter
-            adapter.submitList(it)
+            binding.actorsRecycler.adapter =adapterActor
+            adapterActor.submitList(it)
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
+
+        viewModel.noActorStaff.onEach {
+            binding.staffRecycler .adapter =adapterNoActor
+            adapterNoActor.submitList(it)
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
 
     }
 

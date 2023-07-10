@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 class GetStaffUseCase @Inject constructor(private val repository: RepositoryStaff) {
 
-    suspend fun getStaff(): List<ModelStaff.ModelStaffItem>? {
-        return repository.getStaff(301)
+    suspend fun getStaff(id:Int): List<ModelStaff.ModelStaffItem>? {
+        return repository.getStaff( id)
     }
 }

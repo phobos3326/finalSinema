@@ -44,7 +44,12 @@ class ItemInfoViewModel @Inject constructor(
     private var _staff = MutableStateFlow<List<ModelStaff.ModelStaffItem>>(emptyList())
     val staff = _staff.asStateFlow()
 
-    var  actorList = mutableListOf<ModelStaff.ModelStaffItem>()
+    var actorList = mutableListOf<ModelStaff.ModelStaffItem>()
+
+    private var _noActorStaff = MutableStateFlow<List<ModelStaff.ModelStaffItem>>(emptyList())
+    val noActorStaff = _noActorStaff.asStateFlow()
+
+    var noActorList = mutableListOf<ModelStaff.ModelStaffItem>()
 
 
     fun getValue(): Int {
@@ -60,12 +65,14 @@ class ItemInfoViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             loadFilm()
-
+            loadStaff()
+            getValue()
+            repositoryStaff.provideRetrofit()
         }
-        getValue()
-loadStaff()
 
-        repositoryStaff.provideRetrofit()
+
+
+
 //repositoryStaff.parseJSON()
     }
 
@@ -110,25 +117,25 @@ loadStaff()
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching {
 
-                useCase.getStaff()
+                useCase.getStaff(getValue())
             }.fold(
                 onSuccess = {
 
 
+                    it?.forEachIndexed { index, modelStaffItem ->
+                        if (modelStaffItem.professionKey == "ACTOR") {
 
-                    it?.forEachIndexed {index, modelStaffItem ->
-                    if (modelStaffItem.professionKey.equals("ACTOR")){
+                            actorList.add(it[index])
 
-                           actorList.add(it[index])
+                        } else {
 
-                       }else{
-                           val noActorList = mutableListOf(it)
-                           noActorList.add(it)
-                       }
+                            noActorList.add(it[index])
+                        }
                     }
 
 
                     _staff.value = actorList
+                    _noActorStaff.value = noActorList
                     Log.d("MainViewModel2", (it ?: " load").toString())
                 },
                 onFailure = { Log.d("MainViewModelloadTopFilms", it.message ?: "not load") }
