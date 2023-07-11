@@ -7,10 +7,14 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.*
 import com.example.skillsinema.DataRepository
 import com.example.skillsinema.adapter.Film
+import com.example.skillsinema.datasource.GalerieDataSource
 
 import com.example.skillsinema.entity.ModelFilmDetails
 import com.example.skillsinema.domain.GetFilmDetailUseCase
 import com.example.skillsinema.domain.GetStaffUseCase
+
+
+import com.example.skillsinema.entity.ModelGalerie
 import com.example.skillsinema.entity.ModelStaff
 import com.example.skillsinema.repository.RepositoryStaff
 
@@ -29,15 +33,12 @@ import javax.inject.Inject
 class ItemInfoViewModel @Inject constructor(
     private var dataRepository: DataRepository,
     private val dataFilm: GetFilmDetailUseCase,
-    //private var pagingSource: StaffDataSource,
     private val useCase: GetStaffUseCase,
-    val repositoryStaff: RepositoryStaff
-) :
+    private val galerieDataSource: GalerieDataSource
+
+    ) :
     ViewModel() {
     private val _film = MutableLiveData<ModelFilmDetails>()
-
-    //private val _film= MutableStateFlow<ModelFilmDetails.Film>()
-    //val film = _film as StateFlow<*>
     val film = _film
 
 
@@ -67,10 +68,9 @@ class ItemInfoViewModel @Inject constructor(
             loadFilm()
             loadStaff()
             getValue()
-            repositoryStaff.provideRetrofit()
+            pagedGalerie
+            //  repositoryStaff.provideRetrofit()
         }
-
-
 
 
 //repositoryStaff.parseJSON()
@@ -112,28 +112,19 @@ class ItemInfoViewModel @Inject constructor(
 
     private fun loadStaff() {
 
-        //  flowOf(PagingData.from(listOf(Movie)).toList() == listOf(model)
-        //navController.navigate(R.id.action_mainFragment_to_itemInfoFragment, bundle)
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             kotlin.runCatching {
 
                 useCase.getStaff(getValue())
             }.fold(
                 onSuccess = {
-
-
                     it?.forEachIndexed { index, modelStaffItem ->
                         if (modelStaffItem.professionKey == "ACTOR") {
-
                             actorList.add(it[index])
-
                         } else {
-
                             noActorList.add(it[index])
                         }
                     }
-
-
                     _staff.value = actorList
                     _noActorStaff.value = noActorList
                     Log.d("MainViewModel2", (it ?: " load").toString())
@@ -141,9 +132,17 @@ class ItemInfoViewModel @Inject constructor(
                 onFailure = { Log.d("MainViewModelloadTopFilms", it.message ?: "not load") }
             )
         }
-
-
     }
+
+
+    val pagedGalerie: Flow<PagingData<ModelGalerie.Item>> = Pager(
+        config = PagingConfig(
+            pageSize = 20,
+            enablePlaceholders = true
+
+        ),
+        pagingSourceFactory = { galerieDataSource }
+    ).flow.cachedIn(viewModelScope)
 
 
 }

@@ -37,6 +37,7 @@ class ItemInfoFragment : Fragment() {
 
     val adapterActor =StaffAdapter()
     val adapterNoActor =StaffAdapter()
+    val galerieAdapter =GalerieAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,6 +89,12 @@ class ItemInfoFragment : Fragment() {
         viewModel.noActorStaff.onEach {
             binding.staffRecycler .adapter =adapterNoActor
             adapterNoActor.submitList(it)
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
+
+
+        viewModel.pagedGalerie.onEach {
+            binding.galerieRecycler.adapter=galerieAdapter
+            galerieAdapter.submitData(it)
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
     }
