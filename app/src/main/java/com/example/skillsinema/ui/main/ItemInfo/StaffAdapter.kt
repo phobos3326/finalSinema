@@ -18,7 +18,7 @@ import com.example.skillsinema.ui.main.ItemInfo.StaffAdapter.Const.END
 import com.example.skillsinema.ui.main.ItemInfo.StaffAdapter.Const.NOEND
 import javax.inject.Inject
 
-class StaffAdapter()
+class StaffAdapter
     :ListAdapter<ModelStaff.ModelStaffItem, RecyclerView.ViewHolder>(DiffUtilCallback()) {
 
     //private var onClickListener: View.OnClickListener? = null

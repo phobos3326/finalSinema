@@ -11,7 +11,7 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 class AppModule {
     @Provides
-    fun provideDataRepository():DataRepository{
-        return DataRepository()
+    fun provideDataRepository( id:Int):DataRepository{
+        return DataRepository(id)
     }
 }

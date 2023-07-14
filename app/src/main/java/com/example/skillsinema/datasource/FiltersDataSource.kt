@@ -26,7 +26,7 @@ class FiltersDataSource @Inject constructor(
             onSuccess = {
 
                 listFilters = it
-               Log.d("MainViewModel2", (it ?: " load").toString())
+               Log.d("MainViewModel2", it.toString())
             },
             onFailure = { Log.d("MainViewModelFilters", it.message ?: "not load") }
         )

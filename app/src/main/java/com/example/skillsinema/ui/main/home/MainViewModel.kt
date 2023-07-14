@@ -12,6 +12,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.skillsinema.DataRepository
+import com.example.skillsinema.MyComponentManager
 import com.example.skillsinema.adapter.Film
 import com.example.skillsinema.data.FilmPagingSourse
 import com.example.skillsinema.datasource.FilteredFilmPagingSource
@@ -72,6 +73,9 @@ class MainViewModel @Inject constructor(
     ).flow.cachedIn(viewModelScope)
 
 
+
+
+
     init {
         viewModelScope.launch {
             loadPremieres()
@@ -102,7 +106,7 @@ class MainViewModel @Inject constructor(
                 onSuccess = {
                     _premiereModel.value = it
 
-                    Log.d("MainViewModel", (it ?: " load").toString())
+                    Log.d("MainViewModel", it.toString())
                 },
                 onFailure = { Log.d("MainViewModel", it.message ?: "not load") }
             )
@@ -122,7 +126,7 @@ class MainViewModel @Inject constructor(
                 onSuccess = {
                     _topFilmModel.value = it
 
-                    Log.d("MainViewModel2", (it ?: " load").toString())
+                    Log.d("MainViewModel2", it.toString())
                 },
                 onFailure = { Log.d("MainViewModelloadTopFilms", it.message ?: "not load") }
             )

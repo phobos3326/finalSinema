@@ -144,15 +144,15 @@ class RepositoryStaff @Inject constructor() {
                             Log.d("REPOSTAFF: ", id as String)*/
 
                             // Employee Name
-                            val employeeName = items[i].nameEn ?: "N/A"
+                            val employeeName = items[i].nameEn
                             Log.d("REPOSTAFF: ", employeeName)
 
                             // Employee Salary
-                            val employeeSalary = items[i].nameRu ?: "N/A"
+                            val employeeSalary = items[i].nameRu
                             Log.d("REPOSTAFF: ", employeeSalary)
 
                             // Employee Age
-                            val employeeAge = items[i].professionKey ?: "N/A"
+                            val employeeAge = items[i].professionKey
                             Log.d("REPOSTAFF: ", employeeAge)
 
                         }

@@ -6,7 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.*
 import com.example.skillsinema.DataRepository
-import com.example.skillsinema.adapter.Film
+import com.example.skillsinema.MyComponentManager
+import com.example.skillsinema.MyEntryPoint
 import com.example.skillsinema.datasource.GalerieDataSource
 
 import com.example.skillsinema.entity.ModelFilmDetails
@@ -16,14 +17,12 @@ import com.example.skillsinema.domain.GetStaffUseCase
 
 import com.example.skillsinema.entity.ModelGalerie
 import com.example.skillsinema.entity.ModelStaff
-import com.example.skillsinema.repository.RepositoryStaff
+import dagger.hilt.EntryPoints
 
 
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -31,12 +30,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ItemInfoViewModel @Inject constructor(
-    private var dataRepository: DataRepository,
+    //private var dataRepository: DataRepository,
     private val dataFilm: GetFilmDetailUseCase,
     private val useCase: GetStaffUseCase,
-    private val galerieDataSource: GalerieDataSource
-
-    ) :
+    private val galerieDataSource: GalerieDataSource,
+    var myComponentManager: MyComponentManager
+) :
     ViewModel() {
     private val _film = MutableLiveData<ModelFilmDetails>()
     val film = _film
@@ -53,22 +52,32 @@ class ItemInfoViewModel @Inject constructor(
     var noActorList = mutableListOf<ModelStaff.ModelStaffItem>()
 
 
+
+    val myComponent = myComponentManager.get()
+    val rep =EntryPoints.get(myComponent, MyEntryPoint::class.java).getDataRepository()
     fun getValue(): Int {
-        return dataRepository.id
+
+        return rep.id
     }
 
     fun setValue(value: Int) {
-        dataRepository.id = value
+        rep.id = value
     }
+
 
 
     //Log.d("ItemInfoViewModel", "${id}" )
     init {
+
         viewModelScope.launch {
             loadFilm()
             loadStaff()
-            getValue()
+//            getValue()
+
             pagedGalerie
+          // dataRepository
+
+            myComponentManager.create()
             //  repositoryStaff.provideRetrofit()
         }
 
@@ -77,20 +86,27 @@ class ItemInfoViewModel @Inject constructor(
     }
 
 
+    /* val myComponent =myComponentManager.get()
+     val dataRepository= EntryPoints.get(myComponent, MyEntryPoint::class.java).getDataRepository()
+     */
+
     fun loadFilm() {
 
         // film.value?.kinopoiskId=id
 
 
+        //rep.
         viewModelScope.launch {
             // repository.getFilmDetails(id).film
             kotlin.runCatching {
+
 
                 dataFilm.executeGetFilm(getValue())
                 //  Log.d("ItemInfoViewModel", "${id}" )
             }.fold(
                 onSuccess = {
                     _film.value = it
+
                     Log.d("ItemInfoViewModel", "${it}")
                 },
                 onFailure = {

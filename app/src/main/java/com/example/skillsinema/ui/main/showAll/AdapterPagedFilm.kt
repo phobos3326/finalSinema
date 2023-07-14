@@ -46,7 +46,7 @@ class AdapterPagedFilm @Inject constructor(
             val item = getItem(position)
             (holder as MyViewHolder).bind(item!!)
             holder.itemView.setOnClickListener {
-                                       onClick(item!!)
+                                       onClick(item)
 
             }
 
