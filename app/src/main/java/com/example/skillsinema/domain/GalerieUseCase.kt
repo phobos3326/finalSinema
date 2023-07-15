@@ -15,10 +15,10 @@ import javax.inject.Inject
 
 class GalerieUseCase @Inject constructor(
     val repository: GalerieRepository,
-   // var myComponentManager: MyComponentManager
+   var myComponentManager: MyComponentManager
     ) {
-    @Inject
-    lateinit var myComponentManager: MyComponentManager
+/*    @Inject
+    lateinit var myComponentManager: MyComponentManager*/
     val myComponent = myComponentManager.get()
     val rep = EntryPoints.get(myComponent, MyEntryPoint::class.java).getDataRepository()
     suspend fun getGalerie(): List<ModelGalerie.Item>? {

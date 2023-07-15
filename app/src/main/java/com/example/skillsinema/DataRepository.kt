@@ -10,19 +10,19 @@ import javax.inject.Singleton
 
 @MyScope
 
-data class DataRepository @Inject constructor(var id:Int) {
+ class DataRepository @Inject constructor() {
 
 
-   // var id: Int = 0
+    var id: Int = 0
 
 
     fun getValue(): Int {
         return id
     }
 
-   /* fun setValue(value: Int) {
+    /*fun setValue(value: Int) {
         id = value
-    }*/
-
+    }
+*/
 
 }
