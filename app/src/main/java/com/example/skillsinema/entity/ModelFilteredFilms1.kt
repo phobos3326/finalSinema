@@ -1,7 +1,6 @@
 package com.example.skillsinema.entity
 
 
-import com.example.skillsinema.adapter.Film
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 

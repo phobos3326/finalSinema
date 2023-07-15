@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.skillsinema.R
-import com.example.skillsinema.adapter.Film
+import com.example.skillsinema.entity.Film
 import com.example.skillsinema.databinding.ItemBinding
 import com.example.skillsinema.databinding.SecondItemBinding
 import com.example.skillsinema.ui.main.home.AdapterFilteredFilms.Const.END

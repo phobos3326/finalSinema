@@ -21,7 +21,11 @@
         android:id="@+id/itemInfoFragment"
         android:name="com.example.skillsinema.ui.main.ItemInfo.ItemInfoFragment"
         android:label="fragment_item_info"
-        tools:layout="@layout/fragment_item_info" />
+        tools:layout="@layout/fragment_item_info" >
+        <action
+            android:id="@+id/action_itemInfoFragment_self"
+            app:destination="@id/itemInfoFragment" />
+    </fragment>
     <fragment
         android:id="@+id/find_fragment"
         android:name="com.example.skillsinema.ui.main.find.SecondFragment"

@@ -3,9 +3,8 @@ package com.example.skillsinema.ui.main.showAll
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.*
-import com.example.skillsinema.adapter.Film
+import com.example.skillsinema.entity.Film
 import com.example.skillsinema.data.FilmPagingSourse
-import com.example.skillsinema.entity.Movie
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

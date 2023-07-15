@@ -1,6 +1,6 @@
 package com.example.skillsinema.domain
 
-import com.example.skillsinema.adapter.Film
+import com.example.skillsinema.entity.Film
 import com.example.skillsinema.repository.Repository
 import javax.inject.Inject
 

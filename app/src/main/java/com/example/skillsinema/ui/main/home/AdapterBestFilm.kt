@@ -1,13 +1,9 @@
 package com.example.skillsinema.ui.main.home
 
-import android.service.autofill.OnClickAction
 import android.view.LayoutInflater
-import android.view.View
 import android.view.View.OnClickListener
 import android.view.ViewGroup
-import androidx.navigation.Navigation.findNavController
 import androidx.navigation.findNavController
-import androidx.paging.PagingDataAdapter
 
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -17,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.skillsinema.R
 
-import com.example.skillsinema.adapter.Film
+import com.example.skillsinema.entity.Film
 import com.example.skillsinema.ui.main.home.AdapterBestFilm.Const.END
 import com.example.skillsinema.ui.main.home.AdapterBestFilm.Const.NOEND
 import com.example.skillsinema.databinding.ItemBinding

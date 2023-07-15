@@ -1,13 +1,9 @@
 package com.example.skillsinema.datasource
 
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.skillsinema.adapter.Film
-import com.example.skillsinema.entity.ModelFilteredFilms1
-import com.example.skillsinema.entity.Movie
-import com.example.skillsinema.repository.MoviePagedListRepository
+import com.example.skillsinema.entity.Film
 import com.example.skillsinema.repository.Repository
 import javax.inject.Inject
 

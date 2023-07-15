@@ -10,19 +10,17 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.bumptech.glide.Glide
 
-import com.example.skillsinema.adapter.Film
+import com.example.skillsinema.entity.Film
 
 import com.example.skillsinema.databinding.ItemBinding
 import com.example.skillsinema.databinding.SecondItemBinding
-import com.example.skillsinema.entity.Movie
-import com.example.skillsinema.ui.main.showAll.AdapterPagedFilm.Const.NOEND
 
 import javax.inject.Inject
 
 class AdapterPagedFilm @Inject constructor(
     private val onClick: (Film) -> Unit,
 
-) : PagingDataAdapter<Film, RecyclerView.ViewHolder>(DiffUtilCallback()) {
+    ) : PagingDataAdapter<Film, RecyclerView.ViewHolder>(DiffUtilCallback()) {
 
 
     class DiffUtilCallback : DiffUtil.ItemCallback<Film>() {

@@ -6,14 +6,12 @@ import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.skillsinema.DataRepository
-import com.example.skillsinema.MyComponentManager
-import com.example.skillsinema.adapter.Film
+import com.example.skillsinema.entity.Film
 import com.example.skillsinema.data.FilmPagingSourse
 import com.example.skillsinema.datasource.FilteredFilmPagingSource
 import com.example.skillsinema.domain.FilteredFilmsUseCase

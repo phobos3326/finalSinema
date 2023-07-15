@@ -13,10 +13,12 @@ import com.example.skillsinema.datasource.GalerieDataSource
 import com.example.skillsinema.entity.ModelFilmDetails
 import com.example.skillsinema.domain.GetFilmDetailUseCase
 import com.example.skillsinema.domain.GetStaffUseCase
+import com.example.skillsinema.entity.Film
 
 
 import com.example.skillsinema.entity.ModelGalerie
 import com.example.skillsinema.entity.ModelStaff
+import com.example.skillsinema.repository.RepositorySimilarFilm
 import dagger.hilt.EntryPoints
 
 
@@ -34,7 +36,9 @@ class ItemInfoViewModel @Inject constructor(
     private val dataFilm: GetFilmDetailUseCase,
     private val useCase: GetStaffUseCase,
     private val galerieDataSource: GalerieDataSource,
+    private val similarFilm: RepositorySimilarFilm,
     var myComponentManager: MyComponentManager
+
 ) :
     ViewModel() {
     private val _film = MutableLiveData<ModelFilmDetails>()
@@ -48,6 +52,10 @@ class ItemInfoViewModel @Inject constructor(
 
     private var _noActorStaff = MutableStateFlow<List<ModelStaff.ModelStaffItem>>(emptyList())
     val noActorStaff = _noActorStaff.asStateFlow()
+
+
+    private var _similar = MutableStateFlow<List<Film>>(emptyList())
+    val similar = _similar.asStateFlow()
 
     var noActorList = mutableListOf<ModelStaff.ModelStaffItem>()
 
@@ -79,6 +87,7 @@ class ItemInfoViewModel @Inject constructor(
 
             myComponentManager.create()
             //  repositoryStaff.provideRetrofit()
+            loadSimilarFilm()
         }
 
 
@@ -115,6 +124,34 @@ class ItemInfoViewModel @Inject constructor(
             )
         }
     }
+
+
+    fun loadSimilarFilm() {
+
+        // film.value?.kinopoiskId=id
+
+
+        //rep.
+        viewModelScope.launch {
+            // repository.getFilmDetails(id).film
+            kotlin.runCatching {
+
+
+                similarFilm.getSimilarFilm()
+                //  Log.d("ItemInfoViewModel", "${id}" )
+            }.fold(
+                onSuccess = {
+                    _similar.value = it
+
+                    Log.d("ItemInfoViewModel", "${it}")
+                },
+                onFailure = {
+                    Log.d("1ItemInfoViewModel", it.message ?: "not load")
+                }
+            )
+        }
+    }
+
 
 
     /*val pagedStaff: Flow<PagingData<ModelStaffItem>> = Pager(

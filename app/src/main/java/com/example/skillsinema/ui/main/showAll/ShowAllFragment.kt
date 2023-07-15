@@ -10,10 +10,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.skillsinema.R
-import com.example.skillsinema.adapter.Film
+import com.example.skillsinema.entity.Film
 
 import com.example.skillsinema.databinding.FragmentShowAllBinding
-import com.example.skillsinema.entity.Model
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach

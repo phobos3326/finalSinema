@@ -1,4 +1,4 @@
-package com.example.skillsinema.adapter
+package com.example.skillsinema.entity
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -16,7 +16,7 @@ interface BestFilms {
     @JsonClass(generateAdapter = true)
     data class Film(
         @Json(name = "countries")
-        val countries: List<Country>,
+        val countries: List<Country>?,
         @Json(name = "filmId")
         val filmId: Int?,
         @Json(name = "kinopoiskId")
@@ -24,15 +24,15 @@ interface BestFilms {
         @Json(name = "filmLength")
         val filmLength: String?,
         @Json(name = "genres")
-        val genres: List<Genre>,
+        val genres: List<Genre>?,
         @Json(name = "nameEn")
         val nameEn: String?,
         @Json(name = "nameRu")
-        val nameRu: String,
+        val nameRu: String?,
         @Json(name = "posterUrl")
-        val posterUrl: String,
+        val posterUrl: String?,
         @Json(name = "posterUrlPreview")
-        val posterUrlPreview: String,
+        val posterUrlPreview: String?,
         @Json(name = "rating")
         val rating: String?,
         @Json(name = "ratingKinopoisk")
@@ -42,8 +42,21 @@ interface BestFilms {
         @Json(name = "ratingVoteCount")
         val ratingVoteCount: Int?,
         @Json(name = "year")
-        val year: String
-    )
+        val year: String?
+    ){
+        @JsonClass(generateAdapter = true)
+        data class Country(
+            @Json(name = "country")
+            val country: String
+        )
+
+        @JsonClass(generateAdapter = true)
+        data class Genre(
+            @Json(name = "genre")
+            val genre: String
+        )
+
+    }
 /*@JsonClass(generateAdapter = true)
 data class Film(
     @Json(name = "completed")
@@ -135,17 +148,6 @@ data class Film(
     @Json(name = "year")
     val year: Int?
 )*/
-@JsonClass(generateAdapter = true)
-    data class Country(
-        @Json(name = "country")
-        val country: String
-    )
-
-    @JsonClass(generateAdapter = true)
-    data class Genre(
-        @Json(name = "genre")
-        val genre: String
-    )
 
 
 

@@ -15,11 +15,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.skillsinema.MyComponentManager
 import com.example.skillsinema.MyEntryPoint
+import com.example.skillsinema.R
 import com.example.skillsinema.entity.ModelFilmDetails
 import com.example.skillsinema.databinding.FragmentItemInfoBinding
+import com.example.skillsinema.entity.Film
+import com.example.skillsinema.ui.main.home.AdapterBestFilm
 import dagger.hilt.EntryPoints
 //import com.example.skillsinema.entity.ModelFilmDetails
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,6 +46,11 @@ class ItemInfoFragment : Fragment() {
     val adapterActor =StaffAdapter()
     val adapterNoActor =StaffAdapter()
     val galerieAdapter =GalerieAdapter()
+    val similarFilmAdapter =AdapterBestFilm{
+        onItemDetailClick(it)
+    }
+
+    val bundle=Bundle()
 
     @Inject
     lateinit var myComponentManager: MyComponentManager
@@ -108,6 +117,22 @@ class ItemInfoFragment : Fragment() {
             galerieAdapter.submitData(it)
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
+
+        viewModel.similar.onEach {
+            binding.relatedMoviesRecycler.adapter=similarFilmAdapter
+            similarFilmAdapter.submitList(it)
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
+
+    }
+
+
+    private fun onItemDetailClick(item: Film) {
+        if (item.kinopoiskId == null) {
+            item.filmId?.let { bundle.putInt("Arg", it) }
+        } else {
+            item.kinopoiskId.let { bundle.putInt("Arg", it) }
+        }
+        findNavController().navigate(R.id.action_itemInfoFragment_self, bundle)
     }
 
    /* @Composable

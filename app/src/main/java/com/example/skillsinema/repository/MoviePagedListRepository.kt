@@ -2,8 +2,7 @@ package com.example.skillsinema.repository
 
 
 
-import com.example.skillsinema.adapter.Film
-import com.example.skillsinema.entity.Movie
+import com.example.skillsinema.entity.Film
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

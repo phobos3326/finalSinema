@@ -2,8 +2,7 @@ package com.example.skillsinema.data
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.skillsinema.adapter.Film
-import com.example.skillsinema.entity.Movie
+import com.example.skillsinema.entity.Film
 import com.example.skillsinema.repository.MoviePagedListRepository
 import javax.inject.Inject
 
