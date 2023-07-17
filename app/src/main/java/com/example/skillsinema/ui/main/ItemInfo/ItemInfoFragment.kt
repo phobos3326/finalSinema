@@ -17,8 +17,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.example.skillsinema.MyComponentManager
-import com.example.skillsinema.MyEntryPoint
+/*import com.example.skillsinema.MyComponentManager
+import com.example.skillsinema.MyEntryPoint*/
 import com.example.skillsinema.R
 import com.example.skillsinema.entity.ModelFilmDetails
 import com.example.skillsinema.databinding.FragmentItemInfoBinding
@@ -52,12 +52,12 @@ class ItemInfoFragment : Fragment() {
 
     val bundle=Bundle()
 
-    @Inject
-    lateinit var myComponentManager: MyComponentManager
+    //@Inject
+    //lateinit var myComponentManager: MyComponentManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        myComponentManager.create()
+       // myComponentManager.create()
        /* val myComponent =myComponentManager.get()
         val dataRepository=EntryPoints.get(myComponent,MyEntryPoint::class.java).getDataRepository()
         */

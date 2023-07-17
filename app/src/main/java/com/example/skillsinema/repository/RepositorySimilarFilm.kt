@@ -1,5 +1,6 @@
 package com.example.skillsinema.repository
 
+import com.example.skillsinema.DataRepository
 import com.example.skillsinema.entity.Film
 import com.example.skillsinema.entity.ModelGalerie
 import com.example.skillsinema.entity.ModelSimilarFilm
@@ -22,16 +23,19 @@ import javax.inject.Inject
 @Module
 @InstallIn(SingletonComponent::class)
 
-class RepositorySimilarFilm @Inject constructor() {
+class RepositorySimilarFilm @Inject constructor(
+
+) {
 
     private val BASE_URL = "https://kinopoiskapiunofficial.tech/api/v2.2/"
 
 
 
     @Provides
-    suspend fun getSimilarFilm(): List<Film> {
+    suspend fun getSimilarFilm(id: Int): List<Film> {
+
         // parseJSON()
-        return retrofitSimilarFilm.similars(301).items
+        return retrofitSimilarFilm.similars(id).items
 
 
     }

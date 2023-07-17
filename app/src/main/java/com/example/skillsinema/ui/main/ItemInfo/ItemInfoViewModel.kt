@@ -6,13 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.*
 import com.example.skillsinema.DataRepository
-import com.example.skillsinema.MyComponentManager
-import com.example.skillsinema.MyEntryPoint
+/*import com.example.skillsinema.MyComponentManager
+import com.example.skillsinema.MyEntryPoint*/
 import com.example.skillsinema.datasource.GalerieDataSource
 
 import com.example.skillsinema.entity.ModelFilmDetails
 import com.example.skillsinema.domain.GetFilmDetailUseCase
 import com.example.skillsinema.domain.GetStaffUseCase
+import com.example.skillsinema.domain.SimilarFilmsUsecase
 import com.example.skillsinema.entity.Film
 
 
@@ -36,8 +37,9 @@ class ItemInfoViewModel @Inject constructor(
     private val dataFilm: GetFilmDetailUseCase,
     private val useCase: GetStaffUseCase,
     private val galerieDataSource: GalerieDataSource,
-    private val similarFilm: RepositorySimilarFilm,
+    //private val similarFilm: RepositorySimilarFilm,
     private val dataRepository: DataRepository,
+    private val similarFilmsUsecase: SimilarFilmsUsecase
 ) :
     ViewModel() {
     private val _film = MutableLiveData<ModelFilmDetails>()
@@ -130,7 +132,7 @@ class ItemInfoViewModel @Inject constructor(
             kotlin.runCatching {
 
 
-                similarFilm.getSimilarFilm()
+                similarFilmsUsecase.getSimilarFilms()
                 //  Log.d("ItemInfoViewModel", "${id}" )
             }.fold(
                 onSuccess = {
