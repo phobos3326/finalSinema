@@ -14,7 +14,7 @@ import javax.inject.Inject
 class GalerieDataSource @Inject constructor(
     val repository: GalerieRepository,
     val useCase: GalerieUseCase
-   ) :
+) :
     PagingSource<Int, ModelGalerie.Item>() {
 
 
@@ -24,7 +24,7 @@ class GalerieDataSource @Inject constructor(
 
         val page = params.key ?: FIRST_PAGE
         return kotlin.runCatching {
-           useCase.getGalerie()
+            useCase.getGalerie()
         }.fold(
             onSuccess = {
                 LoadResult.Page(

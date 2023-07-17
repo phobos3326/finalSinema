@@ -19,6 +19,7 @@ import com.example.skillsinema.entity.Film
 import com.example.skillsinema.entity.ModelGalerie
 import com.example.skillsinema.entity.ModelStaff
 import com.example.skillsinema.repository.RepositorySimilarFilm
+import dagger.assisted.Assisted
 import dagger.hilt.EntryPoints
 
 
@@ -32,13 +33,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ItemInfoViewModel @Inject constructor(
-    //private var dataRepository: DataRepository,
     private val dataFilm: GetFilmDetailUseCase,
     private val useCase: GetStaffUseCase,
     private val galerieDataSource: GalerieDataSource,
     private val similarFilm: RepositorySimilarFilm,
-    var myComponentManager: MyComponentManager
-
+    private val dataRepository: DataRepository,
 ) :
     ViewModel() {
     private val _film = MutableLiveData<ModelFilmDetails>()
@@ -59,19 +58,14 @@ class ItemInfoViewModel @Inject constructor(
 
     var noActorList = mutableListOf<ModelStaff.ModelStaffItem>()
 
-
-
-    val myComponent = myComponentManager.get()
-    val rep =EntryPoints.get(myComponent, MyEntryPoint::class.java).getDataRepository()
     fun getValue(): Int {
 
-        return rep.id
+        return dataRepository.id
     }
 
     fun setValue(value: Int) {
-        rep.id = value
+        dataRepository.id = value
     }
-
 
 
     //Log.d("ItemInfoViewModel", "${id}" )
@@ -83,9 +77,8 @@ class ItemInfoViewModel @Inject constructor(
 //            getValue()
 
             pagedGalerie
-          // dataRepository
+            // dataRepository
 
-            myComponentManager.create()
             //  repositoryStaff.provideRetrofit()
             loadSimilarFilm()
         }
@@ -151,7 +144,6 @@ class ItemInfoViewModel @Inject constructor(
             )
         }
     }
-
 
 
     /*val pagedStaff: Flow<PagingData<ModelStaffItem>> = Pager(

@@ -1,7 +1,6 @@
 package com.example.skillsinema.repository
 
 
-
 import android.util.Log
 import com.example.skillsinema.entity.Model
 import com.example.skillsinema.entity.ModelGalerie
@@ -36,20 +35,13 @@ class GalerieRepository @Inject constructor() {
     private val BASE_URL = "https://kinopoiskapiunofficial.tech/api/v2.2/"
 
 
-
     @Provides
     suspend fun getGalerie(id: Int): List<ModelGalerie.Item> {
-       // parseJSON()
-        return retrofitGalerie.galerie(id,"STILL", 1).items.toList()
+        // parseJSON()
+        return retrofitGalerie.galerie(id, "STILL", 1).items.toList()
 
 
     }
-
-
-
-
-
-
 
     private val logInterceptor = HttpLoggingInterceptor()
         .setLevel(HttpLoggingInterceptor.Level.BODY)
@@ -61,11 +53,6 @@ class GalerieRepository @Inject constructor() {
         .add(KotlinJsonAdapterFactory())
 
         .build()
-
-
-
-
-
 
 
     val retrofitGalerie = Retrofit
@@ -96,9 +83,9 @@ class GalerieRepository @Inject constructor() {
         @Headers("X-API-KEY: $api_key")
         @GET("films/{id}/images")
         suspend fun galerie(
-            @Path(value ="id") id:Int,
+            @Path(value = "id") id: Int,
             @Query("type") type: String,
-            @Query("page") page:Int
+            @Query("page") page: Int
         ): ModelGalerie
     }
 
