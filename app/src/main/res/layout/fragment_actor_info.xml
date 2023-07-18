@@ -37,8 +37,6 @@
         android:text="Имя Актера"
         android:textColor="@color/light_gray"
         android:textSize="15sp"
-
-
         app:layout_constraintBottom_toBottomOf="@+id/imageView"
         app:layout_constraintStart_toEndOf="@+id/imageView"
         app:layout_constraintTop_toBottomOf="@+id/actor_name"
@@ -89,6 +87,8 @@
         app:layout_constraintStart_toEndOf="@+id/best_actor_films"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/best_actors_movies"
         android:layout_width="match_parent"
@@ -100,6 +100,53 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/best_actor_films"
         tools:listitem="@layout/item" />
+
+    <TextView
+        android:id="@+id/filmography"
+        android:layout_width="172dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:fontFamily="sans-serif-black"
+        android:layout_marginTop="16dp"
+        android:gravity="top"
+        android:lineSpacingExtra="1sp"
+        android:text="Filmography"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/best_actors_movies" />
+
+    <TextView
+        android:id="@+id/filmography_show_All"
+        android:layout_width="49dp"
+        android:layout_height="23dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="sans-serif-black"
+        android:gravity="top"
+        android:lineSpacingExtra="1sp"
+        android:text="Все >"
+        android:textColor="@color/purple_700"
+        android:textSize="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/filmography"
+        app:layout_constraintTop_toBottomOf="@+id/best_actors_movies"
+        app:layout_goneMarginEnd="20dp" />
+
+    <TextView
+        android:id="@+id/number_of_movies"
+        android:layout_width="172dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+
+
+        android:fontFamily="sans-serif-black"
+        android:text="Filmography"
+        android:textColor="@color/light_gray"
+        android:textSize="15sp"
+        app:layout_constraintTop_toBottomOf="@+id/filmography"
+        tools:layout_editor_absoluteX="16dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -35,12 +35,12 @@ android {
 
     buildFeatures {
         viewBinding true
-        compose true
+        //compose true
     }
 
-    composeOptions {
+   /* composeOptions {
         kotlinCompilerExtensionVersion = "1.4.8"
-    }
+    }*/
 
     buildscript {
         repositories {
@@ -115,9 +115,9 @@ dependencies {
 
     def nav_version = "2.5.3"
 
-    implementation "androidx.activity:activity-compose:1.7.3."
-    implementation "androidx.activity:activity:1.7.0"
-    implementation "androidx.activity:activity-ktx:1.7.0"
+   // implementation "androidx.activity:activity-compose:1.7.3."
+    implementation "androidx.activity:activity:1.7.2"
+    implementation "androidx.activity:activity-ktx:1.7.2"
 
     // Java language implementation
     implementation "androidx.navigation:navigation-fragment:$nav_version"
