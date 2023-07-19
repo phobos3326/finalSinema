@@ -6,11 +6,11 @@ import com.example.skillsinema.repository.RepositorySimilarFilm
 import javax.inject.Inject
 
 class SimilarFilmsUsecase @Inject constructor(
-    val dataRepository: DataRepository,
-    val repositorySimilarFilm: RepositorySimilarFilm
+    private val dataRepository: DataRepository,
+    private val repositorySimilarFilm: RepositorySimilarFilm
 ) {
     suspend fun getSimilarFilms(): List<Film> {
 
-      return  repositorySimilarFilm.getSimilarFilm(dataRepository.id)
+        return repositorySimilarFilm.getSimilarFilm(dataRepository.id)
     }
 }

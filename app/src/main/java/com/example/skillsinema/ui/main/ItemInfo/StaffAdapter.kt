@@ -12,14 +12,17 @@ import com.bumptech.glide.Glide
 import com.example.skillsinema.R
 import com.example.skillsinema.databinding.ActorItemBinding
 import com.example.skillsinema.databinding.SecondItemBinding
+import com.example.skillsinema.entity.Film
+import com.example.skillsinema.entity.ModelActorInfo
 import com.example.skillsinema.entity.ModelStaff
 
 import com.example.skillsinema.ui.main.ItemInfo.StaffAdapter.Const.END
 import com.example.skillsinema.ui.main.ItemInfo.StaffAdapter.Const.NOEND
 import javax.inject.Inject
 
-class StaffAdapter
-    :ListAdapter<ModelStaff.ModelStaffItem, RecyclerView.ViewHolder>(DiffUtilCallback()) {
+class StaffAdapter @Inject constructor(
+    private val onClick: (ModelStaff.ModelStaffItem) -> Unit
+)    :ListAdapter<ModelStaff.ModelStaffItem, RecyclerView.ViewHolder>(DiffUtilCallback()) {
 
     //private var onClickListener: View.OnClickListener? = null
 
@@ -49,7 +52,7 @@ class StaffAdapter
                 (holder as MyViewHolder).bind(item)
             }
             holder.itemView.setOnClickListener {
-               // onClick(item!!)
+                onClick(item!!)
 
 
             }

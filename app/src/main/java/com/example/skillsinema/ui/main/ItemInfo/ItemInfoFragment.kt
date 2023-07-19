@@ -23,6 +23,8 @@ import com.example.skillsinema.R
 import com.example.skillsinema.entity.ModelFilmDetails
 import com.example.skillsinema.databinding.FragmentItemInfoBinding
 import com.example.skillsinema.entity.Film
+import com.example.skillsinema.entity.ModelActorInfo
+import com.example.skillsinema.entity.ModelStaff
 import com.example.skillsinema.ui.main.home.AdapterBestFilm
 import dagger.hilt.EntryPoints
 //import com.example.skillsinema.entity.ModelFilmDetails
@@ -43,8 +45,12 @@ class ItemInfoFragment : Fragment() {
 
     val viewModel: ItemInfoViewModel by viewModels()
 
-    val adapterActor =StaffAdapter()
-    val adapterNoActor =StaffAdapter()
+    val adapterActor =StaffAdapter {
+        onItemActorClick(it)
+    }
+    val adapterNoActor =StaffAdapter{
+        onItemActorClick(it)
+    }
     val galerieAdapter =GalerieAdapter()
     val similarFilmAdapter =AdapterBestFilm{
         onItemDetailClick(it)
@@ -135,27 +141,14 @@ class ItemInfoFragment : Fragment() {
         findNavController().navigate(R.id.action_itemInfoFragment_self, bundle)
     }
 
-   /* @Composable
-    fun SimpleScreen() {
-        Column(Modifier.fillMaxSize()) {
-            Text(
-                text = stringResource(R.string.title),
-                style = MaterialTheme.typography.headlineMedium
-            )
-            Text(
-                text = stringResource(R.string.subtitle),
-                style = MaterialTheme.typography.headlineSmall
-            )
-            Text(
-                text = stringResource(R.string.body),
-                style = MaterialTheme.typography.bodyMedium
-            )
-            Spacer(modifier = Modifier.weight(1f))
-            Button(onClick = { *//* Handle click *//* }, Modifier.fillMaxWidth()) {
-                Text(text = stringResource(R.string.confirm))
-            }
-        }
-    }*/
+    private fun onItemActorClick(item: ModelStaff.ModelStaffItem) {
+
+            item.staffId?.let { bundle.putInt("ArgActor", it) }
+
+        findNavController().navigate(R.id.action_itemInfoFragment_to_actorInfoFragment, bundle)
+    }
+
+
 
     companion object {
         /**

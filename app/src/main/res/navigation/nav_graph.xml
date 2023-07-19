@@ -25,6 +25,9 @@
         <action
             android:id="@+id/action_itemInfoFragment_self"
             app:destination="@id/itemInfoFragment" />
+        <action
+            android:id="@+id/action_itemInfoFragment_to_actorInfoFragment"
+            app:destination="@id/actorInfoFragment" />
     </fragment>
     <fragment
         android:id="@+id/find_fragment"
@@ -45,4 +48,9 @@
             android:id="@+id/action_showAllFragment_to_itemInfoFragment"
             app:destination="@id/itemInfoFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/actorInfoFragment"
+        android:name="com.example.skillsinema.ui.main.actorInfo.ActorInfoFragment"
+        android:label="fragment_actor_info"
+        tools:layout="@layout/fragment_actor_info" />
 </navigation>

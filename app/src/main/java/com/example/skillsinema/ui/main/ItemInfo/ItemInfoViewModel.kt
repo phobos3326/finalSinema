@@ -162,12 +162,12 @@ class ItemInfoViewModel @Inject constructor(
         viewModelScope.launch {
             kotlin.runCatching {
 
-                useCase.getStaff(getValue())
+                useCase.getStaff()
             }.fold(
                 onSuccess = {
                     it?.forEachIndexed { index, modelStaffItem ->
                         if (modelStaffItem.professionKey == "ACTOR") {
-                            actorList.add(it[index])
+                           actorList.add(it[index])
                         } else {
                             noActorList.add(it[index])
                         }
