@@ -1,5 +1,6 @@
 package com.example.skillsinema.repository
 
+import com.example.skillsinema.entity.Film
 import com.example.skillsinema.entity.ModelActorInfo
 import com.example.skillsinema.entity.ModelGalerie
 import com.squareup.moshi.Moshi
@@ -30,6 +31,14 @@ class RepositoryActorInfo @Inject constructor() {
     suspend fun getActor(id: Int): ModelActorInfo {
         // parseJSON()
         return retrofitActor.actor(id)
+
+
+    }
+
+    @Provides
+    suspend fun getActorFilm(id: Int): List<Film> {
+        // parseJSON()
+        return retrofitActor.actor(id).films
 
 
     }
@@ -80,7 +89,7 @@ class RepositoryActorInfo @Inject constructor() {
     }
 
     private companion object {
-        private const val api_key = "1006c25a-038b-47b4-b9f9-341f208b4ac3"
+        private const val api_key = "63101d70-3149-4782-99f8-dd1ba5fc4ab1"
     }
 
 

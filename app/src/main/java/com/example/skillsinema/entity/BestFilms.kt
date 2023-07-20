@@ -14,7 +14,7 @@ interface BestFilms {
 
 
     @JsonClass(generateAdapter = true)
-    data class Film(
+    data class  Film(
         @Json(name = "countries")
         val countries: List<Country>?,
         @Json(name = "filmId")
@@ -32,7 +32,7 @@ interface BestFilms {
         @Json(name = "posterUrl")
         val posterUrl: String?,
         @Json(name = "posterUrlPreview")
-        val posterUrlPreview: String?,
+        var posterUrlPreview: String?,
         @Json(name = "rating")
         val rating: String?,
         @Json(name = "ratingKinopoisk")

@@ -8,26 +8,35 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 
 import com.example.skillsinema.R
 import com.example.skillsinema.databinding.FragmentActorInfoBinding
 import com.example.skillsinema.databinding.FragmentItemInfoBinding
 import com.example.skillsinema.databinding.FragmentMainBinding
+import com.example.skillsinema.entity.Film
+import com.example.skillsinema.ui.main.home.AdapterBestFilm
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class ActorInfoFragment : Fragment() {
+class ActorInfoFragment @Inject constructor() : Fragment() {
 
 
     private var _binding: FragmentActorInfoBinding? = null
     private val binding get() = _binding!!
 
-   /* companion object {
-        fun newInstance() = ActorInfoFragment()
-    }*/
-
+    /* companion object {
+         fun newInstance() = ActorInfoFragment()
+     }*/
+    val adapter = AdapterBestFilm {
+        onItemDetailClick(it)
+    }
+    val bundle = Bundle()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,13 +50,13 @@ class ActorInfoFragment : Fragment() {
         }
     }
 
-    private  val viewModel: ActorInfoViewModel by viewModels()
+    private val viewModel: ActorInfoViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding=FragmentActorInfoBinding.inflate(inflater,container,false)
+        _binding = FragmentActorInfoBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -58,23 +67,36 @@ class ActorInfoFragment : Fragment() {
 
         lifecycleScope.launch {
             viewModel.setValue(actorId!!)
-            viewModel.actor.observe(viewLifecycleOwner){
-                binding.actorName.text =it.nameRu
-                binding.actorProperty.text=it.profession
+            viewModel.actor.observe(viewLifecycleOwner) {
+                binding.actorName.text = it.nameRu
+                binding.actorProperty.text = it.profession
                 Glide.with(this@ActorInfoFragment)
                     .load(it.posterUrl)
                     .into(binding.imageView)
             }
         }
 
+        viewModel.actorFilm.onEach {
+            binding.bestActorsMovies.adapter = adapter
+            adapter.submitList(it)
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
+
     }
 
-   /* override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(ActorInfoViewModel::class.java)
-        // TODO: Use the ViewModel
-    }*/
 
+    private fun onItemDetailClick(item: Film) {
+        if (item.kinopoiskId == null) {
+            item.filmId?.let { bundle.putInt("Arg", it) }
+        } else {
+            item.kinopoiskId.let { bundle.putInt("Arg", it) }
+        }
+        findNavController().navigate(R.id.action_mainFragment_to_itemInfoFragment, bundle)
+    }
+    /* override fun onActivityCreated(savedInstanceState: Bundle?) {
+         super.onActivityCreated(savedInstanceState)
+         viewModel = ViewModelProvider(this).get(ActorInfoViewModel::class.java)
+         // TODO: Use the ViewModel
+     }*/
 
 
 }

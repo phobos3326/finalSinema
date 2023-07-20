@@ -62,7 +62,7 @@
         android:fontFamily="sans-serif-black"
         android:gravity="top"
         android:lineSpacingExtra="1sp"
-        android:text="Имя Актера"
+        android:text="Лучшее"
         android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
