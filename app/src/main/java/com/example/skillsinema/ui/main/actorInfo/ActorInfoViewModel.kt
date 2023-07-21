@@ -4,13 +4,19 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.example.skillsinema.DataRepository
+import com.example.skillsinema.datasource.BestActorFilmPagingSource
 import com.example.skillsinema.domain.GetActorFilmUseCase
 import com.example.skillsinema.domain.GetActorUseCase
 import com.example.skillsinema.entity.Film
 import com.example.skillsinema.entity.ModelActorInfo
 import com.example.skillsinema.entity.ModelStaff
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -21,7 +27,8 @@ import javax.inject.Inject
 class ActorInfoViewModel @Inject constructor(
     private val useCase: GetActorUseCase,
     private val useCaseActorFilm: GetActorFilmUseCase,
-    private val dataRepository: DataRepository
+    private val dataRepository: DataRepository,
+    private val pagingSource: BestActorFilmPagingSource
 ) : ViewModel() {
     private var _actor = MutableLiveData<ModelActorInfo>()
     val actor = _actor
@@ -35,8 +42,12 @@ class ActorInfoViewModel @Inject constructor(
     }
 
     init {
-        loadActor()
-        loadActorFilm()
+
+        //loadActorFilm()
+        viewModelScope.launch {
+            loadActor()
+            pagedFilms
+        }
     }
 
     private fun loadActor() {
@@ -70,5 +81,14 @@ class ActorInfoViewModel @Inject constructor(
             )
         }
     }
+
+    val pagedFilms: Flow<PagingData<Film>> = Pager(
+        config = PagingConfig(
+            pageSize = 20,
+            enablePlaceholders = true
+
+        ),
+        pagingSourceFactory = { pagingSource }
+    ).flow.cachedIn(viewModelScope)
 
 }

@@ -17,6 +17,7 @@ import com.example.skillsinema.databinding.FragmentItemInfoBinding
 import com.example.skillsinema.databinding.FragmentMainBinding
 import com.example.skillsinema.entity.Film
 import com.example.skillsinema.ui.main.home.AdapterBestFilm
+import com.example.skillsinema.ui.main.home.AdapterFilteredFilms
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -33,7 +34,7 @@ class ActorInfoFragment @Inject constructor() : Fragment() {
     /* companion object {
          fun newInstance() = ActorInfoFragment()
      }*/
-    val adapter = AdapterBestFilm {
+    val adapter = AdapterFilteredFilms {
         onItemDetailClick(it)
     }
     val bundle = Bundle()
@@ -76,9 +77,9 @@ class ActorInfoFragment @Inject constructor() : Fragment() {
             }
         }
 
-        viewModel.actorFilm.onEach {
+        viewModel.pagedFilms.onEach {
             binding.bestActorsMovies.adapter = adapter
-            adapter.submitList(it)
+            adapter.submitData(it)
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
     }

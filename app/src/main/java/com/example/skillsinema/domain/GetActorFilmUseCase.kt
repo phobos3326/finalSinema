@@ -13,16 +13,22 @@ class GetActorFilmUseCase @Inject constructor(
 ) {
     suspend fun getActorFilm(): List<Film> {
         var id = dataRepository.idActor
-        val list:MutableList<Film> = repositoryActorInfo.getActorFilm(id) as MutableList<Film>
+        val list: MutableList<Film> = repositoryActorInfo.getActorFilm(id) as MutableList<Film>
         val listFilm = mutableListOf<Film>()
 
         list.forEachIndexed { index, film ->
 
             //listFilm[index].posterUrlPreview = list[index].posterUrlPreview
-            list[index].posterUrlPreview=repository.getFilmDetails(film.filmId!!).posterUrlPreview
+            if (index < 19) {
+                list[index].posterUrlPreview =
+                    repository.getFilmDetails(film.filmId!!).posterUrlPreview
+            } else {
+                return list.take(19)
+            }
+
 
         }
-        return list
+        return list.take(19)
 
     }
 }

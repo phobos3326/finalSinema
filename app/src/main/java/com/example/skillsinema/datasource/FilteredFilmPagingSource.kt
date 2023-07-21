@@ -17,13 +17,6 @@ class FilteredFilmPagingSource @Inject constructor(
     var countries = 1
     override fun getRefreshKey(state: PagingState<Int, Film>): Int? = FIRST_PAGE
 
-    /* override fun getRefreshKey(state: PagingState<Int, Movie>): Int? {
-         return state.anchorPosition?.let {
-             state.closestPageToPosition(it)?.prevKey?.plus(1)
-                 ?: state.closestPageToPosition(it)?.nextKey?.minus(1)
-         }
-     }*/
-
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Film> {
 
         dataSource.loadFilters().forEach {
@@ -37,10 +30,10 @@ class FilteredFilmPagingSource @Inject constructor(
         }.fold(
             onSuccess = {
                 LoadResult.Page(
-                  data = it,
+                    data = it,
                     prevKey = null,
-                    // nextKey =  null
-                    nextKey = if (it.isEmpty()) null else page + 1
+                   //  nextKey =  null
+                   nextKey = if (it.isEmpty()) null else page + 1
                 )
             },
             onFailure = {

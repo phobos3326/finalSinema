@@ -65,7 +65,7 @@ class MainFragment @Inject constructor() : Fragment() {
 
         mainViewModel.topFilmModel.onEach {
             binding.TopFilmsRecyclerView.adapter = adapterBestFilms
-            binding.TopFilmsRecyclerView.scrollToPosition(1)
+
             adapterBestFilms.submitList(it)
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
