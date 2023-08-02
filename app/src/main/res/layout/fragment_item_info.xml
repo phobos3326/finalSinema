@@ -101,16 +101,13 @@
                 android:id="@+id/actorsRecycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 app:layout_constraintTop_toBottomOf="@+id/featuredInTheFilm"
                 app:spanCount="4"
-                tools:layout_editor_absoluteX="8dp"
+                tools:layout_editor_absoluteX="-11dp"
                 tools:listitem="@layout/actor_item" />
-
 
             <TextView
                 android:id="@+id/staff"
@@ -212,7 +209,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:fontFamily="sans-serif-black"
-                android:text="галерея"
+                android:text="похожие фильмы"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/galerieRecycler" />

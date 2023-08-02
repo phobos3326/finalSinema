@@ -1,24 +1,19 @@
-package com.example.skillsinema.ui.main.ItemInfo
+package com.example.skillsinema.ui.main.galerie
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.navigation.findNavController
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.skillsinema.R
 import com.example.skillsinema.databinding.GalerieItemBinding
 import com.example.skillsinema.databinding.SecondItemBinding
-
-
 import com.example.skillsinema.entity.ModelGalerie
-import com.example.skillsinema.ui.main.ItemInfo.GalerieAdapter.Const.END
-import com.example.skillsinema.ui.main.ItemInfo.GalerieAdapter.Const.NOEND
+import com.example.skillsinema.ui.main.galerie.FullGalerieAdapter.Const.END
+import com.example.skillsinema.ui.main.galerie.FullGalerieAdapter.Const.NOEND
 import javax.inject.Inject
 
-class GalerieAdapter @Inject constructor() :
-    PagingDataAdapter<ModelGalerie.Item, RecyclerView.ViewHolder>(DiffUtilCallback()) {
+class FullGalerieAdapter @Inject constructor() : PagingDataAdapter<ModelGalerie.Item, RecyclerView.ViewHolder>(DiffUtilCallback()) {
 
 
     class DiffUtilCallback : DiffUtil.ItemCallback<ModelGalerie.Item>() {
@@ -125,5 +120,4 @@ class GalerieAdapter @Inject constructor() :
         const val END = 0 // random unique value
         const val NOEND = 1
     }
-
 }

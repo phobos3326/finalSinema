@@ -129,6 +129,10 @@ class ItemInfoFragment : Fragment() {
             similarFilmAdapter.submitList(it)
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
+        binding.galerieFilmAll.setOnClickListener {
+            findNavController().navigate(R.id.action_itemInfoFragment_to_galerieFragment)
+        }
+
     }
 
 

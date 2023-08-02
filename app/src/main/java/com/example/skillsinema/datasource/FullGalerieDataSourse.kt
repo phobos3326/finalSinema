@@ -2,20 +2,15 @@ package com.example.skillsinema.datasource
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.skillsinema.DataRepository
-import com.example.skillsinema.data.FilmPagingSourse
 import com.example.skillsinema.domain.GalerieUseCase
-
-
 import com.example.skillsinema.entity.ModelGalerie
 import com.example.skillsinema.repository.GalerieRepository
 import javax.inject.Inject
 
-class GalerieDataSource @Inject constructor(
+class FullGalerieDataSourse @Inject constructor(
     val repository: GalerieRepository,
     val useCase: GalerieUseCase
-) :
-    PagingSource<Int, ModelGalerie.Item>() {
+) : PagingSource<Int, ModelGalerie.Item>() {
 
 
     override fun getRefreshKey(state: PagingState<Int, ModelGalerie.Item>): Int? = FIRST_PAGE
@@ -30,8 +25,8 @@ class GalerieDataSource @Inject constructor(
                 LoadResult.Page(
                     data = it!!,
                     prevKey = null,
-                     nextKey =  null
-                    //nextKey = if (it.isEmpty()) null else page + 1
+                    // nextKey =  null
+                    nextKey = if (it.isEmpty()) null else page + 1
                 )
             },
             onFailure = {
@@ -46,7 +41,3 @@ class GalerieDataSource @Inject constructor(
 
 
 }
-
-
-
-

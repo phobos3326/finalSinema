@@ -36,9 +36,9 @@ class GalerieRepository @Inject constructor() {
 
 
     @Provides
-    suspend fun getGalerie(id: Int): List<ModelGalerie.Item> {
+    suspend fun getGalerie(page: Int, id: Int): List<ModelGalerie.Item> {
         // parseJSON()
-        return retrofitGalerie.galerie(id, "STILL", 1).items.toList()
+        return retrofitGalerie.galerie(id, "STILL", page).items.toList()
 
 
     }

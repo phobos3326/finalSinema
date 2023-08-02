@@ -34,6 +34,8 @@ class MainActivity : AppCompatActivity() {
                     R.id.find_fragment->setCurrentFragment(secondFragment)
                     R.id.person_fragment->setCurrentFragment(thirdFragment)
 
+
+
                 }
                 true
             }*/
@@ -45,6 +47,8 @@ class MainActivity : AppCompatActivity() {
             setOf(
                 R.id.home_fragment, R.id.find_fragment, R.id.person_fragment
             )
+
+
         )
 
         setupActionBarWithNavController(navController, appBarConfiguration)

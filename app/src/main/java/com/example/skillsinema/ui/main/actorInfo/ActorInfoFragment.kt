@@ -82,6 +82,8 @@ class ActorInfoFragment @Inject constructor() : Fragment() {
             adapter.submitData(it)
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
+
+
     }
 
 

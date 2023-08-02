@@ -10,9 +10,9 @@ class GalerieUseCase @Inject constructor(
     private val repository: GalerieRepository,
     private val dataRepository: DataRepository,
 ) {
-    suspend fun getGalerie(): List<ModelGalerie.Item>? {
+    suspend fun getGalerie(page:Int): List<ModelGalerie.Item>? {
 
         val id = dataRepository.id
-        return repository.getGalerie(id)
+        return repository.getGalerie(page, id )
     }
 }

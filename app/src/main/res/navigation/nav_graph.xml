@@ -28,6 +28,9 @@
         <action
             android:id="@+id/action_itemInfoFragment_to_actorInfoFragment"
             app:destination="@id/actorInfoFragment" />
+        <action
+            android:id="@+id/action_itemInfoFragment_to_galerieFragment"
+            app:destination="@id/galerieFragment" />
     </fragment>
     <fragment
         android:id="@+id/find_fragment"
@@ -53,4 +56,9 @@
         android:name="com.example.skillsinema.ui.main.actorInfo.ActorInfoFragment"
         android:label="fragment_actor_info"
         tools:layout="@layout/fragment_actor_info" />
+    <fragment
+        android:id="@+id/galerieFragment"
+        android:name="com.example.skillsinema.ui.main.galerie.GalerieFragment"
+        android:label="fragment_galerie"
+        tools:layout="@layout/fragment_galerie" />
 </navigation>
