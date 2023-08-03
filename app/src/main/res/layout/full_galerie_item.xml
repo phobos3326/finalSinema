@@ -2,8 +2,8 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/item_view"
-    android:layout_width="wrap_content"
+    android:id="@+id/full_gallery_item_view"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="2dp"
 
@@ -21,15 +21,16 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/poster"
-            android:layout_width="192dp"
-            android:layout_height="108dp"
-            android:scaleType="center"
+            android:id="@+id/poster11"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="fitCenter"
 
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearanceOverlay="@style/RoundedSquare"
-            tools:srcCompat="@tools:sample/avatars" />
+            tools:srcCompat="@tools:sample/avatars"
+            android:adjustViewBounds="true"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

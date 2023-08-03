@@ -6,6 +6,8 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.example.skillsinema.databinding.FullGalerieItemBinding
 import com.example.skillsinema.databinding.GalerieItemBinding
 import com.example.skillsinema.databinding.SecondItemBinding
 import com.example.skillsinema.entity.ModelGalerie
@@ -29,7 +31,7 @@ class FullGalerieAdapter @Inject constructor() : PagingDataAdapter<ModelGalerie.
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val binding = GalerieItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = FullGalerieItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         // val binding2 = SecondItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
         return MyViewHolder(binding)
@@ -92,14 +94,19 @@ class FullGalerieAdapter @Inject constructor() : PagingDataAdapter<ModelGalerie.
     }
 
     class MyViewHolder @Inject constructor(
-        private var binding1: GalerieItemBinding
+        private var binding1: FullGalerieItemBinding
     ) : RecyclerView.ViewHolder(binding1.root) {
         fun bind(film: ModelGalerie.Item) {
 
             film.let {
-                Glide.with(binding1.poster)
+                Glide.with(binding1.poster11)
+
                     .load(it.previewUrl)
-                    .into(binding1.poster)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+
+
+                    //.preload(10,10)
+                    .into(binding1.poster11)
             }
         }
     }
