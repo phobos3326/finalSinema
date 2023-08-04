@@ -55,7 +55,11 @@
         android:id="@+id/actorInfoFragment"
         android:name="com.example.skillsinema.ui.main.actorInfo.ActorInfoFragment"
         android:label="fragment_actor_info"
-        tools:layout="@layout/fragment_actor_info" />
+        tools:layout="@layout/fragment_actor_info" >
+        <action
+            android:id="@+id/action_actorInfoFragment_to_itemInfoFragment"
+            app:destination="@id/itemInfoFragment" />
+    </fragment>
     <fragment
         android:id="@+id/galerieFragment"
         android:name="com.example.skillsinema.ui.main.galerie.GalerieFragment"

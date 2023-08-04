@@ -123,6 +123,8 @@ class FullGalerieAdapter @Inject constructor() : PagingDataAdapter<ModelGalerie.
         }
     }
 
+
+
     private object Const {
         const val END = 0 // random unique value
         const val NOEND = 1

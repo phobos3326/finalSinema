@@ -1,7 +1,7 @@
 package com.example.skillsinema.repository
 
 
-import com.example.skillsinema.entity.Film
+import com.example.skillsinema.BuildConfig
 import com.example.skillsinema.data.BestFilmDTO
 import com.example.skillsinema.data.DataDTO
 import com.example.skillsinema.entity.*
@@ -28,6 +28,11 @@ import javax.inject.Inject
 class Repository @Inject constructor(
 
 ) {
+
+
+    private companion object {
+        private const val api_key = "63101d70-3149-4782-99f8-dd1ba5fc4ab1"
+    }
 
 
     @Provides
@@ -58,47 +63,6 @@ class Repository @Inject constructor(
         return retrofit.filteredFilms(page, countries, genre, 3, 10).items
     }
 
-    /*@Provides
-    suspend fun getStaff(id: Int): List<ModelStaffItem> {
-        return retrofitStaff.staff(301).staffItem
-    }*/
-
-      /* val q=retrofitStaff.staff(301).body()
-
-        val gson = Gson()
-        try {
-            retrofitStaff.staff(301).body()
-        } catch (e: JsonSyntaxException) {
-            if (e.equals(
-                    "Expected BEGIN_OBJECT but was BEGIN_ARRAY"
-                )
-            ) {
-                val jsonArray = JsonParser()
-                    .parse(qq)
-                    .getAsJsonArray();
-                for (i in 0..jsonArray.size()) {
-                  val q= gson.fromJson(jsonArray.get(i), ModelStaffItem::class.java)
-                    // do something with the user object
-                }
-            }
-        }
-
-        val myData: List<ModelStaffItem> = moshi.adapter(Types.newParameterizedType(List::class.java, ModelStaffItem::class.java)).fromJson(q)
-        return q!!*/
-
-      /*  kotlin.runCatching {
-
-        }.fold(
-            onSuccess = {
-              return  listOf(it!!)
-            },
-            onFailure =
-        )*/
-
-
-
-
-
 
     private val BASE_URL = "https://kinopoiskapiunofficial.tech/api/v2.2/"
     private val BASE_URL2 = "https://kinopoiskapiunofficial.tech/api/v1/"
@@ -115,24 +79,6 @@ class Repository @Inject constructor(
         .build()
 
 
-
-
-    //val myData: List<ModelStaffItem> = moshi.  adapter(Types.newParameterizedType(List::class.java, ModelStaffItem::class.java)).fromJson(jsonString)
-
-
-
-   /* class VideosJsonConverter {
-        @Wrapped
-        @FromJson
-        fun fromJson(json: VideosResponse): List<Video> {
-            return json.results
-        }
-
-        @ToJson
-        fun toJson(@Wrapped value: List<Video?>?): VideosResponse {
-            throw UnsupportedOperationException()
-        }
-    }*/
 
 
     private fun retrofit(): Retrofit? {
@@ -168,27 +114,6 @@ class Repository @Inject constructor(
         .build()
         .create(ApiInterfaceFilteredFilms::class.java)
 
-
-  /*  val retrofitStaff = Retrofit
-        .Builder()
-        .client(
-            OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().also {
-
-
-              //  qq = it.level
-                it.level = HttpLoggingInterceptor.Level.BODY
-
-            }).build()
-        )
-        .baseUrl(BASE_URL2)
-        .addConverterFactory(MoshiConverterFactory.create(moshi))
-        .build()
-        .create(ApiInterfaceStaff::class.java)*/
-
-
- /*   val listType = Types.newParameterizedType(List::class.java, ApiInterfaceStaff::class.java)
-    val adapter: JsonAdapter<List<qq>> = moshi.adapter(listType)
-    val pushPortMessageList = adapter.fromJson(pushPortMessage)*/
 
 
     private fun retrofitInstance(): ApiInterface = retrofit()!!.create(ApiInterface::class.java)
@@ -258,45 +183,6 @@ class Repository @Inject constructor(
             ): ModelFilteredFilms1
 
     }
-
-   /* interface ApiInterfaceStaff {
-        @Headers("X-API-KEY: $api_key")
-        @GET("staff?")
-        suspend fun staff(
-            @Query("filmId") filmId: Int
-        ): ModelStaff
-    }*/
-
-    private companion object {
-        private const val api_key = "63101d70-3149-4782-99f8-dd1ba5fc4ab1"
-    }
-
-
-
-
-/*    @JsonClass(generateAdapter = true)
-    data class CustomObjJson(
-        var at1: String? = null,
-        var at2: String? = null,
-        var at3: String? = null,
-    )
-
-    class CustomObjAdapter {
-        @ToJson
-        fun toJson(obj: ModelStaffItem): String {
-            return obj.nameRu + obj.description + obj.posterUrl
-        }
-
-        @FromJson
-        fun fromJson(customObjJson: CustomObjJson): ModelStaffItem {
-            var at1 = customObjJson.at1
-            // TODO: find a way to convert customObjJson.at2 of type String to Date here
-            var at2 = customObjJson.at2
-            var at3 = customObjJson.at3
-            return ModelStaffItem(description = at1!!, nameRu = at2!!, posterUrl = at3!! )
-        }
-    }*/
-
 
 
 }

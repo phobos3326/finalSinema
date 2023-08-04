@@ -59,9 +59,7 @@ class GalerieRepository @Inject constructor() {
         .Builder()
         .client(
             OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().also {
-
                 it.level = HttpLoggingInterceptor.Level.BODY
-
             }).build()
         )
         .baseUrl(BASE_URL)
@@ -69,14 +67,6 @@ class GalerieRepository @Inject constructor() {
         .build()
         .create(ApiInterfaceGalerie::class.java)
 
-
-    /* private fun retrofit(): Retrofit? {
-         return Retrofit.Builder()
-             .baseUrl(BASE_URL)
-             .addConverterFactory(MoshiConverterFactory.create(moshi))
-             .client(httpClientBuilder.build())
-             .build()
-     }*/
 
 
     interface ApiInterfaceGalerie {
@@ -94,54 +84,5 @@ class GalerieRepository @Inject constructor() {
     }
 
 
-    /*fun parseJSON() {
-
-        // Create Retrofit
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(MoshiConverterFactory.create(moshi))
-            .build()
-
-        // Create Service
-
-        val service = retrofit.create(ApiInterfaceGalerie::class.java)
-        CoroutineScope(Dispatchers.IO).launch {
-
-            // Do the GET request and get response
-            val response = service.galerie(301,"STILL", 1)
-
-            withContext(Dispatchers.Main) {
-                if (!response.isEmpty()) {
-
-                    val items = response
-                    if (items != null) {
-                        for (i in 0 until items.count()) {
-                            // ID
-                            *//*val id = items[i].staffId ?: "N/A"
-                            Log.d("REPOSTAFF: ", id as String)*//*
-
-                            // Employee Name
-                            val employeeName = items[i].imageUrl ?: "N/A"
-                            Log.d("REPOSTAFF: ", employeeName)
-
-                            // Employee Salary
-                            val employeeSalary = items[i].imageUrl ?: "N/A"
-                            Log.d("REPOSTAFF: ", employeeSalary)
-
-                            // Employee Age
-                            val employeeAge = items[i].imageUrl ?: "N/A"
-                            Log.d("REPOSTAFF: ", employeeAge)
-
-                        }
-                    }
-
-                } else {
-
-                    Log.e("RETROFIT_ERROR", response.code().toString())
-
-                }
-            }
-        }
-    }*/
 
 }

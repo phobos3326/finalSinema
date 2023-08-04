@@ -43,10 +43,14 @@ class GalerieFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.pagedFullGalerie.onEach {
-            binding.galerieRecyclerview.adapter = adapter
-            adapter.submitData(it)
-        }.launchIn(viewLifecycleOwner.lifecycleScope)
+        binding.button1.setOnClickListener {
+            viewModel.pagedFullGalerie.onEach {
+                binding.galerieRecyclerview.adapter = adapter
+                adapter.submitData(it)
+            }.launchIn(viewLifecycleOwner.lifecycleScope)
+        }
+
+
 
 
 

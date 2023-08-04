@@ -93,7 +93,7 @@ class ActorInfoFragment @Inject constructor() : Fragment() {
         } else {
             item.kinopoiskId.let { bundle.putInt("Arg", it) }
         }
-        findNavController().navigate(R.id.action_mainFragment_to_itemInfoFragment, bundle)
+        findNavController().navigate(R.id.action_actorInfoFragment_to_itemInfoFragment, bundle)
     }
     /* override fun onActivityCreated(savedInstanceState: Bundle?) {
          super.onActivityCreated(savedInstanceState)
