@@ -20,9 +20,8 @@ class GalerieViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            pagedFullGalerie
+          pagedFullGalerie
         }
-
     }
 
 

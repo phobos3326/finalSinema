@@ -86,8 +86,10 @@
         app:layout_constraintTop_toBottomOf="@+id/scrollView2"
         app:layout_constraintVertical_bias="0.0"
 
-        app:spanCount="2"
+        app:spanCount="3"
         tools:listitem="@layout/full_galerie_item" />
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
