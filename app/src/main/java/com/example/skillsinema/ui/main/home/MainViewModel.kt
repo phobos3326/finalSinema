@@ -90,8 +90,10 @@ class MainViewModel @Inject constructor(
 
     private fun loadPremieres() {
         val calendar = Calendar.getInstance()
+
+
         val monthNumber = calendar.get(Calendar.MONTH)
-        val monthName = DateFormatSymbols().months[monthNumber]
+        val monthName = DateFormatSymbols(Locale.ENGLISH).months[monthNumber]
         val year = SimpleDateFormat("yyyy")
         val currentYear = year.format(Date())
 

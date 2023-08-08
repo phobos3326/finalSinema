@@ -1,7 +1,13 @@
 package com.example.skillsinema
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
+//import android.view.MenuItem
+import androidx.appcompat.app.ActionBar
+import androidx.core.graphics.toColor
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.findNavController
@@ -24,6 +30,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
+        val actionBar= supportActionBar
+        actionBar?.setDisplayHomeAsUpEnabled(true)
+       // actionBar?.setBackgroundDrawable(ColorDrawable(Color.alpha(90)))
+        actionBar?.let {
+            it.setTitle("1111")
+
+        }
+
 
 
 
@@ -63,6 +79,18 @@ class MainActivity : AppCompatActivity() {
 
 
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                // Handle home button press (navigate back or perform another action)
+                onBackPressed()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
 
     private fun obtainNavHostFragment(
         fragmentManager: FragmentManager,

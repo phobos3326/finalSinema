@@ -3,6 +3,7 @@ package com.example.skillsinema.ui.main.ItemInfo
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Column
@@ -11,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.SemanticsProperties.Text
 import androidx.compose.ui.text.input.KeyboardType.Companion.Text
+import androidx.core.graphics.green
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -67,9 +69,21 @@ class ItemInfoFragment : Fragment() {
        /* val myComponent =myComponentManager.get()
         val dataRepository=EntryPoints.get(myComponent,MyEntryPoint::class.java).getDataRepository()
         */
+
+
         arguments?.let {
 
 
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
