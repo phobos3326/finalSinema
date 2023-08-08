@@ -7,7 +7,7 @@ import com.example.skillsinema.entity.ModelGalerie
 import com.example.skillsinema.repository.GalerieRepository
 import javax.inject.Inject
 
-class FullGalerieDataSourse @Inject constructor(
+class StillGalerieDataSourse @Inject constructor(
     val repository: GalerieRepository,
     val useCase: GalerieUseCase
 ) : PagingSource<Int, ModelGalerie.Item>() {
@@ -19,7 +19,7 @@ class FullGalerieDataSourse @Inject constructor(
 
         val page = params.key ?: FIRST_PAGE
         return kotlin.runCatching {
-            useCase.getGalerie(page)
+            useCase.executeGetGalerieStill(page)
         }.fold(
             onSuccess = {
                 LoadResult.Page(

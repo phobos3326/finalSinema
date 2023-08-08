@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.ActionBar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -20,6 +21,10 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainFragment @Inject constructor() : Fragment() {
+
+
+
+
 
 
     private var _binding: FragmentMainBinding? = null

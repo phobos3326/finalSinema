@@ -12,7 +12,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.skillsinema.DataRepository
 import com.example.skillsinema.entity.Film
-import com.example.skillsinema.data.FilmPagingSourse
+import com.example.skillsinema.datasource.FilmPagingSourse
 import com.example.skillsinema.datasource.FilteredFilmPagingSource
 import com.example.skillsinema.domain.FilteredFilmsUseCase
 import com.example.skillsinema.domain.FiltersUseCase

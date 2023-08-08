@@ -6,7 +6,9 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.example.skillsinema.datasource.FullGalerieDataSourse
+import com.example.skillsinema.datasource.ShootingGalerieDataSourse
+import com.example.skillsinema.datasource.StillGalerieDataSourse
+import com.example.skillsinema.datasource.WallpaperGalerieDataSourse
 import com.example.skillsinema.entity.ModelGalerie
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -15,7 +17,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GalerieViewModel @Inject constructor(
-    private val dataSourse: FullGalerieDataSourse
+    private val dataSourse: StillGalerieDataSourse,
+    private val shootingGalerieDataSourse: ShootingGalerieDataSourse,
+    private val wallpaperGalerieDataSourse: WallpaperGalerieDataSourse
 ) : ViewModel() {
 
     init {
@@ -32,5 +36,24 @@ class GalerieViewModel @Inject constructor(
 
         ),
         pagingSourceFactory = { dataSourse }
+    ).flow.cachedIn(viewModelScope)
+
+
+    val pagesShootingGalerie : Flow<PagingData<ModelGalerie.Item>> = Pager(
+        config = PagingConfig(
+            pageSize = 20,
+            enablePlaceholders = true
+
+        ),
+        pagingSourceFactory = { shootingGalerieDataSourse }
+    ).flow.cachedIn(viewModelScope)
+
+    val pagesWallpaperGalerie : Flow<PagingData<ModelGalerie.Item>> = Pager(
+        config = PagingConfig(
+            pageSize = 20,
+            enablePlaceholders = true
+
+        ),
+        pagingSourceFactory = { wallpaperGalerieDataSourse }
     ).flow.cachedIn(viewModelScope)
 }

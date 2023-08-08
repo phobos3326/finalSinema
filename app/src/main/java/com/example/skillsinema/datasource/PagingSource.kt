@@ -1,4 +1,4 @@
-package com.example.skillsinema.data
+package com.example.skillsinema.datasource
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState

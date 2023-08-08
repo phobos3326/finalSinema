@@ -1,16 +1,17 @@
 package com.example.skillsinema.ui.main.galerie
 
-import androidx.lifecycle.ViewModelProvider
+import android.app.ActionBar
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.skillsinema.R
 import com.example.skillsinema.databinding.FragmentGalerieBinding
-import com.example.skillsinema.databinding.FragmentItemInfoBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -30,18 +31,31 @@ class GalerieFragment : Fragment() {
 
     private val viewModel: GalerieViewModel by viewModels()
 
+  /*  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu., menu)
+        menu.getItem(1).title ="1111"
+    }*/
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentGalerieBinding.inflate(inflater, container, false)
+        setHasOptionsMenu(true)
+
+
+      //  actionBar.hide() // or even hide the actionbar
+
+
         return binding.root
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+        //val title: String = actionBar?.getTitle().toString() // get the title
 
         binding.button1.setOnClickListener {
             viewModel.pagedFullGalerie.onEach {
@@ -50,6 +64,19 @@ class GalerieFragment : Fragment() {
             }.launchIn(viewLifecycleOwner.lifecycleScope)
         }
 
+        binding.button2.setOnClickListener{
+            viewModel.pagesShootingGalerie.onEach {
+                binding.galerieRecyclerview.adapter=adapter
+                adapter.submitData(it)
+            }.launchIn(viewLifecycleOwner.lifecycleScope)
+        }
+
+        binding.button3.setOnClickListener{
+            viewModel.pagesWallpaperGalerie.onEach {
+                binding.galerieRecyclerview.adapter=adapter
+                adapter.submitData(it)
+            }.launchIn(viewLifecycleOwner.lifecycleScope)
+        }
 
 
 

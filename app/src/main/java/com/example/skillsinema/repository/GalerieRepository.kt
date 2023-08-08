@@ -1,25 +1,15 @@
 package com.example.skillsinema.repository
 
 
-import android.util.Log
-import com.example.skillsinema.entity.Model
 import com.example.skillsinema.entity.ModelGalerie
-import com.example.skillsinema.entity.ModelStaff
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
@@ -36,11 +26,21 @@ class GalerieRepository @Inject constructor() {
 
 
     @Provides
-    suspend fun getGalerie(page: Int, id: Int): List<ModelGalerie.Item> {
+    suspend fun getGalerieStill(page: Int, id: Int): List<ModelGalerie.Item> {
         // parseJSON()
         return retrofitGalerie.galerie(id, "STILL", page).items.toList()
+    }
 
+    @Provides
+    suspend fun getGalerieShooting(page: Int, id: Int): List<ModelGalerie.Item> {
+        // parseJSON()
+        return retrofitGalerie.galerie(id, "SHOOTING", page).items.toList()
+    }
 
+    @Provides
+    suspend fun getGalerieWALLPAPER(page: Int, id: Int): List<ModelGalerie.Item> {
+        // parseJSON()
+        return retrofitGalerie.galerie(id, "WALLPAPER", page).items.toList()
     }
 
     private val logInterceptor = HttpLoggingInterceptor()
