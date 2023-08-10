@@ -4,6 +4,7 @@ package com.example.skillsinema.datasource
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.skillsinema.DataRepository
+import com.example.skillsinema.domain.FilteredFilmsUseCase
 import com.example.skillsinema.domain.FiltersUseCase
 import com.example.skillsinema.entity.Film
 import com.example.skillsinema.repository.Repository
@@ -15,6 +16,7 @@ class FilteredFilmPagingSource @Inject constructor(
     val repository: Repository,
     //val dataSource: FiltersDataSource,
     val useCase: FiltersUseCase,
+    val useCaseFilteredFilms: FilteredFilmsUseCase,
     val dataRepository: DataRepository
 
 ) :
@@ -30,7 +32,7 @@ class FilteredFilmPagingSource @Inject constructor(
         val page = params.key ?: FIRST_PAGE
 
         return kotlin.runCatching {
-            repository.getFilteredFilm(page, dataRepository.genreID, dataRepository.countryID)
+            useCaseFilteredFilms.getFilteredFilms(page)
         }.fold(
             onSuccess = {
                 LoadResult.Page(

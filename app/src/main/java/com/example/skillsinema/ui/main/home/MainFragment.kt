@@ -60,7 +60,7 @@ class MainFragment @Inject constructor() : Fragment() {
         }
 
         //mainViewModel.getFilters()
-      return binding.root
+        return binding.root
     }
 
 
@@ -128,7 +128,7 @@ class MainFragment @Inject constructor() : Fragment() {
         Log.d(TAG, "onAttach")
     }
 
-    override fun onViewStateRestored( savedInstanceState: Bundle?) {
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
         Log.d(TAG, "onViewStateRestored")
     }

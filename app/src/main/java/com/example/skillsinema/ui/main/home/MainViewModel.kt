@@ -30,6 +30,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import retrofit2.Response
 import java.util.*
 import javax.inject.Inject
 
@@ -62,12 +63,18 @@ class MainViewModel @Inject constructor(
     private var _filteredFilms = MutableStateFlow<List<ModelFilteredFilms1>>(emptyList())
     val filteredFilms = _filteredFilms.asStateFlow()
 
-    var genre = 0
-    var country = 0
+    /*var genre = 0
+    var country = 0*/
 
     var bundle = Bundle()
 
     var listFilters = listOf<ModelFilter>()
+
+    private var genre: List<ModelFilter.Genre>? = emptyList()
+    private var country: List<ModelFilter.Country>? = emptyList()
+
+    var rndGenre = 0
+    var rndCountry = 0
 
     val pagedFilms: Flow<PagingData<Film>> = Pager(
         config = PagingConfig(
@@ -83,22 +90,24 @@ class MainViewModel @Inject constructor(
         dataRepository.genreID = value
     }
 
+
     init {
         viewModelScope.launch {
             loadPremieres()
             loadTopFilms()
             pagedFilms
             // getFilters()
-
+            //response(this@MainViewModel)
             //getPagedFilteredFilms()
-            Log.d("FILTERED", "${getPagedFilteredFilms()}")
+            load()
+            //response(this@MainViewModel)
+            Log.d("FILTERED", "${pagedFilteredFilms}")
 
             //staff.parseJSON()
         }
         // pagedFilms
 
     }
-
 
     private fun loadPremieres() {
         val calendar = Calendar.getInstance()
@@ -148,52 +157,13 @@ class MainViewModel @Inject constructor(
     }
 
 
-    /*  fun loadFilters() {
-          viewModelScope.launch {
-              kotlin.runCatching {
-                  filtersUseCase.getFilters()
-              }.fold(
-                  onSuccess = {
-                      _filters.value = listOf(it)
-                      listFilters = listOf(it)
-                      Log.d("MainViewModel2", (it ?: " load").toString())
-                  },
-                  onFailure = { Log.d("MainViewModelFilters", it.message ?: "not load") }
-              )
-          }
-
-          listFilters.forEach {
-              country = it.countries[1].id
-              genre = it.genres[11].id
-          }
-
-      }*/
-
-
-    /* fun loadFilteredFilms() {
-         viewModelScope.launch {
-             kotlin.runCatching {
-                 filteredFilmsUseCase.getFilteredFilms()
-             }.fold(
-                 onSuccess = {
-                     _filteredFilms.value = it
-                     Log.d("MainViewModelFilteredFilms", (it ?: " load").toString())
-                 },
-                 onFailure = {
-                     Log.d("MainViewModelFilteredFilms", it.message ?: "not load")
-                 }
-             )
-         }
-     }*/
-
-
-    fun getPagedFilteredFilms(): Flow<PagingData<Film>> {
-        // getFilters()
-
-        return Pager(config = PagingConfig(pageSize = 20, enablePlaceholders = true),
-            pagingSourceFactory = { filteredFilmPagingSource }
-        ).flow.cachedIn(viewModelScope)
-    }
+    val pagedFilteredFilms: Flow<PagingData<Film>> = Pager(
+        config = PagingConfig(
+            pageSize = 20,
+            enablePlaceholders = true
+        ),
+        pagingSourceFactory = { filteredFilmPagingSource }
+    ).flow.cachedIn(viewModelScope)
 
 
     /* fun isNetworkAvaibable(context: Context){
@@ -205,42 +175,41 @@ class MainViewModel @Inject constructor(
          }
      }*/
 
+    suspend fun load() {
+        genre = response(this@MainViewModel).body()?.genres
+        country = response(this@MainViewModel).body()?.countries
+        rndGenre = (0 until genre!!.size - 1).random()
+        rndCountry = (0 until country!!.size - 1).random()
+    }
+
+
     suspend fun getFilters(): Flow<PagingData<Film>> {
 
-        /*val listGenre = useCase.getFiltersGenre()
-            dataRepository.genreID = listGenre[(0..listGenre.size - 1).random()].id
+delay(3000)
+        return if (response(this@MainViewModel).isSuccessful) {
 
-
-            val listCountry = useCase.getFiltersCountries()
-            val rndCountryID = listCountry[(0..listCountry.size - 1).random()].id
-            setValue(rndCountryID)
-            dataRepository.countryLabel = listCountry[rndCountryID].country*/
-
-
-        val response = useCase.getFilters()
-      return  if (response.isSuccessful) {
-            val genre = response.body()?.genres
-            val country = response.body()?.countries
-
-            val rndGenre = (0 until genre!!.size).random()
-            val rndCountry = (0 until country!!.size).random()
 
             dataRepository.genreID = rndGenre
             dataRepository.countryID = rndCountry
-             Pager(config = PagingConfig(pageSize = 20, enablePlaceholders = true),
-                pagingSourceFactory = { filteredFilmPagingSource }
-            ).flow.cachedIn(viewModelScope)
+            Log.d("TAG1", "${dataRepository.genreID} + ${dataRepository.countryID}")
+            //dataRepository.countryLabel = country[rndCountry].country
+
+            pagedFilteredFilms
         } else {
-          Pager(config = PagingConfig(pageSize = 20, enablePlaceholders = true),
-              pagingSourceFactory = { filteredFilmPagingSource }
-          ).flow.cachedIn(viewModelScope)
-      }
+            pagedFilteredFilms
+        }
 
 
     }
 
+    companion object {
 
 
+        suspend fun response(mainViewModel: MainViewModel): Response<ModelFilter> {
+
+            return mainViewModel.useCase.getFilters()
+        }
+    }
 
 
 }
