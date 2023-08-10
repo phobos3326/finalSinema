@@ -1,30 +1,33 @@
 package com.example.skillsinema.ui.main.home
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.ActionBar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.example.skillsinema.DataRepository
 import com.example.skillsinema.R
-import com.example.skillsinema.entity.Film
 import com.example.skillsinema.databinding.FragmentMainBinding
+import com.example.skillsinema.entity.Film
 import com.example.skillsinema.entity.Model
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class MainFragment @Inject constructor() : Fragment() {
 
-
-
-
+    @Inject
+    lateinit var dataRepository: DataRepository
 
 
     private var _binding: FragmentMainBinding? = null
@@ -48,19 +51,21 @@ class MainFragment @Inject constructor() : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+        Log.d(TAG, "onCreateView")
         _binding = FragmentMainBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-
-
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
         binding.SHOWALL.setOnClickListener { View ->
             onClickShowAll()
         }
+
+        //mainViewModel.getFilters()
+      return binding.root
+    }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             mainViewModel.modelPremiere.collect {
                 binding.viewPager.adapter = adapter
@@ -74,17 +79,22 @@ class MainFragment @Inject constructor() : Fragment() {
             adapterBestFilms.submitList(it)
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
-        mainViewModel.pagedFilteredFilms.onEach {
 
-            binding.FilterFilmsRecyclerView.adapter = adapterFilteredFilms
-            adapterFilteredFilms.submitData(it)
-            Log.d("PDATA", "$it")
+        binding.filtered1.text = dataRepository.countryLabel
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            mainViewModel.getFilters().onEach {
+                binding.FilterFilmsRecyclerView.adapter = adapterFilteredFilms
+
+                adapterFilteredFilms.submitData(it)
+                Log.d("PDATA", "$it")
+
+            }.launchIn(viewLifecycleOwner.lifecycleScope)
+        }
 
 
 
-        }.launchIn(viewLifecycleOwner.lifecycleScope)
-
-
+        Log.d(TAG, "onViewCreated");
 
     }
 
@@ -107,5 +117,58 @@ class MainFragment @Inject constructor() : Fragment() {
         }
         findNavController().navigate(R.id.action_mainFragment_to_itemInfoFragment, bundle)
     }
+
+
+    fun ContentFragment() {
+        Log.d(TAG, "Constructor")
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        Log.d(TAG, "onAttach")
+    }
+
+    override fun onViewStateRestored( savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        Log.d(TAG, "onViewStateRestored")
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d(TAG, "onStart")
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        Log.d(TAG, "onResume")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d(TAG, "onPause")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d(TAG, "onStop")
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Log.d(TAG, "onDestroyView")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG, "onDestroy")
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        Log.d(TAG, "onDetach")
+    }
+
+    private val TAG = "ContentFragment"
 
 }

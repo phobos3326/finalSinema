@@ -8,6 +8,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Inject
+/*
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -18,10 +19,10 @@ class FiltersDataSource @Inject constructor(
     lateinit var  useCase: FiltersUseCase
 
     @Provides
-    suspend fun loadFilters(): List<ModelFilter.Genre> {
+    suspend fun loadGenre(): List<ModelFilter.Genre> {
         var listFilters = listOf<ModelFilter.Genre>()
         kotlin.runCatching {
-            useCase.getFilters()
+            useCase.getFilters().genres
         }.fold(
             onSuccess = {
 
@@ -33,4 +34,21 @@ class FiltersDataSource @Inject constructor(
         return listFilters
 
     }
-}
+
+    @Provides
+    suspend fun loadCountry(): List<ModelFilter.Country> {
+        var listFilters = listOf<ModelFilter.Country>()
+        kotlin.runCatching {
+            useCase.getFilters()
+        }.fold(
+            onSuccess = {
+
+                listFilters = it.countries
+                Log.d("MainViewModel3", it.toString())
+            },
+            onFailure = { Log.d("MainViewModelFilters", it.message ?: "not load") }
+        )
+        return listFilters
+
+    }
+}*/

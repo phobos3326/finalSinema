@@ -57,7 +57,6 @@ class ItemInfoViewModel @Inject constructor(
     var noActorList = mutableListOf<ModelStaff.ModelStaffItem>()
 
     fun getValue(): Int {
-
         return dataRepository.id
     }
 

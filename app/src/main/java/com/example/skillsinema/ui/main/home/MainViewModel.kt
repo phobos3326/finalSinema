@@ -1,7 +1,9 @@
 package com.example.skillsinema.ui.main.home
 
+import android.content.Context
 import android.icu.text.DateFormatSymbols
 import android.icu.text.SimpleDateFormat
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -20,9 +22,12 @@ import com.example.skillsinema.domain.GetPremiereUseCase
 import com.example.skillsinema.domain.GetTopFilmsUseCase
 import com.example.skillsinema.entity.*
 import com.example.skillsinema.repository.RepositoryStaff
+import dagger.hilt.android.internal.Contexts
 
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.util.*
@@ -39,7 +44,10 @@ class MainViewModel @Inject constructor(
     private val filteredFilmPagingSource: FilteredFilmPagingSource,
     private val filtersUseCase: FiltersUseCase,
     private val filteredFilmsUseCase: FilteredFilmsUseCase,
-    private val staff: RepositoryStaff
+    private val staff: RepositoryStaff,
+    private val useCase: FiltersUseCase
+
+
     //private val navController: NavController
 ) : ViewModel() {
     private val _premiereModel = MutableStateFlow<List<Model.Item>>(emptyList())
@@ -71,16 +79,20 @@ class MainViewModel @Inject constructor(
     ).flow.cachedIn(viewModelScope)
 
 
-
-
+    fun setValue(value: Int) {
+        dataRepository.genreID = value
+    }
 
     init {
         viewModelScope.launch {
             loadPremieres()
             loadTopFilms()
             pagedFilms
-            pagedFilteredFilms
-            Log.d("FILTERED", "$pagedFilteredFilms")
+            // getFilters()
+
+            //getPagedFilteredFilms()
+            Log.d("FILTERED", "${getPagedFilteredFilms()}")
+
             //staff.parseJSON()
         }
         // pagedFilms
@@ -136,53 +148,98 @@ class MainViewModel @Inject constructor(
     }
 
 
-  /*  fun loadFilters() {
-        viewModelScope.launch {
-            kotlin.runCatching {
-                filtersUseCase.getFilters()
-            }.fold(
-                onSuccess = {
-                    _filters.value = listOf(it)
-                    listFilters = listOf(it)
-                    Log.d("MainViewModel2", (it ?: " load").toString())
-                },
-                onFailure = { Log.d("MainViewModelFilters", it.message ?: "not load") }
-            )
-        }
+    /*  fun loadFilters() {
+          viewModelScope.launch {
+              kotlin.runCatching {
+                  filtersUseCase.getFilters()
+              }.fold(
+                  onSuccess = {
+                      _filters.value = listOf(it)
+                      listFilters = listOf(it)
+                      Log.d("MainViewModel2", (it ?: " load").toString())
+                  },
+                  onFailure = { Log.d("MainViewModelFilters", it.message ?: "not load") }
+              )
+          }
 
-        listFilters.forEach {
-            country = it.countries[1].id
-            genre = it.genres[11].id
-        }
+          listFilters.forEach {
+              country = it.countries[1].id
+              genre = it.genres[11].id
+          }
 
-    }*/
-
-
-   /* fun loadFilteredFilms() {
-        viewModelScope.launch {
-            kotlin.runCatching {
-                filteredFilmsUseCase.getFilteredFilms()
-            }.fold(
-                onSuccess = {
-                    _filteredFilms.value = it
-                    Log.d("MainViewModelFilteredFilms", (it ?: " load").toString())
-                },
-                onFailure = {
-                    Log.d("MainViewModelFilteredFilms", it.message ?: "not load")
-                }
-            )
-        }
-    }*/
+      }*/
 
 
-    val pagedFilteredFilms: Flow<PagingData<Film>> = Pager(
-        config = PagingConfig(
-            pageSize = 20,
-            enablePlaceholders = true
+    /* fun loadFilteredFilms() {
+         viewModelScope.launch {
+             kotlin.runCatching {
+                 filteredFilmsUseCase.getFilteredFilms()
+             }.fold(
+                 onSuccess = {
+                     _filteredFilms.value = it
+                     Log.d("MainViewModelFilteredFilms", (it ?: " load").toString())
+                 },
+                 onFailure = {
+                     Log.d("MainViewModelFilteredFilms", it.message ?: "not load")
+                 }
+             )
+         }
+     }*/
 
-        ),
-        pagingSourceFactory = { filteredFilmPagingSource }
-    ).flow.cachedIn(viewModelScope)
+
+    fun getPagedFilteredFilms(): Flow<PagingData<Film>> {
+        // getFilters()
+
+        return Pager(config = PagingConfig(pageSize = 20, enablePlaceholders = true),
+            pagingSourceFactory = { filteredFilmPagingSource }
+        ).flow.cachedIn(viewModelScope)
+    }
+
+
+    /* fun isNetworkAvaibable(context: Context){
+         viewModelScope.launch {
+             val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+             val networkInfo = cm.activeNetworkInfo
+ if (networkInfo)
+
+         }
+     }*/
+
+    suspend fun getFilters(): Flow<PagingData<Film>> {
+
+        /*val listGenre = useCase.getFiltersGenre()
+            dataRepository.genreID = listGenre[(0..listGenre.size - 1).random()].id
+
+
+            val listCountry = useCase.getFiltersCountries()
+            val rndCountryID = listCountry[(0..listCountry.size - 1).random()].id
+            setValue(rndCountryID)
+            dataRepository.countryLabel = listCountry[rndCountryID].country*/
+
+
+        val response = useCase.getFilters()
+      return  if (response.isSuccessful) {
+            val genre = response.body()?.genres
+            val country = response.body()?.countries
+
+            val rndGenre = (0 until genre!!.size).random()
+            val rndCountry = (0 until country!!.size).random()
+
+            dataRepository.genreID = rndGenre
+            dataRepository.countryID = rndCountry
+             Pager(config = PagingConfig(pageSize = 20, enablePlaceholders = true),
+                pagingSourceFactory = { filteredFilmPagingSource }
+            ).flow.cachedIn(viewModelScope)
+        } else {
+          Pager(config = PagingConfig(pageSize = 20, enablePlaceholders = true),
+              pagingSourceFactory = { filteredFilmPagingSource }
+          ).flow.cachedIn(viewModelScope)
+      }
+
+
+    }
+
+
 
 
 

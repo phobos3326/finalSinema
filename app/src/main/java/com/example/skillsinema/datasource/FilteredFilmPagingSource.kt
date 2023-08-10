@@ -3,37 +3,41 @@ package com.example.skillsinema.datasource
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.example.skillsinema.DataRepository
+import com.example.skillsinema.domain.FiltersUseCase
 import com.example.skillsinema.entity.Film
 import com.example.skillsinema.repository.Repository
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import javax.inject.Inject
 
 class FilteredFilmPagingSource @Inject constructor(
     val repository: Repository,
-    val dataSource: FiltersDataSource
+    //val dataSource: FiltersDataSource,
+    val useCase: FiltersUseCase,
+    val dataRepository: DataRepository
+
 ) :
     PagingSource<Int, Film>() {
 
-    var genre = 0
-    var countries = 1
+
     override fun getRefreshKey(state: PagingState<Int, Film>): Int? = FIRST_PAGE
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Film> {
 
-        dataSource.loadFilters().forEach {
-            //countries = it.countries[1].id
-            genre = it.id
-        }
+
+
         val page = params.key ?: FIRST_PAGE
 
         return kotlin.runCatching {
-            repository.getFilteredFilm(page, 1, 11)
+            repository.getFilteredFilm(page, dataRepository.genreID, dataRepository.countryID)
         }.fold(
             onSuccess = {
                 LoadResult.Page(
                     data = it,
                     prevKey = null,
-                   //  nextKey =  null
-                   nextKey = if (it.isEmpty()) null else page + 1
+                    //  nextKey =  null
+                    nextKey = if (it.isEmpty()) null else page + 1
                 )
             },
             onFailure = {

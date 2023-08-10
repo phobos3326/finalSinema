@@ -13,6 +13,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
@@ -31,7 +32,7 @@ class Repository @Inject constructor(
 
 
     private companion object {
-        private const val api_key = "63101d70-3149-4782-99f8-dd1ba5fc4ab1"
+        private const val api_key = "1006c25a-038b-47b4-b9f9-341f208b4ac3"
     }
 
 
@@ -54,8 +55,10 @@ class Repository @Inject constructor(
 
 
     @Provides
-    suspend fun getFilters(): List<ModelFilter.Genre> {
-        return retrofitInstanceFilters().filters().genres
+    suspend fun getFilters(): Response<ModelFilter> {
+
+        return retrofitInstanceFilters().filters()
+
     }
 
     @Provides
@@ -166,7 +169,7 @@ class Repository @Inject constructor(
         @GET("films/filters")
         suspend fun filters(
 
-        ): ModelFilter
+        ): Response<ModelFilter>
 
     }
 
