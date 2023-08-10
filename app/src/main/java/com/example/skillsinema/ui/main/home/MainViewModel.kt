@@ -75,6 +75,8 @@ class MainViewModel @Inject constructor(
 
     var rndGenre = 0
     var rndCountry = 0
+    var rndCountryLabel = ""
+    var rndGenreLabel = ""
 
     val pagedFilms: Flow<PagingData<Film>> = Pager(
         config = PagingConfig(
@@ -176,27 +178,31 @@ class MainViewModel @Inject constructor(
      }*/
 
     suspend fun load() {
-        genre = response(this@MainViewModel).body()?.genres
-        country = response(this@MainViewModel).body()?.countries
-        rndGenre = (0 until genre!!.size - 1).random()
-        rndCountry = (0 until country!!.size - 1).random()
+        genre = response(this@MainViewModel).body()?.genres?.subList(0,17)
+        country = response(this@MainViewModel).body()?.countries?.subList(0, 34)
+        rndGenre = (0 until genre!!.size - 1).random()-1
+        rndCountry = (0 until country!!.size - 1).random()-1
+        rndCountryLabel = country!![rndCountry-1].country
+        rndGenreLabel = genre!![rndGenre-1].genre
+
     }
 
 
     suspend fun getFilters(): Flow<PagingData<Film>> {
 
-delay(3000)
-        return if (response(this@MainViewModel).isSuccessful) {
+       // delay(3000)
+        return if (response(this@MainViewModel).isSuccessful && genre?.size !=0 && country?.size!=0) {
 
 
             dataRepository.genreID = rndGenre
             dataRepository.countryID = rndCountry
-            Log.d("TAG1", "${dataRepository.genreID} + ${dataRepository.countryID}")
-            //dataRepository.countryLabel = country[rndCountry].country
+            dataRepository.countryLabel = rndCountryLabel
+            Log.d("TAG1", "${dataRepository.genreID} + ${dataRepository.countryID}" + "${dataRepository.countryLabel}\"")
+
 
             pagedFilteredFilms
         } else {
-            pagedFilteredFilms
+           getFilters()
         }
 
 

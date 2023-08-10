@@ -80,12 +80,12 @@ class MainFragment @Inject constructor() : Fragment() {
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
 
-        binding.filtered1.text = dataRepository.countryLabel
+
 
         viewLifecycleOwner.lifecycleScope.launch {
             mainViewModel.getFilters().onEach {
                 binding.FilterFilmsRecyclerView.adapter = adapterFilteredFilms
-
+                binding.filtered1.text = dataRepository.countryLabel
                 adapterFilteredFilms.submitData(it)
                 Log.d("PDATA", "$it")
 

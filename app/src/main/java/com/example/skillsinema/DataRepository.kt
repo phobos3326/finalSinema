@@ -20,8 +20,10 @@ class DataRepository @Inject constructor(
     var idActor: Int = 0
     var type_images = ""
     var genreID = 0
-    var countryID = 0
     var countryLabel = ""
+    var genreLabel = ""
+    var countryID = 0
+
 
 
 }
