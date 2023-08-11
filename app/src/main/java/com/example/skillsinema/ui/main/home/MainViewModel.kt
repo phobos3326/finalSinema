@@ -1,11 +1,13 @@
 package com.example.skillsinema.ui.main.home
 
+import android.app.Application
 import android.content.Context
 import android.icu.text.DateFormatSymbols
 import android.icu.text.SimpleDateFormat
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
@@ -13,6 +15,11 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.skillsinema.DataRepository
+import com.example.skillsinema.dao.ItemDao
+import com.example.skillsinema.dao.ItemDataBase
+import com.example.skillsinema.dao.ItemFilm
+import com.example.skillsinema.dao.ItemRepository
+
 import com.example.skillsinema.entity.Film
 import com.example.skillsinema.datasource.FilmPagingSourse
 import com.example.skillsinema.datasource.FilteredFilmPagingSource
@@ -37,7 +44,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    // @ApplicationContext private val context: ApplicationContext,
+    //  @ApplicationContext private val context: ApplicationContext,
     private var dataRepository: DataRepository,
     private val data: GetPremiereUseCase,
     private val topFilmsUseCase: GetTopFilmsUseCase,
@@ -46,11 +53,14 @@ class MainViewModel @Inject constructor(
     private val filtersUseCase: FiltersUseCase,
     private val filteredFilmsUseCase: FilteredFilmsUseCase,
     private val staff: RepositoryStaff,
-    private val useCase: FiltersUseCase
+    private val useCase: FiltersUseCase,
+    private val itemRepository: ItemRepository,
+
+    application: Application
 
 
     //private val navController: NavController
-) : ViewModel() {
+) : AndroidViewModel(application) {
     private val _premiereModel = MutableStateFlow<List<Model.Item>>(emptyList())
     val modelPremiere = _premiereModel.asStateFlow()
 
@@ -77,6 +87,15 @@ class MainViewModel @Inject constructor(
     var rndCountry = 0
     var rndCountryLabel = ""
     var rndGenreLabel = ""
+
+
+    fun insertItem(id: Int) {
+        viewModelScope.launch {
+
+            itemRepository.insertItem((ItemFilm(id = id)))
+        }
+    }
+
 
     val pagedFilms: Flow<PagingData<Film>> = Pager(
         config = PagingConfig(
@@ -178,31 +197,34 @@ class MainViewModel @Inject constructor(
      }*/
 
     suspend fun load() {
-        genre = response(this@MainViewModel).body()?.genres?.subList(0,17)
+        genre = response(this@MainViewModel).body()?.genres?.subList(0, 17)
         country = response(this@MainViewModel).body()?.countries?.subList(0, 34)
-        rndGenre = (0 until genre!!.size - 1).random()-1
-        rndCountry = (0 until country!!.size - 1).random()-1
-        rndCountryLabel = country!![rndCountry-1].country
-        rndGenreLabel = genre!![rndGenre-1].genre
+        rndGenre = (0 until genre!!.size - 1).random() - 1
+        rndCountry = (0 until country!!.size - 1).random() - 1
+        rndCountryLabel = country!![rndCountry - 1].country
+        rndGenreLabel = genre!![rndGenre].genre
 
     }
 
 
     suspend fun getFilters(): Flow<PagingData<Film>> {
 
-       // delay(3000)
-        return if (response(this@MainViewModel).isSuccessful && genre?.size !=0 && country?.size!=0) {
+        // delay(3000)
+        return if (response(this@MainViewModel).isSuccessful && genre?.size != 0 && country?.size != 0) {
 
 
             dataRepository.genreID = rndGenre
             dataRepository.countryID = rndCountry
             dataRepository.countryLabel = rndCountryLabel
-            Log.d("TAG1", "${dataRepository.genreID} + ${dataRepository.countryID}" + "${dataRepository.countryLabel}\"")
+            Log.d(
+                "TAG1",
+                "${dataRepository.genreID} + ${dataRepository.countryID}" + "${dataRepository.countryLabel}\""
+            )
 
 
             pagedFilteredFilms
         } else {
-           getFilters()
+            getFilters()
         }
 
 

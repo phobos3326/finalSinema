@@ -116,7 +116,11 @@ class MainFragment @Inject constructor() : Fragment() {
             item.kinopoiskId.let { bundle.putInt("Arg", it) }
         }
         findNavController().navigate(R.id.action_mainFragment_to_itemInfoFragment, bundle)
+
+        item.kinopoiskId?.let { mainViewModel.insertItem(it) }
     }
+
+
 
 
     fun ContentFragment() {
