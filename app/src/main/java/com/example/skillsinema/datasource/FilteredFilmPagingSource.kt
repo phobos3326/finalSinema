@@ -38,8 +38,8 @@ class FilteredFilmPagingSource @Inject constructor(
                 LoadResult.Page(
                     data = it,
                     prevKey = null,
-                    //  nextKey =  null
-                    nextKey = if (it.isEmpty()) null else page + 1
+                      nextKey =  null
+                    //nextKey = if (it.isEmpty()) null else page + 1
                 )
             },
             onFailure = {
