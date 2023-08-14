@@ -148,9 +148,9 @@ class MainViewModel @Inject constructor(
                 onSuccess = {
                     _premiereModel.value = it
 
-                    Log.d("MainViewModel", it.toString())
+                    Log.d(TAG, it.toString())
                 },
-                onFailure = { Log.d("MainViewModel", it.message ?: "not load") }
+                onFailure = { Log.d(TAG, it.message ?: "not load") }
             )
         }
     }
@@ -168,9 +168,9 @@ class MainViewModel @Inject constructor(
                 onSuccess = {
                     _topFilmModel.value = it
 
-                    Log.d("MainViewModel2", it.toString())
+                    Log.d(TAG, it.toString())
                 },
-                onFailure = { Log.d("MainViewModelloadTopFilms", it.message ?: "not load") }
+                onFailure = { Log.d(TAG, it.message ?: "not load") }
             )
         }
 
@@ -199,10 +199,11 @@ class MainViewModel @Inject constructor(
     suspend fun load() {
         genre = response(this@MainViewModel).body()?.genres?.subList(0, 17)
         country = response(this@MainViewModel).body()?.countries?.subList(0, 34)
-        rndGenre = (0 until genre!!.size - 1).random() - 1
-        rndCountry = (0 until country!!.size - 1).random() - 1
-        rndCountryLabel = country!![rndCountry - 1].country
-        rndGenreLabel = genre!![rndGenre].genre
+        rndGenre = (0 until genre!!.size ).random()+1
+        rndCountry = (0 until country!!.size).random()+1
+        rndCountryLabel = country!![rndCountry-1].country
+        rndGenreLabel = genre!![rndGenre-1].genre
+        Log.d(TAG, "genre: ${genre},\n  country: ${country},\n rndGenre: ${rndGenre}, \n rndCountry: ${rndCountry}, \n rndCountryLabel: ${rndCountryLabel},\n rndGenreLabel: ${rndGenreLabel}")
 
     }
 
@@ -217,8 +218,8 @@ class MainViewModel @Inject constructor(
             dataRepository.countryID = rndCountry
             dataRepository.countryLabel = rndCountryLabel
             Log.d(
-                "TAG1",
-                "${dataRepository.genreID} + ${dataRepository.countryID}" + "${dataRepository.countryLabel}\""
+                TAG,
+                "${dataRepository.genreID} + ${dataRepository.countryID} + ${dataRepository.countryLabel}"
             )
 
 
@@ -231,7 +232,7 @@ class MainViewModel @Inject constructor(
     }
 
     companion object {
-
+        val TAG = "MainViewModel"
 
         suspend fun response(mainViewModel: MainViewModel): Response<ModelFilter> {
 

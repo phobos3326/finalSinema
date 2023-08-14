@@ -86,7 +86,7 @@ class MyAdapter @Inject constructor(private val onClick: (Model.Item) -> Unit) :
 
                     val sb = StringBuilder()
                     it.genres.forEach {
-                        sb.append(it)
+                       sb.append("${it.genre}, ")
                     }
                     myViewType.genre = sb.toString()
 
