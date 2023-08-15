@@ -5,15 +5,23 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.semantics.SemanticsProperties.Text
 import com.example.skillsinema.R
+import com.example.skillsinema.databinding.FragmentGalerieBinding
+import com.example.skillsinema.databinding.FragmentSecondBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
+
+private var _binding: FragmentSecondBinding? = null
+private val binding get() = _binding!!
 
 /**
  * A simple [Fragment] subclass.
@@ -41,11 +49,19 @@ class SecondFragment : Fragment() {
         // Inflate the layout for this fragmen
         //
         //newInstance(param1, param2)
+
         return ComposeView(requireContext()).apply {
+            // Dispose of the Composition when the view's LifecycleOwner
+            // is destroyed
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
-                Text(text = "Hello world.")
+                MaterialTheme {
+                    // In Compose world
+                    Text("Hello Compose!")
+                }
             }
-    }}
+        }
+    }
 
     companion object {
         /**
