@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.semantics.SemanticsProperties.Text
 import com.example.skillsinema.R
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -39,8 +41,11 @@ class SecondFragment : Fragment() {
         // Inflate the layout for this fragmen
         //
         //newInstance(param1, param2)
-        return inflater.inflate(R.layout.fragment_second, container, false)
-    }
+        return ComposeView(requireContext()).apply {
+            setContent {
+                Text(text = "Hello world.")
+            }
+    }}
 
     companion object {
         /**

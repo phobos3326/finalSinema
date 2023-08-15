@@ -1,5 +1,6 @@
 package com.example.skillsinema.ui.main.galerie
 
+
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
@@ -7,13 +8,15 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
+import com.example.skillsinema.R
 import com.example.skillsinema.databinding.FullGalerieItemBinding
-import com.example.skillsinema.databinding.GalerieItemBinding
 import com.example.skillsinema.databinding.SecondItemBinding
 import com.example.skillsinema.entity.ModelGalerie
 import com.example.skillsinema.ui.main.galerie.FullGalerieAdapter.Const.END
 import com.example.skillsinema.ui.main.galerie.FullGalerieAdapter.Const.NOEND
 import javax.inject.Inject
+
 
 class FullGalerieAdapter @Inject constructor() : PagingDataAdapter<ModelGalerie.Item, RecyclerView.ViewHolder>(DiffUtilCallback()) {
 
@@ -102,13 +105,20 @@ class FullGalerieAdapter @Inject constructor() : PagingDataAdapter<ModelGalerie.
                 Glide.with(binding1.poster11)
 
                     .load(it.previewUrl)
+                    .placeholder(R.drawable.a4___1)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
 
 
                     //.preload(10,10)
                     .into(binding1.poster11)
             }
+
+
         }
+
+
+
+
     }
 
 
