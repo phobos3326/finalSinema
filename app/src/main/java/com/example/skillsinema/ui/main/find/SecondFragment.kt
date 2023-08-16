@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -71,6 +72,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.SemanticsProperties.Text
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.Placeholder
+import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -143,26 +146,57 @@ class SecondFragment : Fragment() {
     fun SearchBar1() {
         var query by rememberSaveable { mutableStateOf("") }
 
+        /* Placeholder(
+             width = 10.sp,
+             height = 30.sp,
+             placeholderVerticalAlign = PlaceholderVerticalAlign.Center
+         )*/
+
         TextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(52.dp),
-               // .padding(horizontal =  16.dp),
+                .height(52.dp)
+                .padding(0.dp),
+
 
             value = query,
             onValueChange = { query = it },
             placeholder = { Text("Фильмы, актеры, режисёры") },
             leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null) },
             trailingIcon = {
-                IconButton(
-                    onClick = { query = "" },
-                    content = {
-                        Icon(
-                            painterResource(R.drawable.find_settings),
-                            contentDescription = null
+                Row {
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        modifier = Modifier
+                            .width(10.dp)
+                            .height(52.dp),
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.rectangle_31),
+                            alignment = Alignment.Center,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(25.dp)
                         )
                     }
-                )
+
+                    Column(
+                        modifier = Modifier.width(50.dp)
+                    ) {
+                        IconButton(
+
+                            onClick = { query = "" },
+                            content = {
+                                Icon(
+                                    painterResource(R.drawable.find_settings),
+                                    contentDescription = null
+                                )
+                            }
+                        )
+                    }
+
+                }
+
             },
             singleLine = true,
             shape = MaterialTheme.shapes.extraLarge,
@@ -177,45 +211,12 @@ class SecondFragment : Fragment() {
         )
     }
 
-    @Preview(showBackground = true)
 
+    @Preview(showBackground = true)
     @Composable
     fun preview() {
         SearchBar1()
-    }
-
-    @Composable
-    fun SearchBar() {
-        var text by remember { mutableStateOf("") }
-        Box(
-            modifier = Modifier
-                .width(350.dp)
-                .height(50.dp)
-                .background(color = Color.White, shape = RoundedCornerShape(100.dp))
-                .padding(10.dp, 20.dp)
-        ) {
-
-            TextField(
-                value = text,
-                onValueChange = { text = it },
-                label = { Text("Фильмы, актеры, режисёры") },
-                leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null) },
-                trailingIcon = {
-                    Icon(
-                        painterResource(R.drawable.find_settings),
-                        contentDescription = null
-                    )
-                },
-
-                modifier = Modifier
-                    .width(350.dp)
-                    .height(50.dp)
-                    .background(color = Color.White, shape = RoundedCornerShape(20.dp))
-                    .fillMaxSize(1f)
-
-
-            )
-        }
+        //  MyUI()
     }
 
 

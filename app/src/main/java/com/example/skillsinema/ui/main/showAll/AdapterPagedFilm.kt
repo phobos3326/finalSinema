@@ -86,7 +86,7 @@ class AdapterPagedFilm @Inject constructor(
     ) : RecyclerView.ViewHolder(binding1.root) {
         fun bind(film: Film) {
             binding1.title.text = film.nameRu
-            binding1.textViewRating.text = film.ratingKinopoisk.toString()
+            binding1.textViewRating.text = film.rating.toString()
             film.let {
                 Glide.with(binding1.poster)
                     .load(it.posterUrlPreview)
