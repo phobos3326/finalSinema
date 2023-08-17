@@ -107,17 +107,20 @@ class MainFragment @Inject constructor() : Fragment() {
 
         bundle.putInt("Arg", item.kinopoiskId)
         findNavController().navigate(R.id.action_mainFragment_to_itemInfoFragment, bundle)
+        item.kinopoiskId?.let { mainViewModel.insertItem(it) }
     }
 
     private fun onItemDetailClick(item: Film) {
         if (item.kinopoiskId == null) {
             item.filmId?.let { bundle.putInt("Arg", it) }
+            item.filmId?.let { mainViewModel.insertItem(it) }
         } else {
             item.kinopoiskId.let { bundle.putInt("Arg", it) }
+
         }
         findNavController().navigate(R.id.action_mainFragment_to_itemInfoFragment, bundle)
 
-        item.kinopoiskId?.let { mainViewModel.insertItem(it) }
+
     }
 
 

@@ -24,16 +24,14 @@ import javax.inject.Inject
 @InstallIn(SingletonComponent::class)
 class RepositoryKeyWord @Inject constructor() {
 
-    private val BASE_URL = "https://kinopoiskapiunofficial.tech/api/v2.2/"
+    private val BASE_URL = "https://kinopoiskapiunofficial.tech/api/v2.1/"
 
 
     @Provides
-    suspend fun getGalerieStill( keyWord:  String, page: Int): List<Film>? {
+    suspend fun getKeyWord(): List<Film>? {
         // parseJSON()
-        return retrofitKeyWord.keyWord(keyWord, page).films
+        return retrofitKeyWord.keyWord("Robot",1).films
     }
-
-
 
 
     private val logInterceptor = HttpLoggingInterceptor()
@@ -48,7 +46,7 @@ class RepositoryKeyWord @Inject constructor() {
         .build()
 
 
-    val retrofitKeyWord  = Retrofit
+    val retrofitKeyWord = Retrofit
         .Builder()
         .client(
             OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().also {
@@ -59,7 +57,6 @@ class RepositoryKeyWord @Inject constructor() {
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .build()
         .create(ApiInterfaceKeyWord::class.java)
-
 
 
     interface ApiInterfaceKeyWord {

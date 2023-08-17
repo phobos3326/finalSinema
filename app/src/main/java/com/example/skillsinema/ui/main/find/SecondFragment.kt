@@ -27,12 +27,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
@@ -60,10 +63,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -82,10 +87,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.rememberImagePainter
 import com.example.skillsinema.R
 import com.example.skillsinema.databinding.FragmentGalerieBinding
 import com.example.skillsinema.databinding.FragmentSecondBinding
+import com.example.skillsinema.entity.Film
+import com.example.skillsinema.ui.main.home.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import androidx.compose.foundation.lazy.items
+import androidx.lifecycle.ViewModel
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -114,6 +127,8 @@ class SecondFragment : Fragment() {
         }
     }
 
+    private val mainViewModel: searchViewmodel by viewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -132,8 +147,11 @@ class SecondFragment : Fragment() {
                     Column(
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                     ) {
-                        SearchBar1()
+                        SearchBar()
+
                     }
+
+                   // BarkHomeContent()
                 }
             }
 
@@ -143,7 +161,7 @@ class SecondFragment : Fragment() {
 
 
     @Composable
-    fun SearchBar1() {
+    fun SearchBar() {
         var query by rememberSaveable { mutableStateOf("") }
 
         /* Placeholder(
@@ -212,11 +230,68 @@ class SecondFragment : Fragment() {
     }
 
 
+    @Composable
+    fun BarkHomeContent() {
+       val a= mainViewModel.list
+
+        val film = remember {  a  }
+        LazyColumn(
+            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+        ) {
+            items(
+                items = film,
+                itemContent = {
+                    FilmListItem(film = it)
+                })
+        }
+    }
+
+
+    @Composable
+    fun FilmListItem(film: Film) {
+        Card(
+            modifier = Modifier
+                .padding(horizontal = 8.dp, vertical = 8.dp)
+                .fillMaxWidth(),
+            elevation = 2.dp,
+            backgroundColor = Color.White,
+            shape = RoundedCornerShape(corner = CornerSize(16.dp))
+
+        ) {
+            Row {
+                FilmImage(film)
+                Column(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth()
+                        .align(Alignment.CenterVertically)) {
+                    Text(text = film.nameRu!!, style = typography.h6)
+                    Text(text = "VIEW DETAIL", style = typography.caption)
+
+                }
+            }
+        }
+    }
+
+    @Composable
+    private fun FilmImage(film: Film) {
+        Image(
+            painter = rememberImagePainter(film.posterUrlPreview),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .padding(8.dp)
+                .size(84.dp)
+                .clip(RoundedCornerShape(corner = CornerSize(16.dp)))
+        )
+    }
+
     @Preview(showBackground = true)
     @Composable
     fun preview() {
-        SearchBar1()
-        //  MyUI()
+        SearchBar()
+        BarkHomeContent()
+
     }
 
 

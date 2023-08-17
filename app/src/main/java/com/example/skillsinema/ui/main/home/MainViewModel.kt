@@ -28,6 +28,7 @@ import com.example.skillsinema.domain.FiltersUseCase
 import com.example.skillsinema.domain.GetPremiereUseCase
 import com.example.skillsinema.domain.GetTopFilmsUseCase
 import com.example.skillsinema.entity.*
+import com.example.skillsinema.repository.RepositoryKeyWord
 import com.example.skillsinema.repository.RepositoryStaff
 import dagger.hilt.android.internal.Contexts
 
@@ -37,6 +38,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Response
 import java.util.*
 import javax.inject.Inject
@@ -55,6 +57,8 @@ class MainViewModel @Inject constructor(
     private val staff: RepositoryStaff,
     private val useCase: FiltersUseCase,
     private val itemRepository: ItemRepository,
+    private val itemDao: ItemDao,
+
 
     application: Application
 
@@ -93,6 +97,8 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
 
             itemRepository.insertItem((ItemFilm(id = id)))
+
+
         }
     }
 
@@ -166,9 +172,10 @@ class MainViewModel @Inject constructor(
                 topFilmsUseCase.executeTopFilm()
             }.fold(
                 onSuccess = {
-                    _topFilmModel.value = it
+                   // _topFilmModel.value = it
+                    _topFilmModel.value=  isViewed(it)
 
-                    Log.d(TAG, it.toString())
+                    // Log.d(TAG, "LIST FILM" + isViewed(it))
                 },
                 onFailure = { Log.d(TAG, it.message ?: "not load") }
             )
@@ -177,6 +184,57 @@ class MainViewModel @Inject constructor(
 
     }
 
+       fun isViewed(listFilm: List<Film>): List<Film> {
+            val a = listFilm
+            val db = itemDao.getAll()
+            a.forEach { film ->
+                db.onEach { filmID ->
+                    //if (film.filmId?.equals(filmID.id) != false && film.kinopoiskId?.equals(filmID.id) != false) {
+                    if (film.filmId == filmID.id || film.kinopoiskId == filmID.id) {
+
+                        film.isViewed =true
+                    }
+                }
+            }
+           Log.d(TAG, "LIST FILM  $a")
+            return a
+        }
+
+
+ /*   fun isViewed(listFilm: List<Film>): List<Film> {
+        val a = listFilm
+        val db = itemDao.getAll()
+        for (i in 0.. a.size-1){
+           for(j in 0..db.size-1){
+               if (a[i].kinopoiskId == db[j].id !!)
+           }
+        }
+        //Log.d(TAG, "LIST FILM  $a")
+        return a
+    }*/
+
+/*    suspend fun isViewed(listFilm: List<Film>) {
+
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val roomData = withContext(Dispatchers.IO) { itemDao.getAll() }
+            val a = listFilm
+
+            roomData.onEach {
+                it.forEach { ItemFilm ->
+                    a.forEach { Film ->
+                        if (Film.filmId == ItemFilm.id && Film.kinopoiskId == ItemFilm.id) {
+                            Film.isViewed = true
+
+                        }
+                    }
+                }
+            }
+            Log.d(TAG, "LIST FILM  $a")
+            // return a
+        }
+
+    }*/
 
     val pagedFilteredFilms: Flow<PagingData<Film>> = Pager(
         config = PagingConfig(
@@ -199,11 +257,14 @@ class MainViewModel @Inject constructor(
     suspend fun load() {
         genre = response(this@MainViewModel).body()?.genres?.subList(0, 17)
         country = response(this@MainViewModel).body()?.countries?.subList(0, 34)
-        rndGenre = (0 until genre!!.size ).random()+1
-        rndCountry = (0 until country!!.size).random()+1
-        rndCountryLabel = country!![rndCountry-1].country
-        rndGenreLabel = genre!![rndGenre-1].genre
-        Log.d(TAG, "genre: ${genre},\n  country: ${country},\n rndGenre: ${rndGenre}, \n rndCountry: ${rndCountry}, \n rndCountryLabel: ${rndCountryLabel},\n rndGenreLabel: ${rndGenreLabel}")
+        rndGenre = (0 until genre!!.size).random() + 1
+        rndCountry = (0 until country!!.size).random() + 1
+        rndCountryLabel = country!![rndCountry - 1].country
+        rndGenreLabel = genre!![rndGenre - 1].genre
+        Log.d(
+            TAG,
+            "genre: ${genre},\n  country: ${country},\n rndGenre: ${rndGenre}, \n rndCountry: ${rndCountry}, \n rndCountryLabel: ${rndCountryLabel},\n rndGenreLabel: ${rndGenreLabel}"
+        )
 
     }
 

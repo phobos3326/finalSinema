@@ -2,6 +2,7 @@ package com.example.skillsinema.ui.main.home
 
 import android.view.LayoutInflater
 import android.view.View.OnClickListener
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.navigation.findNavController
 
@@ -107,6 +108,9 @@ class AdapterBestFilm @Inject constructor(
         fun bind(film: Film) {
             binding1.title.text = film.nameRu
             binding1.textViewRating.text = film.rating
+            if (film.isViewed==true){
+                binding1.isViewedImageView.visibility = VISIBLE
+            }
             film.let {
                 Glide.with(binding1.poster)
                     .load(it.posterUrlPreview)

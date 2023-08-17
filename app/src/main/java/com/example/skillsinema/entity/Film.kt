@@ -32,7 +32,11 @@ data class Film(
     @Json(name = "year")
     val year: String?,
     @Json(name = "kinopoiskId")
-    val kinopoiskId: Int?
+    val kinopoiskId: Int?,
+    @Json(name = "ratingImdb")
+    val ratingImdb: String?,
+    @Json(name = "isViewed")
+    var isViewed: Boolean?
 
 ) {
     @JsonClass(generateAdapter = true)
