@@ -13,6 +13,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
@@ -100,6 +101,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.draw.alpha
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.collect
@@ -111,7 +113,6 @@ import kotlinx.coroutines.launch
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
-
 
 
 /**
@@ -129,13 +130,13 @@ class SecondFragment : Fragment() {
     private val binding get() = _binding!!
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-     /*   arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }*/
+        /*   arguments?.let {
+               param1 = it.getString(ARG_PARAM1)
+               param2 = it.getString(ARG_PARAM2)
+           }*/
     }
 
-   // private val mainViewModel: searchViewmodel by viewModels()
+    // private val mainViewModel: searchViewmodel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -155,8 +156,11 @@ class SecondFragment : Fragment() {
                     Column(
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                     ) {
-                        SearchBar()
-                        BarkHomeContent()
+                        Row {
+                            SearchBar()
+                        }
+                        Row { BarkHomeContent() }
+
                     }
 
                     //
@@ -247,85 +251,186 @@ class SecondFragment : Fragment() {
 
         LazyColumn {
 
-             items(data){Film ->
-                 FilmListItem(film = Film)
-
-             }
+            items(data) { Film ->
+                FilmListItem(film = Film)
 
             }
-
 
         }
 
 
+    }
 
 
-@Composable
-fun FilmListItem(film: Film) {
-    Card(
-        modifier = Modifier
-            .padding(horizontal = 8.dp, vertical = 8.dp)
-            .fillMaxWidth(),
-        elevation = 2.dp,
-        backgroundColor = Color.White,
-        shape = RoundedCornerShape(corner = CornerSize(16.dp))
+    @Composable
+    fun FilmListItem(film: Film) {
+        Card(
+            modifier = Modifier
+                .padding(horizontal = 8.dp, vertical = 8.dp)
+                .fillMaxWidth(),
+            elevation = 0.dp,
+            backgroundColor = Color.White,
+            shape = RoundedCornerShape(corner = CornerSize(4.dp))
 
-    ) {
-        Row {
-            FilmImage(film)
-            Column(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth()
-                    .align(Alignment.CenterVertically)
-            ) {
-                Text(text = film.nameRu!!, style = typography.h6)
-                Text(text = "VIEW DETAIL", style = typography.caption)
+        ) {
+            Row {
+                FilmImage(film)
+                Column(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth()
+                        .align(Alignment.CenterVertically)
+                ) {
+                    Text(text = film.nameRu!!, style = typography.h6)
+                    Text(text = film.genres!!.first()?.genre.toString(), style = typography.caption)
 
+                }
             }
         }
     }
-}
 
-@Composable
-private fun FilmImage(film: Film) {
-    Image(
-        painter = rememberImagePainter(film.posterUrlPreview),
-        contentDescription = null,
-        contentScale = ContentScale.Crop,
-        modifier = Modifier
-            .padding(8.dp)
-            .size(84.dp)
-            .clip(RoundedCornerShape(corner = CornerSize(16.dp)))
-    )
-}
+/*    @Composable
+    fun FilmListItem1() {
+        Card(
+            modifier = Modifier
+                .padding(horizontal = 8.dp, vertical = 8.dp)
+                .fillMaxWidth(),
+            elevation = 0.dp,
+            backgroundColor = Color.White,
+            shape = RoundedCornerShape(corner = CornerSize(4.dp))
 
-@Preview(showBackground = true)
-@Composable
-fun preview() {
-    SearchBar()
-    BarkHomeContent()
+        ) {
+            Row {
+                FilmImage1()
+                Column(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth()
+                        .align(Alignment.CenterVertically)
+                ) {
+                    Text(text = "TEXT", style = typography.h6)
+                    Text(text = "VIEW DETAIL", style = typography.caption)
 
-}
-
-
-companion object {
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SecondFragment.
-     */
-    // TODO: Rename and change types and number of parameters
- /*   @JvmStatic
-    fun newInstance(param1: String, param2: String) =
-        SecondFragment().apply {
-            arguments = Bundle().apply {
-                putString(ARG_PARAM1, param1)
-                putString(ARG_PARAM2, param2)
+                }
             }
-        }*/
-}
+        }
+    }*/
+
+
+    @Composable
+    private fun FilmImage(film: Film) {
+
+        Box{
+            Image(
+                painter = rememberImagePainter(film.posterUrlPreview),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    //.padding(8.dp)
+                    .width(96.dp)
+                    .height(132.dp)
+                    .clip(RoundedCornerShape(corner = CornerSize(4.dp)))
+            )
+
+            Box(
+                modifier = Modifier
+                    .padding(4.dp)
+                    .width(17.dp)
+                    .height(9.91211.dp)
+                    .clip(shape = RoundedCornerShape(size = 4.dp))
+                    .background(color = Color.White)
+            ) {
+                Text(
+                    text = film.rating.toString(),
+                    fontSize = 8.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .align(Alignment.Center),
+                    color = Color.Black,
+                )
+            }
+
+        }
+
+
+
+
+    }
+
+    @Composable
+    private fun FilmImage1(film: Film) {
+        Image(
+            painter = rememberImagePainter(film.posterUrlPreview),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .padding(8.dp)
+                .width(96.dp)
+                .height(132.dp)
+                .clip(RoundedCornerShape(corner = CornerSize(4.dp)))
+        )
+    }
+
+
+    @Composable
+    fun ImageWithOverlay() {
+        Box() {
+            Image(
+                painter = rememberImagePainter(R.drawable.a4___1),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .width(96.dp)
+                    .height(132.dp)
+                    .clip(RoundedCornerShape(corner = CornerSize(4.dp)))
+            )
+
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color = Color.Yellow)
+                    .alpha(0.5f)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .width(17.dp)
+                        .height(9.91211.dp)
+                        .clip(shape = RoundedCornerShape(size = 4.dp))
+                        .background(color = Color.Green)
+                ) {
+                }
+            }
+        }
+    }
+
+    @Preview(showBackground = true)
+    @Composable
+    fun preview() {
+        // SearchBar()
+        // BarkHomeContent()
+         //ImageWithOverlay()
+        //FilmListItem1()
+    }
+
+
+    companion object {
+        /**
+         * Use this factory method to create a new instance of
+         * this fragment using the provided parameters.
+         *
+         * @param param1 Parameter 1.
+         * @param param2 Parameter 2.
+         * @return A new instance of fragment SecondFragment.
+         */
+        // TODO: Rename and change types and number of parameters
+        /*   @JvmStatic
+           fun newInstance(param1: String, param2: String) =
+               SecondFragment().apply {
+                   arguments = Bundle().apply {
+                       putString(ARG_PARAM1, param1)
+                       putString(ARG_PARAM2, param2)
+                   }
+               }*/
+    }
 }
