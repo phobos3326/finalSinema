@@ -28,7 +28,7 @@ class RepositoryKeyWord @Inject constructor() {
 
 
     @Provides
-    suspend fun getKeyWord(): List<Film>? {
+    suspend fun getKeyWord(): List<Film> {
         // parseJSON()
         return retrofitKeyWord.keyWord("Robot",1).films
     }
@@ -69,7 +69,7 @@ class RepositoryKeyWord @Inject constructor() {
     }
 
     private companion object {
-        private const val api_key = "1006c25a-038b-47b4-b9f9-341f208b4ac3"
+        private const val api_key = "63101d70-3149-4782-99f8-dd1ba5fc4ab1"
     }
 
 }

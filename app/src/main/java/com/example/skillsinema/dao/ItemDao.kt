@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 interface ItemDao {
 
     @Query("SELECT * FROM viewedItem")
-    fun getAll():  List<ItemFilm>
+    fun getAll(): List<ItemFilm>
     @Insert(entity = ItemFilm::class, onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(item: ItemFilm)
 

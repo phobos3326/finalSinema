@@ -98,15 +98,21 @@ import com.example.skillsinema.entity.Film
 import com.example.skillsinema.ui.main.home.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.forEach
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-private var _binding: FragmentSecondBinding? = null
-private val binding get() = _binding!!
+
 
 /**
  * A simple [Fragment] subclass.
@@ -119,15 +125,17 @@ class SecondFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private var _binding: FragmentSecondBinding? = null
+    private val binding get() = _binding!!
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
+     /*   arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
-        }
+        }*/
     }
 
-    private val mainViewModel: searchViewmodel by viewModels()
+   // private val mainViewModel: searchViewmodel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -148,10 +156,10 @@ class SecondFragment : Fragment() {
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                     ) {
                         SearchBar()
-
+                        BarkHomeContent()
                     }
 
-                   // BarkHomeContent()
+                    //
                 }
             }
 
@@ -231,87 +239,93 @@ class SecondFragment : Fragment() {
 
 
     @Composable
-    fun BarkHomeContent() {
-       val a= mainViewModel.list
+    fun BarkHomeContent(viewModel: searchViewmodel = viewModel()) {
 
-        val film = remember {  a  }
-        LazyColumn(
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
-        ) {
-            items(
-                items = film,
-                itemContent = {
-                    FilmListItem(film = it)
-                })
+        val data by viewModel.keyWordsFilms.collectAsState()
+
+
+
+        LazyColumn {
+
+             items(data){Film ->
+                 FilmListItem(film = Film)
+
+             }
+
+            }
+
+
         }
-    }
 
 
-    @Composable
-    fun FilmListItem(film: Film) {
-        Card(
-            modifier = Modifier
-                .padding(horizontal = 8.dp, vertical = 8.dp)
-                .fillMaxWidth(),
-            elevation = 2.dp,
-            backgroundColor = Color.White,
-            shape = RoundedCornerShape(corner = CornerSize(16.dp))
 
-        ) {
-            Row {
-                FilmImage(film)
-                Column(
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .fillMaxWidth()
-                        .align(Alignment.CenterVertically)) {
-                    Text(text = film.nameRu!!, style = typography.h6)
-                    Text(text = "VIEW DETAIL", style = typography.caption)
 
-                }
+@Composable
+fun FilmListItem(film: Film) {
+    Card(
+        modifier = Modifier
+            .padding(horizontal = 8.dp, vertical = 8.dp)
+            .fillMaxWidth(),
+        elevation = 2.dp,
+        backgroundColor = Color.White,
+        shape = RoundedCornerShape(corner = CornerSize(16.dp))
+
+    ) {
+        Row {
+            FilmImage(film)
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+                    .align(Alignment.CenterVertically)
+            ) {
+                Text(text = film.nameRu!!, style = typography.h6)
+                Text(text = "VIEW DETAIL", style = typography.caption)
+
             }
         }
     }
+}
 
-    @Composable
-    private fun FilmImage(film: Film) {
-        Image(
-            painter = rememberImagePainter(film.posterUrlPreview),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .padding(8.dp)
-                .size(84.dp)
-                .clip(RoundedCornerShape(corner = CornerSize(16.dp)))
-        )
-    }
+@Composable
+private fun FilmImage(film: Film) {
+    Image(
+        painter = rememberImagePainter(film.posterUrlPreview),
+        contentDescription = null,
+        contentScale = ContentScale.Crop,
+        modifier = Modifier
+            .padding(8.dp)
+            .size(84.dp)
+            .clip(RoundedCornerShape(corner = CornerSize(16.dp)))
+    )
+}
 
-    @Preview(showBackground = true)
-    @Composable
-    fun preview() {
-        SearchBar()
-        BarkHomeContent()
+@Preview(showBackground = true)
+@Composable
+fun preview() {
+    SearchBar()
+    BarkHomeContent()
 
-    }
+}
 
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SecondFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SecondFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+companion object {
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment SecondFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+ /*   @JvmStatic
+    fun newInstance(param1: String, param2: String) =
+        SecondFragment().apply {
+            arguments = Bundle().apply {
+                putString(ARG_PARAM1, param1)
+                putString(ARG_PARAM2, param2)
             }
-    }
+        }*/
+}
 }

@@ -7,7 +7,7 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class ModelKeyWord(
     @Json(name = "films")
-    val films: List<Film>?,
+    val films: List<Film>,
     @Json(name = "keyword")
     val keyword: String?,
     @Json(name = "pagesCount")

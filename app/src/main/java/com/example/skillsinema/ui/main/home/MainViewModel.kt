@@ -169,7 +169,8 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching {
 
-                topFilmsUseCase.executeTopFilm()
+         topFilmsUseCase.executeTopFilm()
+
             }.fold(
                 onSuccess = {
                    // _topFilmModel.value = it
@@ -184,21 +185,50 @@ class MainViewModel @Inject constructor(
 
     }
 
-       fun isViewed(listFilm: List<Film>): List<Film> {
+        fun isViewed(listFilm: List<Film>): List<Film> {
             val a = listFilm
             val db = itemDao.getAll()
-            a.forEach { film ->
-                db.onEach { filmID ->
-                    //if (film.filmId?.equals(filmID.id) != false && film.kinopoiskId?.equals(filmID.id) != false) {
-                    if (film.filmId == filmID.id || film.kinopoiskId == filmID.id) {
 
-                        film.isViewed =true
-                    }
-                }
+
+                db.forEach { filmID ->
+
+                        a.forEach { Film->
+                            if (Film.filmId == filmID.id || Film.kinopoiskId == filmID.id){
+                                Film.isViewed=true
+                            }
+                        }
+
+
+
+
             }
            Log.d(TAG, "LIST FILM  $a")
             return a
         }
+
+ /* suspend  fun isViewed(listFilm: List<Film>): List<Film> {
+        val a = listFilm
+        val db = itemDao.getAll()
+
+            db.collect{
+                it.forEach {
+                    a.forEach {  }
+                }
+
+        }
+
+        a.forEach { film ->
+            db.onEach { filmID ->
+                //if (film.filmId?.equals(filmID.id) != false && film.kinopoiskId?.equals(filmID.id) != false) {
+                if (film.filmId == filmID.id || film.kinopoiskId == filmID.id) {
+
+                    film.isViewed =true
+                }
+            }
+        }
+        Log.d(TAG, "LIST FILM  $a")
+        return a
+    }*/
 
 
  /*   fun isViewed(listFilm: List<Film>): List<Film> {
