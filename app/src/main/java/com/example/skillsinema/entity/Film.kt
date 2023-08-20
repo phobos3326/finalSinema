@@ -14,7 +14,7 @@ data class Film(
     @Json(name = "filmLength")
     val filmLength: String?,
     @Json(name = "genres")
-    val genres: List<Genre?>?,
+    val genres: List<Genre>?,
     @Json(name = "nameEn")
     val nameEn: String?,
     @Json(name = "nameRu")

@@ -42,7 +42,9 @@ class SearchViewmodel @Inject constructor(
 
 
     fun onSearchTextChange(text: String) {
+
         _searchText.value = text
+        keyWordsFilms()
     }
 
     init {
@@ -72,11 +74,13 @@ class SearchViewmodel @Inject constructor(
 
                 keyWord.getKeyWord(searchText.value)
 
+
             }.fold(
                 onSuccess = {
                     // _topFilmModel.value = it
-                    delay(500)
+
                     _keyWordsFilm.value = it
+
 
                     // Log.d(TAG, "LIST FILM" + isViewed(it))
                 },
@@ -89,11 +93,12 @@ class SearchViewmodel @Inject constructor(
 
 
     val getPersons = searchText
-
+        .debounce(1000)
         .stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(5000),
             _keyWordsFilm.value
+
         )
 
 

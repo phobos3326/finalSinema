@@ -138,20 +138,16 @@ class SecondFragment : Fragment() {
         TextField(
 
             value = searchText,
-            /*onValueChange = {
-                viewModel.onSearchTextChange(it)
-                viewModel.keyWordsFilms()
-            },*/
             onValueChange = {
                 viewModel.onSearchTextChange(it)
-                viewModel.keyWordsFilms()
+                //viewModel.keyWordsFilms()
             },
+           // onValueChange = viewModel::getPersons,
 
             modifier = Modifier
                 .fillMaxWidth()
                 .height(52.dp)
                 .padding(0.dp),
-
 
             placeholder = { Text("Фильмы, актеры, режисёры") },
             leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null) },
@@ -245,7 +241,7 @@ class SecondFragment : Fragment() {
                         .align(Alignment.CenterVertically)
                 ) {
                     Text(text = film.nameRu!!, style = typography.h6)
-                    Text(text = film.genres!!.first()?.genre.toString(), style = typography.caption)
+                    Text(text = film.genres?.first()?.genre.toString(), style = typography.caption)
 
                 }
             }
