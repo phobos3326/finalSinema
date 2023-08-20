@@ -183,6 +183,11 @@ class SecondFragment : Fragment() {
          )*/
 
         TextField(
+            value = state.value,
+            onValueChange = { value ->
+                state.value = value
+            },
+
             modifier = Modifier
                 .fillMaxWidth()
                 .height(52.dp)
@@ -289,38 +294,38 @@ class SecondFragment : Fragment() {
         }
     }
 
-/*    @Composable
-    fun FilmListItem1() {
-        Card(
-            modifier = Modifier
-                .padding(horizontal = 8.dp, vertical = 8.dp)
-                .fillMaxWidth(),
-            elevation = 0.dp,
-            backgroundColor = Color.White,
-            shape = RoundedCornerShape(corner = CornerSize(4.dp))
+    /*    @Composable
+        fun FilmListItem1() {
+            Card(
+                modifier = Modifier
+                    .padding(horizontal = 8.dp, vertical = 8.dp)
+                    .fillMaxWidth(),
+                elevation = 0.dp,
+                backgroundColor = Color.White,
+                shape = RoundedCornerShape(corner = CornerSize(4.dp))
 
-        ) {
-            Row {
-                FilmImage1()
-                Column(
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .fillMaxWidth()
-                        .align(Alignment.CenterVertically)
-                ) {
-                    Text(text = "TEXT", style = typography.h6)
-                    Text(text = "VIEW DETAIL", style = typography.caption)
+            ) {
+                Row {
+                    FilmImage1()
+                    Column(
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxWidth()
+                            .align(Alignment.CenterVertically)
+                    ) {
+                        Text(text = "TEXT", style = typography.h6)
+                        Text(text = "VIEW DETAIL", style = typography.caption)
 
+                    }
                 }
             }
-        }
-    }*/
+        }*/
 
 
     @Composable
     private fun FilmImage(film: Film) {
 
-        Box{
+        Box {
             Image(
                 painter = rememberImagePainter(film.posterUrlPreview),
                 contentDescription = null,
@@ -351,8 +356,6 @@ class SecondFragment : Fragment() {
             }
 
         }
-
-
 
 
     }
@@ -409,7 +412,7 @@ class SecondFragment : Fragment() {
     fun preview() {
         // SearchBar()
         // BarkHomeContent()
-         //ImageWithOverlay()
+        //ImageWithOverlay()
         //FilmListItem1()
     }
 
