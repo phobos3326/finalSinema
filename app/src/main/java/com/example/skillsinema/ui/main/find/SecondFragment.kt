@@ -5,21 +5,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
+
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -27,11 +21,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
@@ -41,73 +32,36 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SearchBarColors
-import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.semantics.SemanticsProperties.Text
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.Placeholder
-import androidx.compose.ui.text.PlaceholderVerticalAlign
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberImagePainter
 import com.example.skillsinema.R
-import com.example.skillsinema.databinding.FragmentGalerieBinding
 import com.example.skillsinema.databinding.FragmentSecondBinding
 import com.example.skillsinema.entity.Film
-import com.example.skillsinema.ui.main.home.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.draw.alpha
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.forEach
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
+import androidx.compose.ui.text.input.TextFieldValue
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -174,18 +128,23 @@ class SecondFragment : Fragment() {
 
     @Composable
     fun SearchBar() {
-        var query by rememberSaveable { mutableStateOf("") }
+        val viewModel: SearchViewmodel = viewModel()
 
-        /* Placeholder(
-             width = 10.sp,
-             height = 30.sp,
-             placeholderVerticalAlign = PlaceholderVerticalAlign.Center
-         )*/
+        val searchText by viewModel.searchText.collectAsState()
+
+        val textState = remember { mutableStateOf(TextFieldValue("")) }
+
 
         TextField(
-            value = state.value,
-            onValueChange = { value ->
-                state.value = value
+
+            value = searchText,
+            /*onValueChange = {
+                viewModel.onSearchTextChange(it)
+                viewModel.keyWordsFilms()
+            },*/
+            onValueChange = {
+                viewModel.onSearchTextChange(it)
+                viewModel.keyWordsFilms()
             },
 
             modifier = Modifier
@@ -194,8 +153,6 @@ class SecondFragment : Fragment() {
                 .padding(0.dp),
 
 
-            value = query,
-            onValueChange = { query = it },
             placeholder = { Text("Фильмы, актеры, режисёры") },
             leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null) },
             trailingIcon = {
@@ -220,7 +177,7 @@ class SecondFragment : Fragment() {
                     ) {
                         IconButton(
 
-                            onClick = { query = "" },
+                            onClick = { textState.value = TextFieldValue("") },
                             content = {
                                 Icon(
                                     painterResource(R.drawable.find_settings),
@@ -248,13 +205,13 @@ class SecondFragment : Fragment() {
 
 
     @Composable
-    fun BarkHomeContent(viewModel: searchViewmodel = viewModel()) {
+    fun BarkHomeContent(viewModel: SearchViewmodel = viewModel()) {
 
         val data by viewModel.keyWordsFilms.collectAsState()
 
 
 
-        LazyColumn {
+        LazyColumn(modifier = Modifier.fillMaxHeight(1f)) {
 
             items(data) { Film ->
                 FilmListItem(film = Film)
@@ -272,6 +229,7 @@ class SecondFragment : Fragment() {
         Card(
             modifier = Modifier
                 .padding(horizontal = 8.dp, vertical = 8.dp)
+
                 .fillMaxWidth(),
             elevation = 0.dp,
             backgroundColor = Color.White,

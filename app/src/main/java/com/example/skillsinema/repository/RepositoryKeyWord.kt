@@ -28,9 +28,9 @@ class RepositoryKeyWord @Inject constructor() {
 
 
     @Provides
-    suspend fun getKeyWord(): List<Film> {
+    suspend fun getKeyWord(s: String): List<Film> {
         // parseJSON()
-        return retrofitKeyWord.keyWord("Robot",1).films
+        return retrofitKeyWord.keyWord(s,1).films
     }
 
 
