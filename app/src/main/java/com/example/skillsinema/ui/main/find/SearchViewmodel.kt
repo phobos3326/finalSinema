@@ -13,6 +13,7 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
@@ -28,6 +29,9 @@ class SearchViewmodel @Inject constructor(
     private val keyWord: RepositoryKeyWord
 ) : ViewModel() {
 
+
+    private val _uiState = MutableStateFlow(SearchUiState())
+    val uiState: StateFlow<SearchUiState> = _uiState.asStateFlow()
 
     private var _keyWordsFilm = MutableStateFlow<List<Film>>(emptyList())
     val keyWordsFilms = _keyWordsFilm.asStateFlow()

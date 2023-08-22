@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -58,10 +59,22 @@ import com.example.skillsinema.databinding.FragmentSecondBinding
 import com.example.skillsinema.entity.Film
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.navigation.NavHost
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -111,9 +124,14 @@ class SecondFragment : Fragment() {
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                     ) {
                         Row {
-                            SearchBar()
+                            //SearchBar()
+                            // SearchApp()
                         }
-                        Row { BarkHomeContent() }
+                        Row {
+                            //BarkHomeContent()
+
+                            SearchApp()
+                        }
 
                     }
 
@@ -126,29 +144,97 @@ class SecondFragment : Fragment() {
     }
 
 
+    enum class SearchScreen(@StringRes val title: Int) {
+        Start(title = R.string.search_screen),
+        Country(title = R.string.country_screen),
+        Genre(title = R.string.genre_screen),
+        Period(title = R.string.period_screen)
+    }
+
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun SearchBar() {
-        val viewModel: SearchViewmodel = viewModel()
+    fun SearchAppBar(
 
+        currentScreen: SearchScreen,
+        canNavigateBack: Boolean,
+        navigateUp: () -> Unit,
+        modifier: Modifier = Modifier
+    ) {
+        TopAppBar(
+            title = { Text(stringResource(currentScreen.title)) },
+            colors = TopAppBarDefaults.mediumTopAppBarColors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer
+            ),
+            modifier = modifier,
+            navigationIcon = {
+                if (canNavigateBack) {
+                    androidx.compose.material3.IconButton(onClick = navigateUp) {
+                        androidx.compose.material3.Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.back_button)
+                        )
+                    }
+                }
+            }
+        )
+    }
+
+    @Composable
+    fun SearchApp(
+        viewModel: SearchViewmodel = viewModel(),
+        navController: NavHostController = rememberNavController()
+    ) {
+        val backStackEntry by navController.currentBackStackEntryAsState()
+        // Get the name of the current screen
+        val currentScreen = SearchScreen.valueOf(
+            backStackEntry?.destination?.route ?: SearchScreen.Start.name
+        )
+
+        Scaffold(
+            topBar = {
+                SearchAppBar(
+                    currentScreen = currentScreen,
+                    canNavigateBack = navController.previousBackStackEntry != null,
+                    navigateUp = { navController.navigateUp() }
+                )
+            }
+        ) { innerPadding ->
+            val uiState by viewModel.uiState.collectAsState()
+            NavHost(
+                navController = navController,
+                startDestination = SearchScreen.Start.name,
+                modifier = Modifier.padding(innerPadding)
+            ) {
+                composable(route = SearchScreen.Start.name) {
+                    Column(
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                    ) {
+                        CountryScreen(viewModel)
+
+                    }
+
+                }
+            }
+
+        }
+
+    }
+
+
+    @Composable
+    fun SearchBar(viewModel: SearchViewmodel) {
+        //val viewModel: SearchViewmodel = viewModel()
         val searchText by viewModel.searchText.collectAsState()
-
         val textState = remember { mutableStateOf(TextFieldValue("")) }
-
-
         TextField(
-
             value = searchText,
             onValueChange = {
                 viewModel.onSearchTextChange(it)
-                //viewModel.keyWordsFilms()
             },
-           // onValueChange = viewModel::getPersons,
-
             modifier = Modifier
                 .fillMaxWidth()
                 .height(52.dp)
                 .padding(0.dp),
-
             placeholder = { Text("Фильмы, актеры, режисёры") },
             leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null) },
             trailingIcon = {
@@ -167,7 +253,6 @@ class SecondFragment : Fragment() {
                                 .size(25.dp)
                         )
                     }
-
                     Column(
                         modifier = Modifier.width(50.dp)
                     ) {
@@ -184,7 +269,6 @@ class SecondFragment : Fragment() {
                     }
 
                 }
-
             },
             singleLine = true,
             shape = MaterialTheme.shapes.extraLarge,
@@ -201,10 +285,12 @@ class SecondFragment : Fragment() {
 
 
     @Composable
-    fun BarkHomeContent(viewModel: SearchViewmodel = viewModel()) {
+    fun BarkHomeContent(
+
+        viewModel: SearchViewmodel
+    ) {
 
         val data by viewModel.keyWordsFilms.collectAsState()
-
 
 
         LazyColumn(modifier = Modifier.fillMaxHeight(1f)) {
@@ -357,6 +443,32 @@ class SecondFragment : Fragment() {
                         .background(color = Color.Green)
                 ) {
                 }
+            }
+        }
+    }
+
+    @Composable
+    fun CountryScreen(
+        viewModel: SearchViewmodel
+    ) {
+
+
+        Column(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+        ) {
+            Row {
+                SearchBar(viewModel)
+                // SearchApp()
+            }
+            Row {
+                BarkHomeContent(
+
+                    viewModel = viewModel,
+
+
+                )
+
+
             }
         }
     }

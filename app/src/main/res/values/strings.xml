@@ -3,4 +3,10 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment second</string>
     <string name="hello_blank_fragment_third">Hello blank fragment third</string>
+    <string name="search_screen">Настройки поиска</string>
+    <string name="country_screen">Страна</string>
+    <string name="genre_screen">Жанр</string>
+    <string name="period_screen">Период</string>
+    <string name="back_button">Back</string>
+
 </resources>
