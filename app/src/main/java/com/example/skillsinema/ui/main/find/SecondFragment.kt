@@ -182,11 +182,14 @@ class SecondFragment : Fragment() {
         )
     }
 
+
+
     @Composable
     fun SearchApp(
         viewModel: SearchViewmodel = viewModel(),
         navController: NavHostController = rememberNavController()
     ) {
+
         val backStackEntry by navController.currentBackStackEntryAsState()
         // Get the name of the current screen
         val currentScreen = SearchScreen.valueOf(
@@ -210,7 +213,7 @@ class SecondFragment : Fragment() {
             ) {
                 composable(route = SearchScreen.Country.name) {
 
-                        CountryScreen(
+                        CountryScreen1(
 
                             viewModel,
                             navController
@@ -487,6 +490,95 @@ class SecondFragment : Fragment() {
 
 
                     )
+
+
+            }
+        }
+    }
+
+    @Composable
+    fun CountryScreen1(
+        viewModel: SearchViewmodel,
+        navController: NavHostController
+    ) {
+        Column(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+        ) {
+            Row {
+                val searchText by viewModel.searchText.collectAsState()
+                val textState = remember { mutableStateOf(TextFieldValue("")) }
+                TextField(
+                    value = searchText,
+                    onValueChange = {
+                        viewModel.onSearchTextChange(it)
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(52.dp)
+                        .padding(0.dp),
+                    placeholder = { Text("Фильмы, актеры, режисёры") },
+                    leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null) },
+                    trailingIcon = {
+                        Row {
+                            Column(
+                                verticalArrangement = Arrangement.Center,
+                                modifier = Modifier
+                                    .width(10.dp)
+                                    .height(52.dp),
+                            ) {
+                                Image(
+                                    painter = painterResource(id = R.drawable.rectangle_31),
+                                    alignment = Alignment.Center,
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .size(25.dp)
+                                )
+                            }
+                            Column(
+                                modifier = Modifier.width(50.dp)
+                            ) {
+                                IconButton(
+
+                                    onClick = {
+
+                                        navController.navigate(SearchScreen.Genre.name)
+                                    },
+                                    content = {
+                                        Icon(
+                                            painterResource(R.drawable.find_settings),
+                                            contentDescription = null
+                                        )
+                                    }
+                                )
+                            }
+
+                        }
+                    },
+                    singleLine = true,
+                    shape = MaterialTheme.shapes.extraLarge,
+                    colors = TextFieldDefaults.textFieldColors(
+
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        //cursorColor = MaterialTheme.colors.onSurface
+                    ),
+                    //keyboardActions = KeyboardActions(onSearch = { onQueryChanged(query) }),
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search)
+                )
+                // SearchApp()
+            }
+            Row {
+                val data by viewModel.keyWordsFilms.collectAsState()
+
+
+                LazyColumn(modifier = Modifier.fillMaxHeight(1f)) {
+
+                    items(data) { Film ->
+                        FilmListItem(film = Film)
+
+                    }
+
+                }
 
 
             }
