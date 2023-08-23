@@ -1,5 +1,6 @@
 package com.example.skillsinema.ui.main.find
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -75,12 +76,19 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.fragment.findNavController
+import com.example.skillsinema.entity.Genre
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
-
+enum class SearchScreen(@StringRes val title: Int) {
+    Start(title = R.string.search_screen),
+    Country(title = R.string.country_screen),
+    Genre(title = R.string.genre_screen),
+    Period(title = R.string.period_screen)
+}
 
 /**
  * A simple [Fragment] subclass.
@@ -144,12 +152,7 @@ class SecondFragment : Fragment() {
     }
 
 
-    enum class SearchScreen(@StringRes val title: Int) {
-        Start(title = R.string.search_screen),
-        Country(title = R.string.country_screen),
-        Genre(title = R.string.genre_screen),
-        Period(title = R.string.period_screen)
-    }
+
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
@@ -202,17 +205,24 @@ class SecondFragment : Fragment() {
             val uiState by viewModel.uiState.collectAsState()
             NavHost(
                 navController = navController,
-                startDestination = SearchScreen.Start.name,
+                startDestination = SearchScreen.Country.name,
                 modifier = Modifier.padding(innerPadding)
             ) {
-                composable(route = SearchScreen.Start.name) {
-                    Column(
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                    ) {
-                        CountryScreen(viewModel)
+                composable(route = SearchScreen.Country.name) {
 
-                    }
+                        CountryScreen(
 
+                            viewModel,
+                            navController
+
+                        )
+
+
+
+                }
+                composable(route = SearchScreen.Genre.name) {
+                    val context:Context
+                    GenreScreen(viewModel = viewModel, navController = navController)
                 }
             }
 
@@ -222,7 +232,10 @@ class SecondFragment : Fragment() {
 
 
     @Composable
-    fun SearchBar(viewModel: SearchViewmodel) {
+    fun SearchBar(
+        viewModel: SearchViewmodel,
+        onNextButtonClicked: () -> Unit,
+    ) {
         //val viewModel: SearchViewmodel = viewModel()
         val searchText by viewModel.searchText.collectAsState()
         val textState = remember { mutableStateOf(TextFieldValue("")) }
@@ -258,7 +271,10 @@ class SecondFragment : Fragment() {
                     ) {
                         IconButton(
 
-                            onClick = { textState.value = TextFieldValue("") },
+                            onClick = {
+
+                                onNextButtonClicked
+                            },
                             content = {
                                 Icon(
                                     painterResource(R.drawable.find_settings),
@@ -449,15 +465,19 @@ class SecondFragment : Fragment() {
 
     @Composable
     fun CountryScreen(
-        viewModel: SearchViewmodel
+        viewModel: SearchViewmodel,
+        navController: NavHostController
     ) {
-
-
         Column(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
             Row {
-                SearchBar(viewModel)
+                SearchBar(
+                    viewModel,
+                   onNextButtonClicked = {
+                       navController.navigate(SearchScreen.Genre.name)
+                   }
+                )
                 // SearchApp()
             }
             Row {
@@ -466,11 +486,19 @@ class SecondFragment : Fragment() {
                     viewModel = viewModel,
 
 
-                )
+                    )
 
 
             }
         }
+    }
+
+    @Composable
+    fun GenreScreen(
+        viewModel: SearchViewmodel,
+        navController: NavHostController
+    ) {
+        Text(text = "parametr screen")
     }
 
     @Preview(showBackground = true)
