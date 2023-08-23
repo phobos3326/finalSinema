@@ -83,6 +83,7 @@ import com.example.skillsinema.entity.Genre
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
+
 enum class SearchScreen(@StringRes val title: Int) {
     Start(title = R.string.search_screen),
     Country(title = R.string.country_screen),
@@ -137,21 +138,17 @@ class SecondFragment : Fragment() {
                         }
                         Row {
                             //BarkHomeContent()
-
                             SearchApp()
                         }
 
                     }
 
-                    //
                 }
             }
 
 
         }
     }
-
-
 
 
     @OptIn(ExperimentalMaterial3Api::class)
@@ -183,7 +180,6 @@ class SecondFragment : Fragment() {
     }
 
 
-
     @Composable
     fun SearchApp(
         viewModel: SearchViewmodel = viewModel(),
@@ -212,118 +208,18 @@ class SecondFragment : Fragment() {
                 modifier = Modifier.padding(innerPadding)
             ) {
                 composable(route = SearchScreen.Country.name) {
-
-                        CountryScreen1(
-
-                            viewModel,
-                            navController
-
-                        )
-
-
-
+                    CountryScreen(
+                        viewModel,
+                        navController
+                    )
                 }
                 composable(route = SearchScreen.Genre.name) {
-                    val context:Context
+                    val context: Context
                     GenreScreen(viewModel = viewModel, navController = navController)
                 }
             }
-
         }
-
     }
-
-
-    @Composable
-    fun SearchBar(
-        viewModel: SearchViewmodel,
-        onNextButtonClicked: () -> Unit,
-    ) {
-        //val viewModel: SearchViewmodel = viewModel()
-        val searchText by viewModel.searchText.collectAsState()
-        val textState = remember { mutableStateOf(TextFieldValue("")) }
-        TextField(
-            value = searchText,
-            onValueChange = {
-                viewModel.onSearchTextChange(it)
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(52.dp)
-                .padding(0.dp),
-            placeholder = { Text("Фильмы, актеры, режисёры") },
-            leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null) },
-            trailingIcon = {
-                Row {
-                    Column(
-                        verticalArrangement = Arrangement.Center,
-                        modifier = Modifier
-                            .width(10.dp)
-                            .height(52.dp),
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.rectangle_31),
-                            alignment = Alignment.Center,
-                            contentDescription = null,
-                            modifier = Modifier
-                                .size(25.dp)
-                        )
-                    }
-                    Column(
-                        modifier = Modifier.width(50.dp)
-                    ) {
-                        IconButton(
-
-                            onClick = {
-
-                                onNextButtonClicked
-                            },
-                            content = {
-                                Icon(
-                                    painterResource(R.drawable.find_settings),
-                                    contentDescription = null
-                                )
-                            }
-                        )
-                    }
-
-                }
-            },
-            singleLine = true,
-            shape = MaterialTheme.shapes.extraLarge,
-            colors = TextFieldDefaults.textFieldColors(
-
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                //cursorColor = MaterialTheme.colors.onSurface
-            ),
-            //keyboardActions = KeyboardActions(onSearch = { onQueryChanged(query) }),
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search)
-        )
-    }
-
-
-    @Composable
-    fun BarkHomeContent(
-
-        viewModel: SearchViewmodel
-    ) {
-
-        val data by viewModel.keyWordsFilms.collectAsState()
-
-
-        LazyColumn(modifier = Modifier.fillMaxHeight(1f)) {
-
-            items(data) { Film ->
-                FilmListItem(film = Film)
-
-            }
-
-        }
-
-
-    }
-
 
     @Composable
     fun FilmListItem(film: Film) {
@@ -353,37 +249,9 @@ class SecondFragment : Fragment() {
         }
     }
 
-    /*    @Composable
-        fun FilmListItem1() {
-            Card(
-                modifier = Modifier
-                    .padding(horizontal = 8.dp, vertical = 8.dp)
-                    .fillMaxWidth(),
-                elevation = 0.dp,
-                backgroundColor = Color.White,
-                shape = RoundedCornerShape(corner = CornerSize(4.dp))
-
-            ) {
-                Row {
-                    FilmImage1()
-                    Column(
-                        modifier = Modifier
-                            .padding(16.dp)
-                            .fillMaxWidth()
-                            .align(Alignment.CenterVertically)
-                    ) {
-                        Text(text = "TEXT", style = typography.h6)
-                        Text(text = "VIEW DETAIL", style = typography.caption)
-
-                    }
-                }
-            }
-        }*/
-
 
     @Composable
     private fun FilmImage(film: Film) {
-
         Box {
             Image(
                 painter = rememberImagePainter(film.posterUrlPreview),
@@ -395,7 +263,6 @@ class SecondFragment : Fragment() {
                     .height(132.dp)
                     .clip(RoundedCornerShape(corner = CornerSize(4.dp)))
             )
-
             Box(
                 modifier = Modifier
                     .padding(4.dp)
@@ -415,89 +282,11 @@ class SecondFragment : Fragment() {
             }
 
         }
-
-
     }
 
-    @Composable
-    private fun FilmImage1(film: Film) {
-        Image(
-            painter = rememberImagePainter(film.posterUrlPreview),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .padding(8.dp)
-                .width(96.dp)
-                .height(132.dp)
-                .clip(RoundedCornerShape(corner = CornerSize(4.dp)))
-        )
-    }
-
-
-    @Composable
-    fun ImageWithOverlay() {
-        Box() {
-            Image(
-                painter = rememberImagePainter(R.drawable.a4___1),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .padding(8.dp)
-                    .width(96.dp)
-                    .height(132.dp)
-                    .clip(RoundedCornerShape(corner = CornerSize(4.dp)))
-            )
-
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(color = Color.Yellow)
-                    .alpha(0.5f)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .width(17.dp)
-                        .height(9.91211.dp)
-                        .clip(shape = RoundedCornerShape(size = 4.dp))
-                        .background(color = Color.Green)
-                ) {
-                }
-            }
-        }
-    }
 
     @Composable
     fun CountryScreen(
-        viewModel: SearchViewmodel,
-        navController: NavHostController
-    ) {
-        Column(
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-        ) {
-            Row {
-                SearchBar(
-                    viewModel,
-                   onNextButtonClicked = {
-                       navController.navigate(SearchScreen.Genre.name)
-                   }
-                )
-                // SearchApp()
-            }
-            Row {
-                BarkHomeContent(
-
-                    viewModel = viewModel,
-
-
-                    )
-
-
-            }
-        }
-    }
-
-    @Composable
-    fun CountryScreen1(
         viewModel: SearchViewmodel,
         navController: NavHostController
     ) {
@@ -560,27 +349,20 @@ class SecondFragment : Fragment() {
 
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,
-                        //cursorColor = MaterialTheme.colors.onSurface
-                    ),
-                    //keyboardActions = KeyboardActions(onSearch = { onQueryChanged(query) }),
+
+                        ),
+
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search)
                 )
-                // SearchApp()
             }
             Row {
                 val data by viewModel.keyWordsFilms.collectAsState()
-
-
                 LazyColumn(modifier = Modifier.fillMaxHeight(1f)) {
-
                     items(data) { Film ->
                         FilmListItem(film = Film)
 
                     }
-
                 }
-
-
             }
         }
     }
