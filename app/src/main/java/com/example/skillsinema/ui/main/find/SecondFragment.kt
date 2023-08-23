@@ -86,6 +86,7 @@ private const val ARG_PARAM2 = "param2"
 
 enum class SearchScreen(@StringRes val title: Int) {
     Start(title = R.string.search_screen),
+    SearchOptions(title =R.string.search_options),
     Country(title = R.string.country_screen),
     Genre(title = R.string.genre_screen),
     Period(title = R.string.period_screen)
@@ -208,14 +209,14 @@ class SecondFragment : Fragment() {
                 modifier = Modifier.padding(innerPadding)
             ) {
                 composable(route = SearchScreen.Country.name) {
-                    CountryScreen(
+                    SearchScreen(
                         viewModel,
                         navController
                     )
                 }
-                composable(route = SearchScreen.Genre.name) {
+                composable(route = SearchScreen.SearchOptions.name) {
                     val context: Context
-                    GenreScreen(viewModel = viewModel, navController = navController)
+                    SearchOptionsScreen(viewModel = viewModel, navController = navController)
                 }
             }
         }
@@ -286,7 +287,7 @@ class SecondFragment : Fragment() {
 
 
     @Composable
-    fun CountryScreen(
+    fun SearchScreen(
         viewModel: SearchViewmodel,
         navController: NavHostController
     ) {
@@ -330,7 +331,7 @@ class SecondFragment : Fragment() {
 
                                     onClick = {
 
-                                        navController.navigate(SearchScreen.Genre.name)
+                                        navController.navigate(SearchScreen.SearchOptions.name)
                                     },
                                     content = {
                                         Icon(
@@ -374,6 +375,8 @@ class SecondFragment : Fragment() {
     ) {
         Text(text = "parametr screen")
     }
+
+
 
     @Preview(showBackground = true)
     @Composable
