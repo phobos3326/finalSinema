@@ -5,6 +5,7 @@ data class SearchUiState(
     var genre: Int = 0,
     var order: String ="",
     var filmType: String ="",
+
     var ratingFrom: Int = 0,
     var ratingTo: Int = 0,
     var yearFrom: Int = 0,
@@ -12,4 +13,7 @@ data class SearchUiState(
     var imdbId: String ="",
     var keyword: String ="",
     var page: Int = 0,
+
+
 )
+
