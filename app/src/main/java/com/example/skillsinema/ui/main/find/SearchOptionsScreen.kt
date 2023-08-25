@@ -383,13 +383,14 @@ fun ButtonRow() {
                     )
                 }
                 Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.Top,
-
                     modifier = Modifier
-                        .width(295.dp)
-                        .height(40.dp)
-                        .border(width = 1.dp, color = Color(0x4DB5B5C9))
+
+                        // .border(width = 1.dp, color = Color(0x4DB5B5C9))
+                        .width(360.dp)
+                        .height(50.dp)
+                        .padding(start = 26.dp, top = 16.dp, end = 26.dp, bottom = 16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
                         text = "0",
