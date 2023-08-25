@@ -113,7 +113,7 @@ class SecondFragment : Fragment() {
            }*/
     }
 
-    // private val mainViewModel: searchViewmodel by viewModels()
+     //private val mainViewModel: SearchViewmodel = hiltViewmodel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

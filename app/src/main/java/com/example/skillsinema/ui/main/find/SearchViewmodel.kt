@@ -75,7 +75,7 @@ class SearchViewmodel @Inject constructor(
         //navController.navigate(R.id.action_mainFragment_to_itemInfoFragment, bundle)
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching {
-
+                uiState.value.filmType
                 keyWord.getKeyWord(searchText.value)
 
 

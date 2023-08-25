@@ -28,16 +28,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.skillsinema.R
+import kotlin.reflect.jvm.internal.impl.resolve.constants.KClassValue
 
 @Composable
 fun SearchOptionsScreen(
-    viewModel: SearchViewmodel,
+    viewModel: SearchViewmodel ,
     navController: NavHostController
 ) {
     Text(text = "parametr screen")
@@ -67,12 +69,12 @@ fun SegmentedControlPage(viewModel: SearchViewmodel) {
              * Multiple items
              */
 
-            val items1 = listOf("ALL", "FILM", "TV_SERIES")
+            val items1 = listOf("Все", "Фильмы", "Сериалы")
             SegmentedControl(
                 items = items1,
                 defaultSelectedItemIndex = 0,
                 defaultFilmType = "All",
-                color = R.color.purple_200,
+                color = R.color.blue,
                 cornerRadius = 50
             ) {
 
@@ -95,6 +97,7 @@ fun SegmentedControlPage(viewModel: SearchViewmodel) {
 }
 
 
+
 @Composable
 fun SegmentedControl(
     items: List<String>,
@@ -103,7 +106,7 @@ fun SegmentedControl(
     useFixedWidth: Boolean = false,
     itemWidth: Dp = 120.dp,
     cornerRadius: Int = 10,
-    @ColorRes color: Int = R.color.teal_200,
+    @ColorRes color: Int = R.color.light_gray,
     onItemSelection: (selectedItemIndex: Int) -> Unit
 ) {
     val selectedIndex = remember { mutableStateOf(defaultSelectedItemIndex) }
@@ -123,7 +126,7 @@ fun SegmentedControl(
                                 .zIndex(if (selectedIndex.value == index) 1f else 0f)
                         } else {
                             Modifier
-                                .wrapContentSize()
+                                .wrapContentSize(unbounded = true)
                                 .offset(0.dp, 0.dp)
                                 .zIndex(if (selectedIndex.value == index) 1f else 0f)
                         }
@@ -136,7 +139,7 @@ fun SegmentedControl(
                                 .offset((-1 * index).dp, 0.dp)
                                 .zIndex(if (selectedIndex.value == index) 1f else 0f)
                         else Modifier
-                            .wrapContentSize()
+                            .wrapContentSize(unbounded = true)
                             .offset((-1 * index).dp, 0.dp)
                             .zIndex(if (selectedIndex.value == index) 1f else 0f)
                     }
@@ -211,3 +214,10 @@ fun SegmentedControl(
     }
 }
 
+@Preview()
+@Composable
+fun Preview(viewModel: SearchViewmodel = viewModel()){
+//@PreviewParameter()
+    //SegmentedControl()
+    SegmentedControlPage(viewModel = viewModel)
+}
