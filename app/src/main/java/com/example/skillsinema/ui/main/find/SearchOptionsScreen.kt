@@ -229,7 +229,12 @@ fun SegmentedControl(
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ButtonRow() {
-    Column {
+    Column(
+        modifier = Modifier
+            .fillMaxSize(10f)
+
+
+    ) {
         Row(
             modifier = Modifier
                 .clickable { }
@@ -326,7 +331,7 @@ fun ButtonRow() {
         Row(
             modifier = Modifier
 
-               // .border(width = 1.dp, color = Color(0x4DB5B5C9))
+                // .border(width = 1.dp, color = Color(0x4DB5B5C9))
                 .width(360.dp)
                 .height(50.dp)
                 .padding(start = 26.dp, top = 16.dp, end = 26.dp, bottom = 16.dp),
@@ -357,9 +362,9 @@ fun ButtonRow() {
         Row(
             modifier = Modifier
 
-               // .border(width = 1.dp, color = Color(0x4DB5B5C9))
+                // .border(width = 1.dp, color = Color(0x4DB5B5C9))
                 .width(360.dp)
-                .height(50.dp)
+                //.height(150.dp)
                 .padding(start = 26.dp, top = 16.dp, end = 26.dp, bottom = 16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
@@ -367,43 +372,52 @@ fun ButtonRow() {
 
         {
 
+            var sliderValues by remember {
+                mutableStateOf(0f..10f)
+            }
             Column {
-                Row{
-                    var sliderPosition by remember { mutableStateOf(0f..100f) }
-                    RangeSlider(
-                        modifier = Modifier.semantics { contentDescription = "Localized Description" },
-                        value = sliderPosition,
-                        onValueChange = { sliderPosition = it },
-                        valueRange = 0f..100f,
-                        steps = 10,
-                        onValueChangeFinished = {
-                            // launch some business logic update with the state you hold
-                            // viewModel.updateSelectedSliderValue(sliderPosition)
-                        },
-                    )
-                }
-                Row(
-                    modifier = Modifier
 
-                        // .border(width = 1.dp, color = Color(0x4DB5B5C9))
-                        .width(360.dp)
-                        .height(50.dp)
-                        .padding(start = 26.dp, top = 16.dp, end = 26.dp, bottom = 16.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
+                Row(
+
                 ) {
+
+                    RangeSlider(
+                        value = sliderValues,
+                        onValueChange = { sliderValues_ ->
+                            sliderValues = sliderValues_
+                        },
+                        valueRange = 0f..10f,
+                        onValueChangeFinished = {
+                            // this is called when the user completed selecting the value
+                            Log.d(
+                                "MainActivity",
+                                "Start: ${sliderValues.start}, End: ${sliderValues.endInclusive}"
+                            )
+                        },
+                        steps = 10
+                    )
+
+                }
+
+                Row(   modifier = Modifier
+
+                    .width(360.dp)
+                    .padding(start = 26.dp,  end = 26.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,) {
+
                     Text(
-                        text = "0",
+                        text = sliderValues.start.toString(),
                         style = TextStyle(
-                            fontSize = 16.sp,
+                            fontSize = 14.sp,
 
                             fontWeight = FontWeight(400),
-                            color = Color(0xFF272727),
-                            textAlign = TextAlign.Center,
+                            color = Color(0xFF838390),
+                            textAlign = TextAlign.Start,
                         )
                     )
                     Text(
-                        text = "10",
+                        text = sliderValues.endInclusive.toString(),
                         style = TextStyle(
                             fontSize = 14.sp,
 
@@ -413,8 +427,97 @@ fun ButtonRow() {
                         )
                     )
                 }
-
             }
+
+            /*var sliderValues by remember {
+                mutableStateOf(1f..20f) // pass the initial values
+            }
+
+                Row(
+                    modifier = Modifier
+
+                        // .border(width = 1.dp, color = Color(0x4DB5B5C9))
+                        .width(360.dp)
+                        .height(350.dp),
+                    verticalAlignment = Alignment.Top
+                ) {
+
+
+
+                    *//*RangeSlider(
+                        value = sliderValues,
+                        onValueChange = { sliderValues_ ->
+                            sliderValues = sliderValues_
+                        },
+                        valueRange = 1f..20f,
+                        onValueChangeFinished = {
+                            // this is called when the user completed selecting the value
+                            Log.d(
+                                "MainActivity",
+                                "Start: ${sliderValues.start}, End: ${sliderValues.endInclusive}"
+                            )
+                        }
+                    )
+
+                    Text(text = "Start: ${sliderValues.start}, End: ${sliderValues.endInclusive}")*//*
+
+                    *//* var sliderPosition by remember { mutableStateOf(0f..100f) }
+                     Text(text = (sliderPosition.start ..sliderPosition.endInclusive).toString())
+                     RangeSlider(
+                         modifier = Modifier.semantics {
+                             contentDescription = "Localized Description"
+                         },
+                         value = sliderPosition,
+                         onValueChange = { sliderPosition = it },
+                         valueRange = 0f..100f,
+                         steps = 10,
+                         onValueChangeFinished = {
+                             // launch some business logic update with the state you hold
+                             // viewModel.updateSelectedSliderValue(sliderPosition)
+
+
+                         },
+
+                     )
+
+                     Column {
+                         Row(
+                             modifier = Modifier
+
+                                 // .border(width = 1.dp, color = Color(0x4DB5B5C9))
+                                 .width(360.dp)
+                                 .height(100.dp),
+                             horizontalArrangement = Arrangement.SpaceBetween,
+                             verticalAlignment = Alignment.Bottom,
+
+                             ) {
+                             Text(
+                                 text = sliderPosition.toString(),
+                                 style = TextStyle(
+                                     fontSize = 14.sp,
+
+                                     fontWeight = FontWeight(400),
+                                     color = Color(0xFF838390),
+                                     textAlign = TextAlign.Start,
+                                 )
+                             )
+                             Text(
+                                 text = sliderPosition.endInclusive.toString(),
+                                 style = TextStyle(
+                                     fontSize = 14.sp,
+
+                                     fontWeight = FontWeight(400),
+                                     color = Color(0xFF838390),
+                                     textAlign = TextAlign.End,
+                                 )
+                             )
+                         }
+                     }
+*//*
+
+
+
+            }*/
 
 
         }
@@ -425,7 +528,45 @@ fun ButtonRow() {
 @Preview(backgroundColor = 0xFFFFFFFF, showBackground = true)
 @Composable
 fun Preview() {
-
+    //MyUI()
     ButtonRow()
 }
 
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+private fun MyUI() {
+
+    var sliderValues by remember {
+        mutableStateOf(0f..10f)
+    }
+Column {
+
+    Row {
+
+        RangeSlider(
+            value = sliderValues,
+            onValueChange = { sliderValues_ ->
+                sliderValues = sliderValues_
+            },
+            valueRange = 0f..10f,
+            onValueChangeFinished = {
+                // this is called when the user completed selecting the value
+                Log.d(
+                    "MainActivity",
+                    "Start: ${sliderValues.start}, End: ${sliderValues.endInclusive}"
+                )
+            },
+            steps = 4
+        )
+
+    }
+
+    Row {
+        Text(text = "Start: ${sliderValues.start}, End: ${sliderValues.endInclusive}")
+
+    }
+}
+
+
+
+}
