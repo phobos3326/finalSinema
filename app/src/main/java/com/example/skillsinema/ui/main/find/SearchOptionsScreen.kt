@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -20,6 +21,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
@@ -65,13 +67,32 @@ fun SearchOptionsScreen(
 ) {
     LazyColumn(
         content = {
-            item { SegmentedButton(viewModel = viewModel) }
-            item { CountryRow() }
-            item { GenreRow() }
-            item { YearRow() }
-           // item { RatingRow() }
-            item { Slider() }
-            item { SegmentedSortedButton(viewModel = viewModel) }
+            item {
+                SegmentedButton(viewModel = viewModel)
+                Divider(color = Color(0x4DB5B5C9), thickness = 1.dp)
+            }
+
+            item {
+                CountryRow()
+                Divider(color = Color(0x4DB5B5C9), thickness = 1.dp)
+            }
+            item {
+                GenreRow()
+                Divider(color = Color(0x4DB5B5C9), thickness = 1.dp)
+            }
+            item {
+                YearRow()
+                Divider(color = Color(0x4DB5B5C9), thickness = 1.dp)
+            }
+            // item { RatingRow() }
+            item {
+                Slider()
+                Divider(color = Color(0x4DB5B5C9), thickness = 1.dp)
+            }
+            item {
+                SegmentedSortedButton(viewModel = viewModel)
+                Divider(color = Color(0x4DB5B5C9), thickness = 1.dp)
+            }
 
         }
     )
@@ -80,12 +101,12 @@ fun SearchOptionsScreen(
 
 
 @Composable
-fun CountryRow(){
+fun CountryRow() {
     Row(
         modifier = Modifier
             .clickable { }
-            .border(width = 1.dp, color = Color(0x4DB5B5C9))
-            .width(360.dp)
+            //.border(width = 1.dp, color = Color(0x4DB5B5C9))
+            .fillMaxWidth()
             .height(50.dp)
             .padding(start = 26.dp, top = 16.dp, end = 26.dp, bottom = 16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -115,12 +136,12 @@ fun CountryRow(){
 }
 
 @Composable
-fun GenreRow(){
+fun GenreRow() {
     Row(
         modifier = Modifier
             .clickable { }
-            .border(width = 1.dp, color = Color(0x4DB5B5C9))
-            .width(360.dp)
+            //.border(width = 1.dp, color = Color(0x4DB5B5C9))
+            .fillMaxWidth()
             .height(50.dp)
             .padding(start = 26.dp, top = 16.dp, end = 26.dp, bottom = 16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -150,12 +171,12 @@ fun GenreRow(){
 }
 
 @Composable
-fun YearRow(){
+fun YearRow() {
     Row(
         modifier = Modifier
             .clickable { }
-            .border(width = 1.dp, color = Color(0x4DB5B5C9))
-            .width(360.dp)
+            //.border(width = 1.dp, color = Color(0x4DB5B5C9))
+            .fillMaxWidth()
             .height(50.dp)
             .padding(start = 26.dp, top = 16.dp, end = 26.dp, bottom = 16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -184,53 +205,20 @@ fun YearRow(){
     }
 }
 
-@Composable
-fun RatingRow(){
-    Row(
-        modifier = Modifier
 
-            .border(width = 1.dp, color = Color(0x4DB5B5C9))
-            .width(360.dp)
-            .height(50.dp)
-            .padding(start = 26.dp, top = 16.dp, end = 26.dp, bottom = 16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Text(
-            text = "Рейтинг",
-            style = TextStyle(
-                fontSize = 16.sp,
 
-                fontWeight = FontWeight(400),
-                color = Color(0xFF272727),
-                textAlign = TextAlign.Center,
-            )
-        )
-        Text(
-            text = "любой",
-            style = TextStyle(
-                fontSize = 14.sp,
-
-                fontWeight = FontWeight(400),
-                color = Color(0xFF838390),
-                textAlign = TextAlign.End,
-            )
-        )
-    }
-}
 @Preview(showBackground = true)
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun Slider(){
+fun Slider() {
     Column(
-        modifier = Modifier
-            .border(width = 1.dp, color = Color(0x4DB5B5C9))
+
     ) {
         Row(
             modifier = Modifier
                 //.border(width = 1.dp, color = Color(0x4DB5B5C9))
-                .clickable {  }
-                .width(360.dp)
+                .clickable { }
+                .fillMaxWidth()
                 .height(50.dp)
                 .padding(start = 26.dp, top = 16.dp, end = 26.dp, bottom = 16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -262,7 +250,7 @@ fun Slider(){
             modifier = Modifier
 
 
-                .width(360.dp)
+                .fillMaxWidth()
                 //.height(150.dp)
                 .padding(start = 26.dp, top = 16.dp, end = 26.dp, bottom = 16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -272,9 +260,9 @@ fun Slider(){
             var sliderValues by remember {
                 mutableStateOf(0f..10f)
             }
-            Column (
+            Column(
 
-            ){
+            ) {
 
                 Row {
                     RangeSlider(
@@ -368,7 +356,9 @@ fun SegmentedButton(viewModel: SearchViewmodel) {
                             viewModel.uiState.value.filmType = "TV_SERIES"
                         }
                     }
+
                 }
+
             }
         }
     }
@@ -532,7 +522,7 @@ fun SegmentedControl(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+/*@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ButtonRow() {
     Column(
@@ -543,7 +533,7 @@ fun ButtonRow() {
     ) {
 
 
-    /*    Row(
+    *//*    Row(
             modifier = Modifier
                 .clickable { }
                 .border(width = 1.dp, color = Color(0x4DB5B5C9))
@@ -573,9 +563,9 @@ fun ButtonRow() {
                     textAlign = TextAlign.End,
                 )
             )
-        }*/
+        }*//*
 
-     /*   Row(
+     *//*   Row(
             modifier = Modifier
                 .clickable { }
                 .border(width = 1.dp, color = Color(0x4DB5B5C9))
@@ -605,8 +595,8 @@ fun ButtonRow() {
                     textAlign = TextAlign.End,
                 )
             )
-        }*/
-       /* Row(
+        }*//*
+       *//* Row(
             modifier = Modifier
 
                 .border(width = 1.dp, color = Color(0x4DB5B5C9))
@@ -636,8 +626,8 @@ fun ButtonRow() {
                     textAlign = TextAlign.End,
                 )
             )
-        }*/
-        /*Row(
+        }*//*
+        *//*Row(
             modifier = Modifier
 
                 // .border(width = 1.dp, color = Color(0x4DB5B5C9))
@@ -707,52 +697,18 @@ fun ButtonRow() {
             }
 
 
-        }*/
+        }*//*
 
     }
-}
+}*/
 
 @Preview(backgroundColor = 0xFFFFFFFF, showBackground = true)
 @Composable
 fun Preview() {
     //MyUI()
-    ButtonRow()
+    // ButtonRow()
 }
 
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-private fun MyUI() {
-
-    var sliderValues by remember {
-        mutableStateOf(0f..10f)
-    }
-    Column {
-
-        Row {
-
-            RangeSlider(
-                value = sliderValues,
-                onValueChange = { sliderValues_ ->
-                    sliderValues = sliderValues_
-                },
-                valueRange = 0f..10f,
-                onValueChangeFinished = {
-                    // this is called when the user completed selecting the value
-                    Log.d(
-                        "MainActivity",
-                        "Start: ${sliderValues.start}, End: ${sliderValues.endInclusive}"
-                    )
-                },
-                steps = 4
-            )
-
-        }
-
-        Row {
-            Text(text = "Start: ${sliderValues.start}, End: ${sliderValues.endInclusive}")
-
-        }
-    }
 
 
-}
+

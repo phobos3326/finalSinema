@@ -131,7 +131,7 @@ class SecondFragment : Fragment() {
                 MaterialTheme {
 
                     Column(
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                        modifier = Modifier.padding( vertical = 8.dp)
                     ) {
                         Row {
                             //SearchBar()
@@ -163,14 +163,14 @@ class SecondFragment : Fragment() {
     ) {
         TopAppBar(
             title = { Text(stringResource(currentScreen.title)) },
-            colors = TopAppBarDefaults.mediumTopAppBarColors(
+           /* colors = TopAppBarDefaults.mediumTopAppBarColors(
                 containerColor = MaterialTheme.colorScheme.primaryContainer
-            ),
+            ),*/
             modifier = modifier,
             navigationIcon = {
                 if (canNavigateBack) {
-                    androidx.compose.material3.IconButton(onClick = navigateUp) {
-                        androidx.compose.material3.Icon(
+                    androidx.compose.material.IconButton(onClick = navigateUp) {
+                        androidx.compose.material.Icon(
                             imageVector = Icons.Filled.ArrowBack,
                             contentDescription = stringResource(R.string.back_button)
                         )
@@ -205,10 +205,10 @@ class SecondFragment : Fragment() {
             val uiState by viewModel.uiState.collectAsState()
             NavHost(
                 navController = navController,
-                startDestination = SearchScreen.Country.name,
+                startDestination = SearchScreen.Start.name,
                 modifier = Modifier.padding(innerPadding)
             ) {
-                composable(route = SearchScreen.Country.name) {
+                composable(route = SearchScreen.Start.name) {
                     SearchScreen(
                         viewModel,
                         navController
@@ -378,7 +378,7 @@ class SecondFragment : Fragment() {
 
 
 
-    @Preview(showBackground = true)
+    @Preview
     @Composable
     fun preview() {
         // SearchBar()
