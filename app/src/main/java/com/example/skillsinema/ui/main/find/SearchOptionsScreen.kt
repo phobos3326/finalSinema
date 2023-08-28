@@ -64,6 +64,7 @@ fun SearchOptionsScreen(
     Text(text = "parametr screen")
 
     SegmentedControlPage(viewModel)
+
 }
 
 
@@ -79,33 +80,42 @@ fun SegmentedControlPage(viewModel: SearchViewmodel) {
                 .padding(30.dp)
                 .background(Color.White),
         ) {
+            Row {
+                val items1 = listOf("Все", "Фильмы", "Сериалы")
+                SegmentedControl(
+                    items = items1,
+                    defaultSelectedItemIndex = 0,
+                    defaultFilmType = "All",
+                    color = R.color.blue,
+                    cornerRadius = 50
+                ) {
 
-            val items1 = listOf("Все", "Фильмы", "Сериалы")
-            SegmentedControl(
-                items = items1,
-                defaultSelectedItemIndex = 0,
-                defaultFilmType = "All",
-                color = R.color.blue,
-                cornerRadius = 50
-            ) {
+                    viewModel.uiState.value.filmType = "ALL"
+                    Log.e("CustomToggle", "Selected item : ${items1[it]}")
+                    when (it) {
+                        0 -> {
+                            viewModel.uiState.value.filmType = "ALL"
+                        }
 
-                viewModel.uiState.value.filmType = "ALL"
-                Log.e("CustomToggle", "Selected item : ${items1[it]}")
-                when (it) {
-                    0 -> {
-                        viewModel.uiState.value.filmType = "ALL"
-                    }
+                        1 -> {
+                            viewModel.uiState.value.filmType = "FILM"
+                        }
 
-                    1 -> {
-                        viewModel.uiState.value.filmType = "FILM"
-                    }
-
-                    2 -> {
-                        viewModel.uiState.value.filmType = "TV_SERIES"
+                        2 -> {
+                            viewModel.uiState.value.filmType = "TV_SERIES"
+                        }
                     }
                 }
             }
+            Row {
+
+                ButtonRow()
+            }
+
         }
+
+
+
     }
 }
 
@@ -235,6 +245,10 @@ fun ButtonRow() {
 
 
     ) {
+        Row{
+
+        }
+
         Row(
             modifier = Modifier
                 .clickable { }
@@ -394,20 +408,24 @@ fun ButtonRow() {
                                 "Start: ${sliderValues.start}, End: ${sliderValues.endInclusive}"
                             )
                         },
-                        steps = 10
+                        steps = 9
                     )
 
                 }
 
-                Row(   modifier = Modifier
+                Row(
+                    modifier = Modifier
 
-                    .width(360.dp)
-                    .padding(start = 26.dp,  end = 26.dp),
+                        .width(360.dp)
+                        .padding(start = 26.dp, end = 26.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,) {
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
 
                     Text(
-                        text = sliderValues.start.toString(),
+                        // text = String.format("%.1f", sliderValues.start),
+                        text = sliderValues.start.toInt().toString(),
+
                         style = TextStyle(
                             fontSize = 14.sp,
 
@@ -417,7 +435,8 @@ fun ButtonRow() {
                         )
                     )
                     Text(
-                        text = sliderValues.endInclusive.toString(),
+
+                        text = sliderValues.endInclusive.toInt().toString(),
                         style = TextStyle(
                             fontSize = 14.sp,
 
@@ -539,34 +558,33 @@ private fun MyUI() {
     var sliderValues by remember {
         mutableStateOf(0f..10f)
     }
-Column {
+    Column {
 
-    Row {
+        Row {
 
-        RangeSlider(
-            value = sliderValues,
-            onValueChange = { sliderValues_ ->
-                sliderValues = sliderValues_
-            },
-            valueRange = 0f..10f,
-            onValueChangeFinished = {
-                // this is called when the user completed selecting the value
-                Log.d(
-                    "MainActivity",
-                    "Start: ${sliderValues.start}, End: ${sliderValues.endInclusive}"
-                )
-            },
-            steps = 4
-        )
+            RangeSlider(
+                value = sliderValues,
+                onValueChange = { sliderValues_ ->
+                    sliderValues = sliderValues_
+                },
+                valueRange = 0f..10f,
+                onValueChangeFinished = {
+                    // this is called when the user completed selecting the value
+                    Log.d(
+                        "MainActivity",
+                        "Start: ${sliderValues.start}, End: ${sliderValues.endInclusive}"
+                    )
+                },
+                steps = 4
+            )
 
+        }
+
+        Row {
+            Text(text = "Start: ${sliderValues.start}, End: ${sliderValues.endInclusive}")
+
+        }
     }
-
-    Row {
-        Text(text = "Start: ${sliderValues.start}, End: ${sliderValues.endInclusive}")
-
-    }
-}
-
 
 
 }
