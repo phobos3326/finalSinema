@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.ExperimentalMaterialApi
@@ -54,6 +55,7 @@ import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.skillsinema.R
+import java.time.Year
 import kotlin.reflect.jvm.internal.impl.resolve.constants.KClassValue
 
 @Composable
@@ -61,18 +63,279 @@ fun SearchOptionsScreen(
     viewModel: SearchViewmodel,
     navController: NavHostController
 ) {
-    Text(text = "parametr screen")
+    LazyColumn(
+        content = {
+            item { SegmentedButton(viewModel = viewModel) }
+            item { CountryRow() }
+            item { GenreRow() }
+            item { YearRow() }
+           // item { RatingRow() }
+            item { Slider() }
+            item { SegmentedSortedButton(viewModel = viewModel) }
 
-    SegmentedControlPage(viewModel)
+        }
+    )
 
 }
 
 
-//@Preview
 @Composable
-fun SegmentedControlPage(viewModel: SearchViewmodel) {
+fun CountryRow(){
+    Row(
+        modifier = Modifier
+            .clickable { }
+            .border(width = 1.dp, color = Color(0x4DB5B5C9))
+            .width(360.dp)
+            .height(50.dp)
+            .padding(start = 26.dp, top = 16.dp, end = 26.dp, bottom = 16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = "Страна",
+            style = TextStyle(
+                fontSize = 16.sp,
+
+                fontWeight = FontWeight(400),
+                color = Color(0xFF272727),
+                textAlign = TextAlign.Center,
+            )
+        )
+        Text(
+            text = "Россия",
+            style = TextStyle(
+                fontSize = 14.sp,
+
+                fontWeight = FontWeight(400),
+                color = Color(0xFF838390),
+                textAlign = TextAlign.End,
+            )
+        )
+    }
+}
+
+@Composable
+fun GenreRow(){
+    Row(
+        modifier = Modifier
+            .clickable { }
+            .border(width = 1.dp, color = Color(0x4DB5B5C9))
+            .width(360.dp)
+            .height(50.dp)
+            .padding(start = 26.dp, top = 16.dp, end = 26.dp, bottom = 16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = "Жанр",
+            style = TextStyle(
+                fontSize = 16.sp,
+
+                fontWeight = FontWeight(400),
+                color = Color(0xFF272727),
+                textAlign = TextAlign.Center,
+            )
+        )
+        Text(
+            text = "Комедия",
+            style = TextStyle(
+                fontSize = 14.sp,
+
+                fontWeight = FontWeight(400),
+                color = Color(0xFF838390),
+                textAlign = TextAlign.End,
+            )
+        )
+    }
+}
+
+@Composable
+fun YearRow(){
+    Row(
+        modifier = Modifier
+            .clickable { }
+            .border(width = 1.dp, color = Color(0x4DB5B5C9))
+            .width(360.dp)
+            .height(50.dp)
+            .padding(start = 26.dp, top = 16.dp, end = 26.dp, bottom = 16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = "Год",
+            style = TextStyle(
+                fontSize = 16.sp,
+
+                fontWeight = FontWeight(400),
+                color = Color(0xFF272727),
+                textAlign = TextAlign.Center,
+            )
+        )
+        Text(
+            text = "с 1998 до 2017",
+            style = TextStyle(
+                fontSize = 14.sp,
+
+                fontWeight = FontWeight(400),
+                color = Color(0xFF838390),
+                textAlign = TextAlign.End,
+            )
+        )
+    }
+}
+
+@Composable
+fun RatingRow(){
+    Row(
+        modifier = Modifier
+
+            .border(width = 1.dp, color = Color(0x4DB5B5C9))
+            .width(360.dp)
+            .height(50.dp)
+            .padding(start = 26.dp, top = 16.dp, end = 26.dp, bottom = 16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = "Рейтинг",
+            style = TextStyle(
+                fontSize = 16.sp,
+
+                fontWeight = FontWeight(400),
+                color = Color(0xFF272727),
+                textAlign = TextAlign.Center,
+            )
+        )
+        Text(
+            text = "любой",
+            style = TextStyle(
+                fontSize = 14.sp,
+
+                fontWeight = FontWeight(400),
+                color = Color(0xFF838390),
+                textAlign = TextAlign.End,
+            )
+        )
+    }
+}
+@Preview(showBackground = true)
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun Slider(){
+    Column(
+        modifier = Modifier
+            .border(width = 1.dp, color = Color(0x4DB5B5C9))
+    ) {
+        Row(
+            modifier = Modifier
+                //.border(width = 1.dp, color = Color(0x4DB5B5C9))
+                .clickable {  }
+                .width(360.dp)
+                .height(50.dp)
+                .padding(start = 26.dp, top = 16.dp, end = 26.dp, bottom = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                text = "Рейтинг",
+                style = TextStyle(
+                    fontSize = 16.sp,
+
+                    fontWeight = FontWeight(400),
+                    color = Color(0xFF272727),
+                    textAlign = TextAlign.Center,
+                )
+            )
+            Text(
+                text = "любой",
+                style = TextStyle(
+                    fontSize = 14.sp,
+
+                    fontWeight = FontWeight(400),
+                    color = Color(0xFF838390),
+                    textAlign = TextAlign.End,
+                )
+            )
+        }
+
+        Row(
+            modifier = Modifier
 
 
+                .width(360.dp)
+                //.height(150.dp)
+                .padding(start = 26.dp, top = 16.dp, end = 26.dp, bottom = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        )
+        {
+            var sliderValues by remember {
+                mutableStateOf(0f..10f)
+            }
+            Column (
+
+            ){
+
+                Row {
+                    RangeSlider(
+                        value = sliderValues,
+                        onValueChange = { sliderValues_ ->
+                            sliderValues = sliderValues_
+                        },
+                        valueRange = 0f..10f,
+                        onValueChangeFinished = {
+                            // this is called when the user completed selecting the value
+                            Log.d(
+                                "MainActivity",
+                                "Start: ${sliderValues.start}, End: ${sliderValues.endInclusive}"
+                            )
+                        },
+                        steps = 9
+                    )
+                }
+
+                Row(
+                    modifier = Modifier
+
+                        .width(360.dp)
+                        .padding(start = 26.dp, end = 26.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+
+                    Text(
+                        // text = String.format("%.1f", sliderValues.start),
+                        text = sliderValues.start.toInt().toString(),
+
+                        style = TextStyle(
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight(400),
+                            color = Color(0xFF838390),
+                            textAlign = TextAlign.Start,
+                        )
+                    )
+                    Text(
+
+                        text = sliderValues.endInclusive.toInt().toString(),
+                        style = TextStyle(
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight(400),
+                            color = Color(0xFF838390),
+                            textAlign = TextAlign.End,
+                        )
+                    )
+                }
+            }
+
+
+        }
+    }
+
+}
+
+
+@Composable
+fun SegmentedButton(viewModel: SearchViewmodel) {
     Box(modifier = Modifier.background(Color.White)) {
         Column(
             modifier = Modifier
@@ -107,15 +370,48 @@ fun SegmentedControlPage(viewModel: SearchViewmodel) {
                     }
                 }
             }
-            Row {
-
-                ButtonRow()
-            }
-
         }
+    }
+}
 
 
+@Composable
+fun SegmentedSortedButton(viewModel: SearchViewmodel) {
+    Box(modifier = Modifier.background(Color.White)) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(30.dp)
+                .background(Color.White),
+        ) {
+            Row {
+                val items1 = listOf("Дата", "Популярность", "Рейтинг")
+                SegmentedControl(
+                    items = items1,
+                    defaultSelectedItemIndex = 0,
+                    defaultFilmType = "All",
+                    color = R.color.blue,
+                    cornerRadius = 50
+                ) {
 
+                    viewModel.uiState.value.filmType = "ALL"
+                    Log.e("CustomToggle", "Selected item : ${items1[it]}")
+                    when (it) {
+                        0 -> {
+                            viewModel.uiState.value.filmType = "ALL"
+                        }
+
+                        1 -> {
+                            viewModel.uiState.value.filmType = "FILM"
+                        }
+
+                        2 -> {
+                            viewModel.uiState.value.filmType = "TV_SERIES"
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -245,11 +541,9 @@ fun ButtonRow() {
 
 
     ) {
-        Row{
 
-        }
 
-        Row(
+    /*    Row(
             modifier = Modifier
                 .clickable { }
                 .border(width = 1.dp, color = Color(0x4DB5B5C9))
@@ -279,39 +573,9 @@ fun ButtonRow() {
                     textAlign = TextAlign.End,
                 )
             )
-        }
-        Row(
-            modifier = Modifier
-                .clickable { }
-                .border(width = 1.dp, color = Color(0x4DB5B5C9))
-                .width(360.dp)
-                .height(50.dp)
-                .padding(start = 26.dp, top = 16.dp, end = 26.dp, bottom = 16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(
-                text = "Жанр",
-                style = TextStyle(
-                    fontSize = 16.sp,
+        }*/
 
-                    fontWeight = FontWeight(400),
-                    color = Color(0xFF272727),
-                    textAlign = TextAlign.Center,
-                )
-            )
-            Text(
-                text = "Комедия",
-                style = TextStyle(
-                    fontSize = 14.sp,
-
-                    fontWeight = FontWeight(400),
-                    color = Color(0xFF838390),
-                    textAlign = TextAlign.End,
-                )
-            )
-        }
-        Row(
+     /*   Row(
             modifier = Modifier
                 .clickable { }
                 .border(width = 1.dp, color = Color(0x4DB5B5C9))
@@ -341,11 +605,11 @@ fun ButtonRow() {
                     textAlign = TextAlign.End,
                 )
             )
-        }
-        Row(
+        }*/
+       /* Row(
             modifier = Modifier
 
-                // .border(width = 1.dp, color = Color(0x4DB5B5C9))
+                .border(width = 1.dp, color = Color(0x4DB5B5C9))
                 .width(360.dp)
                 .height(50.dp)
                 .padding(start = 26.dp, top = 16.dp, end = 26.dp, bottom = 16.dp),
@@ -372,8 +636,8 @@ fun ButtonRow() {
                     textAlign = TextAlign.End,
                 )
             )
-        }
-        Row(
+        }*/
+        /*Row(
             modifier = Modifier
 
                 // .border(width = 1.dp, color = Color(0x4DB5B5C9))
@@ -383,18 +647,15 @@ fun ButtonRow() {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         )
-
         {
-
             var sliderValues by remember {
                 mutableStateOf(0f..10f)
             }
-            Column {
+            Column (
+                modifier = Modifier.border(width = 1.dp, color = Color(0x4DB5B5C9))
+            ){
 
-                Row(
-
-                ) {
-
+                Row {
                     RangeSlider(
                         value = sliderValues,
                         onValueChange = { sliderValues_ ->
@@ -410,7 +671,6 @@ fun ButtonRow() {
                         },
                         steps = 9
                     )
-
                 }
 
                 Row(
@@ -428,7 +688,6 @@ fun ButtonRow() {
 
                         style = TextStyle(
                             fontSize = 14.sp,
-
                             fontWeight = FontWeight(400),
                             color = Color(0xFF838390),
                             textAlign = TextAlign.Start,
@@ -439,7 +698,6 @@ fun ButtonRow() {
                         text = sliderValues.endInclusive.toInt().toString(),
                         style = TextStyle(
                             fontSize = 14.sp,
-
                             fontWeight = FontWeight(400),
                             color = Color(0xFF838390),
                             textAlign = TextAlign.End,
@@ -448,98 +706,8 @@ fun ButtonRow() {
                 }
             }
 
-            /*var sliderValues by remember {
-                mutableStateOf(1f..20f) // pass the initial values
-            }
 
-                Row(
-                    modifier = Modifier
-
-                        // .border(width = 1.dp, color = Color(0x4DB5B5C9))
-                        .width(360.dp)
-                        .height(350.dp),
-                    verticalAlignment = Alignment.Top
-                ) {
-
-
-
-                    *//*RangeSlider(
-                        value = sliderValues,
-                        onValueChange = { sliderValues_ ->
-                            sliderValues = sliderValues_
-                        },
-                        valueRange = 1f..20f,
-                        onValueChangeFinished = {
-                            // this is called when the user completed selecting the value
-                            Log.d(
-                                "MainActivity",
-                                "Start: ${sliderValues.start}, End: ${sliderValues.endInclusive}"
-                            )
-                        }
-                    )
-
-                    Text(text = "Start: ${sliderValues.start}, End: ${sliderValues.endInclusive}")*//*
-
-                    *//* var sliderPosition by remember { mutableStateOf(0f..100f) }
-                     Text(text = (sliderPosition.start ..sliderPosition.endInclusive).toString())
-                     RangeSlider(
-                         modifier = Modifier.semantics {
-                             contentDescription = "Localized Description"
-                         },
-                         value = sliderPosition,
-                         onValueChange = { sliderPosition = it },
-                         valueRange = 0f..100f,
-                         steps = 10,
-                         onValueChangeFinished = {
-                             // launch some business logic update with the state you hold
-                             // viewModel.updateSelectedSliderValue(sliderPosition)
-
-
-                         },
-
-                     )
-
-                     Column {
-                         Row(
-                             modifier = Modifier
-
-                                 // .border(width = 1.dp, color = Color(0x4DB5B5C9))
-                                 .width(360.dp)
-                                 .height(100.dp),
-                             horizontalArrangement = Arrangement.SpaceBetween,
-                             verticalAlignment = Alignment.Bottom,
-
-                             ) {
-                             Text(
-                                 text = sliderPosition.toString(),
-                                 style = TextStyle(
-                                     fontSize = 14.sp,
-
-                                     fontWeight = FontWeight(400),
-                                     color = Color(0xFF838390),
-                                     textAlign = TextAlign.Start,
-                                 )
-                             )
-                             Text(
-                                 text = sliderPosition.endInclusive.toString(),
-                                 style = TextStyle(
-                                     fontSize = 14.sp,
-
-                                     fontWeight = FontWeight(400),
-                                     color = Color(0xFF838390),
-                                     textAlign = TextAlign.End,
-                                 )
-                             )
-                         }
-                     }
-*//*
-
-
-
-            }*/
-
-
-        }
+        }*/
 
     }
 }
