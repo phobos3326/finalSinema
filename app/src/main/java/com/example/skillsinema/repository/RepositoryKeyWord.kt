@@ -26,7 +26,7 @@ class RepositoryKeyWord @Inject constructor() {
 
 
     @Provides
-    suspend fun getKeyWord(countries: Int?, genres: Int?, oreder: String?, type: String?, ratingFrom: Int?, ratingTo: Int?, yearFrom: Int?, yearTo: Int?, imdbId: String?, keyword: String, page:Int): List<Film> {
+    suspend fun getKeyWord(countries: Int?, genres: Int?, oreder: String?, type: String?, ratingFrom: Int?, ratingTo: Int?, yearFrom: Int?, yearTo: Int?, imdbId: String?, keyword: String?, page:Int): List<Film> {
             // parseJSON()
         return retrofitKeyWord.keyWord(countries, genres, oreder, type, ratingFrom, ratingTo, yearFrom, yearTo, imdbId, keyword, page).items
     }

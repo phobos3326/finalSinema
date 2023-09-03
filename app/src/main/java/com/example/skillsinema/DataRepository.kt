@@ -10,12 +10,7 @@ import javax.inject.Scope
 
 
 class DataRepository @Inject constructor(
-
 ) {
-
-
-
-
     var id: Int = 0
     var idActor: Int = 0
     var type_images = ""
@@ -35,8 +30,5 @@ class DataRepository @Inject constructor(
     var yearFrom: Int? = 1000
     var yearTo: Int? = 3000
     var imdbId: String? =null
-    var keyword: String ="счастье"
-
-
-
+    var keyword: String = ""
 }

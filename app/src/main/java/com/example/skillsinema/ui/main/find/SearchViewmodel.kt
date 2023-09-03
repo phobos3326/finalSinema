@@ -41,7 +41,7 @@ class SearchViewmodel @Inject constructor(
     private var dataRepository: DataRepository,
     private val keyWord: RepositoryKeyWord,
     private val filteredFilmPagingSource: FilteredFilmPagingSource,
-    private val searchPagingSource : SearchPagingSource,
+    private val searchPagingSource: SearchPagingSource,
     private val searchFilmUseCase: searchFilmUseCase
 ) : ViewModel() {
 
@@ -63,15 +63,15 @@ class SearchViewmodel @Inject constructor(
 
     fun onSearchTextChange(text: String) {
 
-       // _searchText.value = text
-       dataRepository.keyword=text
+        _searchText.value = text
+        dataRepository.keyword = text
         searchFilteredFilms
     }
 
     init {
 
         viewModelScope.launch {
-           // keyWordsFilms()
+            // keyWordsFilms()
             searchFilteredFilms
         }
     }
@@ -93,19 +93,19 @@ class SearchViewmodel @Inject constructor(
         //navController.navigate(R.id.action_mainFragment_to_itemInfoFragment, bundle)
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching {
-               // uiState.value.filmType
+                // uiState.value.filmType
 
-               /* keyWord.getKeyWord(
-                    countries = dataRepository.countries,
-                    genres= uiState.value.genre,
-                    oreder=uiState.value.order,
-                    type=uiState.value.filmType,
-                    ratingFrom=uiState.value.ratingFrom,
-                    ratingTo=uiState.value.ratingTo,
-                    yearFrom=uiState.value.yearFrom,
-                    yearTo=uiState.value.yearTo,
-                    imdbId=uiState.value.imdbId,
-                    keyword = searchText.value)*/
+                /* keyWord.getKeyWord(
+                     countries = dataRepository.countries,
+                     genres= uiState.value.genre,
+                     oreder=uiState.value.order,
+                     type=uiState.value.filmType,
+                     ratingFrom=uiState.value.ratingFrom,
+                     ratingTo=uiState.value.ratingTo,
+                     yearFrom=uiState.value.yearFrom,
+                     yearTo=uiState.value.yearTo,
+                     imdbId=uiState.value.imdbId,
+                     keyword = searchText.value)*/
                 searchFilmUseCase.getKeyWord(1)
 
 
