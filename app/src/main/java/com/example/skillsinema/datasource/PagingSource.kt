@@ -5,8 +5,7 @@ import androidx.paging.PagingState
 import com.example.skillsinema.entity.Film
 import com.example.skillsinema.repository.MoviePagedListRepository
 import javax.inject.Inject
-
-class FilmPagingSourse @Inject constructor(val repository: MoviePagedListRepository) :
+ class FilmPagingSourse @Inject constructor(val repository: MoviePagedListRepository) :
     PagingSource<Int, Film>() {
 
     override fun getRefreshKey(state: PagingState<Int, Film>): Int? = FIRST_PAGE

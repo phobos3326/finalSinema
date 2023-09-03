@@ -1,7 +1,7 @@
 package com.example.skillsinema.ui.main.find
 
 data class SearchUiState(
-    val countries: Int = 0,
+    var countries: Int = 0,
     var genre: Int = 0,
     var order: String ="",
     var filmType: String ="",

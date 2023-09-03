@@ -2,6 +2,7 @@ package com.example.skillsinema.ui.main.find
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Message
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -77,7 +78,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.fragment.findNavController
+import androidx.paging.Pager
+import androidx.paging.PagingData
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemKey
 import com.example.skillsinema.entity.Genre
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -86,7 +92,7 @@ private const val ARG_PARAM2 = "param2"
 
 enum class SearchScreen(@StringRes val title: Int) {
     Start(title = R.string.search_screen),
-    SearchOptions(title =R.string.search_options),
+    SearchOptions(title = R.string.search_options),
     Country(title = R.string.country_screen),
     Genre(title = R.string.genre_screen),
     Period(title = R.string.period_screen)
@@ -113,7 +119,7 @@ class SecondFragment : Fragment() {
            }*/
     }
 
-     //private val mainViewModel: SearchViewmodel = hiltViewmodel()
+    //private val mainViewModel: SearchViewmodel = hiltViewmodel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -131,7 +137,7 @@ class SecondFragment : Fragment() {
                 MaterialTheme {
 
                     Column(
-                        modifier = Modifier.padding( vertical = 8.dp)
+                        modifier = Modifier.padding(vertical = 8.dp)
                     ) {
                         Row {
                             //SearchBar()
@@ -140,6 +146,7 @@ class SecondFragment : Fragment() {
                         Row {
                             //BarkHomeContent()
                             SearchApp()
+
                         }
 
                     }
@@ -163,9 +170,9 @@ class SecondFragment : Fragment() {
     ) {
         TopAppBar(
             title = { Text(stringResource(currentScreen.title)) },
-           /* colors = TopAppBarDefaults.mediumTopAppBarColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer
-            ),*/
+            /* colors = TopAppBarDefaults.mediumTopAppBarColors(
+                 containerColor = MaterialTheme.colorScheme.primaryContainer
+             ),*/
             modifier = modifier,
             navigationIcon = {
                 if (canNavigateBack) {
@@ -242,7 +249,7 @@ class SecondFragment : Fragment() {
                         .fillMaxWidth()
                         .align(Alignment.CenterVertically)
                 ) {
-                    Text(text = film.nameRu!!, style = typography.h6)
+                    film.nameRu?.let { Text(text = it, style = typography.h6) }
                     Text(text = film.genres?.first()?.genre.toString(), style = typography.caption)
 
                 }
@@ -273,7 +280,8 @@ class SecondFragment : Fragment() {
                     .background(color = Color.White)
             ) {
                 Text(
-                    text = film.rating.toString(),
+
+                    text = film.ratingImdb.toString(),
                     fontSize = 8.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
@@ -289,16 +297,18 @@ class SecondFragment : Fragment() {
     @Composable
     fun SearchScreen(
         viewModel: SearchViewmodel,
-        navController: NavHostController
+        navController: NavHostController,
+        //pager: Pager<Int, Film>
     ) {
         Column(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
             Row {
-                val searchText by viewModel.searchText.collectAsState()
+
+                val searchText by viewModel.uiState.collectAsState()
                 val textState = remember { mutableStateOf(TextFieldValue("")) }
                 TextField(
-                    value = searchText,
+                    value = searchText.keyword,
                     onValueChange = {
                         viewModel.onSearchTextChange(it)
                     },
@@ -357,13 +367,36 @@ class SecondFragment : Fragment() {
                 )
             }
             Row {
-                val data by viewModel.keyWordsFilms.collectAsState()
+                //val data by viewModel.keyWordsFilms.collectAsState()
+                /*val data by viewModel.keyWordsFilms.collectAsState()
                 LazyColumn(modifier = Modifier.fillMaxHeight(1f)) {
                     items(data) { Film ->
+                        //viewModel.keyWordsFilms()
+                        //viewModel.searchFilteredFilms
                         FilmListItem(film = Film)
 
                     }
+                }*/
+                //  val pagingData: PagingData<Film> by viewModel.searchFilteredFilms.collectAsState()
+
+                val lazyPagingItems = viewModel.searchFilteredFilms.collectAsLazyPagingItems()
+
+                LazyColumn {
+                    items(
+                        lazyPagingItems.itemCount,
+                        // key = lazyPagingItems.itemKey { it }
+                    ) { index ->
+                        val film = lazyPagingItems[index]
+                        if (film != null) {
+                            FilmListItem(film)
+                        }
+                    }
                 }
+                /*LazyColumn{
+                    items(items=lazyPagingItems){ film:Film ->
+                        FilmListItem( ind)
+                    }
+                }*/
             }
         }
     }
@@ -375,7 +408,6 @@ class SecondFragment : Fragment() {
     ) {
         Text(text = "parametr screen")
     }
-
 
 
     @Preview

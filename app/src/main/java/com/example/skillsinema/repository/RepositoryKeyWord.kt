@@ -1,9 +1,8 @@
 package com.example.skillsinema.repository
 
 import com.example.skillsinema.entity.Film
-import com.example.skillsinema.entity.Model
-import com.example.skillsinema.entity.ModelGalerie
 import com.example.skillsinema.entity.ModelKeyWord
+import com.example.skillsinema.entity.ModelVariousFilters
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -16,7 +15,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Headers
-import retrofit2.http.Path
 import retrofit2.http.Query
 import javax.inject.Inject
 
@@ -24,13 +22,13 @@ import javax.inject.Inject
 @InstallIn(SingletonComponent::class)
 class RepositoryKeyWord @Inject constructor() {
 
-    private val BASE_URL = "https://kinopoiskapiunofficial.tech/api/v2.1/"
+    private val BASE_URL = "https://kinopoiskapiunofficial.tech/api/v2.2/"
 
 
     @Provides
-    suspend fun getKeyWord(s: String): List<Film> {
-        // parseJSON()
-        return retrofitKeyWord.keyWord(s,1).films
+    suspend fun getKeyWord(countries: Int?, genres: Int?, oreder: String?, type: String?, ratingFrom: Int?, ratingTo: Int?, yearFrom: Int?, yearTo: Int?, imdbId: String?, keyword: String, page:Int): List<Film> {
+            // parseJSON()
+        return retrofitKeyWord.keyWord(countries, genres, oreder, type, ratingFrom, ratingTo, yearFrom, yearTo, imdbId, keyword, page).items
     }
 
 
@@ -61,11 +59,20 @@ class RepositoryKeyWord @Inject constructor() {
 
     interface ApiInterfaceKeyWord {
         @Headers("X-API-KEY: $api_key")
-        @GET("films/search-by-keyword?")
+        @GET("films?")
         suspend fun keyWord(
-            @Query("keyword") type: String,
-            @Query("page") page: Int
-        ): ModelKeyWord
+            @Query("countries") countries: Int?,
+            @Query("genres") genres: Int?,
+            @Query("order") order: String?,
+            @Query("type") type: String?,
+            @Query("ratingFrom") ratingFrom: Int?,
+            @Query("ratingTo") ratingTo: Int?,
+            @Query("yearFrom") yearFrom: Int?,
+            @Query("yearTo") yearTo: Int?,
+            @Query("imdbId") imdbId: String?,
+            @Query("keyword") keyword: String?,
+            @Query("page") page: Int?
+        ): ModelVariousFilters
     }
 
     private companion object {

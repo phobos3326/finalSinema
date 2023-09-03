@@ -65,46 +65,46 @@ fun SearchOptionsScreen(
     viewModel: SearchViewmodel,
     navController: NavHostController
 ) {
-    LazyColumn(
-        content = {
-            item {
-                SegmentedButton(viewModel = viewModel)
-                Divider(color = Color(0x4DB5B5C9), thickness = 1.dp)
-            }
-
-            item {
-                CountryRow()
-                Divider(color = Color(0x4DB5B5C9), thickness = 1.dp)
-            }
-            item {
-                GenreRow()
-                Divider(color = Color(0x4DB5B5C9), thickness = 1.dp)
-            }
-            item {
-                YearRow()
-                Divider(color = Color(0x4DB5B5C9), thickness = 1.dp)
-            }
-            // item { RatingRow() }
-            item {
-                Slider()
-                Divider(color = Color(0x4DB5B5C9), thickness = 1.dp)
-            }
-            item {
-                SegmentedSortedButton(viewModel = viewModel)
-                Divider(color = Color(0x4DB5B5C9), thickness = 1.dp)
-            }
-
+    LazyColumn {
+        item {
+            SegmentedButton(viewModel)
+            Divider(color = Color(0x4DB5B5C9), thickness = 1.dp)
         }
-    )
+
+        item {
+            CountryRow(viewModel)
+            Divider(color = Color(0x4DB5B5C9), thickness = 1.dp)
+        }
+        item {
+            GenreRow(viewModel)
+            Divider(color = Color(0x4DB5B5C9), thickness = 1.dp)
+        }
+        item {
+            YearRow()
+            Divider(color = Color(0x4DB5B5C9), thickness = 1.dp)
+        }
+        // item { RatingRow() }
+        item {
+            Slider()
+            Divider(color = Color(0x4DB5B5C9), thickness = 1.dp)
+        }
+        item {
+            SegmentedSortedButton(viewModel = viewModel)
+            Divider(color = Color(0x4DB5B5C9), thickness = 1.dp)
+        }
+
+    }
 
 }
 
 
 @Composable
-fun CountryRow() {
+fun CountryRow( viewModel: SearchViewmodel,) {
     Row(
         modifier = Modifier
-            .clickable { }
+            .clickable { viewModel.uiState.value.countries = 1
+          //  viewModel.searchFilteredFilms
+            }
             //.border(width = 1.dp, color = Color(0x4DB5B5C9))
             .fillMaxWidth()
             .height(50.dp)
@@ -136,10 +136,10 @@ fun CountryRow() {
 }
 
 @Composable
-fun GenreRow() {
+fun GenreRow(viewModel:SearchViewmodel) {
     Row(
         modifier = Modifier
-            .clickable { }
+            .clickable { viewModel.uiState.value.genre = 1}
             //.border(width = 1.dp, color = Color(0x4DB5B5C9))
             .fillMaxWidth()
             .height(50.dp)

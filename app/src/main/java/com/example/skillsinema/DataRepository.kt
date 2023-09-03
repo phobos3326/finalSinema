@@ -25,5 +25,18 @@ class DataRepository @Inject constructor(
     var countryID = 0
 
 
+    var countries: Int? = null
+    var genre: Int? = null
+    var order: String? =null
+    var filmType: String? =null
+
+    var ratingFrom: Int? = 0
+    var ratingTo: Int? = 10
+    var yearFrom: Int? = 1000
+    var yearTo: Int? = 3000
+    var imdbId: String? =null
+    var keyword: String ="счастье"
+
+
 
 }

@@ -188,9 +188,6 @@ class MainViewModel @Inject constructor(
         fun isViewed(listFilm: List<Film>): List<Film> {
             val a = listFilm
             val db = itemDao.getAll()
-
-
-
                 db.forEach { filmID ->
 
                         a.forEach { Film->
@@ -198,10 +195,6 @@ class MainViewModel @Inject constructor(
                                 Film.isViewed=true
                             }
                         }
-
-
-
-
             }
            Log.d(TAG, "LIST FILM  $a")
             return a
@@ -313,8 +306,6 @@ class MainViewModel @Inject constructor(
                 TAG,
                 "${dataRepository.genreID} + ${dataRepository.countryID} + ${dataRepository.countryLabel}"
             )
-
-
             pagedFilteredFilms
         } else {
             getFilters()
