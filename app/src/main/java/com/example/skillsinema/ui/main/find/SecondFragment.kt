@@ -305,12 +305,13 @@ class SecondFragment : Fragment() {
         ) {
             Row {
 
-                val searchText by viewModel.uiState.collectAsState()
+                val searchText by viewModel.searchQuery.collectAsState()
                 val textState = remember { mutableStateOf(TextFieldValue("")) }
                 TextField(
-                    value = searchText.keyword,
+                    value = searchText,
                     onValueChange = {
-                        viewModel.onSearchTextChange(it)
+                        //viewModel.onSearchTextChange(it)
+                        viewModel.setSearchQuery(it)
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -379,7 +380,7 @@ class SecondFragment : Fragment() {
                 }*/
                 //  val pagingData: PagingData<Film> by viewModel.searchFilteredFilms.collectAsState()
 
-                val lazyPagingItems = viewModel.searchFilteredFilms.collectAsLazyPagingItems()
+                val lazyPagingItems = viewModel.searchResults.collectAsLazyPagingItems()
 
                 LazyColumn {
                     items(
@@ -388,7 +389,9 @@ class SecondFragment : Fragment() {
                     ) { index ->
                         val film = lazyPagingItems[index]
                         if (film != null) {
+
                             FilmListItem(film)
+                            lazyPagingItems.refresh()
                         }
                     }
                 }

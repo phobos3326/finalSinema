@@ -17,6 +17,7 @@ import com.example.skillsinema.domain.searchFilmUseCase
 import com.example.skillsinema.entity.Film
 import com.example.skillsinema.repository.RepositoryKeyWord
 import com.example.skillsinema.ui.main.home.MainViewModel
+import dagger.Provides
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
@@ -28,6 +29,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -40,6 +43,7 @@ import javax.inject.Inject
 class SearchViewmodel @Inject constructor(
     private var dataRepository: DataRepository,
     private val keyWord: RepositoryKeyWord,
+   // private val repository: RepositoryKeyWord,
     private val filteredFilmPagingSource: FilteredFilmPagingSource,
     private val searchPagingSource: SearchPagingSource,
     private val searchFilmUseCase: searchFilmUseCase
@@ -87,7 +91,7 @@ class SearchViewmodel @Inject constructor(
     }
 
 
-    fun keyWordsFilms() {
+/*    fun keyWordsFilms() {
 
         //  flowOf(PagingData.from(listOf(Movie)).toList() == listOf(model)
         //navController.navigate(R.id.action_mainFragment_to_itemInfoFragment, bundle)
@@ -95,7 +99,7 @@ class SearchViewmodel @Inject constructor(
             kotlin.runCatching {
                 // uiState.value.filmType
 
-                /* keyWord.getKeyWord(
+                *//* keyWord.getKeyWord(
                      countries = dataRepository.countries,
                      genres= uiState.value.genre,
                      oreder=uiState.value.order,
@@ -105,7 +109,7 @@ class SearchViewmodel @Inject constructor(
                      yearFrom=uiState.value.yearFrom,
                      yearTo=uiState.value.yearTo,
                      imdbId=uiState.value.imdbId,
-                     keyword = searchText.value)*/
+                     keyword = searchText.value)*//*
                 searchFilmUseCase.getKeyWord(1)
 
 
@@ -123,7 +127,34 @@ class SearchViewmodel @Inject constructor(
         }
 
 
+    }*/
+
+
+
+
+    private val _searchQuery = MutableStateFlow("")
+    var searchQuery = _searchQuery.asStateFlow()
+
+    val searchResults: Flow<PagingData<Film>> = searchQuery
+        .debounce(300) // Optional: Add a debounce to avoid making too many API requests
+        .distinctUntilChanged()
+        .flatMapLatest { query ->
+            Pager(
+                config = PagingConfig(
+                    pageSize = 20,
+                    enablePlaceholders = true
+                ),
+                pagingSourceFactory = {SearchPagingSource(searchFilmUseCase, dataRepository)}
+            ) .flow.cachedIn(viewModelScope)
+        }
+
+    fun setSearchQuery(query: String) {
+        dataRepository.keyword=query
+        _searchQuery.value = query
     }
+
+
+
 
     val searchFilteredFilms: Flow<PagingData<Film>> = Pager(
         config = PagingConfig(
@@ -134,14 +165,39 @@ class SearchViewmodel @Inject constructor(
     ).flow.cachedIn(viewModelScope)
 
 
-    val getPersons = searchText
-        .debounce(1000)
-        .stateIn(
-            viewModelScope,
-            SharingStarted.WhileSubscribed(5000),
-            _keyWordsFilm.value
+  /*  fun getGetPersons(): StateFlow<Any> {
+        return searchText
+            .debounce(1000)
+            .stateIn(
+                viewModelScope,
+                SharingStarted.WhileSubscribed(5000),
+                _keyWordsFilm.value
 
-        )
+            )
+    }*/
+
+
+
+
+  /*  val data = Pager(
+        config = PagingConfig(
+            pageSize = 10,
+            initialLoadSize = 10,
+            prefetchDistance = 3
+        ),
+        initialKey = 1,
+        pagingSourceFactory = {
+            searchPagingSource
+        }
+    ).flow.cachedIn(viewModelScope)*/
+
+
+/*    @Provides
+    fun updateRequest(newRequest: String) {
+        if(_request != newRequest){
+            _request = newRequest
+        }
+    }*/
 
 
 }

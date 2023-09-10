@@ -1,14 +1,14 @@
 package com.example.skillsinema.ui.main.home
 
 import android.app.Application
-import android.content.Context
+
 import android.icu.text.DateFormatSymbols
 import android.icu.text.SimpleDateFormat
-import android.net.ConnectivityManager
+
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
+
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -16,7 +16,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.skillsinema.DataRepository
 import com.example.skillsinema.dao.ItemDao
-import com.example.skillsinema.dao.ItemDataBase
+
 import com.example.skillsinema.dao.ItemFilm
 import com.example.skillsinema.dao.ItemRepository
 
@@ -28,17 +28,17 @@ import com.example.skillsinema.domain.FiltersUseCase
 import com.example.skillsinema.domain.GetPremiereUseCase
 import com.example.skillsinema.domain.GetTopFilmsUseCase
 import com.example.skillsinema.entity.*
-import com.example.skillsinema.repository.RepositoryKeyWord
+
 import com.example.skillsinema.repository.RepositoryStaff
-import dagger.hilt.android.internal.Contexts
+
 
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.delay
+
+
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+
 import retrofit2.Response
 import java.util.*
 import javax.inject.Inject

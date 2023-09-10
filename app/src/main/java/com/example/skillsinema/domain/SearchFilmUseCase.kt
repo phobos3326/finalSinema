@@ -10,7 +10,7 @@ class searchFilmUseCase @Inject constructor(
     private val dataRepository: DataRepository
 ) {
 
-    suspend fun getKeyWord(page:Int
+    suspend fun getKeyWord(page:Int, word:String
         //countries: Int, genres:Int
     ): List<Film> {
 
@@ -25,7 +25,7 @@ class searchFilmUseCase @Inject constructor(
             dataRepository.yearFrom,
             dataRepository.yearTo,
             dataRepository.imdbId,
-            dataRepository.keyword,
+            word,
             page
         )
     }
