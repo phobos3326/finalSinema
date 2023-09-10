@@ -102,7 +102,7 @@ fun SearchOptionsScreen(
 fun CountryRow( viewModel: SearchViewmodel,) {
     Row(
         modifier = Modifier
-            .clickable { viewModel.uiState.value.countries = 1
+            .clickable { viewModel.setCountryQuery(33)
           //  viewModel.searchFilteredFilms
             }
             //.border(width = 1.dp, color = Color(0x4DB5B5C9))
@@ -139,7 +139,7 @@ fun CountryRow( viewModel: SearchViewmodel,) {
 fun GenreRow(viewModel:SearchViewmodel) {
     Row(
         modifier = Modifier
-            .clickable { viewModel.uiState.value.genre = 1}
+            .clickable { viewModel.setGenreQuery(3)}
             //.border(width = 1.dp, color = Color(0x4DB5B5C9))
             .fillMaxWidth()
             .height(50.dp)

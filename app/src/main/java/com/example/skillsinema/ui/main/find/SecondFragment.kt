@@ -391,7 +391,7 @@ class SecondFragment : Fragment() {
                         if (film != null) {
 
                             FilmListItem(film)
-                            lazyPagingItems.refresh()
+                            //lazyPagingItems.refresh()
                         }
                     }
                 }

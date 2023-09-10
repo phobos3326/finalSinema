@@ -76,58 +76,17 @@ class SearchViewmodel @Inject constructor(
 
         viewModelScope.launch {
             // keyWordsFilms()
-            searchFilteredFilms
+//            searchFilteredFilms
+            searchResults
         }
     }
 
     var list = emptyList<Film>()
 
-    suspend fun key() {
-        viewModelScope.launch {
-
-        }
-
-        //Log.d(TAG, " keyWord  ${a}")
-    }
 
 
-/*    fun keyWordsFilms() {
-
-        //  flowOf(PagingData.from(listOf(Movie)).toList() == listOf(model)
-        //navController.navigate(R.id.action_mainFragment_to_itemInfoFragment, bundle)
-        viewModelScope.launch(Dispatchers.IO) {
-            kotlin.runCatching {
-                // uiState.value.filmType
-
-                *//* keyWord.getKeyWord(
-                     countries = dataRepository.countries,
-                     genres= uiState.value.genre,
-                     oreder=uiState.value.order,
-                     type=uiState.value.filmType,
-                     ratingFrom=uiState.value.ratingFrom,
-                     ratingTo=uiState.value.ratingTo,
-                     yearFrom=uiState.value.yearFrom,
-                     yearTo=uiState.value.yearTo,
-                     imdbId=uiState.value.imdbId,
-                     keyword = searchText.value)*//*
-                searchFilmUseCase.getKeyWord(1)
 
 
-            }.fold(
-                onSuccess = {
-                    // _topFilmModel.value = it
-
-                    _keyWordsFilm.value = it
-
-
-                    // Log.d(TAG, "LIST FILM" + isViewed(it))
-                },
-                onFailure = { Log.d(MainViewModel.TAG, it.message ?: "not load") }
-            )
-        }
-
-
-    }*/
 
 
 
@@ -137,7 +96,7 @@ class SearchViewmodel @Inject constructor(
 
     val searchResults: Flow<PagingData<Film>> = searchQuery
         .debounce(300) // Optional: Add a debounce to avoid making too many API requests
-        .distinctUntilChanged()
+//        .distinctUntilChanged()
         .flatMapLatest { query ->
             Pager(
                 config = PagingConfig(
@@ -153,6 +112,15 @@ class SearchViewmodel @Inject constructor(
         _searchQuery.value = query
     }
 
+    fun setCountryQuery(country: Int) {
+        dataRepository.countries=country
+
+    }
+
+    fun setGenreQuery(genre: Int) {
+        dataRepository.genre=genre
+
+    }
 
 
 
@@ -165,39 +133,7 @@ class SearchViewmodel @Inject constructor(
     ).flow.cachedIn(viewModelScope)
 
 
-  /*  fun getGetPersons(): StateFlow<Any> {
-        return searchText
-            .debounce(1000)
-            .stateIn(
-                viewModelScope,
-                SharingStarted.WhileSubscribed(5000),
-                _keyWordsFilm.value
 
-            )
-    }*/
-
-
-
-
-  /*  val data = Pager(
-        config = PagingConfig(
-            pageSize = 10,
-            initialLoadSize = 10,
-            prefetchDistance = 3
-        ),
-        initialKey = 1,
-        pagingSourceFactory = {
-            searchPagingSource
-        }
-    ).flow.cachedIn(viewModelScope)*/
-
-
-/*    @Provides
-    fun updateRequest(newRequest: String) {
-        if(_request != newRequest){
-            _request = newRequest
-        }
-    }*/
 
 
 }
