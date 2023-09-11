@@ -68,18 +68,9 @@ class SearchViewmodel @Inject constructor(
     var isSearching = _isSearching.asStateFlow()
 
 
-    fun onSearchTextChange(text: String) {
-
-        _searchText.value = text
-        dataRepository.keyword = text
-        searchFilteredFilms
-    }
-
     init {
 
         viewModelScope.launch {
-            // keyWordsFilms()
-//            searchFilteredFilms
             searchResults
         }
     }
@@ -89,24 +80,16 @@ class SearchViewmodel @Inject constructor(
 
     fun insertItem(id: Int) {
         viewModelScope.launch {
-
             itemRepository.insertItem((ItemFilm(id = id)))
-
-
         }
     }
-
-
-
-
 
 
     private val _searchQuery = MutableStateFlow("")
     var searchQuery = _searchQuery.asStateFlow()
 
     val searchResults: Flow<PagingData<Film>> = searchQuery
-        .debounce(300) // Optional: Add a debounce to avoid making too many API requests
-//        .distinctUntilChanged()
+        .debounce(300)
         .flatMapLatest { query ->
             Pager(
                 config = PagingConfig(
@@ -130,6 +113,21 @@ class SearchViewmodel @Inject constructor(
     fun setGenreQuery(genre: Int) {
         dataRepository.genre=genre
 
+    }
+
+    fun setFilmType(type: String) {
+        dataRepository.filmType=type
+
+    }
+
+    fun setOrder(order: String) {
+        dataRepository.order=order
+
+    }
+
+    fun setRating(start:Int, end:Int){
+        dataRepository.ratingFrom = start
+        dataRepository.ratingTo = end
     }
 
 

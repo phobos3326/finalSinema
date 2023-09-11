@@ -115,17 +115,9 @@ class SecondFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragmen
-        //
-        //newInstance(param1, param2)
-
         return ComposeView(requireContext()).apply {
-            // Dispose of the Composition when the view's LifecycleOwner
-            // is destroyed
-            //  setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 MaterialTheme {
-
                     Column(
                         modifier = Modifier.padding(vertical = 8.dp)
                     ) {
@@ -136,15 +128,10 @@ class SecondFragment : Fragment() {
                         Row {
                             //BarkHomeContent()
                             SearchApp()
-
                         }
-
                     }
-
                 }
             }
-
-
         }
     }
 
@@ -152,7 +139,6 @@ class SecondFragment : Fragment() {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun SearchAppBar(
-
         currentScreen: SearchScreen,
         canNavigateBack: Boolean,
         navigateUp: () -> Unit,
@@ -185,7 +171,7 @@ class SecondFragment : Fragment() {
     ) {
 
         val backStackEntry by navController.currentBackStackEntryAsState()
-        // Get the name of the current screen
+
         val currentScreen = SearchScreen.valueOf(
             backStackEntry?.destination?.route ?: SearchScreen.Start.name
         )
@@ -368,49 +354,21 @@ class SecondFragment : Fragment() {
                 )
             }
             Row {
-                //val data by viewModel.keyWordsFilms.collectAsState()
-                /*val data by viewModel.keyWordsFilms.collectAsState()
-                LazyColumn(modifier = Modifier.fillMaxHeight(1f)) {
-                    items(data) { Film ->
-                        //viewModel.keyWordsFilms()
-                        //viewModel.searchFilteredFilms
-                        FilmListItem(film = Film)
-
-                    }
-                }*/
-                //  val pagingData: PagingData<Film> by viewModel.searchFilteredFilms.collectAsState()
-
                 val lazyPagingItems = viewModel.searchResults.collectAsLazyPagingItems()
 
                 LazyColumn {
                     items(
-
                         lazyPagingItems.itemCount,
                         // key = lazyPagingItems.itemKey { it }
                     ) { index ->
                         val film = lazyPagingItems[index]
                         if (film != null) {
-
                             FilmListItem(viewModel, film)
-                            //lazyPagingItems.refresh()
                         }
                     }
                 }
-                /*LazyColumn{
-                    items(items=lazyPagingItems){ film:Film ->
-                        FilmListItem( ind)
-                    }
-                }*/
             }
         }
-    }
-
-    @Composable
-    fun GenreScreen(
-        viewModel: SearchViewmodel,
-        navController: NavHostController
-    ) {
-        Text(text = "parametr screen")
     }
 
     private fun onItemDetailClick(viewModel: SearchViewmodel, item: Film) {

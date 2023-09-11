@@ -11,11 +11,10 @@ class searchFilmUseCase @Inject constructor(
 ) {
 
     suspend fun getKeyWord(page:Int, word:String
-        //countries: Int, genres:Int
+
     ): List<Film> {
 
         return repository.getKeyWord(
-
             dataRepository.countries,
             dataRepository.genre,
             dataRepository.order,

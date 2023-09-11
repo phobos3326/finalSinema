@@ -85,7 +85,7 @@ fun SearchOptionsScreen(
         }
         // item { RatingRow() }
         item {
-            Slider()
+            Slider(viewModel)
             Divider(color = Color(0x4DB5B5C9), thickness = 1.dp)
         }
         item {
@@ -102,8 +102,9 @@ fun SearchOptionsScreen(
 fun CountryRow( viewModel: SearchViewmodel,) {
     Row(
         modifier = Modifier
-            .clickable { viewModel.setCountryQuery(33)
-          //  viewModel.searchFilteredFilms
+            .clickable {
+                viewModel.setCountryQuery(33)
+                //  viewModel.searchFilteredFilms
             }
             //.border(width = 1.dp, color = Color(0x4DB5B5C9))
             .fillMaxWidth()
@@ -139,7 +140,7 @@ fun CountryRow( viewModel: SearchViewmodel,) {
 fun GenreRow(viewModel:SearchViewmodel) {
     Row(
         modifier = Modifier
-            .clickable { viewModel.setGenreQuery(3)}
+            .clickable { viewModel.setGenreQuery(3) }
             //.border(width = 1.dp, color = Color(0x4DB5B5C9))
             .fillMaxWidth()
             .height(50.dp)
@@ -207,10 +208,10 @@ fun YearRow() {
 
 
 
-@Preview(showBackground = true)
+
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun Slider() {
+fun Slider(viewModel:SearchViewmodel) {
     Column(
 
     ) {
@@ -275,8 +276,10 @@ fun Slider() {
                             // this is called when the user completed selecting the value
                             Log.d(
                                 "MainActivity",
-                                "Start: ${sliderValues.start}, End: ${sliderValues.endInclusive}"
+                                "Start: ${sliderValues.start.toInt()}, End: ${sliderValues.endInclusive.toInt()}"
                             )
+                            viewModel.setRating(sliderValues.start.toInt(), sliderValues.endInclusive.toInt())
+
                         },
                         steps = 9
                     )
@@ -345,15 +348,15 @@ fun SegmentedButton(viewModel: SearchViewmodel) {
                     Log.e("CustomToggle", "Selected item : ${items1[it]}")
                     when (it) {
                         0 -> {
-                            viewModel.uiState.value.filmType = "ALL"
+                            viewModel.setFilmType("ALL")
                         }
 
                         1 -> {
-                            viewModel.uiState.value.filmType = "FILM"
+                            viewModel.setFilmType("FILM")
                         }
 
                         2 -> {
-                            viewModel.uiState.value.filmType = "TV_SERIES"
+                            viewModel.setFilmType("TV_SERIES")
                         }
                     }
 
@@ -379,24 +382,24 @@ fun SegmentedSortedButton(viewModel: SearchViewmodel) {
                 SegmentedControl(
                     items = items1,
                     defaultSelectedItemIndex = 0,
-                    defaultFilmType = "All",
+                    defaultFilmType = "",
                     color = R.color.blue,
                     cornerRadius = 50
                 ) {
 
-                    viewModel.uiState.value.filmType = "ALL"
+                    viewModel.setOrder("")
                     Log.e("CustomToggle", "Selected item : ${items1[it]}")
                     when (it) {
                         0 -> {
-                            viewModel.uiState.value.filmType = "ALL"
+                           viewModel.setOrder("YEAR")
                         }
 
                         1 -> {
-                            viewModel.uiState.value.filmType = "FILM"
+                            viewModel.setOrder("NUM_VOTE")
                         }
 
                         2 -> {
-                            viewModel.uiState.value.filmType = "TV_SERIES"
+                            viewModel.setOrder("RATING")
                         }
                     }
                 }
