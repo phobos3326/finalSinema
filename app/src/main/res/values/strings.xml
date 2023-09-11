@@ -8,6 +8,8 @@
     <string name="country_screen">Страна</string>
     <string name="genre_screen">Жанр</string>
     <string name="period_screen">Период</string>
+    <string name="film_item">Детали фильма</string>
+
     <string name="back_button">Back</string>
 
 </resources>

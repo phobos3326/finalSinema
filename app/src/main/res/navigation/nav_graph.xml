@@ -36,7 +36,11 @@
         android:id="@+id/find_fragment"
         android:name="com.example.skillsinema.ui.main.find.SecondFragment"
         android:label="fragment_second"
-        tools:layout="@layout/fragment_second" />
+        tools:layout="@layout/fragment_second" >
+        <action
+            android:id="@+id/action_find_fragment_to_itemInfoFragment"
+            app:destination="@id/itemInfoFragment" />
+    </fragment>
     <fragment
         android:id="@+id/person_fragment"
         android:name="com.example.skillsinema.ui.main.profile.ThirdFragment"
@@ -65,4 +69,12 @@
         android:name="com.example.skillsinema.ui.main.galerie.GalerieFragment"
         android:label="fragment_galerie"
         tools:layout="@layout/fragment_galerie" />
+    <!--<fragment
+        android:id="@+id/second_fragment"
+        android:name="com.example.skillsinema.ui.main.find.SecondFragment"
+        tools:layout="@layout/fragment_second">
+        <action
+            android:id="@+id/second_fragment_to_itemInfoFragment"
+            app:destination="@id/itemInfoFragment" />
+    </fragment>-->
 </navigation>

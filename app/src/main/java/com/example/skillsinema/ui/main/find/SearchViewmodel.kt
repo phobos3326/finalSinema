@@ -9,6 +9,8 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.skillsinema.DataRepository
+import com.example.skillsinema.dao.ItemFilm
+import com.example.skillsinema.dao.ItemRepository
 import com.example.skillsinema.datasource.FilteredFilmPagingSource
 import com.example.skillsinema.datasource.SearchPagingSource
 
@@ -46,7 +48,8 @@ class SearchViewmodel @Inject constructor(
    // private val repository: RepositoryKeyWord,
     private val filteredFilmPagingSource: FilteredFilmPagingSource,
     private val searchPagingSource: SearchPagingSource,
-    private val searchFilmUseCase: searchFilmUseCase
+    private val searchFilmUseCase: searchFilmUseCase,
+    private val itemRepository: ItemRepository
 ) : ViewModel() {
 
 
@@ -84,7 +87,14 @@ class SearchViewmodel @Inject constructor(
     var list = emptyList<Film>()
 
 
+    fun insertItem(id: Int) {
+        viewModelScope.launch {
 
+            itemRepository.insertItem((ItemFilm(id = id)))
+
+
+        }
+    }
 
 
 

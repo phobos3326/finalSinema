@@ -2,7 +2,6 @@ package com.example.skillsinema.ui.main.find
 
 import android.content.Context
 import android.os.Bundle
-import android.os.Message
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,14 +9,13 @@ import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -40,8 +38,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -60,29 +56,21 @@ import com.example.skillsinema.R
 import com.example.skillsinema.databinding.FragmentSecondBinding
 import com.example.skillsinema.entity.Film
 import dagger.hilt.android.AndroidEntryPoint
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.navigation.NavHost
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.fragment.findNavController
-import androidx.paging.Pager
-import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.itemKey
-import com.example.skillsinema.entity.Genre
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -95,7 +83,8 @@ enum class SearchScreen(@StringRes val title: Int) {
     SearchOptions(title = R.string.search_options),
     Country(title = R.string.country_screen),
     Genre(title = R.string.genre_screen),
-    Period(title = R.string.period_screen)
+    Period(title = R.string.period_screen),
+    FilmItem(title = R.string.film_item)
 }
 
 /**
@@ -119,6 +108,7 @@ class SecondFragment : Fragment() {
            }*/
     }
 
+    val bundle = Bundle()
     //private val mainViewModel: SearchViewmodel = hiltViewmodel()
 
     override fun onCreateView(
@@ -225,12 +215,17 @@ class SecondFragment : Fragment() {
                     val context: Context
                     SearchOptionsScreen(viewModel = viewModel, navController = navController)
                 }
+
+                composable(route = SearchScreen.FilmItem.name) {
+                    val context: Context
+                    SearchOptionsScreen(viewModel = viewModel, navController = navController)
+                }
             }
         }
     }
 
     @Composable
-    fun FilmListItem(film: Film) {
+    fun FilmListItem(viewModel: SearchViewmodel, film: Film) {
         Card(
             modifier = Modifier
                 .padding(horizontal = 8.dp, vertical = 8.dp)
@@ -241,7 +236,12 @@ class SecondFragment : Fragment() {
             shape = RoundedCornerShape(corner = CornerSize(4.dp))
 
         ) {
-            Row {
+            Row(
+                modifier = Modifier
+                    .clickable {
+                        onItemDetailClick(viewModel, film)
+                    }
+            ) {
                 FilmImage(film)
                 Column(
                     modifier = Modifier
@@ -384,13 +384,14 @@ class SecondFragment : Fragment() {
 
                 LazyColumn {
                     items(
+
                         lazyPagingItems.itemCount,
                         // key = lazyPagingItems.itemKey { it }
                     ) { index ->
                         val film = lazyPagingItems[index]
                         if (film != null) {
 
-                            FilmListItem(film)
+                            FilmListItem(viewModel, film)
                             //lazyPagingItems.refresh()
                         }
                     }
@@ -410,6 +411,19 @@ class SecondFragment : Fragment() {
         navController: NavHostController
     ) {
         Text(text = "parametr screen")
+    }
+
+    private fun onItemDetailClick(viewModel: SearchViewmodel, item: Film) {
+        if (item.kinopoiskId == null) {
+            item.filmId?.let { bundle.putInt("Arg", it) }
+            item.filmId?.let { viewModel.insertItem(it) }
+        } else {
+            item.kinopoiskId.let { bundle.putInt("Arg", it) }
+
+        }
+        findNavController().navigate(R.id.action_find_fragment_to_itemInfoFragment, bundle)
+
+
     }
 
 
