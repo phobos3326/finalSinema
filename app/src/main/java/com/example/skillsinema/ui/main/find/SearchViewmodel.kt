@@ -17,6 +17,7 @@ import com.example.skillsinema.datasource.SearchPagingSource
 import com.example.skillsinema.domain.searchFilmUseCase
 
 import com.example.skillsinema.entity.Film
+import com.example.skillsinema.entity.ModelFilter
 import com.example.skillsinema.repository.RepositoryKeyWord
 import com.example.skillsinema.ui.main.home.MainViewModel
 import dagger.Provides
@@ -67,7 +68,14 @@ class SearchViewmodel @Inject constructor(
     var _isSearching = MutableStateFlow("")
     var isSearching = _isSearching.asStateFlow()
 
-    val defCountry = mutableListOf("Россия", "Великобритания", "Германия", "США", "Франция")
+    val defCountry = mutableListOf(
+        ModelFilter.Country("Россия",34),
+        ModelFilter.Country("Великобритания", 5),
+        ModelFilter.Country("Германия",9 ),
+        ModelFilter.Country("Франция",3 ),
+
+
+    )
 
     private var _searchCountry = MutableStateFlow(defCountry)
     var searchCountry = _searchCountry.asStateFlow()

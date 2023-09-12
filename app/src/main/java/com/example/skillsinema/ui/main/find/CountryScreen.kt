@@ -111,21 +111,21 @@ fun ListOfCountry(viewModel: SearchViewmodel, navController: NavHostController) 
         modifier = Modifier.fillMaxWidth()
     ) {
         items(lazyItems) {item ->
-            ItemRow(viewModel =viewModel, navController = navController, countryName=item)
+            ItemRow(viewModel =viewModel, navController = navController, countryName=item.country, countryId = item.id)
         }
     }
 }
 
 
 @Composable
-fun ItemRow(viewModel: SearchViewmodel, navController: NavHostController, countryName:String) {
+fun ItemRow(viewModel: SearchViewmodel, navController: NavHostController, countryName:String, countryId: Int) {
     Column(
         //modifier = Modifier.padding(top = 26.dp)
     ) {
         Row(
             modifier = Modifier
                 .clickable {
-                    viewModel.setCountryQuery(34)
+                    viewModel.setCountryQuery(countryId)
                     //  viewModel.searchFilteredFilms
                 }
                 .fillMaxWidth()
