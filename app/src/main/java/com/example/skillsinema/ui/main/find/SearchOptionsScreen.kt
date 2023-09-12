@@ -72,7 +72,7 @@ fun SearchOptionsScreen(
         }
 
         item {
-            CountryRow(viewModel)
+            CountryRow(viewModel, navController)
             Divider(color = Color(0x4DB5B5C9), thickness = 1.dp)
         }
         item {
@@ -99,12 +99,15 @@ fun SearchOptionsScreen(
 
 
 @Composable
-fun CountryRow( viewModel: SearchViewmodel,) {
+fun CountryRow( viewModel: SearchViewmodel, navController:NavHostController) {
     Row(
         modifier = Modifier
             .clickable {
                 viewModel.setCountryQuery(33)
                 //  viewModel.searchFilteredFilms
+                navController.navigate(
+                    SearchScreen.Country.name
+                )
             }
             //.border(width = 1.dp, color = Color(0x4DB5B5C9))
             .fillMaxWidth()
@@ -525,185 +528,7 @@ fun SegmentedControl(
     }
 }
 
-/*@OptIn(ExperimentalMaterialApi::class)
-@Composable
-fun ButtonRow() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize(10f)
 
-
-    ) {
-
-
-    *//*    Row(
-            modifier = Modifier
-                .clickable { }
-                .border(width = 1.dp, color = Color(0x4DB5B5C9))
-                .width(360.dp)
-                .height(50.dp)
-                .padding(start = 26.dp, top = 16.dp, end = 26.dp, bottom = 16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(
-                text = "Страна",
-                style = TextStyle(
-                    fontSize = 16.sp,
-
-                    fontWeight = FontWeight(400),
-                    color = Color(0xFF272727),
-                    textAlign = TextAlign.Center,
-                )
-            )
-            Text(
-                text = "Россия",
-                style = TextStyle(
-                    fontSize = 14.sp,
-
-                    fontWeight = FontWeight(400),
-                    color = Color(0xFF838390),
-                    textAlign = TextAlign.End,
-                )
-            )
-        }*//*
-
-     *//*   Row(
-            modifier = Modifier
-                .clickable { }
-                .border(width = 1.dp, color = Color(0x4DB5B5C9))
-                .width(360.dp)
-                .height(50.dp)
-                .padding(start = 26.dp, top = 16.dp, end = 26.dp, bottom = 16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(
-                text = "Год",
-                style = TextStyle(
-                    fontSize = 16.sp,
-
-                    fontWeight = FontWeight(400),
-                    color = Color(0xFF272727),
-                    textAlign = TextAlign.Center,
-                )
-            )
-            Text(
-                text = "с 1998 до 2017",
-                style = TextStyle(
-                    fontSize = 14.sp,
-
-                    fontWeight = FontWeight(400),
-                    color = Color(0xFF838390),
-                    textAlign = TextAlign.End,
-                )
-            )
-        }*//*
-       *//* Row(
-            modifier = Modifier
-
-                .border(width = 1.dp, color = Color(0x4DB5B5C9))
-                .width(360.dp)
-                .height(50.dp)
-                .padding(start = 26.dp, top = 16.dp, end = 26.dp, bottom = 16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(
-                text = "Рейтинг",
-                style = TextStyle(
-                    fontSize = 16.sp,
-
-                    fontWeight = FontWeight(400),
-                    color = Color(0xFF272727),
-                    textAlign = TextAlign.Center,
-                )
-            )
-            Text(
-                text = "любой",
-                style = TextStyle(
-                    fontSize = 14.sp,
-
-                    fontWeight = FontWeight(400),
-                    color = Color(0xFF838390),
-                    textAlign = TextAlign.End,
-                )
-            )
-        }*//*
-        *//*Row(
-            modifier = Modifier
-
-                // .border(width = 1.dp, color = Color(0x4DB5B5C9))
-                .width(360.dp)
-                //.height(150.dp)
-                .padding(start = 26.dp, top = 16.dp, end = 26.dp, bottom = 16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        )
-        {
-            var sliderValues by remember {
-                mutableStateOf(0f..10f)
-            }
-            Column (
-                modifier = Modifier.border(width = 1.dp, color = Color(0x4DB5B5C9))
-            ){
-
-                Row {
-                    RangeSlider(
-                        value = sliderValues,
-                        onValueChange = { sliderValues_ ->
-                            sliderValues = sliderValues_
-                        },
-                        valueRange = 0f..10f,
-                        onValueChangeFinished = {
-                            // this is called when the user completed selecting the value
-                            Log.d(
-                                "MainActivity",
-                                "Start: ${sliderValues.start}, End: ${sliderValues.endInclusive}"
-                            )
-                        },
-                        steps = 9
-                    )
-                }
-
-                Row(
-                    modifier = Modifier
-
-                        .width(360.dp)
-                        .padding(start = 26.dp, end = 26.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-
-                    Text(
-                        // text = String.format("%.1f", sliderValues.start),
-                        text = sliderValues.start.toInt().toString(),
-
-                        style = TextStyle(
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight(400),
-                            color = Color(0xFF838390),
-                            textAlign = TextAlign.Start,
-                        )
-                    )
-                    Text(
-
-                        text = sliderValues.endInclusive.toInt().toString(),
-                        style = TextStyle(
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight(400),
-                            color = Color(0xFF838390),
-                            textAlign = TextAlign.End,
-                        )
-                    )
-                }
-            }
-
-
-        }*//*
-
-    }
-}*/
 
 @Preview(backgroundColor = 0xFFFFFFFF, showBackground = true)
 @Composable

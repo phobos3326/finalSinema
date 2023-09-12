@@ -64,6 +64,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -145,11 +146,14 @@ class SecondFragment : Fragment() {
         modifier: Modifier = Modifier
     ) {
         TopAppBar(
-            title = { Text(stringResource(currentScreen.title)) },
-            /* colors = TopAppBarDefaults.mediumTopAppBarColors(
-                 containerColor = MaterialTheme.colorScheme.primaryContainer
-             ),*/
-            modifier = modifier,
+
+            title = {
+                Text(
+                    stringResource(currentScreen.title),
+                    textAlign = TextAlign.Center
+                )
+                    },
+
             navigationIcon = {
                 if (canNavigateBack) {
                     androidx.compose.material.IconButton(onClick = navigateUp) {
@@ -206,6 +210,12 @@ class SecondFragment : Fragment() {
                     val context: Context
                     SearchOptionsScreen(viewModel = viewModel, navController = navController)
                 }
+
+                composable(route = SearchScreen.Country.name) {
+                    val context: Context
+                    CountryScreen(viewModel = viewModel, navController = navController)
+                }
+
             }
         }
     }

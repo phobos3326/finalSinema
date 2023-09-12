@@ -190,6 +190,7 @@ class MainViewModel @Inject constructor(
             val db = itemDao.getAll()
                 db.forEach { filmID ->
 
+
                         a.forEach { Film->
                             if (Film.filmId == filmID.id || Film.kinopoiskId == filmID.id){
                                 Film.isViewed=true

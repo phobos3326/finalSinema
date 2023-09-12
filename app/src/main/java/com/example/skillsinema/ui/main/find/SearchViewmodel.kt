@@ -45,7 +45,7 @@ import javax.inject.Inject
 class SearchViewmodel @Inject constructor(
     private var dataRepository: DataRepository,
     private val keyWord: RepositoryKeyWord,
-   // private val repository: RepositoryKeyWord,
+    // private val repository: RepositoryKeyWord,
     private val filteredFilmPagingSource: FilteredFilmPagingSource,
     private val searchPagingSource: SearchPagingSource,
     private val searchFilmUseCase: searchFilmUseCase,
@@ -96,40 +96,39 @@ class SearchViewmodel @Inject constructor(
                     pageSize = 20,
                     enablePlaceholders = true
                 ),
-                pagingSourceFactory = {SearchPagingSource(searchFilmUseCase, dataRepository)}
-            ) .flow.cachedIn(viewModelScope)
+                pagingSourceFactory = { SearchPagingSource(searchFilmUseCase, dataRepository) }
+            ).flow.cachedIn(viewModelScope)
         }
 
     fun setSearchQuery(query: String) {
-        dataRepository.keyword=query
+        dataRepository.keyword = query
         _searchQuery.value = query
     }
 
     fun setCountryQuery(country: Int) {
-        dataRepository.countries=country
+        dataRepository.countries = country
 
     }
 
     fun setGenreQuery(genre: Int) {
-        dataRepository.genre=genre
+        dataRepository.genre = genre
 
     }
 
     fun setFilmType(type: String) {
-        dataRepository.filmType=type
+        dataRepository.filmType = type
 
     }
 
     fun setOrder(order: String) {
-        dataRepository.order=order
+        dataRepository.order = order
 
     }
 
-    fun setRating(start:Int, end:Int){
+    fun setRating(start: Int, end: Int) {
         dataRepository.ratingFrom = start
         dataRepository.ratingTo = end
     }
-
 
 
     val searchFilteredFilms: Flow<PagingData<Film>> = Pager(
@@ -139,9 +138,6 @@ class SearchViewmodel @Inject constructor(
         ),
         pagingSourceFactory = { searchPagingSource }
     ).flow.cachedIn(viewModelScope)
-
-
-
 
 
 }
