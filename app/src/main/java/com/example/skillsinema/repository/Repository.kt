@@ -32,7 +32,7 @@ class Repository @Inject constructor(
 
 
     private companion object {
-        private const val api_key = "c3252e89-6d89-480c-b5bd-7c97cdffdd5c"
+        private const val api_key = "1006c25a-038b-47b4-b9f9-341f208b4ac3"
     }
 
 

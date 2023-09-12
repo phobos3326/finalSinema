@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.Divider
@@ -40,6 +41,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.skillsinema.R
 
 @Composable
@@ -47,16 +49,18 @@ fun CountryScreen(
     viewModel: SearchViewmodel,
     navController: NavHostController
 ) {
-    LazyColumn {
-        item {
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row {
             CountrySearchTextField(viewModel, navController)
 
         }
 
-         item {
-             RussiaRow(viewModel, navController)
-             Divider(color = Color(0x4DB5B5C9), thickness = 1.dp)
-         }
+        Row {
+            ListOfCountry(viewModel, navController)
+            Divider(color = Color(0x4DB5B5C9), thickness = 1.dp)
+        }
 
 
     }
@@ -100,6 +104,54 @@ fun CountrySearchTextField(
 }
 
 @Composable
+fun ListOfCountry(viewModel: SearchViewmodel, navController: NavHostController) {
+
+    val lazyItems by viewModel.searchCountry.collectAsState()
+    LazyColumn(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        items(lazyItems) {item ->
+            ItemRow(viewModel =viewModel, navController = navController, countryName=item)
+        }
+    }
+}
+
+
+@Composable
+fun ItemRow(viewModel: SearchViewmodel, navController: NavHostController, countryName:String) {
+    Column(
+        //modifier = Modifier.padding(top = 26.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .clickable {
+                    viewModel.setCountryQuery(34)
+                    //  viewModel.searchFilteredFilms
+                }
+                .fillMaxWidth()
+                .height(50.dp)
+                .padding(start = 26.dp, top = 16.dp, end = 26.dp, bottom = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                text = countryName,
+                style = TextStyle(
+                    fontSize = 16.sp,
+
+                    fontWeight = FontWeight(400),
+                    color = Color(0xFF272727),
+                    textAlign = TextAlign.Center,
+                )
+            )
+
+        }
+        Divider(color = Color(0x4DB5B5C9), thickness = 1.dp)
+
+    }
+}
+
+/*@Composable
 fun RussiaRow(viewModel: SearchViewmodel, navController: NavHostController) {
     Column(
         modifier = Modifier.padding(top = 26.dp)
@@ -228,6 +280,5 @@ fun RussiaRow(viewModel: SearchViewmodel, navController: NavHostController) {
             )
 
         }
-    }
+    }*/
 
-}

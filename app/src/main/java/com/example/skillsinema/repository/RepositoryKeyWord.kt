@@ -76,7 +76,7 @@ class RepositoryKeyWord @Inject constructor() {
     }
 
     private companion object {
-        private const val api_key = "c3252e89-6d89-480c-b5bd-7c97cdffdd5c"
+        private const val api_key = "63101d70-3149-4782-99f8-dd1ba5fc4ab1"
     }
 
 }

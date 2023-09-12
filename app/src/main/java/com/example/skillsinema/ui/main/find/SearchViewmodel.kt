@@ -67,6 +67,11 @@ class SearchViewmodel @Inject constructor(
     var _isSearching = MutableStateFlow("")
     var isSearching = _isSearching.asStateFlow()
 
+    val defCountry = mutableListOf("Россия", "Великобритания", "Германия", "США", "Франция")
+
+    private var _searchCountry = MutableStateFlow(defCountry)
+    var searchCountry = _searchCountry.asStateFlow()
+
 
     init {
 

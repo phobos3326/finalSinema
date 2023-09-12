@@ -201,65 +201,7 @@ class MainViewModel @Inject constructor(
             return a
         }
 
- /* suspend  fun isViewed(listFilm: List<Film>): List<Film> {
-        val a = listFilm
-        val db = itemDao.getAll()
 
-            db.collect{
-                it.forEach {
-                    a.forEach {  }
-                }
-
-        }
-
-        a.forEach { film ->
-            db.onEach { filmID ->
-                //if (film.filmId?.equals(filmID.id) != false && film.kinopoiskId?.equals(filmID.id) != false) {
-                if (film.filmId == filmID.id || film.kinopoiskId == filmID.id) {
-
-                    film.isViewed =true
-                }
-            }
-        }
-        Log.d(TAG, "LIST FILM  $a")
-        return a
-    }*/
-
-
- /*   fun isViewed(listFilm: List<Film>): List<Film> {
-        val a = listFilm
-        val db = itemDao.getAll()
-        for (i in 0.. a.size-1){
-           for(j in 0..db.size-1){
-               if (a[i].kinopoiskId == db[j].id !!)
-           }
-        }
-        //Log.d(TAG, "LIST FILM  $a")
-        return a
-    }*/
-
-/*    suspend fun isViewed(listFilm: List<Film>) {
-
-
-        viewModelScope.launch(Dispatchers.IO) {
-            val roomData = withContext(Dispatchers.IO) { itemDao.getAll() }
-            val a = listFilm
-
-            roomData.onEach {
-                it.forEach { ItemFilm ->
-                    a.forEach { Film ->
-                        if (Film.filmId == ItemFilm.id && Film.kinopoiskId == ItemFilm.id) {
-                            Film.isViewed = true
-
-                        }
-                    }
-                }
-            }
-            Log.d(TAG, "LIST FILM  $a")
-            // return a
-        }
-
-    }*/
 
     val pagedFilteredFilms: Flow<PagingData<Film>> = Pager(
         config = PagingConfig(
