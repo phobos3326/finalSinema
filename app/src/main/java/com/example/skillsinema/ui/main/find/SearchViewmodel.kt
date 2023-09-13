@@ -47,10 +47,6 @@ import javax.inject.Inject
 @OptIn(FlowPreview::class)
 class SearchViewmodel @Inject constructor(
     private var dataRepository: DataRepository,
-    private val keyWord: RepositoryKeyWord,
-    // private val repository: RepositoryKeyWord,
-    private val filteredFilmPagingSource: FilteredFilmPagingSource,
-    private val searchPagingSource: SearchPagingSource,
     private val searchFilmUseCase: searchFilmUseCase,
     private val itemRepository: ItemRepository,
     private val useCase: FiltersUseCase,
@@ -60,30 +56,14 @@ class SearchViewmodel @Inject constructor(
     private val _uiState = MutableStateFlow(DataRepository())
     val uiState: StateFlow<DataRepository> = _uiState.asStateFlow()
 
-    private var _keyWordsFilm = MutableStateFlow<List<Film>>(emptyList())
-    val keyWordsFilms = _keyWordsFilm.asStateFlow()
-
-    //val keyfilms by mutableStateOf(keyWordsFilms)
-    private var _searchText = MutableStateFlow("")
-    var searchText = _searchText.asStateFlow()
-
-
-    var _isSearching = MutableStateFlow("")
-    var isSearching = _isSearching.asStateFlow()
 
     val defCountry = mutableListOf(
         ModelFilter.Country("Россия", 34),
         ModelFilter.Country("Великобритания", 5),
         ModelFilter.Country("Германия", 9),
         ModelFilter.Country("Франция", 3),
+    )
 
-
-        )
-
-    fun setQuery(query:String){
-        _isSearching.value=query
-
-    }
 
     val Query = ""
 
@@ -102,8 +82,7 @@ class SearchViewmodel @Inject constructor(
 
     fun loadCountries() {
 
-        //  flowOf(PagingData.from(listOf(Movie)).toList() == listOf(model)
-        //navController.navigate(R.id.action_mainFragment_to_itemInfoFragment, bundle)
+
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching {
 
@@ -186,15 +165,6 @@ class SearchViewmodel @Inject constructor(
         dataRepository.ratingFrom = start
         dataRepository.ratingTo = end
     }
-
-
-    val searchFilteredFilms: Flow<PagingData<Film>> = Pager(
-        config = PagingConfig(
-            pageSize = 20,
-            enablePlaceholders = true
-        ),
-        pagingSourceFactory = { searchPagingSource }
-    ).flow.cachedIn(viewModelScope)
 
 
 }
