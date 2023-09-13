@@ -28,6 +28,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -75,14 +76,20 @@ fun CountrySearchTextField(
     Column(
         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
+
+
+        val countries by viewModel.searchCountry.collectAsState(emptyList())
+        var searchQuery by remember { mutableStateOf("") }
+        val filteredCountries = countries.filter { country ->
+            country.country.contains(searchQuery, ignoreCase = true)
+        }
         Row {
-            val searchText by viewModel.searchQuery.collectAsState()
-            val textState = remember { mutableStateOf(TextFieldValue("")) }
             TextField(
-                value = searchText,
+                value = searchQuery,
                 onValueChange = {
-                    //viewModel.onSearchTextChange(it)
-                    viewModel.setSearchQuery(it)
+                   // viewModel.onSearchTextChange(it)
+                    searchQuery=it
+                    viewModel.loadCountries()
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -100,20 +107,24 @@ fun CountrySearchTextField(
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search)
             )
         }
+
+        Row{
+
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                items(filteredCountries) {item ->
+                    ItemRow(viewModel =viewModel, navController = navController, countryName=item.country, countryId = item.id)
+                }
+            }
+        }
     }
 }
 
 @Composable
 fun ListOfCountry(viewModel: SearchViewmodel, navController: NavHostController) {
 
-    val lazyItems by viewModel.searchCountry.collectAsState()
-    LazyColumn(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        items(lazyItems) {item ->
-            ItemRow(viewModel =viewModel, navController = navController, countryName=item.country, countryId = item.id)
-        }
-    }
+
 }
 
 

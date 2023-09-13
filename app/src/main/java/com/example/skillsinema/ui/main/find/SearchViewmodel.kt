@@ -13,6 +13,7 @@ import com.example.skillsinema.dao.ItemFilm
 import com.example.skillsinema.dao.ItemRepository
 import com.example.skillsinema.datasource.FilteredFilmPagingSource
 import com.example.skillsinema.datasource.SearchPagingSource
+import com.example.skillsinema.domain.FiltersUseCase
 
 import com.example.skillsinema.domain.searchFilmUseCase
 
@@ -34,6 +35,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -50,7 +52,8 @@ class SearchViewmodel @Inject constructor(
     private val filteredFilmPagingSource: FilteredFilmPagingSource,
     private val searchPagingSource: SearchPagingSource,
     private val searchFilmUseCase: searchFilmUseCase,
-    private val itemRepository: ItemRepository
+    private val itemRepository: ItemRepository,
+    private val useCase: FiltersUseCase,
 ) : ViewModel() {
 
 
@@ -69,16 +72,56 @@ class SearchViewmodel @Inject constructor(
     var isSearching = _isSearching.asStateFlow()
 
     val defCountry = mutableListOf(
-        ModelFilter.Country("Россия",34),
+        ModelFilter.Country("Россия", 34),
         ModelFilter.Country("Великобритания", 5),
-        ModelFilter.Country("Германия",9 ),
-        ModelFilter.Country("Франция",3 ),
+        ModelFilter.Country("Германия", 9),
+        ModelFilter.Country("Франция", 3),
 
 
-    )
+        )
+
+    fun setQuery(query:String){
+        _isSearching.value=query
+
+    }
+
+    val Query = ""
 
     private var _searchCountry = MutableStateFlow(defCountry)
     var searchCountry = _searchCountry.asStateFlow()
+
+
+    fun getFilteredCountriesFlow(): Flow<List<ModelFilter.Country>> {
+        return _searchCountry.map { countries ->
+            countries.filter {
+                it.country.contains(Query, ignoreCase = false)
+            }
+        }
+    }
+
+
+    fun loadCountries() {
+
+        //  flowOf(PagingData.from(listOf(Movie)).toList() == listOf(model)
+        //navController.navigate(R.id.action_mainFragment_to_itemInfoFragment, bundle)
+        viewModelScope.launch(Dispatchers.IO) {
+            kotlin.runCatching {
+
+                useCase.getFilters().body()?.countries
+
+            }.fold(
+                onSuccess = {
+                    // _topFilmModel.value = it
+                    _searchCountry.value = it as MutableList<ModelFilter.Country>
+
+                    // Log.d(TAG, "LIST FILM" + isViewed(it))
+                },
+                onFailure = { Log.d(MainViewModel.TAG, it.message ?: "not load") }
+            )
+        }
+
+
+    }
 
 
     init {
@@ -100,6 +143,7 @@ class SearchViewmodel @Inject constructor(
 
     private val _searchQuery = MutableStateFlow("")
     var searchQuery = _searchQuery.asStateFlow()
+
 
     val searchResults: Flow<PagingData<Film>> = searchQuery
         .debounce(300)
