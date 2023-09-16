@@ -76,7 +76,7 @@ fun SearchOptionsScreen(
             Divider(color = Color(0x4DB5B5C9), thickness = 1.dp)
         }
         item {
-            GenreRow(viewModel)
+            GenreRow(viewModel, navController)
             Divider(color = Color(0x4DB5B5C9), thickness = 1.dp)
         }
         item {
@@ -140,10 +140,14 @@ fun CountryRow( viewModel: SearchViewmodel, navController:NavHostController) {
 }
 
 @Composable
-fun GenreRow(viewModel:SearchViewmodel) {
+fun GenreRow(viewModel:SearchViewmodel, navController:NavHostController) {
     Row(
         modifier = Modifier
-            .clickable { viewModel.setGenreQuery(3) }
+            .clickable { viewModel.setGenreQuery(3)
+                navController.navigate(
+                    SearchScreen.Genre.name
+                )
+            }
             //.border(width = 1.dp, color = Color(0x4DB5B5C9))
             .fillMaxWidth()
             .height(50.dp)

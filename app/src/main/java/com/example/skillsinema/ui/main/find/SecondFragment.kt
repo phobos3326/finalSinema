@@ -215,6 +215,10 @@ class SecondFragment : Fragment() {
                     val context: Context
                     CountryScreen(viewModel = viewModel, navController = navController)
                 }
+                composable(route = SearchScreen.Genre.name) {
+                    val context: Context
+                    GenreScreen(viewModel = viewModel, navController = navController)
+                }
 
             }
         }

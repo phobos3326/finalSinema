@@ -65,11 +65,22 @@ class SearchViewmodel @Inject constructor(
     )
 
 
+    val defGenre = mutableListOf(
+        ModelFilter.Genre("Комедия", 13),
+        ModelFilter.Genre("Мелодрама", 4),
+        ModelFilter.Genre("Боевик", 11),
+        ModelFilter.Genre("Вестерн", 10),
+        ModelFilter.Genre("Драма", 2),
+    )
+
     val Query = ""
 
     private var _searchCountry = MutableStateFlow(defCountry)
     var searchCountry = _searchCountry.asStateFlow()
 
+
+    private var _searchGenre = MutableStateFlow(defGenre)
+    var searchGenre = _searchGenre.asStateFlow()
 
     fun getFilteredCountriesFlow(): Flow<List<ModelFilter.Country>> {
         return _searchCountry.map { countries ->
@@ -92,6 +103,29 @@ class SearchViewmodel @Inject constructor(
                 onSuccess = {
                     // _topFilmModel.value = it
                     _searchCountry.value = it as MutableList<ModelFilter.Country>
+
+                    // Log.d(TAG, "LIST FILM" + isViewed(it))
+                },
+                onFailure = { Log.d(MainViewModel.TAG, it.message ?: "not load") }
+            )
+        }
+
+
+    }
+
+
+    fun loadGenre() {
+
+
+        viewModelScope.launch(Dispatchers.IO) {
+            kotlin.runCatching {
+
+                useCase.getFilters().body()?.genres
+
+            }.fold(
+                onSuccess = {
+                    // _topFilmModel.value = it
+                    _searchGenre.value = it as MutableList<ModelFilter.Genre>
 
                     // Log.d(TAG, "LIST FILM" + isViewed(it))
                 },
