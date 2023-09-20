@@ -215,8 +215,9 @@ class SearchViewmodel @Inject constructor(
     fun selectedYears(){
 
 
-        if (endIndex > yearList.size-1) {
+        if (endIndex > yearList.size) {
             endIndex = yearList.size
+            _buttonEnabledState.value=false
         }
 
       previewList=yearList.subList(startIndex, endIndex).toMutableList()
@@ -225,9 +226,8 @@ class SearchViewmodel @Inject constructor(
         startIndex = endIndex
         endIndex += 12
 
-        if(endIndex>yearList.size-1){
-
-           _buttonEnabledState.value=false
+        if(startIndex>yearList.size){
+            startIndex=endIndex
         }
 
     }
