@@ -196,7 +196,8 @@ class SearchViewmodel @Inject constructor(
 
     private val yearList = (1900..currentYear.toInt()).map { it }
     var previewList = mutableListOf<Int>()
-    private var _showYear = MutableStateFlow(yearList)
+
+    private var _showYear = MutableStateFlow(yearList.take(12))
     var showYear = _showYear.asStateFlow()
 
     private val _buttonIncrementEnabledState = MutableStateFlow(true)
@@ -205,37 +206,36 @@ class SearchViewmodel @Inject constructor(
     private val _buttonDecrementEnabledState = MutableStateFlow(false)
     val buttonDecrementEnabledState: StateFlow<Boolean> = _buttonDecrementEnabledState
 
-    var startIndex = 0
-    var endIndex=startIndex+12
+    var startIndex = 12
+    var endIndex = startIndex + 12
 
 
+    fun selectedYearsIncrement() {
 
-    fun selectedYearsIncrement(){
         if (endIndex > yearList.size) {
             endIndex = yearList.size
-            _buttonIncrementEnabledState.value=false
+            _buttonIncrementEnabledState.value = false
         }
-        _buttonDecrementEnabledState.value=true
-      previewList=yearList.subList(startIndex, endIndex).toMutableList()
-        _showYear.value=previewList
+        _buttonDecrementEnabledState.value = true
+        previewList = yearList.subList(startIndex, endIndex).toMutableList()
+
+        _showYear.value = previewList
         startIndex = endIndex
         endIndex += 12
 
     }
+
     fun selectedYearsDecrement() {
         endIndex = startIndex
         startIndex -= 12
         if (startIndex <= 0) {
             startIndex = 0
             _buttonDecrementEnabledState.value = false
-            _buttonIncrementEnabledState.value=true
+            _buttonIncrementEnabledState.value = true
         }
         previewList = yearList.subList(startIndex, endIndex).toMutableList()
         _showYear.value = previewList
-        _buttonIncrementEnabledState.value=true
+        _buttonIncrementEnabledState.value = true
     }
-
-
-
 
 }
