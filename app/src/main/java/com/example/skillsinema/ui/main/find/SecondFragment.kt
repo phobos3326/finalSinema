@@ -220,6 +220,11 @@ class SecondFragment : Fragment() {
                     GenreScreen(viewModel = viewModel, navController = navController)
                 }
 
+                composable(route = SearchScreen.Period.name) {
+                    val context: Context
+                    PeriodScreen(viewModel = viewModel)
+                }
+
             }
         }
     }

@@ -80,7 +80,7 @@ fun SearchOptionsScreen(
             Divider(color = Color(0x4DB5B5C9), thickness = 1.dp)
         }
         item {
-            YearRow()
+            YearRow(viewModel, navController)
             Divider(color = Color(0x4DB5B5C9), thickness = 1.dp)
         }
         // item { RatingRow() }
@@ -179,10 +179,14 @@ fun GenreRow(viewModel:SearchViewmodel, navController:NavHostController) {
 }
 
 @Composable
-fun YearRow() {
+fun YearRow(viewModel:SearchViewmodel, navController:NavHostController) {
     Row(
         modifier = Modifier
-            .clickable { }
+            .clickable {
+                navController.navigate(
+                    SearchScreen.Period.name
+                )
+            }
             //.border(width = 1.dp, color = Color(0x4DB5B5C9))
             .fillMaxWidth()
             .height(50.dp)

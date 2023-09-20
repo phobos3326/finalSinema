@@ -141,6 +141,7 @@ class SearchViewmodel @Inject constructor(
 
         viewModelScope.launch {
             searchResults
+            showYear
         }
     }
 
@@ -199,6 +200,39 @@ class SearchViewmodel @Inject constructor(
         dataRepository.ratingFrom = start
         dataRepository.ratingTo = end
     }
+
+    private val yearList = (1900..2023).map { it }
+    var previewList = mutableListOf<Int>()
+    private var _showYear = MutableStateFlow(yearList)
+    var showYear = _showYear.asStateFlow()
+
+    private val _buttonEnabledState = MutableStateFlow(true)
+    val buttonEnabledState: StateFlow<Boolean> = _buttonEnabledState
+
+    var startIndex = 0
+    var endIndex=startIndex+12
+
+    fun selectedYears(){
+
+
+        if (endIndex > yearList.size-1) {
+            endIndex = yearList.size
+        }
+
+      previewList=yearList.subList(startIndex, endIndex).toMutableList()
+        _showYear.value=previewList
+
+        startIndex = endIndex
+        endIndex += 12
+
+        if(endIndex>yearList.size-1){
+
+           _buttonEnabledState.value=false
+        }
+
+    }
+
+
 
 
 }
