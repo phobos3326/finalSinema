@@ -1,7 +1,7 @@
 package com.example.skillsinema.ui.main.find
 
+import android.icu.text.SimpleDateFormat
 import android.util.Log
-import android.util.LogPrinter
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
@@ -11,7 +11,6 @@ import androidx.paging.cachedIn
 import com.example.skillsinema.DataRepository
 import com.example.skillsinema.dao.ItemFilm
 import com.example.skillsinema.dao.ItemRepository
-import com.example.skillsinema.datasource.FilteredFilmPagingSource
 import com.example.skillsinema.datasource.SearchPagingSource
 import com.example.skillsinema.domain.FiltersUseCase
 
@@ -19,28 +18,19 @@ import com.example.skillsinema.domain.searchFilmUseCase
 
 import com.example.skillsinema.entity.Film
 import com.example.skillsinema.entity.ModelFilter
-import com.example.skillsinema.repository.RepositoryKeyWord
 import com.example.skillsinema.ui.main.home.MainViewModel
-import dagger.Provides
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.security.PrivateKey
+import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
@@ -201,35 +191,48 @@ class SearchViewmodel @Inject constructor(
         dataRepository.ratingTo = end
     }
 
-    private val yearList = (1900..2023).map { it }
+    val year = SimpleDateFormat("yyyy")
+    val currentYear = year.format(Date())
+
+    private val yearList = (1900..currentYear.toInt()).map { it }
     var previewList = mutableListOf<Int>()
     private var _showYear = MutableStateFlow(yearList)
     var showYear = _showYear.asStateFlow()
 
-    private val _buttonEnabledState = MutableStateFlow(true)
-    val buttonEnabledState: StateFlow<Boolean> = _buttonEnabledState
+    private val _buttonIncrementEnabledState = MutableStateFlow(true)
+    val buttonIncrementEnabledState: StateFlow<Boolean> = _buttonIncrementEnabledState
+
+    private val _buttonDecrementEnabledState = MutableStateFlow(false)
+    val buttonDecrementEnabledState: StateFlow<Boolean> = _buttonDecrementEnabledState
 
     var startIndex = 0
     var endIndex=startIndex+12
 
-    fun selectedYears(){
 
 
+    fun selectedYearsIncrement(){
         if (endIndex > yearList.size) {
             endIndex = yearList.size
-            _buttonEnabledState.value=false
+            _buttonIncrementEnabledState.value=false
         }
-
+        _buttonDecrementEnabledState.value=true
       previewList=yearList.subList(startIndex, endIndex).toMutableList()
         _showYear.value=previewList
-
         startIndex = endIndex
         endIndex += 12
 
-        if(startIndex>yearList.size){
-            startIndex=endIndex
+    }
+    fun selectedYearsDecrement() {
+        endIndex = startIndex
+        startIndex -= 12
+        if (startIndex <= 0) {
+            startIndex = 0
+            _buttonDecrementEnabledState.value = false
+            _buttonIncrementEnabledState.value=true
         }
-
+        previewList = yearList.subList(startIndex, endIndex).toMutableList()
+        _showYear.value = previewList
+        _buttonIncrementEnabledState.value=true
     }
 
 
