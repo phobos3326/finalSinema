@@ -131,7 +131,7 @@ class SearchViewmodel @Inject constructor(
 
         viewModelScope.launch {
             searchResults
-            showYear
+
         }
     }
 
@@ -186,6 +186,11 @@ class SearchViewmodel @Inject constructor(
 
     }
 
+    fun setPeriodFrom(year: Int) {
+        dataRepository.yearFrom = year
+
+    }
+
     fun setRating(start: Int, end: Int) {
         dataRepository.ratingFrom = start
         dataRepository.ratingTo = end
@@ -194,60 +199,15 @@ class SearchViewmodel @Inject constructor(
     val year = SimpleDateFormat("yyyy")
     val currentYear = year.format(Date())
 
-    private val yearList = (1900..currentYear.toInt()).map { it }
-    var previewList = mutableListOf<Int>()
 
-    /*private var _showYear = MutableStateFlow(yearList.take(12))
-    var showYear = _showYear.asStateFlow()
-
-    private val _buttonIncrementEnabledState = MutableStateFlow(true)
-    val buttonIncrementEnabledState: StateFlow<Boolean> = _buttonIncrementEnabledState
-
-    private val _buttonDecrementEnabledState = MutableStateFlow(false)
-    val buttonDecrementEnabledState: StateFlow<Boolean> = _buttonDecrementEnabledState
-
-    var startIndex = 12
-    var endIndex = startIndex + 12
-
-
-    fun selectedYearsIncrement() {
-
-        if (endIndex > yearList.size) {
-            endIndex = yearList.size
-            _buttonIncrementEnabledState.value = false
-        }
-        _buttonDecrementEnabledState.value = true
-        previewList = yearList.subList(startIndex, endIndex).toMutableList()
-
-        _showYear.value = previewList
-        startIndex = endIndex
-        endIndex += 12
-
-    }
-
-    fun selectedYearsDecrement() {
-        endIndex = startIndex
-        startIndex -= 12
-        if (startIndex <= 0) {
-            startIndex = 0
-            _buttonDecrementEnabledState.value = false
-            _buttonIncrementEnabledState.value = true
-        }
-        previewList = yearList.subList(startIndex, endIndex).toMutableList()
-        _showYear.value = previewList
-        _buttonIncrementEnabledState.value = true
-
-    }*/
-
-    private var _showYear = MutableStateFlow(yearList.take(12))
-    var showYear = _showYear.asStateFlow()
-
-    private val _currentPage = MutableStateFlow(0)
+    private val _currentPage = MutableStateFlow(5)
     val currentPage=  _currentPage.asStateFlow()
 
     private val myList = (1900..currentYear.toInt()).map { it }
 
-    fun getCurrentPageItems(itemsPerPage: Int): List<Int> {
+    val itemsPerPage=12
+
+    fun getCurrentPageItems(): List<Int> {
         val startIndex = currentPage.value * itemsPerPage
         val endIndex = minOf(startIndex + itemsPerPage, myList.size)
         return myList.subList(startIndex, endIndex)
