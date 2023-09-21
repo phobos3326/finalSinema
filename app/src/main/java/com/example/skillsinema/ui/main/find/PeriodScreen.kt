@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -108,8 +109,11 @@ fun GridItem(item: String) {
 fun LazyVerticalGridDemo(
     viewModel: SearchViewmodel
 ) {
-
-
+val itemsPerPage =12
+    val currentPage by viewModel.currentPage.collectAsState()
+    val visibleList = remember(currentPage, itemsPerPage) {
+        viewModel.getCurrentPageItems(itemsPerPage)
+    }
     Column {
 
 
@@ -124,15 +128,15 @@ fun LazyVerticalGridDemo(
 
             Column {
 
-                val buttonDecrementEnabledState by viewModel.buttonDecrementEnabledState.collectAsState()
-                val buttonIncrementEnabledState by viewModel.buttonIncrementEnabledState.collectAsState()
+             /*   val buttonDecrementEnabledState by viewModel.buttonDecrementEnabledState.collectAsState()
+                val buttonIncrementEnabledState by viewModel.buttonIncrementEnabledState.collectAsState()*/
 
                 Button(
                     onClick = {
-                        viewModel.selectedYearsDecrement()
+                        viewModel.decrementPage()
 
                     },
-                    enabled = buttonDecrementEnabledState
+                    enabled = currentPage>0
 
                 ) {
                     Text("<", fontSize = 15.sp)
@@ -140,10 +144,10 @@ fun LazyVerticalGridDemo(
 
                 Button(
                     onClick = {
-                        viewModel.selectedYearsIncrement()
+                        viewModel.incrementPage()
 
                     },
-                    enabled = buttonIncrementEnabledState
+                    enabled = visibleList.size>=itemsPerPage
 
                 ) {
                     Text(">", fontSize = 15.sp)
@@ -151,9 +155,13 @@ fun LazyVerticalGridDemo(
             }
         }
         Row {
-            val gridItems by viewModel.showYear.collectAsState()
+           // val gridItems by viewModel.showYear.collectAsState()
+
+
+
             LazyVerticalGrid(
                 columns = GridCells.Fixed(3),
+
 
 
                 // content padding
@@ -164,7 +172,7 @@ fun LazyVerticalGridDemo(
                     bottom = 16.dp
                 ),
                 content = {
-                    items(gridItems.size) { index ->
+                    items(visibleList.size) { index ->
                         Card(
 
                             modifier = Modifier
@@ -173,7 +181,7 @@ fun LazyVerticalGridDemo(
 
                             ) {
                             Text(
-                                text = gridItems[index].toString(),
+                                text = visibleList[index].toString(),
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 10.sp,
                                 color = Color(0xFFFFFFFF),

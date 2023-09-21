@@ -197,7 +197,7 @@ class SearchViewmodel @Inject constructor(
     private val yearList = (1900..currentYear.toInt()).map { it }
     var previewList = mutableListOf<Int>()
 
-    private var _showYear = MutableStateFlow(yearList.take(12))
+    /*private var _showYear = MutableStateFlow(yearList.take(12))
     var showYear = _showYear.asStateFlow()
 
     private val _buttonIncrementEnabledState = MutableStateFlow(true)
@@ -236,6 +236,31 @@ class SearchViewmodel @Inject constructor(
         previewList = yearList.subList(startIndex, endIndex).toMutableList()
         _showYear.value = previewList
         _buttonIncrementEnabledState.value = true
+
+    }*/
+
+    private var _showYear = MutableStateFlow(yearList.take(12))
+    var showYear = _showYear.asStateFlow()
+
+    private val _currentPage = MutableStateFlow(0)
+    val currentPage=  _currentPage.asStateFlow()
+
+    private val myList = (1900..currentYear.toInt()).map { it }
+
+    fun getCurrentPageItems(itemsPerPage: Int): List<Int> {
+        val startIndex = currentPage.value * itemsPerPage
+        val endIndex = minOf(startIndex + itemsPerPage, myList.size)
+        return myList.subList(startIndex, endIndex)
+    }
+
+    fun incrementPage() {
+        _currentPage.value++
+    }
+
+    fun decrementPage() {
+        if (currentPage.value > 0) {
+            _currentPage.value--
+        }
     }
 
 }

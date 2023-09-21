@@ -118,7 +118,7 @@ class SecondFragment : Fragment() {
     ): View? {
         return ComposeView(requireContext()).apply {
             setContent {
-                MaterialTheme {
+
                     Column(
                         modifier = Modifier.padding(vertical = 8.dp)
                     ) {
@@ -131,7 +131,7 @@ class SecondFragment : Fragment() {
                             SearchApp()
                         }
                     }
-                }
+
             }
         }
     }
