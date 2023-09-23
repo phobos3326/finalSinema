@@ -29,9 +29,11 @@ import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme.typography
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.MaterialTheme
@@ -58,9 +60,9 @@ import com.example.skillsinema.entity.Film
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ColorScheme
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TopAppBar
+/*import androidx.compose.material2.ExperimentalMaterial3Api
+import androidx.compose.material2.Scaffold
+import androidx.compose.material2.TopAppBar*/
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
@@ -142,7 +144,7 @@ class SecondFragment : Fragment() {
     }
 
 
-    @OptIn(ExperimentalMaterial3Api::class)
+    // @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun SearchAppBar(
         currentScreen: SearchScreen,
@@ -151,11 +153,18 @@ class SecondFragment : Fragment() {
         modifier: Modifier = Modifier
     ) {
         TopAppBar(
-
+            backgroundColor = Color.Transparent,
+            elevation = 0.dp,
             title = {
                 Text(
+
+
                     stringResource(currentScreen.title),
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    color = Color.Black,
+                    fontSize = 16.sp
+
+
                 )
             },
 
