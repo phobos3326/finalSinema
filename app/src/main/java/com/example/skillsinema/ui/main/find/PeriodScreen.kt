@@ -1,5 +1,6 @@
 package com.example.skillsinema.ui.main.find
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -9,13 +10,20 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 /*import androidx.compose.material3.Card*/
 /*import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton*/
@@ -26,6 +34,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -33,6 +44,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.skillsinema.R
 
 
 @Composable
@@ -56,8 +68,6 @@ fun YearPeriodFrom(
             .fillMaxWidth(1f)
             .height(224.dp)
     ) {
-
-
         Row(
             Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -81,37 +91,78 @@ fun YearPeriodFrom(
             }
             Column {
                 Row {
+                    IconButton(
+                        enabled = currentPage>0,
+                        onClick = { viewModel.decrementPage() })
 
-                    TextButton(
-                        onClick = {
-                            viewModel.decrementPage()
-                        },
-                        enabled = currentPage > 0
-                    ) {
-                        Text(
-                            "<",
-                            style = TextStyle(
-                                fontSize = 20.sp,
-                                color = Color.Black,
-                                textAlign = TextAlign.Right
-                            )
+
+                    {
+                        Icon(
+                            Icons.Filled.KeyboardArrowLeft,
+                            contentDescription = "",
+                            modifier = Modifier.size(24.dp),
+                            tint = Color.Black
                         )
                     }
-                    TextButton(
-                        onClick = {
-                            viewModel.incrementPage()
-                        },
-                        enabled = visibleList.size >= viewModel.itemsPerPage
-                    ) {
-                        Text(
-                            ">",
-                            style = TextStyle(
-                                fontSize = 20.sp,
-                                color = Color.Black,
-                                textAlign = TextAlign.Right
-                            )
+                    IconButton(
+                        enabled = visibleList.size >= viewModel.itemsPerPage,
+                        onClick = { viewModel.incrementPage() })
+
+
+                    {
+                        Icon(
+                            Icons.Filled.KeyboardArrowRight,
+                            contentDescription = "",
+                            modifier = Modifier.size(24.dp),
+                            tint = Color.Black
                         )
                     }
+
+
+
+                 /*   Image(
+                        painter = painterResource(id = R.drawable.baseline_keyboard_arrow_left_24),
+                        contentDescription = "image description",
+                        contentScale = ContentScale.None,
+
+                        modifier = Modifier
+                            .clickable { viewModel.decrementPage() }
+                            .width(48.dp)
+                            .height(48.dp)
+
+                    )
+                    Image(
+                        painter = painterResource(id = R.drawable.baseline_keyboard_arrow_right_24),
+                        contentDescription = "image description",
+                        contentScale = ContentScale.None,
+
+                        modifier = Modifier
+                            .clickable {
+
+                                viewModel.incrementPage()
+                            }
+                            .width(48.dp)
+                            .height(48.dp)
+
+
+                    )*/
+
+
+                    /*      TextButton(
+                              onClick = {
+                                  viewModel.incrementPage()
+                              },
+                              enabled = visibleList.size >= viewModel.itemsPerPage
+                          ) {
+                              Text(
+                                  ">",
+                                  style = TextStyle(
+                                      fontSize = 20.sp,
+                                      color = Color.Black,
+                                      textAlign = TextAlign.Right
+                                  )
+                              )
+                          }*/
                 }
             }
 
