@@ -191,6 +191,12 @@ class SearchViewmodel @Inject constructor(
 
     }
 
+    fun setPeriodTo(year: Int) {
+        dataRepository.yearTo = year
+
+    }
+
+
     fun setRating(start: Int, end: Int) {
         dataRepository.ratingFrom = start
         dataRepository.ratingTo = end
@@ -200,26 +206,52 @@ class SearchViewmodel @Inject constructor(
     val currentYear = year.format(Date())
 
 
+
+
+
     private val _currentPage = MutableStateFlow(5)
     val currentPage=  _currentPage.asStateFlow()
 
+
+    private val _currentPageTo = MutableStateFlow(5)
+    val currentPageTo=  _currentPageTo.asStateFlow()
+
     private val myList = (1900..currentYear.toInt()).map { it }
+
+
 
     val itemsPerPage=12
 
-    fun getCurrentPageItems(): List<Int> {
+    fun getCurrentPageItemsFrom(): List<Int> {
         val startIndex = currentPage.value * itemsPerPage
         val endIndex = minOf(startIndex + itemsPerPage, myList.size)
         return myList.subList(startIndex, endIndex)
     }
 
-    fun incrementPage() {
+    fun getCurrentPageItemsTo(): List<Int> {
+        val startIndex = currentPageTo.value * itemsPerPage
+        val endIndex = minOf(startIndex + itemsPerPage, myList.size)
+        return myList.subList(startIndex, endIndex)
+    }
+
+    fun incrementPageFrom() {
         _currentPage.value++
     }
 
-    fun decrementPage() {
+    fun decrementPageFrom() {
         if (currentPage.value > 0) {
             _currentPage.value--
+        }
+    }
+
+
+    fun incrementPageTo() {
+        _currentPageTo.value++
+    }
+
+    fun decrementPageTo() {
+        if (currentPageTo.value > 0) {
+            _currentPageTo.value--
         }
     }
 
