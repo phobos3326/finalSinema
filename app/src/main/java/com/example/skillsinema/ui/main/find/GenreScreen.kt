@@ -118,7 +118,7 @@ fun ItemRowGenre(
         Row(
             modifier = Modifier
                 .clickable {
-                    viewModel.setGenreQuery(genreId)
+                    viewModel.setGenreQuery(genreId, genreName)
 
                 }
                 .fillMaxWidth()

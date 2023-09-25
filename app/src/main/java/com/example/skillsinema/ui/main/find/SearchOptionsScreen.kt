@@ -103,7 +103,7 @@ fun CountryRow( viewModel: SearchViewmodel, navController:NavHostController) {
     Row(
         modifier = Modifier
             .clickable {
-                viewModel.setCountryQuery(33)
+                viewModel.setCountryQuery(33, "Россия")
                 //  viewModel.searchFilteredFilms
                 navController.navigate(
                     SearchScreen.Country.name
@@ -143,7 +143,7 @@ fun CountryRow( viewModel: SearchViewmodel, navController:NavHostController) {
 fun GenreRow(viewModel:SearchViewmodel, navController:NavHostController) {
     Row(
         modifier = Modifier
-            .clickable { viewModel.setGenreQuery(3)
+            .clickable { viewModel.setGenreQuery(6, "фантастика")
                 navController.navigate(
                     SearchScreen.Genre.name
                 )
@@ -166,7 +166,7 @@ fun GenreRow(viewModel:SearchViewmodel, navController:NavHostController) {
             )
         )
         Text(
-            text = "Комедия",
+            text = viewModel.getGenre(),
             style = TextStyle(
                 fontSize = 14.sp,
 
@@ -205,7 +205,7 @@ fun YearRow(viewModel:SearchViewmodel, navController:NavHostController) {
             )
         )
         Text(
-            text = "с 1998 до 2017",
+            text = "${viewModel.getPeriod()}",
             style = TextStyle(
                 fontSize = 14.sp,
 

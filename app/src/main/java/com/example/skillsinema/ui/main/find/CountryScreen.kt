@@ -119,7 +119,7 @@ fun ItemRow(
         Row(
             modifier = Modifier
                 .clickable {
-                    viewModel.setCountryQuery(countryId)
+                    viewModel.setCountryQuery(countryId, countryName)
 
                 }
                 .fillMaxWidth()

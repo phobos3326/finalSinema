@@ -20,8 +20,10 @@ class DataRepository @Inject constructor(
     var countryID = 0
 
 
-    var countries: Int? = null
-    var genre: Int? = null
+    var countries: Int? = 33
+    var countriesName: String? = "россия"
+    var genre: Int? = 6
+    var genreName: String? = "фантастика"
     var order: String? =null
     var filmType: String? =null
 

@@ -51,6 +51,7 @@ class SearchViewmodel @Inject constructor(
         ModelFilter.Country("Россия", 34),
         ModelFilter.Country("Великобритания", 5),
         ModelFilter.Country("Германия", 9),
+        ModelFilter.Country("США", 1),
         ModelFilter.Country("Франция", 3),
     )
 
@@ -166,13 +167,15 @@ class SearchViewmodel @Inject constructor(
         _searchQuery.value = query
     }
 
-    fun setCountryQuery(country: Int) {
+    fun setCountryQuery(country: Int, countryName: String) {
         dataRepository.countries = country
+        dataRepository.countriesName = countryName
 
     }
 
-    fun setGenreQuery(genre: Int) {
+    fun setGenreQuery(genre: Int, genreName: String) {
         dataRepository.genre = genre
+        dataRepository.genreName = genreName
 
     }
 
@@ -197,6 +200,11 @@ class SearchViewmodel @Inject constructor(
     }
 
 
+    fun getPeriod(): String {
+        return "c ${dataRepository.yearFrom} до ${dataRepository.yearTo}"
+    }
+
+    fun getGenre() = "${dataRepository.genreName}"
     fun setRating(start: Int, end: Int) {
         dataRepository.ratingFrom = start
         dataRepository.ratingTo = end
@@ -206,21 +214,17 @@ class SearchViewmodel @Inject constructor(
     val currentYear = year.format(Date())
 
 
-
-
-
     private val _currentPage = MutableStateFlow(5)
-    val currentPage=  _currentPage.asStateFlow()
+    val currentPage = _currentPage.asStateFlow()
 
 
     private val _currentPageTo = MutableStateFlow(5)
-    val currentPageTo=  _currentPageTo.asStateFlow()
+    val currentPageTo = _currentPageTo.asStateFlow()
 
     private val myList = (1900..currentYear.toInt()).map { it }
 
 
-
-    val itemsPerPage=12
+    val itemsPerPage = 12
 
     fun getCurrentPageItemsFrom(): List<Int> {
         val startIndex = currentPage.value * itemsPerPage
