@@ -83,42 +83,27 @@ class SearchViewmodel @Inject constructor(
 
 
     fun loadCountries() {
-
-
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching {
-
                 useCase.getFilters().body()?.countries
-
             }.fold(
                 onSuccess = {
-                    // _topFilmModel.value = it
                     _searchCountry.value = it as MutableList<ModelFilter.Country>
-
-                    // Log.d(TAG, "LIST FILM" + isViewed(it))
                 },
                 onFailure = { Log.d(MainViewModel.TAG, it.message ?: "not load") }
             )
         }
-
-
     }
 
 
     fun loadGenre() {
-
-
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching {
-
                 useCase.getFilters().body()?.genres
-
             }.fold(
                 onSuccess = {
-                    // _topFilmModel.value = it
                     _searchGenre.value = it as MutableList<ModelFilter.Genre>
 
-                    // Log.d(TAG, "LIST FILM" + isViewed(it))
                 },
                 onFailure = { Log.d(MainViewModel.TAG, it.message ?: "not load") }
             )
@@ -129,10 +114,8 @@ class SearchViewmodel @Inject constructor(
 
 
     init {
-
         viewModelScope.launch {
             searchResults
-
         }
     }
 

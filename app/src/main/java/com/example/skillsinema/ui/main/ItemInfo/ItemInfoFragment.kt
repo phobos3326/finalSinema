@@ -35,6 +35,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.minutes
 
 @AndroidEntryPoint
 class ItemInfoFragment : Fragment() {
@@ -47,28 +49,28 @@ class ItemInfoFragment : Fragment() {
 
     val viewModel: ItemInfoViewModel by viewModels()
 
-    val adapterActor =StaffAdapter {
+    val adapterActor = StaffAdapter {
         onItemActorClick(it)
     }
-    val adapterNoActor =StaffAdapter{
+    val adapterNoActor = StaffAdapter {
         onItemActorClick(it)
     }
-    val galerieAdapter =GalerieAdapter()
-    val similarFilmAdapter =AdapterBestFilm{
+    val galerieAdapter = GalerieAdapter()
+    val similarFilmAdapter = AdapterBestFilm {
         onItemDetailClick(it)
     }
 
-    val bundle=Bundle()
+    val bundle = Bundle()
 
     //@Inject
     //lateinit var myComponentManager: MyComponentManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-       // myComponentManager.create()
-       /* val myComponent =myComponentManager.get()
-        val dataRepository=EntryPoints.get(myComponent,MyEntryPoint::class.java).getDataRepository()
-        */
+        // myComponentManager.create()
+        /* val myComponent =myComponentManager.get()
+         val dataRepository=EntryPoints.get(myComponent,MyEntryPoint::class.java).getDataRepository()
+         */
 
 
         arguments?.let {
@@ -83,6 +85,7 @@ class ItemInfoFragment : Fragment() {
 
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -109,10 +112,29 @@ class ItemInfoFragment : Fragment() {
             viewModel.film.observe(viewLifecycleOwner, Observer<ModelFilmDetails> {
 
 
-                binding.filmTextView.text = it.nameRu
+                binding.filmTextView.text = "${it.ratingKinopoisk ?: ""} ${it.nameRu}"
+
+                binding.YearGenreTextView.text = "${it.year.toString()}, ${it.genres?.joinToString(", ") { it.genre.toString() }}"
+
+                binding.CountryDuration.text = buildString {
+                    append(it.countries?.take(4)?.joinToString(", ") { it.country.toString() })
+
+                    if (it.filmLength==null){
+                        append("")
+                    }else{
+                        append(
+
+                            it.filmLength.minutes.toComponents { hours, minutes, _, _ -> ", $hours ч:$minutes мин" }
+
+                        )
+                    }
+
+                }
                 binding.shortDescriptionTextView.text = it.shortDescription
+                binding.DescriptionTextView.text = it.description
+
                 Glide.with(this@ItemInfoFragment)
-                    .load(it.posterUrl)
+                    .load(it.posterUrlPreview)
                     .into(binding.filmPreviewImageView)
 
             })
@@ -120,26 +142,28 @@ class ItemInfoFragment : Fragment() {
         }
 
 
+
+
         viewModel.staff.onEach {
-            binding.actorsRecycler.adapter =adapterActor
+            binding.actorsRecycler.adapter = adapterActor
             adapterActor.submitList(it)
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
 
         viewModel.noActorStaff.onEach {
-            binding.staffRecycler .adapter =adapterNoActor
+            binding.staffRecycler.adapter = adapterNoActor
             adapterNoActor.submitList(it)
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
 
         viewModel.pagedGalerie.onEach {
-            binding.galerieRecycler.adapter=galerieAdapter
+            binding.galerieRecycler.adapter = galerieAdapter
             galerieAdapter.submitData(it)
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
 
         viewModel.similar.onEach {
-            binding.relatedMoviesRecycler.adapter=similarFilmAdapter
+            binding.relatedMoviesRecycler.adapter = similarFilmAdapter
             similarFilmAdapter.submitList(it)
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
@@ -161,11 +185,10 @@ class ItemInfoFragment : Fragment() {
 
     private fun onItemActorClick(item: ModelStaff.ModelStaffItem) {
 
-            item.staffId?.let { bundle.putInt("ArgActor", it) }
+        item.staffId?.let { bundle.putInt("ArgActor", it) }
 
         findNavController().navigate(R.id.action_itemInfoFragment_to_actorInfoFragment, bundle)
     }
-
 
 
     companion object {
