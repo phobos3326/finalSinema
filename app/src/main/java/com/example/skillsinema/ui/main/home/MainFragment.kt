@@ -34,11 +34,16 @@ class MainFragment @Inject constructor() : Fragment() {
     private val binding get() = _binding!!
     private val adapter = MyAdapter { onItemClick(it) }
 
+
     private val adapterBestFilms = AdapterBestFilm {
         onItemDetailClick(it)
     }
 
     private val adapterFilteredFilms = AdapterFilteredFilms {
+        onItemDetailClick(it)
+    }
+
+    private val adapterSerials = AdapterFilteredFilms {
         onItemDetailClick(it)
     }
 
@@ -92,6 +97,16 @@ class MainFragment @Inject constructor() : Fragment() {
             }.launchIn(viewLifecycleOwner.lifecycleScope)
         }
 
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            mainViewModel.serials.onEach {
+                binding.serialsRecyclerView.adapter = adapterSerials
+                //binding.filtered1.text = dataRepository.countryLabel
+                adapterSerials.submitData(it)
+                Log.d("PDATA", "$it")
+
+            }.launchIn(viewLifecycleOwner.lifecycleScope)
+        }
 
 
         Log.d(TAG, "onViewCreated");

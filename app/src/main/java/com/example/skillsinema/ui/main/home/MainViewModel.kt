@@ -23,7 +23,8 @@ import com.example.skillsinema.dao.ItemRepository
 import com.example.skillsinema.entity.Film
 import com.example.skillsinema.datasource.FilmPagingSourse
 import com.example.skillsinema.datasource.FilteredFilmPagingSource
-import com.example.skillsinema.domain.FilteredFilmsUseCase
+import com.example.skillsinema.datasource.SerialsPagingSourse
+import com.example.skillsinema.domain.FilteredFilmsUsecase
 import com.example.skillsinema.domain.FiltersUseCase
 import com.example.skillsinema.domain.GetPremiereUseCase
 import com.example.skillsinema.domain.GetTopFilmsUseCase
@@ -53,11 +54,12 @@ class MainViewModel @Inject constructor(
     private val pagingSource: FilmPagingSourse,
     private val filteredFilmPagingSource: FilteredFilmPagingSource,
     private val filtersUseCase: FiltersUseCase,
-    private val filteredFilmsUseCase: FilteredFilmsUseCase,
+    private val filteredFilmsUseCase: FilteredFilmsUsecase,
     private val staff: RepositoryStaff,
     private val useCase: FiltersUseCase,
     private val itemRepository: ItemRepository,
     private val itemDao: ItemDao,
+    private val serialsPagingSourse: SerialsPagingSourse,
 
 
     application: Application
@@ -221,6 +223,16 @@ class MainViewModel @Inject constructor(
          }
      }*/
 
+
+    val serials: Flow<PagingData<Film>> = Pager(
+        config = PagingConfig(
+            pageSize = 20,
+            enablePlaceholders = true
+        ),
+        pagingSourceFactory = { serialsPagingSourse }
+    ).flow.cachedIn(viewModelScope)
+
+
     suspend fun load() {
         genre = response(this@MainViewModel).body()?.genres?.subList(0, 17)
         country = response(this@MainViewModel).body()?.countries?.subList(0, 34)
@@ -253,9 +265,10 @@ class MainViewModel @Inject constructor(
         } else {
             getFilters()
         }
-
-
     }
+
+
+
 
     companion object {
         val TAG = "MainViewModel"

@@ -5,7 +5,7 @@ import com.example.skillsinema.entity.Film
 import com.example.skillsinema.repository.Repository
 import javax.inject.Inject
 
-class FilteredFilmsUseCase @Inject constructor(
+class FilteredFilmsUsecase @Inject constructor(
     private val repository: Repository,
     private val dataRepository: DataRepository
 ) {

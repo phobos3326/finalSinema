@@ -31,6 +31,11 @@ class RepositoryKeyWord @Inject constructor() {
         return retrofitKeyWord.keyWord(countries, genres, oreder, type, ratingFrom, ratingTo, yearFrom, yearTo, imdbId, keyword, page).items
     }
 
+    suspend fun getSeries(countries: Int?, genres: Int?, oreder: String?, type: String?, ratingFrom: Int?, ratingTo: Int?, yearFrom: Int?, yearTo: Int?, imdbId: String?, keyword: String?, page:Int): List<Film> {
+        // parseJSON()
+        return retrofitKeyWord.keyWord(countries, genres, oreder, type, ratingFrom, ratingTo, yearFrom, yearTo, imdbId, keyword, page).items
+    }
+
 
     private val logInterceptor = HttpLoggingInterceptor()
         .setLevel(HttpLoggingInterceptor.Level.BODY)

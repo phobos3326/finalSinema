@@ -3,20 +3,16 @@ package com.example.skillsinema.datasource
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.skillsinema.DataRepository
-import com.example.skillsinema.domain.FilteredFilmsUseCase
-import com.example.skillsinema.domain.FiltersUseCase
 
-import com.example.skillsinema.domain.searchFilmUseCase
+import com.example.skillsinema.domain.SearchFilmUseCase
 import com.example.skillsinema.entity.Film
-import com.example.skillsinema.repository.MoviePagedListRepository
-import com.example.skillsinema.repository.Repository
 import javax.inject.Inject
 
 class SearchPagingSource @Inject constructor(
   //  private val getRequest: () -> String,
    // val repository: Repository,
     //val useCase: FiltersUseCase,
-    val searchFilmUseCase: searchFilmUseCase,
+    val searchFilmUseCase: SearchFilmUseCase,
     val dataRepository: DataRepository,
     //val query:String
 
