@@ -13,10 +13,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.SemanticsProperties.Text
 import androidx.compose.ui.text.input.KeyboardType.Companion.Text
 import androidx.core.graphics.green
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 /*import com.example.skillsinema.MyComponentManager
@@ -31,6 +34,7 @@ import com.example.skillsinema.ui.main.home.AdapterBestFilm
 import dagger.hilt.EntryPoints
 //import com.example.skillsinema.entity.ModelFilmDetails
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -107,25 +111,40 @@ class ItemInfoFragment : Fragment() {
         Log.d("FRAGMENT ITEM", id.toString())
 
 
+
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.state.collect{
+                    when(it){
+                        StateItemFilmInfo.FilmState ->{
+                            binding.series.isVisible=false
+                            binding.seriesAll.isVisible=false
+                            binding.seriesDetails.isVisible=false
+
+                        }
+                        StateItemFilmInfo.SerialState ->{
+                            binding.series.isVisible=true
+                            binding.seriesAll.isVisible=true
+                            binding.seriesDetails.isVisible=true
+                        }
+                    }
+                }
+            }
+        }
+
+
         lifecycleScope.launch {
             viewModel.setValue(id!!)
             viewModel.film.observe(viewLifecycleOwner, Observer<ModelFilmDetails> {
-
-
                 binding.filmTextView.text = "${it.ratingKinopoisk ?: ""} ${it.nameRu}"
-
                 binding.YearGenreTextView.text = "${it.year.toString()}, ${it.genres?.joinToString(", ") { it.genre.toString() }}"
-
                 binding.CountryDuration.text = buildString {
                     append(it.countries?.take(4)?.joinToString(", ") { it.country.toString() })
-
                     if (it.filmLength==null){
                         append("")
                     }else{
                         append(
-
                             it.filmLength.minutes.toComponents { hours, minutes, _, _ -> ", $hours ч:$minutes мин" }
-
                         )
                     }
 
@@ -138,11 +157,7 @@ class ItemInfoFragment : Fragment() {
                     .into(binding.filmPreviewImageView)
 
             })
-
         }
-
-
-
 
         viewModel.staff.onEach {
             binding.actorsRecycler.adapter = adapterActor

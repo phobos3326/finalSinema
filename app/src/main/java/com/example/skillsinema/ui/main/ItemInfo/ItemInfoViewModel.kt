@@ -38,6 +38,11 @@ class ItemInfoViewModel @Inject constructor(
     private val similarFilmsUsecase: SimilarFilmsUsecase
 ) :
     ViewModel() {
+
+
+    private val _state = MutableStateFlow<StateItemFilmInfo>(StateItemFilmInfo.FilmState)
+    val state = _state.asStateFlow()
+
     private val _film = MutableLiveData<ModelFilmDetails>()
     val film = _film
 
@@ -65,7 +70,6 @@ class ItemInfoViewModel @Inject constructor(
     }
 
 
-
     init {
         viewModelScope.launch {
             loadFilm()
@@ -73,10 +77,10 @@ class ItemInfoViewModel @Inject constructor(
             pagedGalerie
 
             loadSimilarFilm()
+            _state.value=StateItemFilmInfo.FilmState
         }
 
     }
-
 
 
     fun loadFilm() {
@@ -86,6 +90,11 @@ class ItemInfoViewModel @Inject constructor(
             }.fold(
                 onSuccess = {
                     _film.value = it
+                    if(it.serial==false){
+                        _state.value=StateItemFilmInfo.FilmState
+                    }else{
+                        _state.value=StateItemFilmInfo.SerialState
+                    }
                     Log.d("ItemInfoViewModel", "${it}")
                 },
                 onFailure = {
@@ -97,7 +106,7 @@ class ItemInfoViewModel @Inject constructor(
 
 
     fun loadSimilarFilm() {
-          viewModelScope.launch {
+        viewModelScope.launch {
             kotlin.runCatching {
                 similarFilmsUsecase.getSimilarFilms()
             }.fold(
@@ -113,8 +122,6 @@ class ItemInfoViewModel @Inject constructor(
     }
 
 
-
-
     private fun loadStaff() {
         viewModelScope.launch {
             kotlin.runCatching {
@@ -123,7 +130,7 @@ class ItemInfoViewModel @Inject constructor(
                 onSuccess = {
                     it?.forEachIndexed { index, modelStaffItem ->
                         if (modelStaffItem.professionKey == "ACTOR") {
-                           actorList.add(it[index])
+                            actorList.add(it[index])
                         } else {
                             noActorList.add(it[index])
                         }

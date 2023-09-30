@@ -98,6 +98,32 @@
                 tools:layout_editor_absoluteX="0dp"
                 tools:text="@tools:sample/lorem" />
 
+
+            <TextView
+                android:id="@+id/series"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="sans-serif-black"
+                android:text="Сезоны и серии"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/DescriptionTextView" />
+
+            <TextView
+                android:id="@+id/seriesDetails"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                android:fontFamily="sans-serif"
+                android:text="1 сезон, 7 серий"
+                android:textColor="@color/light_gray"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/series" />
+
+
             <TextView
                 android:id="@+id/featuredInTheFilm"
                 android:layout_width="wrap_content"
@@ -108,20 +134,34 @@
                 android:text="в фильме снимались"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/DescriptionTextView" />
+                app:layout_constraintTop_toBottomOf="@+id/seriesDetails" />
+
+
+            <TextView
+                android:id="@+id/seriesAll"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_marginEnd="8dp"
+                android:fontFamily="sans-serif-black"
+                android:text="Все"
+                android:textColor="@color/purple_700"
+                app:layout_constraintBottom_toBottomOf="@+id/series"
+
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/series" />
 
             <TextView
                 android:id="@+id/featuredInTheFilmAll"
                 android:layout_width="wrap_content"
                 android:layout_height="24dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:fontFamily="sans-serif-black"
                 android:text="27 >"
                 android:textColor="@color/purple_700"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/featuredInTheFilm"
 
-                app:layout_constraintTop_toBottomOf="@+id/DescriptionTextView" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/featuredInTheFilm" />
 
 
             <androidx.recyclerview.widget.RecyclerView
