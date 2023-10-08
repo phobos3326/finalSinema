@@ -1,7 +1,6 @@
 package com.example.skillsinema.repository
 
 import com.example.skillsinema.entity.ModelSeasons
-import com.example.skillsinema.entity.ModelVariousFilters
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -15,7 +14,6 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Path
-import retrofit2.http.Query
 import javax.inject.Inject
 
 @Module
@@ -27,8 +25,8 @@ class RepositorySerialSeasons @Inject constructor() {
 
 
     @Provides
-    suspend fun getSeasons (id:Int): ModelSeasons {
-        return retrofitSeasons.seasons(id)
+    suspend fun getSeasons (id: Int?): ModelSeasons {
+        return retrofitSeasons.seasons(404900)
 
     }
 

@@ -27,6 +27,7 @@ import com.example.skillsinema.datasource.SerialsPagingSourse
 import com.example.skillsinema.domain.FilteredFilmsUsecase
 import com.example.skillsinema.domain.FiltersUseCase
 import com.example.skillsinema.domain.GetPremiereUseCase
+import com.example.skillsinema.domain.GetSeasonsUseCase
 import com.example.skillsinema.domain.GetTopFilmsUseCase
 import com.example.skillsinema.entity.*
 
@@ -60,6 +61,7 @@ class MainViewModel @Inject constructor(
     private val itemRepository: ItemRepository,
     private val itemDao: ItemDao,
     private val serialsPagingSourse: SerialsPagingSourse,
+    private val seasonsUseCase: GetSeasonsUseCase,
 
 
     application: Application
@@ -73,14 +75,16 @@ class MainViewModel @Inject constructor(
     private var _topFilmModel = MutableStateFlow<List<Film>>(emptyList())
     val topFilmModel = _topFilmModel.asStateFlow()
 
+    private var _seasons = MutableStateFlow<List<ModelSeasons.Item>>(emptyList())
+    val seasons = _seasons.asStateFlow()
+
     private var _filters = MutableStateFlow<List<ModelFilter>>(emptyList())
     val filters = _filters.asStateFlow()
 
     private var _filteredFilms = MutableStateFlow<List<ModelFilteredFilms1>>(emptyList())
     val filteredFilms = _filteredFilms.asStateFlow()
 
-    /*var genre = 0
-    var country = 0*/
+
 
     var bundle = Bundle()
 
@@ -95,53 +99,37 @@ class MainViewModel @Inject constructor(
     var rndGenreLabel = ""
 
 
-    fun insertItem(id: Int) {
-        viewModelScope.launch {
-
-            itemRepository.insertItem((ItemFilm(id = id)))
-
-
-        }
-    }
-
-
-    val pagedFilms: Flow<PagingData<Film>> = Pager(
-        config = PagingConfig(
-            pageSize = 20,
-            enablePlaceholders = true
-
-        ),
-        pagingSourceFactory = { pagingSource }
-    ).flow.cachedIn(viewModelScope)
-
-
-    fun setValue(value: Int) {
-        dataRepository.genreID = value
-    }
-
-
     init {
         viewModelScope.launch {
             loadPremieres()
             loadTopFilms()
             pagedFilms
-            // getFilters()
-            //response(this@MainViewModel)
-            //getPagedFilteredFilms()
             load()
-            //response(this@MainViewModel)
             Log.d("FILTERED", "${pagedFilteredFilms}")
-
-            //staff.parseJSON()
         }
-        // pagedFilms
-
     }
+
+    fun insertItem(id: Int) {
+        viewModelScope.launch {
+            itemRepository.insertItem((ItemFilm(id = id)))
+        }
+    }
+
+    fun setValue(value: Int) {
+        dataRepository.genreID = value
+    }
+
+    val pagedFilms: Flow<PagingData<Film>> = Pager(
+        config = PagingConfig(
+            pageSize = 20,
+            enablePlaceholders = true
+        ),
+        pagingSourceFactory = { pagingSource }
+    ).flow.cachedIn(viewModelScope)
+
 
     private fun loadPremieres() {
         val calendar = Calendar.getInstance()
-
-
         val monthNumber = calendar.get(Calendar.MONTH)
         val monthName = DateFormatSymbols(Locale.ENGLISH).months[monthNumber]
         val year = SimpleDateFormat("yyyy")
@@ -165,45 +153,46 @@ class MainViewModel @Inject constructor(
 
 
     private fun loadTopFilms() {
-
-        //  flowOf(PagingData.from(listOf(Movie)).toList() == listOf(model)
-        //navController.navigate(R.id.action_mainFragment_to_itemInfoFragment, bundle)
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching {
-
-         topFilmsUseCase.executeTopFilm()
-
+                topFilmsUseCase.executeTopFilm()
             }.fold(
                 onSuccess = {
-                   // _topFilmModel.value = it
-                    _topFilmModel.value=  isViewed(it)
-
-                    // Log.d(TAG, "LIST FILM" + isViewed(it))
+                    _topFilmModel.value = isViewed(it)
                 },
                 onFailure = { Log.d(TAG, it.message ?: "not load") }
             )
         }
-
-
     }
 
-        fun isViewed(listFilm: List<Film>): List<Film> {
-            val a = listFilm
-            val db = itemDao.getAll()
-                db.forEach { filmID ->
 
-
-                        a.forEach { Film->
-                            if (Film.filmId == filmID.id || Film.kinopoiskId == filmID.id){
-                                Film.isViewed=true
-                            }
-                        }
-            }
-           Log.d(TAG, "LIST FILM  $a")
-            return a
+    private fun loadSeasons() {
+        viewModelScope.launch(Dispatchers.IO) {
+            kotlin.runCatching {
+                seasonsUseCase.getSeasons()
+            }.fold(
+                onSuccess = {
+                    _seasons.value = it.items
+                },
+                onFailure = { Log.d(TAG, it.message ?: "not load") }
+            )
         }
+    }
 
 
+    fun isViewed(listFilm: List<Film>): List<Film> {
+        val a = listFilm
+        val db = itemDao.getAll()
+        db.forEach { filmID ->
+            a.forEach { Film ->
+                if (Film.filmId == filmID.id || Film.kinopoiskId == filmID.id) {
+                    Film.isViewed = true
+                }
+            }
+        }
+        Log.d(TAG, "LIST FILM  $a")
+        return a
+    }
 
     val pagedFilteredFilms: Flow<PagingData<Film>> = Pager(
         config = PagingConfig(
@@ -213,17 +202,6 @@ class MainViewModel @Inject constructor(
         pagingSourceFactory = { filteredFilmPagingSource }
     ).flow.cachedIn(viewModelScope)
 
-
-    /* fun isNetworkAvaibable(context: Context){
-         viewModelScope.launch {
-             val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-             val networkInfo = cm.activeNetworkInfo
- if (networkInfo)
-
-         }
-     }*/
-
-
     val serials: Flow<PagingData<Film>> = Pager(
         config = PagingConfig(
             pageSize = 20,
@@ -231,7 +209,6 @@ class MainViewModel @Inject constructor(
         ),
         pagingSourceFactory = { serialsPagingSourse }
     ).flow.cachedIn(viewModelScope)
-
 
     suspend fun load() {
         genre = response(this@MainViewModel).body()?.genres?.subList(0, 17)
@@ -249,11 +226,7 @@ class MainViewModel @Inject constructor(
 
 
     suspend fun getFilters(): Flow<PagingData<Film>> {
-
-        // delay(3000)
         return if (response(this@MainViewModel).isSuccessful && genre?.size != 0 && country?.size != 0) {
-
-
             dataRepository.genreID = rndGenre
             dataRepository.countryID = rndCountry
             dataRepository.countryLabel = rndCountryLabel
@@ -267,14 +240,9 @@ class MainViewModel @Inject constructor(
         }
     }
 
-
-
-
     companion object {
         val TAG = "MainViewModel"
-
         suspend fun response(mainViewModel: MainViewModel): Response<ModelFilter> {
-
             return mainViewModel.useCase.getFilters()
         }
     }
@@ -283,15 +251,3 @@ class MainViewModel @Inject constructor(
 }
 
 
-/*
-@Module
-@InstallIn(SingletonComponent::class)
-object NavigationModule {
-
-    @Provides
-    @Singleton
-    fun provideNavController(@ApplicationContext context: Context) = NavHostController(context).apply {
-        navigatorProvider.addNavigator(ComposeNavigator())
-        navigatorProvider.addNavigator(DialogNavigator())
-    }
-}*/

@@ -110,22 +110,25 @@ class ItemInfoFragment : Fragment() {
         val id = arguments?.getInt("Arg")
         Log.d("FRAGMENT ITEM", id.toString())
 
-
+        binding.seriesAll.setOnClickListener {
+            findNavController().navigate(R.id.action_itemInfoFragment_to_itemserialInfoFragment, bundle)
+        }
 
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.state.collect{
-                    when(it){
-                        StateItemFilmInfo.FilmState ->{
-                            binding.series.isVisible=false
-                            binding.seriesAll.isVisible=false
-                            binding.seriesDetails.isVisible=false
+                viewModel.state.collect {
+                    when (it) {
+                        StateItemFilmInfo.FilmState -> {
+                            binding.series.isVisible = false
+                            binding.seriesAll.isVisible = false
+                            binding.seriesDetails.isVisible = false
 
                         }
-                        StateItemFilmInfo.SerialState ->{
-                            binding.series.isVisible=true
-                            binding.seriesAll.isVisible=true
-                            binding.seriesDetails.isVisible=true
+
+                        StateItemFilmInfo.SerialState -> {
+                            binding.series.isVisible = true
+                            binding.seriesAll.isVisible = true
+                            binding.seriesDetails.isVisible = true
                         }
                     }
                 }
@@ -137,12 +140,13 @@ class ItemInfoFragment : Fragment() {
             viewModel.setValue(id!!)
             viewModel.film.observe(viewLifecycleOwner, Observer<ModelFilmDetails> {
                 binding.filmTextView.text = "${it.ratingKinopoisk ?: ""} ${it.nameRu}"
-                binding.YearGenreTextView.text = "${it.year.toString()}, ${it.genres?.joinToString(", ") { it.genre.toString() }}"
+                binding.YearGenreTextView.text =
+                    "${it.year.toString()}, ${it.genres?.joinToString(", ") { it.genre.toString() }}"
                 binding.CountryDuration.text = buildString {
                     append(it.countries?.take(4)?.joinToString(", ") { it.country.toString() })
-                    if (it.filmLength==null){
+                    if (it.filmLength == null) {
                         append("")
-                    }else{
+                    } else {
                         append(
                             it.filmLength.minutes.toComponents { hours, minutes, _, _ -> ", $hours ч:$minutes мин" }
                         )

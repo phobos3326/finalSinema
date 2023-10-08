@@ -33,4 +33,6 @@ class DataRepository @Inject constructor(
     var yearTo: Int? = 3000
     var imdbId: String? =null
     var keyword: String = ""
+
+    var seriesID: Int?   = null
 }
