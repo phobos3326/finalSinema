@@ -48,7 +48,7 @@ class AdapterSeasons @Inject constructor(
 
         holder.itemView.setOnClickListener{
             onClick(item)
-            Log.e("onClickseason", "сезон")
+         //  Log.e("onClickseason", "сезон")
         }
     }
 

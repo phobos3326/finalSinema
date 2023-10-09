@@ -25,13 +25,11 @@ class SerialSeasonsViewModel @Inject constructor(
     private var _seasons = MutableStateFlow<List<ModelSeasons.Item>>(emptyList())
     val seasons = _seasons.asStateFlow()
 
-
     private var _episodes = MutableStateFlow<List<ModelSeasons.Item.Episode>>(emptyList())
     val episodes = _episodes.asStateFlow()
 
-    private var _seasonNumber = MutableStateFlow<Int>(0)
-    private var seasonNumber = _seasonNumber.asStateFlow()
 
+    var number = 0
 
     init {
         loadEpisodes()
@@ -44,15 +42,17 @@ class SerialSeasonsViewModel @Inject constructor(
                 seasonsUseCase.getSeasons().items
             }.fold(
                 onSuccess = {
-                    _episodes.value = it[seasonNumber.value].episodes
+                    _episodes.value = it[number].episodes
                 },
                 onFailure = { Log.d(MainViewModel.TAG, it.message ?: "not load") }
             )
         }
     }
 
+
     fun setSeasonNumber(number: Int) {
-        _seasonNumber.value = number
+        this.number = number - 1
+        _episodes.value = _seasons.value[number - 1].episodes
         Log.e("onClickseason", number.toString())
     }
 
