@@ -49,6 +49,11 @@ class ItemserialInfoFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
+        mainViewModel.serialString.onEach {
+            binding.seasonNumberTextView.text = it
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
+
+
         mainViewModel.episodes.onEach {
             binding.listEpisodesItemsRecyclerView.adapter = adapterEpisodes
             adapterEpisodes.submitList(it)

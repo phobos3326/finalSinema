@@ -28,12 +28,15 @@ class SerialSeasonsViewModel @Inject constructor(
     private var _episodes = MutableStateFlow<List<ModelSeasons.Item.Episode>>(emptyList())
     val episodes = _episodes.asStateFlow()
 
+    private var _serialString = MutableStateFlow<String>("")
+    val serialString = _serialString.asStateFlow()
 
     var number = 0
 
     init {
         loadEpisodes()
         loadSeasons()
+        showEpisodes()
     }
 
     private fun loadEpisodes() {
@@ -53,6 +56,7 @@ class SerialSeasonsViewModel @Inject constructor(
     fun setSeasonNumber(number: Int) {
         this.number = number - 1
         _episodes.value = _seasons.value[number - 1].episodes
+        showEpisodes()
         Log.e("onClickseason", number.toString())
     }
 
@@ -68,6 +72,10 @@ class SerialSeasonsViewModel @Inject constructor(
             )
         }
     }
+    private fun showEpisodes(){
+        _serialString.value= "${ _episodes.value[1].seasonNumber} сезон, ${ _episodes.value.size} серий "
 
+
+    }
 
 }
