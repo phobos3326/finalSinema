@@ -10,6 +10,7 @@ import com.example.skillsinema.entity.ModelSeasons
 import com.example.skillsinema.ui.main.home.MainViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -20,6 +21,7 @@ class SerialSeasonsViewModel @Inject constructor(
     private val seasonsUseCase: GetSeasonsUseCase,
     private var dataRepository: DataRepository,
 ) : ViewModel() {
+    var number = 0
 
     //private val number = 1
     private var _seasons = MutableStateFlow<List<ModelSeasons.Item>>(emptyList())
@@ -28,15 +30,20 @@ class SerialSeasonsViewModel @Inject constructor(
     private var _episodes = MutableStateFlow<List<ModelSeasons.Item.Episode>>(emptyList())
     val episodes = _episodes.asStateFlow()
 
+//    val string = "${ episodes.value[number].seasonNumber} сезон, ${ episodes.value.size} серий "
+
     private var _serialString = MutableStateFlow<String>("")
     val serialString = _serialString.asStateFlow()
 
-    var number = 0
 
     init {
         loadEpisodes()
         loadSeasons()
+        viewModelScope.launch {
+            //
+        }
         showEpisodes()
+        //setSeasonNumber(1)
     }
 
     private fun loadEpisodes() {
@@ -46,6 +53,9 @@ class SerialSeasonsViewModel @Inject constructor(
             }.fold(
                 onSuccess = {
                     _episodes.value = it[number].episodes
+                    //   _episodes.value = _seasons.value[number ].episodes
+                    showEpisodes()
+
                 },
                 onFailure = { Log.d(MainViewModel.TAG, it.message ?: "not load") }
             )
@@ -67,13 +77,22 @@ class SerialSeasonsViewModel @Inject constructor(
             }.fold(
                 onSuccess = {
                     _seasons.value = it.items
+
+
                 },
                 onFailure = { Log.d(MainViewModel.TAG, it.message ?: "not load") }
             )
         }
     }
-    private fun showEpisodes(){
-        _serialString.value= "${ _episodes.value[1].seasonNumber} сезон, ${ _episodes.value.size} серий "
+
+    fun showEpisodes() {
+        if (episodes.value.isEmpty()) {
+            _serialString.value = ""
+
+        } else {
+            _serialString.value =
+                "${episodes.value[number].seasonNumber} сезон, ${episodes.value.size} серий "
+        }
 
 
     }
