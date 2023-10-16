@@ -69,6 +69,9 @@ class ItemInfoViewModel @Inject constructor(
         dataRepository.id = value
     }
 
+    fun setSeriesValue(value: Int) {
+        dataRepository.seriesID = value
+    }
 
     init {
         viewModelScope.launch {

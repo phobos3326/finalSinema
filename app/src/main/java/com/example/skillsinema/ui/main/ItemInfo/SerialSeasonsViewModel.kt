@@ -62,6 +62,10 @@ class SerialSeasonsViewModel @Inject constructor(
         }
     }
 
+  /*  fun setIdSerial(id:Int){
+        dataRepository.seriesID=id
+
+    }*/
 
     fun setSeasonNumber(number: Int) {
         this.number = number - 1
@@ -77,8 +81,6 @@ class SerialSeasonsViewModel @Inject constructor(
             }.fold(
                 onSuccess = {
                     _seasons.value = it.items
-
-
                 },
                 onFailure = { Log.d(MainViewModel.TAG, it.message ?: "not load") }
             )

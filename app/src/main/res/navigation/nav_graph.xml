@@ -74,7 +74,7 @@
         tools:layout="@layout/fragment_galerie" />
     <fragment
         android:id="@+id/itemserialInfoFragment"
-        android:name="com.example.skillsinema.ui.main.ItemInfo.ItemserialInfoFragment"
+        android:name="com.example.skillsinema.ui.main.ItemInfo.ItemSerialInfoFragment"
         android:label="fragment_itemserial_info_fragment"
         tools:layout="@layout/fragment_itemserial_info_fragment" />
     <!--<fragment

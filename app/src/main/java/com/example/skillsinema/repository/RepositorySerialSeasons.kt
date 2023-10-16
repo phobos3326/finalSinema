@@ -26,7 +26,7 @@ class RepositorySerialSeasons @Inject constructor() {
 
     @Provides
     suspend fun getSeasons (id: Int?): ModelSeasons {
-        return retrofitSeasons.seasons(404900)
+        return retrofitSeasons.seasons(id)
 
     }
 

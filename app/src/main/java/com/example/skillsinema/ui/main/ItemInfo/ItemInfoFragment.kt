@@ -111,6 +111,7 @@ class ItemInfoFragment : Fragment() {
         Log.d("FRAGMENT ITEM", id.toString())
 
         binding.seriesAll.setOnClickListener {
+            id?.let { it1 -> onShowAllSeaseonsClick(it1) }
             findNavController().navigate(R.id.action_itemInfoFragment_to_itemserialInfoFragment, bundle)
         }
 
@@ -208,6 +209,12 @@ class ItemInfoFragment : Fragment() {
 
         findNavController().navigate(R.id.action_itemInfoFragment_to_actorInfoFragment, bundle)
     }
+
+
+    private fun onShowAllSeaseonsClick(id:Int){
+        viewModel.setSeriesValue(id)
+    }
+
 
 
     companion object {
