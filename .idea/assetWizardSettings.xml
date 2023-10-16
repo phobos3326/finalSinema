@@ -28,8 +28,9 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="baseline_keyboard_arrow_right_24" />
-                            <entry key="sourceFile" value="E:\SkillBOX_Android\svg\selectorIcon.svg" />
+                            <entry key="assetSourceType" value="FILE" />
+                            <entry key="outputName" value="dottedline" />
+                            <entry key="sourceFile" value="E:\SkillBOX_Android\svg\dottedLine.svg" />
                           </map>
                         </option>
                       </PersistentState>

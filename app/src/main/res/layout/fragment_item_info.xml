@@ -9,7 +9,9 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="51dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -31,7 +33,7 @@
                 android:id="@+id/filmTextView"
                 android:layout_width="293dp"
                 android:layout_height="47dp"
-                android:layout_marginBottom="80dp"
+                android:layout_marginBottom="144dp"
                 android:fontFamily="sans-serif"
                 android:gravity="center_horizontal"
                 android:text="название"
@@ -44,20 +46,6 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
-                android:id="@+id/YearGenreTextView"
-                android:layout_width="312dp"
-                android:layout_height="34dp"
-                android:fontFamily="sans-serif"
-                android:gravity="center_horizontal"
-                android:text="2000, жанр"
-                android:textColor="@color/white"
-                android:textSize="12sp"
-
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/filmTextView" />
-
-            <TextView
                 android:id="@+id/CountryDuration"
                 android:layout_width="346dp"
                 android:layout_height="36dp"
@@ -68,8 +56,78 @@
                 android:textSize="12sp"
 
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.507"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/YearGenreTextView" />
+
+            <TextView
+                android:id="@+id/YearGenreTextView"
+                android:layout_width="312dp"
+                android:layout_height="34dp"
+                android:fontFamily="sans-serif"
+                android:gravity="center_horizontal"
+                android:text="2000, жанр"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.505"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/filmTextView" />
+
+
+            <ImageView
+                android:id="@+id/heartImageView"
+                android:layout_width="40dp"
+                android:layout_height="42dp"
+                android:layout_marginStart="56dp"
+                android:layout_marginTop="8dp"
+
+                android:foreground="@drawable/frame_7300"
+                app:layout_constraintStart_toStartOf="@+id/CountryDuration"
+                app:layout_constraintTop_toBottomOf="@+id/CountryDuration" />
+
+            <ImageView
+                android:id="@+id/flagImageView"
+                android:layout_width="40dp"
+                android:layout_height="42dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:foreground="@drawable/frame_7299__1_"
+                app:layout_constraintStart_toEndOf="@+id/heartImageView"
+                app:layout_constraintTop_toBottomOf="@+id/CountryDuration" />
+
+            <ImageView
+                android:id="@+id/eyeImageView"
+                android:layout_width="40dp"
+                android:layout_height="42dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:foreground="@drawable/eye"
+                app:layout_constraintStart_toEndOf="@+id/flagImageView"
+                app:layout_constraintTop_toBottomOf="@+id/CountryDuration" />
+
+            <ImageView
+                android:id="@+id/shareImageView"
+                android:layout_width="40dp"
+                android:layout_height="42dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:foreground="@drawable/share"
+                app:layout_constraintStart_toEndOf="@+id/eyeImageView"
+                app:layout_constraintTop_toBottomOf="@+id/CountryDuration" />
+
+            <ImageView
+                android:id="@+id/dottedLineImageView"
+                android:layout_width="40dp"
+                android:layout_height="42dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="8dp"
+                android:foreground="@drawable/dottedline"
+
+
+                app:layout_constraintStart_toEndOf="@+id/shareImageView"
+                app:layout_constraintTop_toBottomOf="@+id/CountryDuration" />
 
             <TextView
                 android:id="@+id/shortDescriptionTextView"
