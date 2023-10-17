@@ -80,6 +80,7 @@ class SerialSeasonsViewModel @Inject constructor(
                 seasonsUseCase.getSeasons()
             }.fold(
                 onSuccess = {
+                    showEpisodes()
                     _seasons.value = it.items
                 },
                 onFailure = { Log.d(MainViewModel.TAG, it.message ?: "not load") }

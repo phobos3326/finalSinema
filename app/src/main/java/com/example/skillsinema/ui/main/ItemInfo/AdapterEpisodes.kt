@@ -32,7 +32,7 @@ class AdapterEpisodes @Inject constructor() :
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: ModelSeasons.Item.Episode) {
-            binding.textView5.text = "${item.episodeNumber} серия. ${item.nameRu} "
+            binding.textView5.text = "${item.episodeNumber} серия. ${item.nameRu?:""} "
             binding.textView6.text = item.releaseDate
         }
 

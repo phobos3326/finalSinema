@@ -23,13 +23,13 @@ data class ModelSeasons(
             @Json(name = "episodeNumber")
             val episodeNumber: Int,
             @Json(name = "nameEn")
-            val nameEn: String,
+            val nameEn: String?,
             @Json(name = "nameRu")
-            val nameRu: Any?,
+            val nameRu: String?,
             @Json(name = "releaseDate")
-            val releaseDate: String,
+            val releaseDate: String?,
             @Json(name = "seasonNumber")
-            val seasonNumber: Int,
+            val seasonNumber: Int?,
             @Json(name = "synopsis")
             val synopsis: Any?
         )

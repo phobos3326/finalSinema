@@ -212,6 +212,7 @@ class ItemInfoFragment : Fragment() {
 
 
     private fun onShowAllSeaseonsClick(id:Int){
+
         viewModel.setSeriesValue(id)
     }
 
