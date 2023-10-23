@@ -4,12 +4,10 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "viewedItem")
-data class ItemFilm(
+@Entity(tableName = "isLiked")
+data class LikedFilms(
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "filmID")
-    val id: Int? = 0
-
+    @ColumnInfo(name="filmId")
+    val id:Int =0
 )
-
 

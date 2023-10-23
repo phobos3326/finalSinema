@@ -6,6 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.*
 import com.example.skillsinema.DataRepository
+import com.example.skillsinema.dao.ItemFilm
+import com.example.skillsinema.dao.LikedFilmRepository
+import com.example.skillsinema.dao.LikedFilms
 
 import com.example.skillsinema.datasource.GalerieDataSource
 
@@ -35,7 +38,8 @@ class ItemInfoViewModel @Inject constructor(
     private val galerieDataSource: GalerieDataSource,
     //private val similarFilm: RepositorySimilarFilm,
     private val dataRepository: DataRepository,
-    private val similarFilmsUsecase: SimilarFilmsUsecase
+    private val similarFilmsUsecase: SimilarFilmsUsecase,
+    private val likedFilmRepository: LikedFilmRepository
 ) :
     ViewModel() {
 
@@ -83,6 +87,14 @@ class ItemInfoViewModel @Inject constructor(
             _state.value=StateItemFilmInfo.FilmState
         }
 
+    }
+
+
+
+    fun insertItem(id: Int) {
+        viewModelScope.launch {
+            likedFilmRepository.insertLikedFilm((LikedFilms(id = id)))
+        }
     }
 
 

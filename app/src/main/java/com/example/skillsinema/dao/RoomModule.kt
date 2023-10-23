@@ -21,4 +21,9 @@ object RoomModule {
     fun providesItemDao(itemDB:ItemDataBase): ItemDao{
         return itemDB.itemDao()
     }
+
+    @Provides
+    fun providesLikedFilmDao(itemDB: ItemDataBase):LikedFilmDao{
+        return itemDB.likedFilmDao()
+    }
 }

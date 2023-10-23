@@ -19,3 +19,15 @@ interface ItemDao {
     @Update
     suspend fun update(item: ItemFilm)
 }
+
+
+
+@Dao
+interface LikedFilmDao{
+    @Query("SELECT * FROM isLiked")
+    fun getAll():List<LikedFilms>
+    @Insert(entity = LikedFilms::class, onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(item:LikedFilms)
+    @Update
+    suspend fun update(item:LikedFilms)
+}

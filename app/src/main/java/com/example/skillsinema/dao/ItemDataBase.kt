@@ -5,10 +5,11 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [ItemFilm::class], version = 1)
+@Database(entities = [ItemFilm::class, LikedFilms::class], version = 1)
 abstract class ItemDataBase :RoomDatabase() {
 
     abstract fun itemDao():ItemDao
+    abstract fun likedFilmDao():LikedFilmDao
 
     /*companion object {
         @Volatile

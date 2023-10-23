@@ -115,6 +115,10 @@ class ItemInfoFragment : Fragment() {
             findNavController().navigate(R.id.action_itemInfoFragment_to_itemserialInfoFragment, bundle)
         }
 
+        binding.heartImageView.setOnClickListener {
+            viewModel.insertItem(id!!)
+        }
+
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect {

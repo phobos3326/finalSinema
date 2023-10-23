@@ -75,7 +75,7 @@
                 android:id="@+id/SHOW_ALL"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="212dp"
+                android:layout_marginStart="216dp"
 
                 android:text="показать все"
                 android:textColor="@color/purple_700"
@@ -83,7 +83,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/top250"
                 app:layout_constraintTop_toBottomOf="@+id/viewPager"
-                app:layout_constraintVertical_bias="0.065" />
+                app:layout_constraintVertical_bias="0.012" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/TopFilmsRecyclerView"
