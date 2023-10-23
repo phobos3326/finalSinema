@@ -66,6 +66,9 @@
         <action
             android:id="@+id/action_actorInfoFragment_to_itemInfoFragment"
             app:destination="@id/itemInfoFragment" />
+        <action
+            android:id="@+id/action_actorInfoFragment_to_filmographyFragment"
+            app:destination="@id/filmographyFragment" />
     </fragment>
     <fragment
         android:id="@+id/galerieFragment"
@@ -77,6 +80,11 @@
         android:name="com.example.skillsinema.ui.main.ItemInfo.ItemSerialInfoFragment"
         android:label="fragment_itemserial_info_fragment"
         tools:layout="@layout/fragment_itemserial_info_fragment" />
+    <fragment
+        android:id="@+id/filmographyFragment"
+        android:name="com.example.skillsinema.ui.main.home.FilmographyFragment"
+        android:label="fragment_filmography"
+        tools:layout="@layout/fragment_filmography" />
     <!--<fragment
         android:id="@+id/second_fragment"
         android:name="com.example.skillsinema.ui.main.find.SecondFragment"

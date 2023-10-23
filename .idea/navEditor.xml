@@ -41,6 +41,11 @@
                         </option>
                         <option name="myPositions">
                           <map>
+                            <entry key="action_actorInfoFragment_to_filmographyFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                             <entry key="action_actorInfoFragment_to_itemInfoFragment">
                               <value>
                                 <LayoutPositions />
@@ -51,13 +56,25 @@
                       </LayoutPositions>
                     </value>
                   </entry>
+                  <entry key="filmographyFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="613" />
+                            <option name="y" value="1022" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
                   <entry key="find_fragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="688" />
-                            <option name="y" value="979" />
+                            <option name="x" value="785" />
+                            <option name="y" value="1018" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -132,6 +149,11 @@
                               </value>
                             </entry>
                             <entry key="action_itemInfoFragment_to_galerieFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="action_itemInfoFragment_to_itemserialInfoFragment">
                               <value>
                                 <LayoutPositions />
                               </value>
