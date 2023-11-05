@@ -83,7 +83,7 @@
                 android:layout_marginStart="56dp"
                 android:layout_marginTop="8dp"
 
-                android:foreground="@drawable/frame_7300"
+                android:src="@drawable/frame_7300_11_01"
                 app:layout_constraintStart_toStartOf="@+id/CountryDuration"
                 app:layout_constraintTop_toBottomOf="@+id/CountryDuration" />
 
@@ -93,7 +93,7 @@
                 android:layout_height="42dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:foreground="@drawable/frame_7299__1_"
+                android:src="@drawable/frame_7299__1_"
                 app:layout_constraintStart_toEndOf="@+id/heartImageView"
                 app:layout_constraintTop_toBottomOf="@+id/CountryDuration" />
 

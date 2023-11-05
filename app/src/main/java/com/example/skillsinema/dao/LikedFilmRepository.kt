@@ -9,8 +9,16 @@ class LikedFilmRepository @Inject constructor(
         likedFilmDao.insert(itemFilm)
     }
 
+    fun getAll(): List<LikedFilms> {
+        return likedFilmDao.getAll()
+    }
+
     suspend fun update(itemFilm: LikedFilms){
         likedFilmDao.update(itemFilm)
+    }
+
+    suspend fun delete(itemFilm: LikedFilms){
+        likedFilmDao.delete(itemFilm)
     }
 
 }

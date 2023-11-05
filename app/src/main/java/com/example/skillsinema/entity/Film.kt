@@ -36,7 +36,9 @@ data class Film(
     @Json(name = "ratingImdb")
     val ratingImdb: String?,
     @Json(name = "isViewed")
-    var isViewed: Boolean?
+    var isViewed: Boolean?,
+    @Json(name = "isLiked")
+    var isLiked: Boolean?
 
 ) {
     @JsonClass(generateAdapter = true)

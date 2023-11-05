@@ -1,6 +1,7 @@
 package com.example.skillsinema.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -30,4 +31,6 @@ interface LikedFilmDao{
     suspend fun insert(item:LikedFilms)
     @Update
     suspend fun update(item:LikedFilms)
+    @Delete
+    suspend fun delete(item:LikedFilms)
 }

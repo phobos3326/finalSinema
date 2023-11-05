@@ -92,7 +92,9 @@ import com.squareup.moshi.JsonClass
     @Json(name = "webUrl")
         val webUrl: String?,
     @Json(name = "year")
-        val year: Int?
+        val year: Int?,
+    @Json(name = "isLiked")
+    var isLiked: Boolean?
     )
 
     {

@@ -6,13 +6,6 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.semantics.SemanticsProperties.Text
-import androidx.compose.ui.text.input.KeyboardType.Companion.Text
-import androidx.core.graphics.green
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -28,18 +21,13 @@ import com.example.skillsinema.R
 import com.example.skillsinema.entity.ModelFilmDetails
 import com.example.skillsinema.databinding.FragmentItemInfoBinding
 import com.example.skillsinema.entity.Film
-import com.example.skillsinema.entity.ModelActorInfo
 import com.example.skillsinema.entity.ModelStaff
 import com.example.skillsinema.ui.main.home.AdapterBestFilm
-import dagger.hilt.EntryPoints
 //import com.example.skillsinema.entity.ModelFilmDetails
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import javax.inject.Inject
-import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 
 @AndroidEntryPoint
@@ -116,7 +104,34 @@ class ItemInfoFragment : Fragment() {
         }
 
         binding.heartImageView.setOnClickListener {
-            viewModel.insertItem(id!!)
+            viewModel.insertItemIsLiked(id!!)
+        }
+
+        lifecycleScope.launch {
+
+
+
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+
+
+
+                viewModel.state.collect {
+                    when (it) {
+                        StateItemFilmInfo.FilmState -> {
+                            binding.series.isVisible = false
+                            binding.seriesAll.isVisible = false
+                            binding.seriesDetails.isVisible = false
+
+                        }
+
+                        StateItemFilmInfo.SerialState -> {
+                            binding.series.isVisible = true
+                            binding.seriesAll.isVisible = true
+                            binding.seriesDetails.isVisible = true
+                        }
+                    }
+                }
+            }
         }
 
         lifecycleScope.launch {
@@ -134,6 +149,26 @@ class ItemInfoFragment : Fragment() {
                             binding.series.isVisible = true
                             binding.seriesAll.isVisible = true
                             binding.seriesDetails.isVisible = true
+                        }
+                    }
+                }
+
+
+
+            }
+        }
+
+
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.isLikedState.collect {
+                    when (it) {
+                        false -> {
+                            binding.heartImageView.setImageResource(R.drawable .frame_7300)
+                       }
+
+                        true -> {
+                            binding.heartImageView.setImageResource(R.drawable.frame_7300_11_01)
                         }
                     }
                 }

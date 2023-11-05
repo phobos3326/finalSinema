@@ -21,9 +21,14 @@ import com.example.skillsinema.entity.Film
 
 import com.example.skillsinema.entity.ModelGalerie
 import com.example.skillsinema.entity.ModelStaff
+import com.example.skillsinema.ui.main.home.MainViewModel
 
 
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -39,13 +44,17 @@ class ItemInfoViewModel @Inject constructor(
     //private val similarFilm: RepositorySimilarFilm,
     private val dataRepository: DataRepository,
     private val similarFilmsUsecase: SimilarFilmsUsecase,
-    private val likedFilmRepository: LikedFilmRepository
-) :
+    private val likedFilmRepository: LikedFilmRepository,
+
+    ) :
     ViewModel() {
 
 
     private val _state = MutableStateFlow<StateItemFilmInfo>(StateItemFilmInfo.FilmState)
     val state = _state.asStateFlow()
+
+    private val _isLikedState = MutableStateFlow<Boolean>(true)
+    val isLikedState = _isLikedState.asStateFlow()
 
     private val _film = MutableLiveData<ModelFilmDetails>()
     val film = _film
@@ -63,6 +72,8 @@ class ItemInfoViewModel @Inject constructor(
     private var _similar = MutableStateFlow<List<Film>>(emptyList())
     val similar = _similar.asStateFlow()
 
+    private val taskComplieted = Channel<Unit>()
+
     var noActorList = mutableListOf<ModelStaff.ModelStaffItem>()
 
     fun getValue(): Int {
@@ -79,44 +90,92 @@ class ItemInfoViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            loadFilm()
+
+
             loadStaff()
             pagedGalerie
-
             loadSimilarFilm()
-            _state.value=StateItemFilmInfo.FilmState
+            _state.value = StateItemFilmInfo.FilmState
+
+
+
+            val differed = async {
+                loadFilm()
+            }
+            differed.await()
+            async {
+                islikedCheck()
+            }
+
         }
 
     }
 
 
+    private fun islikedCheck() {
+        //taskComplieted.receive()
+        //val a = listFilm
+        viewModelScope.launch(Dispatchers.IO) {
 
-    fun insertItem(id: Int) {
+            val db = likedFilmRepository.getAll()
+            db.forEach { liked ->
+
+                if (film.value?.kinopoiskId == liked.id) {
+                    _isLikedState.value = true
+
+                } else {
+                    _isLikedState.value = false
+                }
+            }
+        }
+
+
+    }
+
+
+    fun insertItemIsLiked(id: Int) {
+
         viewModelScope.launch {
-            likedFilmRepository.insertLikedFilm((LikedFilms(id = id)))
+            if (_isLikedState.value == false) {
+                _isLikedState.value = true
+                likedFilmRepository.insertLikedFilm((LikedFilms(id = id)))
+            } else {
+                _isLikedState.value = false
+                likedFilmRepository.delete((LikedFilms(id = id)))
+            }
         }
+
+
+        //setIsLikedState()
+        // islikedCheck(id)
+
+       // islikedCheck()
     }
 
 
-    fun loadFilm() {
+    suspend fun loadFilm() {
         viewModelScope.launch {
             kotlin.runCatching {
                 dataFilm.executeGetFilm(getValue())
             }.fold(
                 onSuccess = {
                     _film.value = it
-                    if(it.serial==false){
-                        _state.value=StateItemFilmInfo.FilmState
-                    }else{
-                        _state.value=StateItemFilmInfo.SerialState
+                    if (it.serial == false) {
+                        _state.value = StateItemFilmInfo.FilmState
+                    } else {
+                        _state.value = StateItemFilmInfo.SerialState
                     }
+
                     Log.d("ItemInfoViewModel", "${it}")
                 },
                 onFailure = {
                     Log.d("1ItemInfoViewModel", it.message ?: "not load")
                 }
             )
+
         }
+        //taskComplieted.send(Unit)
+        //islikedCheck()
     }
 
 

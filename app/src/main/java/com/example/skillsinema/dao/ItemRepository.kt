@@ -20,5 +20,9 @@ private val itemDao: ItemDao
         itemDao.update(itemFilm)
     }
 
+    suspend fun delete(itemFilm: ItemFilm){
+        itemDao.update(itemFilm)
+    }
+
     // Other repository functions
 }

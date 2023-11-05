@@ -194,7 +194,9 @@ class MainViewModel @Inject constructor(
         return a
     }
 
-    val pagedFilteredFilms: Flow<PagingData<Film>> = Pager(
+
+
+    private val pagedFilteredFilms: Flow<PagingData<Film>> = Pager(
         config = PagingConfig(
             pageSize = 20,
             enablePlaceholders = true
