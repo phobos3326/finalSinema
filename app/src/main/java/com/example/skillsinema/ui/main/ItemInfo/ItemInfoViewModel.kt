@@ -94,69 +94,26 @@ class ItemInfoViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-
-
             loadStaff()
             pagedGalerie
             loadSimilarFilm()
             _state.value = StateItemFilmInfo.FilmState
-
             loadFilm()
-
             sharedJob.join()
-           // islikedCheck()
-
-            /*val differed = async {
-                loadFilm()
-            }
-            differed.await()
-            async {
-                islikedCheck()
-            }*/
-
         }
-
-    }
-
-
-    private fun islikedCheck() {
-        //taskComplieted.receive()
-        //val a = listFilm
-        viewModelScope.launch(Dispatchers.IO  + sharedJob) {
-
-            val db = likedFilmRepository.getAll()
-            db.forEach { liked ->
-
-                if (film.value?.kinopoiskId == liked.id) {
-                    _isLikedState.value = true
-
-                } else {
-                    _isLikedState.value = false
-                }
-            }
-        }
-
-
     }
 
 
     fun insertItemIsLiked(id: Int) {
-
         viewModelScope.launch() {
             if (_isLikedState.value == false) {
                 _isLikedState.value = true
                 likedFilmRepository.insertLikedFilm((LikedFilms(id = id)))
-            } else if(_isLikedState.value == true){
+            } else if (_isLikedState.value == true) {
                 _isLikedState.value = false
                 likedFilmRepository.delete((LikedFilms(id = id)))
             }
         }
-
-
-        //setIsLikedState()
-        // islikedCheck(id)
-
-         //islikedCheck()
     }
 
 
@@ -166,38 +123,31 @@ class ItemInfoViewModel @Inject constructor(
                 dataFilm.executeGetFilm(getValue())
             }.fold(
                 onSuccess = {
-
                     _film.value = it
                     if (it.serial == false) {
                         _state.value = StateItemFilmInfo.FilmState
                     } else {
                         _state.value = StateItemFilmInfo.SerialState
                     }
-
                     Log.d("ItemInfoViewModel", "${it}")
-
-                    withContext(Dispatchers.IO){
+                    withContext(Dispatchers.IO) {
                         val db = likedFilmRepository.getAll()
-                        db.forEachIndexed {index, liked ->
 
-                            while (film.value?.kinopoiskId == liked.id) {
+                        for (element in db) {
+                            if (film.value?.kinopoiskId == element.id) {
                                 _isLikedState.value = true
-
-
+                                break
+                            } else {
+                                _isLikedState.value = false
                             }
                         }
-
-
                     }
                 },
                 onFailure = {
                     Log.d("1ItemInfoViewModel", it.message ?: "not load")
                 }
             )
-
         }
-        //taskComplieted.send(Unit)
-        //islikedCheck()
     }
 
 
