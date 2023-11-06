@@ -27,12 +27,14 @@ import com.example.skillsinema.ui.main.home.MainViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
@@ -53,7 +55,7 @@ class ItemInfoViewModel @Inject constructor(
     private val _state = MutableStateFlow<StateItemFilmInfo>(StateItemFilmInfo.FilmState)
     val state = _state.asStateFlow()
 
-    private val _isLikedState = MutableStateFlow<Boolean>(true)
+    private val _isLikedState = MutableStateFlow<Boolean>(false)
     val isLikedState = _isLikedState.asStateFlow()
 
     private val _film = MutableLiveData<ModelFilmDetails>()
@@ -88,6 +90,8 @@ class ItemInfoViewModel @Inject constructor(
         dataRepository.seriesID = value
     }
 
+    val sharedJob = Job()
+
     init {
         viewModelScope.launch {
 
@@ -97,15 +101,18 @@ class ItemInfoViewModel @Inject constructor(
             loadSimilarFilm()
             _state.value = StateItemFilmInfo.FilmState
 
+            loadFilm()
 
+            sharedJob.join()
+           // islikedCheck()
 
-            val differed = async {
+            /*val differed = async {
                 loadFilm()
             }
             differed.await()
             async {
                 islikedCheck()
-            }
+            }*/
 
         }
 
@@ -115,7 +122,7 @@ class ItemInfoViewModel @Inject constructor(
     private fun islikedCheck() {
         //taskComplieted.receive()
         //val a = listFilm
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO  + sharedJob) {
 
             val db = likedFilmRepository.getAll()
             db.forEach { liked ->
@@ -135,11 +142,11 @@ class ItemInfoViewModel @Inject constructor(
 
     fun insertItemIsLiked(id: Int) {
 
-        viewModelScope.launch {
+        viewModelScope.launch() {
             if (_isLikedState.value == false) {
                 _isLikedState.value = true
                 likedFilmRepository.insertLikedFilm((LikedFilms(id = id)))
-            } else {
+            } else if(_isLikedState.value == true){
                 _isLikedState.value = false
                 likedFilmRepository.delete((LikedFilms(id = id)))
             }
@@ -149,16 +156,17 @@ class ItemInfoViewModel @Inject constructor(
         //setIsLikedState()
         // islikedCheck(id)
 
-       // islikedCheck()
+         //islikedCheck()
     }
 
 
     suspend fun loadFilm() {
-        viewModelScope.launch {
+        viewModelScope.launch() {
             kotlin.runCatching {
                 dataFilm.executeGetFilm(getValue())
             }.fold(
                 onSuccess = {
+
                     _film.value = it
                     if (it.serial == false) {
                         _state.value = StateItemFilmInfo.FilmState
@@ -167,6 +175,20 @@ class ItemInfoViewModel @Inject constructor(
                     }
 
                     Log.d("ItemInfoViewModel", "${it}")
+
+                    withContext(Dispatchers.IO){
+                        val db = likedFilmRepository.getAll()
+                        db.forEachIndexed {index, liked ->
+
+                            while (film.value?.kinopoiskId == liked.id) {
+                                _isLikedState.value = true
+
+
+                            }
+                        }
+
+
+                    }
                 },
                 onFailure = {
                     Log.d("1ItemInfoViewModel", it.message ?: "not load")

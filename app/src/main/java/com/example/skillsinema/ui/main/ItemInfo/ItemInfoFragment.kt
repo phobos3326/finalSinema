@@ -160,7 +160,7 @@ class ItemInfoFragment : Fragment() {
 
 
         lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 viewModel.isLikedState.collect {
                     when (it) {
                         false -> {
