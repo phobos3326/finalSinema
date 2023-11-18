@@ -14,6 +14,7 @@ interface ItemDao {
 
     @Query("SELECT * FROM viewedItem")
     fun getAll(): List<ItemFilm>
+
     @Insert(entity = ItemFilm::class, onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(item: ItemFilm)
 
@@ -22,15 +23,32 @@ interface ItemDao {
 }
 
 
+@Dao
+interface LikedFilmDao {
+    @Query("SELECT * FROM isLiked")
+    fun getAll(): List<LikedFilms>
+
+    @Insert(entity = LikedFilms::class, onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(item: LikedFilms)
+
+    @Update
+    suspend fun update(item: LikedFilms)
+
+    @Delete
+    suspend fun delete(item: LikedFilms)
+}
 
 @Dao
-interface LikedFilmDao{
-    @Query("SELECT * FROM isLiked")
-    fun getAll():List<LikedFilms>
-    @Insert(entity = LikedFilms::class, onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(item:LikedFilms)
+interface WantToSeeDao {
+    @Query("SELECT * FROM wantToSee")
+    fun getAll(): List<WantToSeeFilm>
+
+    @Insert(entity = WantToSeeFilm::class, onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(item: WantToSeeFilm)
+
     @Update
-    suspend fun update(item:LikedFilms)
+    suspend fun update(item: WantToSeeFilm)
+
     @Delete
-    suspend fun delete(item:LikedFilms)
+    suspend fun delete(item: WantToSeeFilm)
 }

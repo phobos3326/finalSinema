@@ -14,7 +14,9 @@ object RoomModule {
 
     @Provides
     fun providesItemDB(@ApplicationContext context:Context): ItemDataBase{
-        return Room.databaseBuilder(context, ItemDataBase::class.java, "DB").build()
+        return Room.databaseBuilder(context, ItemDataBase::class.java, "DB")
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
     @Provides
@@ -25,5 +27,10 @@ object RoomModule {
     @Provides
     fun providesLikedFilmDao(itemDB: ItemDataBase):LikedFilmDao{
         return itemDB.likedFilmDao()
+    }
+
+    @Provides
+    fun provideWantToSeeFilmDao(itemDB: ItemDataBase) : WantToSeeDao{
+        return  itemDB.wantToSeeFilmDao()
     }
 }
