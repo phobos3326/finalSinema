@@ -33,4 +33,10 @@ object RoomModule {
     fun provideWantToSeeFilmDao(itemDB: ItemDataBase) : WantToSeeDao{
         return  itemDB.wantToSeeFilmDao()
     }
+
+    @Provides
+    fun provideCollectionsDao(itemDB: ItemDataBase) : CollectionDao{
+        return  itemDB.collectionDao()
+    }
 }
+

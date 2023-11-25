@@ -52,3 +52,19 @@ interface WantToSeeDao {
     @Delete
     suspend fun delete(item: WantToSeeFilm)
 }
+
+@Dao
+interface CollectionDao {
+    @Query("SELECT * FROM collections")
+    fun getAll(): List<CollectionsEntity>
+
+  /*  @Query("SELECT * FROM collections WHERE collectionName  LIKE '%' || :collectionNme ||'%'")
+    suspend fun getColumnByName(collectionNme:String):String*/
+
+    @Query("SELECT * FROM collections WHERE collectionName  =  :collectionNme ")
+    suspend fun getColumnByName(collectionNme:String):CollectionsEntity
+
+    @Insert(entity = CollectionsEntity::class, onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(item: CollectionsEntity)
+
+}

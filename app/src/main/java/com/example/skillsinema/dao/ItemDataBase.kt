@@ -1,16 +1,18 @@
 package com.example.skillsinema.dao
 
-import android.content.Context
 import androidx.room.Database
-import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 
-@Database(entities = [ItemFilm::class, LikedFilms::class, WantToSeeFilm::class], version = 1)
+@Database(entities = [ItemFilm::class, LikedFilms::class, WantToSeeFilm::class, CollectionsEntity::class], version = 1)
+@TypeConverters(Converter::class)
 abstract class ItemDataBase :RoomDatabase() {
 
     abstract fun itemDao():ItemDao
     abstract fun likedFilmDao():LikedFilmDao
     abstract fun wantToSeeFilmDao():WantToSeeDao
+
+    abstract fun collectionDao():CollectionDao
 
     /*companion object {
         @Volatile

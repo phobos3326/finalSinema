@@ -107,6 +107,10 @@ class ItemInfoFragment : Fragment() {
             viewModel.insertItemIsLiked(id!!)
         }
 
+        binding.flagImageView.setOnClickListener {
+            viewModel.insertCollection()
+        }
+
         lifecycleScope.launch {
 
 
