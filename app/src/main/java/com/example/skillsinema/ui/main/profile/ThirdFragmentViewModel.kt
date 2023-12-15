@@ -21,23 +21,24 @@ class ThirdFragmentViewModel @Inject constructor(
     private var wantToSeeFilmRepository: WantToSeeFilmRepository,
     private var collectionEntityRepository: CollectionEntityRepository,
     private val itemDao: CollectionDao
-):ViewModel() {
+) : ViewModel() {
 
     private val _collection = MutableStateFlow<List<CollectionsEntity>>(emptyList())
     val collection = _collection.asStateFlow()
 
-init {
+    init {
+        wantToSee()
 
+    }
 
-}
-    fun wantToSee(){
+    fun wantToSee() {
         viewModelScope.launch(Dispatchers.IO) {
-            val db  = collectionEntityRepository.getAll()
-            _collection.value=db
+            val db = collectionEntityRepository.getAll()
+            _collection.value = db
 
             //Log.d(TAG, "list ${db}")
 
-            for (i in db){
+            for (i in db) {
                 Log.d(TAG, "list ${i.id}, ${i.collection.joinToString(",")}, ${i.collectionName}")
             }
 
@@ -48,7 +49,7 @@ init {
     }
 
 
-    companion object{
+    companion object {
         val TAG = "ThirdFragmentViewModel"
     }
 
