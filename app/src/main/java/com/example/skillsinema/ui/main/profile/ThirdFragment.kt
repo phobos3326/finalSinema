@@ -5,11 +5,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.skillsinema.R
 import com.example.skillsinema.databinding.FragmentItemInfoBinding
 import com.example.skillsinema.databinding.FragmentThirdBinding
+import com.example.skillsinema.ui.main.menu.CollectionDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -46,8 +48,14 @@ class ThirdFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         binding.createCollectionTextView.setOnClickListener {
             viewModel.wantToSee()
+
+            fragmentManager?.let { CollectionDialog().show(it,"bottomSheetDialogFragment.tag") }
+
+
+
         }
 
         viewModel.collection.onEach {
