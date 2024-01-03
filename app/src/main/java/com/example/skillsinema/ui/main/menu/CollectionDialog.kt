@@ -50,6 +50,8 @@ class CollectionDialog() : BottomSheetDialogFragment() {
 
                 override fun onSlide(bottomSheet: View, slideOffset: Float) {
                     with(binding) {
+
+
                         // Нас интересует только положительный оффсет, тк при отрицательном нас устроит стандартное поведение - скрытие фрагмента
                        /* if (slideOffset > 0) {
                             // Делаем "свёрнутый" layout более прозрачным
