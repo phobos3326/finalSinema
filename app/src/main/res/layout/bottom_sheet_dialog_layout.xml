@@ -11,8 +11,8 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/poster"
-        android:layout_width="111dp"
-        android:layout_height="156dp"
+        android:layout_width="109dp"
+        android:layout_height="447dp"
         android:scaleType="center"
 
         app:layout_constraintStart_toStartOf="parent"
