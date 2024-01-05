@@ -16,7 +16,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.skillsinema.databinding.ActivityMainBinding
-import com.example.skillsinema.ui.main.menu.CollectionDialog
+import com.example.skillsinema.ui.main.profile.menu.CollectionDialog
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

@@ -36,7 +36,7 @@ class ThirdFragmentViewModel @Inject constructor(
             val db = collectionEntityRepository.getAll()
             _collection.value = db
 
-            //Log.d(TAG, "list ${db}")
+            Log.d(TAG, "list ${db}")
 
             for (i in db) {
                 Log.d(TAG, "list ${i.id}, ${i.collection.joinToString(",")}, ${i.collectionName}")

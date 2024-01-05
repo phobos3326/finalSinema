@@ -11,7 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.skillsinema.R
 import com.example.skillsinema.databinding.FragmentItemInfoBinding
 import com.example.skillsinema.databinding.FragmentThirdBinding
-import com.example.skillsinema.ui.main.menu.CollectionDialog
+import com.example.skillsinema.ui.main.profile.menu.CollectionDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach

@@ -23,7 +23,7 @@ import com.example.skillsinema.databinding.FragmentItemInfoBinding
 import com.example.skillsinema.entity.Film
 import com.example.skillsinema.entity.ModelStaff
 import com.example.skillsinema.ui.main.home.AdapterBestFilm
-import com.example.skillsinema.ui.main.menu.CollectionDialog
+import com.example.skillsinema.ui.main.profile.menu.CollectionDialog
 //import com.example.skillsinema.entity.ModelFilmDetails
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
