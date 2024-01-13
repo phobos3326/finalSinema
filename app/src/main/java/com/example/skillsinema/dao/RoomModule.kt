@@ -2,6 +2,7 @@ package com.example.skillsinema.dao
 
 import android.content.Context
 import androidx.room.Room
+import androidx.room.TypeConverters
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -10,12 +11,14 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-object RoomModule {
 
+object RoomModule {
+    @TypeConverters(Converter::class)
     @Provides
     fun providesItemDB(@ApplicationContext context:Context): ItemDataBase{
         return Room.databaseBuilder(context, ItemDataBase::class.java, "DB")
             .fallbackToDestructiveMigration()
+
             .build()
     }
 
@@ -34,6 +37,7 @@ object RoomModule {
         return  itemDB.wantToSeeFilmDao()
     }
 
+    @TypeConverters(Converter::class)
     @Provides
     fun provideCollectionsDao(itemDB: ItemDataBase) : CollectionDao{
         return  itemDB.collectionDao()

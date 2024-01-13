@@ -38,6 +38,9 @@ class CollectionDialog : BottomSheetDialogFragment() {
 
     val adapter = AddCollectionAdapter()
 
+    val bundle = Bundle()
+
+
 
     override fun getTheme() = R.style.AppBottomSheetDialogTheme
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -50,6 +53,12 @@ class CollectionDialog : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+        val id = arguments?.getInt("Arg")
+
+
+
         Log.d(TAG, "onViewCreated")
         /*viewModel.collection.onEach {
             binding.recyclerView.adapter = adapter
@@ -58,6 +67,7 @@ class CollectionDialog : BottomSheetDialogFragment() {
 
         viewModel.collection.onEach {
             binding.recyclerView.adapter = adapter
+            binding.recyclerView.layoutManager = LinearLayoutManager(context)
             //binding.recyclerView.addItemDecoration(DividerItemDecoration(context, layoutManager.orientation))
             adapter.submitList(it)
         }.launchIn(viewLifecycleOwner.lifecycleScope)
@@ -83,30 +93,30 @@ class CollectionDialog : BottomSheetDialogFragment() {
 
 
 
-            behavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            /*behavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
 
                 override fun onStateChanged(bottomSheet: View, newState: Int) {
                     // Нам не нужны действия по этому колбеку
 
-                    /*viewModel.collection.onEach {
+                    *//*viewModel.collection.onEach {
                         binding.recyclerView.adapter = adapter
                         adapter.submitList(it)
-                    }.launchIn(viewLifecycleOwner.lifecycleScope)*/
+                    }.launchIn(viewLifecycleOwner.lifecycleScope)*//*
                 }
 
                 override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                    viewModel.collection.onEach {
+                   *//* viewModel.collection.onEach {
                         binding.recyclerView.adapter = adapter
                        // binding.recyclerView.addItemDecoration(DividerItemDecoration(context, layoutManager.orientation))
                         binding.recyclerView.layoutManager = LinearLayoutManager(context)
                         adapter.submitList(it)
-                    }.launchIn(viewLifecycleOwner.lifecycleScope)
+                    }.launchIn(viewLifecycleOwner.lifecycleScope)*//*
 
                     with(binding) {
 
 
                         // Нас интересует только положительный оффсет, тк при отрицательном нас устроит стандартное поведение - скрытие фрагмента
-                       /* if (slideOffset > 0) {
+                       *//* if (slideOffset > 0) {
                             // Делаем "свёрнутый" layout более прозрачным
                             layoutCollapsed.alpha = 1 - 2 * slideOffset
                             // И в то же время делаем "расширенный layout" менее прозрачным
@@ -123,43 +133,14 @@ class CollectionDialog : BottomSheetDialogFragment() {
                                 layoutCollapsed.visibility = View.VISIBLE
                                 layoutExpanded.visibility = View.INVISIBLE
                             }
-                        }*/
+                        }*//*
                     }
                 }
-            })
+            })*/
         }
     }
 
 
 
-    override fun onResume() {
-        super.onResume()
-        Log.d(TAG, "onResume")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.d(TAG, "onPause")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.d(TAG, "onStop")
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        Log.d(TAG, "onDestroyView")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d(TAG, "onDestroy")
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        Log.d(TAG, "onDetach")
-    }
 
 }

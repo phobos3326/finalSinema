@@ -9,7 +9,6 @@ import com.example.skillsinema.DataRepository
 
 import com.example.skillsinema.dao.CollectionEntityRepository
 import com.example.skillsinema.dao.CollectionsEntity
-import com.example.skillsinema.dao.ItemFilm
 import com.example.skillsinema.dao.LikedFilmRepository
 import com.example.skillsinema.dao.LikedFilms
 
@@ -24,7 +23,6 @@ import com.example.skillsinema.entity.Film
 
 import com.example.skillsinema.entity.ModelGalerie
 import com.example.skillsinema.entity.ModelStaff
-import com.example.skillsinema.ui.main.home.MainViewModel
 
 
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -122,7 +120,10 @@ class ItemInfoViewModel @Inject constructor(
 
     fun insertCollection(){
         viewModelScope.launch {
-         collectionEntityRepository.insertCollection(CollectionsEntity(13,"name",  listOf("b","c", "a", "d")))
+        //val list= collectionEntityRepository.getListFilmFromCollection("name")
+
+       //  collectionEntityRepository.insertCollection(CollectionsEntity(0,"name",  listOf(1,2, 3, 4, 5)))
+
         }
     }
 
