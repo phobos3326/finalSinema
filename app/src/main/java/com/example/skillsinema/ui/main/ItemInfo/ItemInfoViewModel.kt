@@ -122,7 +122,7 @@ class ItemInfoViewModel @Inject constructor(
         viewModelScope.launch {
         //val list= collectionEntityRepository.getListFilmFromCollection("name")
 
-       //  collectionEntityRepository.insertCollection(CollectionsEntity(0,"name",  listOf(1,2, 3, 4, 5)))
+         collectionEntityRepository.insertCollection(CollectionsEntity(0,"name",  listOf(1,2, 3, 4, 5)))
 
         }
     }

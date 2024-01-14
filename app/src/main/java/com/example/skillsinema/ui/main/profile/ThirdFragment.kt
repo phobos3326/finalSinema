@@ -50,9 +50,9 @@ class ThirdFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.createCollectionTextView.setOnClickListener {
-            viewModel.wantToSee()
+            /*viewModel.wantToSee()
 
-            fragmentManager?.let { CollectionDialog().show(it,"bottomSheetDialogFragment.tag") }
+            fragmentManager?.let { CollectionDialog().show(it,"bottomSheetDialogFragment.tag") }*/
 
 
 

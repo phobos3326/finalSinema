@@ -15,13 +15,14 @@ import com.example.skillsinema.databinding.BottomSheetDialogLayoutBinding
 import com.example.skillsinema.ui.main.profile.AddCollectionAdapter
 import com.example.skillsinema.ui.main.profile.ThirdFragmentViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 
-private const val COLLAPSED_HEIGHT = 228
+private const val COLLAPSED_HEIGHT = 300
 @AndroidEntryPoint
 class CollectionDialog : BottomSheetDialogFragment() {
 
@@ -65,6 +66,18 @@ class CollectionDialog : BottomSheetDialogFragment() {
             adapter.submitList(it)
         }.launchIn(viewLifecycleOwner.lifecycleScope)*/
 
+       /* dialog.let {
+            val bottomSheetDialog = BottomSheetDialog(requireContext())
+            val bottomSheet = bottomSheetDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout?
+            bottomSheet?.layoutParams?.height = 600 // Set the desired height in pixels
+
+            bottomSheetDialog.setContentView(binding.root)
+            bottomSheetDialog.show()
+        }
+*/
+
+
+
         viewModel.collection.onEach {
             binding.recyclerView.adapter = adapter
             binding.recyclerView.layoutManager = LinearLayoutManager(context)
@@ -89,55 +102,14 @@ class CollectionDialog : BottomSheetDialogFragment() {
 
             // Выставляем высоту для состояния collapsed и выставляем состояние collapsed
             behavior.peekHeight = (COLLAPSED_HEIGHT * density).toInt()
+            behavior.maxHeight
+
             behavior.state = BottomSheetBehavior.STATE_COLLAPSED
 
-
-
-            /*behavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
-
-                override fun onStateChanged(bottomSheet: View, newState: Int) {
-                    // Нам не нужны действия по этому колбеку
-
-                    *//*viewModel.collection.onEach {
-                        binding.recyclerView.adapter = adapter
-                        adapter.submitList(it)
-                    }.launchIn(viewLifecycleOwner.lifecycleScope)*//*
-                }
-
-                override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                   *//* viewModel.collection.onEach {
-                        binding.recyclerView.adapter = adapter
-                       // binding.recyclerView.addItemDecoration(DividerItemDecoration(context, layoutManager.orientation))
-                        binding.recyclerView.layoutManager = LinearLayoutManager(context)
-                        adapter.submitList(it)
-                    }.launchIn(viewLifecycleOwner.lifecycleScope)*//*
-
-                    with(binding) {
-
-
-                        // Нас интересует только положительный оффсет, тк при отрицательном нас устроит стандартное поведение - скрытие фрагмента
-                       *//* if (slideOffset > 0) {
-                            // Делаем "свёрнутый" layout более прозрачным
-                            layoutCollapsed.alpha = 1 - 2 * slideOffset
-                            // И в то же время делаем "расширенный layout" менее прозрачным
-                            layoutExpanded.alpha = slideOffset * slideOffset
-
-                            // Когда оффсет превышает половину, мы скрываем collapsed layout и делаем видимым expanded
-                            if (slideOffset > 0.5) {
-                                layoutCollapsed.visibility = View.GONE
-                                layoutExpanded.visibility = View.VISIBLE
-                            }
-
-                            // Если же оффсет меньше половины, а expanded layout всё ещё виден, то нужно скрывать его и показывать collapsed
-                            if (slideOffset < 0.5 && binding.layoutExpanded.visibility == View.VISIBLE) {
-                                layoutCollapsed.visibility = View.VISIBLE
-                                layoutExpanded.visibility = View.INVISIBLE
-                            }
-                        }*//*
-                    }
-                }
-            })*/
         }
+
+
+
     }
 
 
