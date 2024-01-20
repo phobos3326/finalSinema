@@ -1,6 +1,7 @@
-package com.example.skillsinema.ui.main.profile
+package com.example.skillsinema.ui.main.profile.menu
 
 
+import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -10,8 +11,11 @@ import com.example.skillsinema.dao.CollectionsEntity
 import com.example.skillsinema.databinding.CollectionRecyclerItemBinding
 import javax.inject.Inject
 
-class AddCollectionAdapter @Inject constructor() :
-    ListAdapter<CollectionsEntity, RecyclerView.ViewHolder>(DiffUtilCallback()) {
+class AddCollectionAdapter @Inject constructor(
+    private val onChecked: (CollectionsEntity) -> Unit
+) :    ListAdapter<CollectionsEntity, RecyclerView.ViewHolder>(DiffUtilCallback()) {
+
+    private val checkedItems = SparseBooleanArray()
 
     class DiffUtilCallback : DiffUtil.ItemCallback<CollectionsEntity>() {
         override fun areItemsTheSame(
@@ -35,7 +39,8 @@ class AddCollectionAdapter @Inject constructor() :
     ) : RecyclerView.ViewHolder(binding.root) {
         val checkBox = binding.checkBox
         fun bind(item: CollectionsEntity) {
-            binding.collectionNameTextView.text = item.collectionName
+            binding.checkBox.text = item.collectionName
+            binding.collectionNameTextView.text = item.collection.size.toString()
         }
     }
 
@@ -58,6 +63,7 @@ class AddCollectionAdapter @Inject constructor() :
 
         holder.checkBox.setOnCheckedChangeListener { _, isChecked ->
             getItem(position)
+            onChecked(item)
         }
 
     }
@@ -95,6 +101,8 @@ class AddCollectionAdapter @Inject constructor() :
      override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
          (holder as ViewHolder).bind(getItem(position))
      }*/
+
+
 
 
 }

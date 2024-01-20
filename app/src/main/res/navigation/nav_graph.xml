@@ -34,6 +34,9 @@
         <action
             android:id="@+id/action_itemInfoFragment_to_itemserialInfoFragment"
             app:destination="@id/itemserialInfoFragment" />
+        <action
+            android:id="@+id/action_itemInfoFragment_to_collectionDialog"
+            app:destination="@id/collectionDialog" />
     </fragment>
     <fragment
         android:id="@+id/find_fragment"
@@ -85,6 +88,10 @@
         android:name="com.example.skillsinema.ui.main.home.FilmographyFragment"
         android:label="fragment_filmography"
         tools:layout="@layout/fragment_filmography" />
+    <fragment
+        android:id="@+id/collectionDialog"
+        android:name="com.example.skillsinema.ui.main.profile.menu.CollectionDialog"
+        android:label="CollectionDialog" />
     <!--<fragment
         android:id="@+id/second_fragment"
         android:name="com.example.skillsinema.ui.main.find.SecondFragment"

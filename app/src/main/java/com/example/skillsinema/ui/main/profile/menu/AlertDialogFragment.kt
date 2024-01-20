@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.skillsinema.R
+import com.example.skillsinema.dao.CollectionsEntity
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -37,6 +38,9 @@ class AlertDialogFragment : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_alert_dialog, container, false)
     }
+
+
+
 
     companion object {
         /**

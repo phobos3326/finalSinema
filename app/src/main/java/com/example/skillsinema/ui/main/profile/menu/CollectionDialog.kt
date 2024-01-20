@@ -8,14 +8,11 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.skillsinema.R
+import com.example.skillsinema.dao.CollectionsEntity
 import com.example.skillsinema.databinding.BottomSheetDialogLayoutBinding
-import com.example.skillsinema.ui.main.profile.AddCollectionAdapter
-import com.example.skillsinema.ui.main.profile.ThirdFragmentViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
@@ -23,6 +20,7 @@ import kotlinx.coroutines.flow.onEach
 
 
 private const val COLLAPSED_HEIGHT = 300
+
 @AndroidEntryPoint
 class CollectionDialog : BottomSheetDialogFragment() {
 
@@ -32,22 +30,28 @@ class CollectionDialog : BottomSheetDialogFragment() {
     private val binding get() = _binding!!
 
     //val viewModel: ThirdFragmentViewModel by viewModels()
-    val viewModel: ThirdFragmentViewModel by viewModels()
-   // lateinit var binding: BottomSheetDialogLayoutBinding
-   val layoutManager = LinearLayoutManager(context)
+    val viewModel: CollectionDialogViewModel by viewModels()
+
+    // lateinit var binding: BottomSheetDialogLayoutBinding
+    val layoutManager = LinearLayoutManager(context)
 
 
-    val adapter = AddCollectionAdapter()
+    val adapter = AddCollectionAdapter {
+        onItemChecked(it)
+    }
 
     val bundle = Bundle()
 
 
-
     override fun getTheme() = R.style.AppBottomSheetDialogTheme
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         //return inflater.inflate(R.layout.bottom_sheet_dialog_layout, container, false)
         //_binding = BottomSheetDialogLayoutBinding.bind(inflater.inflate(R.layout.bottom_sheet_dialog_layout, container))
-        _binding= BottomSheetDialogLayoutBinding.inflate(inflater, container, false)
+        _binding = BottomSheetDialogLayoutBinding.inflate(inflater, container, false)
 
         return binding.root
     }
@@ -56,25 +60,26 @@ class CollectionDialog : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        val id = arguments?.getInt("Arg")
+
+        val id = arguments?.getInt("data")
 
 
 
-        Log.d(TAG, "onViewCreated")
+        Log.d(TAG, "onViewCreated   $id")
         /*viewModel.collection.onEach {
             binding.recyclerView.adapter = adapter
             adapter.submitList(it)
         }.launchIn(viewLifecycleOwner.lifecycleScope)*/
 
-       /* dialog.let {
-            val bottomSheetDialog = BottomSheetDialog(requireContext())
-            val bottomSheet = bottomSheetDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout?
-            bottomSheet?.layoutParams?.height = 600 // Set the desired height in pixels
+        /* dialog.let {
+             val bottomSheetDialog = BottomSheetDialog(requireContext())
+             val bottomSheet = bottomSheetDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout?
+             bottomSheet?.layoutParams?.height = 600 // Set the desired height in pixels
 
-            bottomSheetDialog.setContentView(binding.root)
-            bottomSheetDialog.show()
-        }
-*/
+             bottomSheetDialog.setContentView(binding.root)
+             bottomSheetDialog.show()
+         }
+ */
 
 
 
@@ -87,6 +92,16 @@ class CollectionDialog : BottomSheetDialogFragment() {
 
     }
 
+
+    fun onItemChecked(item: CollectionsEntity){
+
+        item.id.let {
+            viewModel.insertIdtoDB()
+        }
+
+    }
+
+
     override fun onStart() {
         super.onStart()
 
@@ -97,7 +112,8 @@ class CollectionDialog : BottomSheetDialogFragment() {
 
         dialog?.let {
             // Находим сам bottomSheet и достаём из него Behaviour
-            val bottomSheet = it.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+            val bottomSheet =
+                it.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
             val behavior = BottomSheetBehavior.from(bottomSheet)
 
             // Выставляем высоту для состояния collapsed и выставляем состояние collapsed
@@ -109,10 +125,7 @@ class CollectionDialog : BottomSheetDialogFragment() {
         }
 
 
-
     }
-
-
 
 
 }

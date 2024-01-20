@@ -1,5 +1,8 @@
 package com.example.skillsinema.ui.main.ItemInfo
 
+/*import com.example.skillsinema.MyComponentManager
+import com.example.skillsinema.MyEntryPoint*/
+//import com.example.skillsinema.entity.ModelFilmDetails
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,16 +18,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-/*import com.example.skillsinema.MyComponentManager
-import com.example.skillsinema.MyEntryPoint*/
 import com.example.skillsinema.R
-import com.example.skillsinema.entity.ModelFilmDetails
 import com.example.skillsinema.databinding.FragmentItemInfoBinding
 import com.example.skillsinema.entity.Film
+import com.example.skillsinema.entity.ModelFilmDetails
 import com.example.skillsinema.entity.ModelStaff
 import com.example.skillsinema.ui.main.home.AdapterBestFilm
 import com.example.skillsinema.ui.main.profile.menu.CollectionDialog
-//import com.example.skillsinema.entity.ModelFilmDetails
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -97,7 +98,23 @@ class ItemInfoFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val id = arguments?.getInt("Arg")
+
+
+
+        val bottomSheetDialogFragment = BottomSheetDialogFragment()
+
+        val arg= Bundle()
+        arg.putInt("data", id!!)
+        bottomSheetDialogFragment.arguments = bundle
+
+
+
+       /* findNavController().navigate(
+           R.id.action_itemInfoFragment_to_collectionDialog, bundle
+        )*/
         Log.d("FRAGMENT ITEM", id.toString())
+
+
 
         binding.seriesAll.setOnClickListener {
             id?.let { it1 -> onShowAllSeaseonsClick(it1) }
@@ -109,7 +126,10 @@ class ItemInfoFragment : Fragment() {
         }
 
         binding.dottedLineImageView.setOnClickListener {
-            fragmentManager?.let { CollectionDialog().show(it,"bottomSheetDialogFragment.tag") }
+            fragmentManager?.let {
+                CollectionDialog().show(it,"bottomSheetDialogFragment.tag")
+
+            }
 
         }
 
@@ -267,6 +287,8 @@ class ItemInfoFragment : Fragment() {
 
 
 
+
+
     companion object {
         /**
          * Use this factory method to create a new instance of
@@ -278,12 +300,12 @@ class ItemInfoFragment : Fragment() {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ItemInfoFragment().apply {
-                arguments = Bundle().apply {
-                    //putString(com.example.skillsinema.ARG_PARAM1, param1)
-                    //putString(com.example.skillsinema.ARG_PARAM2, param2)
-                }
-            }
+        fun newInstance(data: Int): ItemInfoFragment {
+            val fragment = ItemInfoFragment()
+            val args = Bundle()
+            args.putInt("data", data)
+            fragment.arguments = args
+            return fragment
+        }
     }
 }

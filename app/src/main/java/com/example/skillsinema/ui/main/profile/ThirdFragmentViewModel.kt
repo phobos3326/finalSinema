@@ -48,27 +48,27 @@ class ThirdFragmentViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val db = collectionEntityRepository.getAll()
 
-            val dbList = collectionEntityRepository.getCollectionList(82).collection
+            val dbList = collectionEntityRepository.getCollectionList(1).collection
             //val dbbb =
 
-            val mutableDBList = dbList.toMutableList()
+     /*       val mutableDBList = dbList.toMutableList()
 
             if (!mutableDBList.contains(6)) {
                 mutableDBList.add(6)
             }
 
-         /*   if(mutableDBList.contains(99)){
+         *//*   if(mutableDBList.contains(99)){
 
                 mutableDBList.remove(99)
-            }*/
+            }*//*
 
                 collectionEntityRepository.insertCollection(
                     CollectionsEntity(
-                        82,
+                        0,
                         "name",
                         mutableDBList
                     )
-                )
+                )*/
 
 
             //collectionEntityRepository.updateCollectionList (1,  mutableDBList)
