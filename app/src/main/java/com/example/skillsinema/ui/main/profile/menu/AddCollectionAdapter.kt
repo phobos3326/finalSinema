@@ -3,7 +3,9 @@ package com.example.skillsinema.ui.main.profile.menu
 
 import android.util.SparseBooleanArray
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -13,9 +15,9 @@ import javax.inject.Inject
 
 class AddCollectionAdapter @Inject constructor(
     private val onChecked: (CollectionsEntity) -> Unit
-) :    ListAdapter<CollectionsEntity, RecyclerView.ViewHolder>(DiffUtilCallback()) {
+) : ListAdapter<CollectionsEntity, RecyclerView.ViewHolder>(DiffUtilCallback()) {
 
-    private val checkedItems = SparseBooleanArray()
+
 
     class DiffUtilCallback : DiffUtil.ItemCallback<CollectionsEntity>() {
         override fun areItemsTheSame(
@@ -32,15 +34,47 @@ class AddCollectionAdapter @Inject constructor(
             return oldItem == newItem
         }
 
+        override fun getChangePayload(
+            oldItem: CollectionsEntity,
+            newItem: CollectionsEntity
+        ): Any? {
+            return super.getChangePayload(oldItem, newItem)
+        }
+
     }
 
     class ViewHolder @Inject constructor(
         private val binding: CollectionRecyclerItemBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-        val checkBox = binding.checkBox
+        private val checkedItems = SparseBooleanArray()
+
+
+        var checkBoxStatesArray = SparseBooleanArray()
+      //private lateinit var currentItem: CollectionsEntity
+      val checkbox = binding.checkBox
+
+        init {
+           /* checkbox.setOnClickListener {
+                if(!checkBoxStatesArray.get(adapterPosition, false)){
+                    checkbox.isChecked = true
+                    checkBoxStatesArray.put(adapterPosition, true)
+                }else{
+                    checkbox.isChecked = false
+                    checkBoxStatesArray.put(adapterPosition, false)
+                }
+            }*/
+
+            checkbox.setOnClickListener { v->
+                val isChecked = (v as CheckBox).isChecked
+
+            }
+
+        }
         fun bind(item: CollectionsEntity) {
             binding.checkBox.text = item.collectionName
+            //checkedItems.put(bindingAdapterPosition, isChecked)
             binding.collectionNameTextView.text = item.collection.size.toString()
+           // binding.checkBox.isChecked = checkedItems.get(adapterPosition, false)
         }
     }
 
@@ -53,54 +87,21 @@ class AddCollectionAdapter @Inject constructor(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
 
-
-
         (holder as ViewHolder).bind(getItem(position))
 
         val item = getItem(position)
 
+      //  holder.checkBox.isChecked = isChecked(position)
 
+        holder.checkbox.setOnCheckedChangeListener { _, isChecked ->
 
-        holder.checkBox.setOnCheckedChangeListener { _, isChecked ->
-            getItem(position)
             onChecked(item)
         }
 
     }
 
-    /* class DiffUtilCallback : DiffUtil.ItemCallback<CollectionsEntity>() {
-         override fun areItemsTheSame(
-             oldItem: CollectionsEntity,
-             newItem: CollectionsEntity
-         ): Boolean {
-             return oldItem == newItem
-         }
-
-         override fun areContentsTheSame(
-             oldItem: CollectionsEntity,
-             newItem: CollectionsEntity
-         ): Boolean {
-             return oldItem == newItem
-         }
-     }
 
 
-     class ViewHolder @Inject constructor(
-         private val binding: CollectionRecyclerItemBinding
-     ):RecyclerView.ViewHolder(binding.root){
-         fun bind(item: CollectionsEntity){
-             binding.collectionNameTextView.text = item.collectionName
-         }
-     }
-
-     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-         val binding = CollectionRecyclerItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-         return ViewHolder(binding)
-     }
-
-     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-         (holder as ViewHolder).bind(getItem(position))
-     }*/
 
 
 

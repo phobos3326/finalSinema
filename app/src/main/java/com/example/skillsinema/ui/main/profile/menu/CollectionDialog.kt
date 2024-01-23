@@ -36,7 +36,7 @@ class CollectionDialog : BottomSheetDialogFragment() {
     val layoutManager = LinearLayoutManager(context)
 
 
-    val adapter = AddCollectionAdapter {
+    val adapter = AddllectionAdapterTWO {
         onItemChecked(it)
     }
 
