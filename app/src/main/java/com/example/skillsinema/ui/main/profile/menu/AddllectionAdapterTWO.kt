@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 class AddllectionAdapterTWO @Inject constructor(
     private val onChecked: (CollectionsEntity) -> Unit
-):ListAdapter<CollectionsEntity, RecyclerView.ViewHolder>(DiffUtilCallback()) {
+) : ListAdapter<CollectionsEntity, RecyclerView.ViewHolder>(DiffUtilCallback()) {
 
     private val checkedItems = SparseBooleanArray()
 
@@ -59,7 +59,7 @@ class AddllectionAdapterTWO @Inject constructor(
     }
 
 
-  inner class ViewHolder(private val binding: CollectionRecyclerItemBinding) :
+    inner class ViewHolder(private val binding: CollectionRecyclerItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: CollectionsEntity, isChecked: Boolean) {
@@ -73,7 +73,10 @@ class AddllectionAdapterTWO @Inject constructor(
                     checkedItems.delete(adapterPosition)
                 }
             }
+            binding.checkBox.setOnCheckedChangeListener { _, isChecked ->
 
+                onChecked(item)
+            }
 
         }
     }
