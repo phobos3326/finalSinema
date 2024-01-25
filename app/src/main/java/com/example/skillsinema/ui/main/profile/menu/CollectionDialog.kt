@@ -90,13 +90,18 @@ class CollectionDialog : BottomSheetDialogFragment() {
             adapter.submitList(it)
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
+        binding.createCollectionTextView.setOnClickListener {
+            viewModel.insertIdtoDB()
+        }
+
+
     }
 
 
     fun onItemChecked(item: CollectionsEntity){
 
         item.id.let {
-            viewModel.insertIdtoDB()
+            viewModel.update()
         }
 
     }

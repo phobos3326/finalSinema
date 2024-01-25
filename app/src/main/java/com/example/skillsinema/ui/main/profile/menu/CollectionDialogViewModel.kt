@@ -69,6 +69,24 @@ class CollectionDialogViewModel @Inject constructor(
         }
     }
 
+
+
+    fun update() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val db = collectionEntityRepository.getAll()
+            val dbList  = collectionEntityRepository.getCollectionList(1).collection
+
+            val mutableDBList = dbList.toMutableList()
+
+            if (!mutableDBList.contains(getValue())) {
+                mutableDBList.add(getValue())
+            }
+
+            collectionEntityRepository.updateCollectionList(1, mutableDBList)
+            _collection.value = db
+        }
+    }
+
     fun show() {
         viewModelScope.launch(Dispatchers.IO) {
             val db = collectionEntityRepository.getAll()

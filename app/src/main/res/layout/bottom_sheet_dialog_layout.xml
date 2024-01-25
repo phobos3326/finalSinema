@@ -150,6 +150,7 @@
         tools:listitem="@layout/collection_recycler_item" />
 
     <TextView
+        android:id="@+id/create_collection_textView"
         android:layout_width="200dp"
         android:layout_height="20dp"
         android:text="Создать свою коллекцию"
