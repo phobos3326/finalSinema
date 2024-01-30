@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">SkillSinema</string>
 
-    <string name="hello_blank_fragment">Hello blank fragment second</string>
+    <string name="hello_blank_fragment">ПРидумайте название для вашей коллекции</string>
     <string name="hello_blank_fragment_third">Hello blank fragment third</string>
     <string name="search_screen">"Экран поиска"</string>
     <string name="search_options">Настройки поиска</string>
@@ -11,5 +11,6 @@
     <string name="film_item">Детали фильма</string>
 
     <string name="back_button">Back</string>
+    <string name="complete">готово</string>
 
 </resources>

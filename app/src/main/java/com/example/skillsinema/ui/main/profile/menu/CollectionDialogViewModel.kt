@@ -40,18 +40,18 @@ class CollectionDialogViewModel @Inject constructor(
     }
 
 
-    fun insertIdtoDB(){
-        viewModelScope.launch(Dispatchers.IO) {
-            val db = collectionEntityRepository.getAll()
+    fun insertIdtoDB(nameCollection: String){
+        viewModelScope.launch() {
+            //val db = collectionEntityRepository.getAll()
 
-            val dbList = collectionEntityRepository.getCollectionList(1).collection
+        /*    val dbList = collectionEntityRepository.getCollectionList(1).collection
             //val dbbb =
 
             val mutableDBList = dbList.toMutableList()
 
             if (!mutableDBList.contains(getValue())) {
                 mutableDBList.add(getValue())
-            }
+            }*/
 
             /*   if(mutableDBList.contains(99)){
 
@@ -61,11 +61,11 @@ class CollectionDialogViewModel @Inject constructor(
             collectionEntityRepository.insertCollection(
                 CollectionsEntity(
                     0,
-                    "name",
-                    mutableDBList
+                    nameCollection ,
+                    listOf(1)
                 )
             )
-            _collection.value = db
+            //_collection.value = db
         }
     }
 

@@ -58,19 +58,20 @@ interface CollectionDao {
     @Query("SELECT * FROM collections")
     fun getAll(): List<CollectionsEntity>
 
-    @Query ("SELECT * FROM collections WHERE id  =  :id" )
-    fun getCollectionList(id:Int):CollectionsEntity
+    @Query("SELECT * FROM collections WHERE id  =  :id")
+    fun getCollectionList(id: Int): CollectionsEntity
 
-  /*  @Query("SELECT * FROM collections WHERE collectionName  LIKE '%' || :collectionNme ||'%'")
-    suspend fun getColumnByName(collectionNme:String):String*/
+    /*  @Query("SELECT * FROM collections WHERE collectionName  LIKE '%' || :collectionNme ||'%'")
+      suspend fun getColumnByName(collectionNme:String):String*/
 
     @Query("SELECT * FROM collections WHERE collectionName  =  :collectionNme ")
-    suspend fun getColumnByName(collectionNme:String):CollectionsEntity
+    suspend fun getColumnByName(collectionNme: String): CollectionsEntity
 
     @Insert(entity = CollectionsEntity::class, onConflict = OnConflictStrategy.REPLACE)
+    //@Query("INSERT INTO collections values " )
     suspend fun insert(item: CollectionsEntity)
 
     @Query("UPDATE collections  SET collection = :collection WHERE id = :id ")
-    suspend fun updateList(collection: List<Int>, id:Int)
+    suspend fun updateList(collection: List<Int>, id: Int)
 
 }

@@ -6,6 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -34,6 +37,10 @@ class CollectionDialog : BottomSheetDialogFragment() {
 
     // lateinit var binding: BottomSheetDialogLayoutBinding
     val layoutManager = LinearLayoutManager(context)
+
+
+
+    class MyDialogFragment : DialogFragment() {}
 
 
     val adapter = AddllectionAdapterTWO {
@@ -91,7 +98,19 @@ class CollectionDialog : BottomSheetDialogFragment() {
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
         binding.createCollectionTextView.setOnClickListener {
-            viewModel.insertIdtoDB()
+
+            val myDialogFragment = AlertDialogFragment()
+            val manager = requireActivity().supportFragmentManager
+            //myDialogFragment.show(manager, "myDialog")
+
+
+
+            //myDialogFragment.show(transaction, "dialog")
+            val transaction: FragmentTransaction = manager.beginTransaction()
+            myDialogFragment.show(transaction, "dialog")
+
+
+           // viewModel.insertIdtoDB()
         }
 
 
