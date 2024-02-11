@@ -1,18 +1,16 @@
 package com.example.skillsinema.ui.main.profile.menu
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.skillsinema.DataRepository
 import com.example.skillsinema.dao.CollectionEntityRepository
 import com.example.skillsinema.dao.CollectionsEntity
-import com.example.skillsinema.ui.main.profile.ThirdFragmentViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -42,7 +40,8 @@ class CollectionDialogViewModel @Inject constructor(
 
     fun insertIdtoDB(nameCollection: String){
         viewModelScope.launch() {
-            //val db = collectionEntityRepository.getAll()
+
+
 
         /*    val dbList = collectionEntityRepository.getCollectionList(1).collection
             //val dbbb =
@@ -65,16 +64,19 @@ class CollectionDialogViewModel @Inject constructor(
                     listOf(1)
                 )
             )
-            //_collection.value = db
+            withContext(Dispatchers.IO){
+                val db = collectionEntityRepository.getAll()
+                _collection.value = db
+            }
         }
     }
 
 
 
-    fun update() {
+    fun update(colllection: CollectionsEntity) {
         viewModelScope.launch(Dispatchers.IO) {
             val db = collectionEntityRepository.getAll()
-            val dbList  = collectionEntityRepository.getCollectionList(1).collection
+            val dbList  = collectionEntityRepository.getCollectionList(colllection.collectionName).collection
 
             val mutableDBList = dbList.toMutableList()
 
@@ -82,7 +84,7 @@ class CollectionDialogViewModel @Inject constructor(
                 mutableDBList.add(getValue())
             }
 
-            collectionEntityRepository.updateCollectionList(1, mutableDBList)
+            collectionEntityRepository.updateCollectionList(colllection.collectionName, mutableDBList)
             _collection.value = db
         }
     }

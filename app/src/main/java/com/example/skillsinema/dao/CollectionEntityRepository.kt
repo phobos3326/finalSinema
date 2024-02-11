@@ -18,14 +18,16 @@ class CollectionEntityRepository @Inject constructor(
         collectionDao.getColumnByName(name).collection
     }
 
-    suspend fun getCollectionList(id: Int): CollectionsEntity {
-       return collectionDao.getCollectionList(id)
+    suspend fun getCollectionList(name: String): CollectionsEntity {
+       return collectionDao.getCollectionList(name)
     }
 
-    suspend fun updateCollectionList(id:Int,list:List<Int>){
-        collectionDao.updateList(list, id)
+    suspend fun updateCollectionList(name: String,list:List<Int>){
+        collectionDao.updateList(list, name)
     }
 
-
+    fun delete(item:CollectionsEntity){
+        collectionDao.delete(item)
+    }
 
 }

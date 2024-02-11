@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.skillsinema.R
+import com.example.skillsinema.dao.CollectionsEntity
 import com.example.skillsinema.databinding.FragmentItemInfoBinding
 import com.example.skillsinema.databinding.FragmentThirdBinding
 import com.example.skillsinema.ui.main.profile.menu.CollectionDialog
@@ -34,7 +35,9 @@ class ThirdFragment : Fragment() {
 
     val viewModel: ThirdFragmentViewModel by viewModels()
 
-    val adapter = CollectionAdapter()
+    val adapter = CollectionAdapter {
+        onDelete(it)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,6 +67,10 @@ class ThirdFragment : Fragment() {
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
 
+    }
+
+    fun onDelete(item:CollectionsEntity){
+        viewModel.deleteCollection(item)
     }
 
 

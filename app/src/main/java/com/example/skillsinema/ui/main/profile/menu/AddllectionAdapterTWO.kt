@@ -64,6 +64,7 @@ class AddllectionAdapterTWO @Inject constructor(
 
         fun bind(item: CollectionsEntity, isChecked: Boolean) {
             binding.collectionNameTextView.text = item.collectionName
+            binding.collectionSizeTextView.text=item.collection.size.toString()
             binding.checkBox.isChecked = isChecked
 
             binding.checkBox.setOnCheckedChangeListener { _, isChecked ->

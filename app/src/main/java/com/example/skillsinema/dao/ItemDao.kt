@@ -58,8 +58,8 @@ interface CollectionDao {
     @Query("SELECT * FROM collections")
     fun getAll(): List<CollectionsEntity>
 
-    @Query("SELECT * FROM collections WHERE id  =  :id")
-    fun getCollectionList(id: Int): CollectionsEntity
+    @Query("SELECT * FROM collections WHERE collectionName  =  :name")
+    fun getCollectionList(name: String): CollectionsEntity
 
     /*  @Query("SELECT * FROM collections WHERE collectionName  LIKE '%' || :collectionNme ||'%'")
       suspend fun getColumnByName(collectionNme:String):String*/
@@ -71,7 +71,10 @@ interface CollectionDao {
     //@Query("INSERT INTO collections values " )
     suspend fun insert(item: CollectionsEntity)
 
-    @Query("UPDATE collections  SET collection = :collection WHERE id = :id ")
-    suspend fun updateList(collection: List<Int>, id: Int)
+    @Query("UPDATE collections  SET collection = :collection WHERE collectionName = :name ")
+    suspend fun updateList(collection: List<Int>, name: String)
+
+    @Delete
+    fun delete(item:CollectionsEntity)
 
 }

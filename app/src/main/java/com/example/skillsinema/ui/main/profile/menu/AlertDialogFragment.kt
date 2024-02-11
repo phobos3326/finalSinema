@@ -36,6 +36,7 @@ class AlertDialogFragment : DialogFragment() {
                         dialog, id ->
                     val enteredText = input.text.toString()
                     viewModel.insertIdtoDB(enteredText)
+
                     dialog.cancel()
                 }
             builder.create()

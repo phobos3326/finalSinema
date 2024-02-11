@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -90,12 +89,7 @@ class CollectionDialog : BottomSheetDialogFragment() {
 
 
 
-        viewModel.collection.onEach {
-            binding.recyclerView.adapter = adapter
-            binding.recyclerView.layoutManager = LinearLayoutManager(context)
-            //binding.recyclerView.addItemDecoration(DividerItemDecoration(context, layoutManager.orientation))
-            adapter.submitList(it)
-        }.launchIn(viewLifecycleOwner.lifecycleScope)
+        extracted()
 
         binding.createCollectionTextView.setOnClickListener {
 
@@ -116,11 +110,20 @@ class CollectionDialog : BottomSheetDialogFragment() {
 
     }
 
+    private fun extracted() {
+        viewModel.collection.onEach {
+            binding.recyclerView.adapter = adapter
+            binding.recyclerView.layoutManager = LinearLayoutManager(context)
+            //binding.recyclerView.addItemDecoration(DividerItemDecoration(context, layoutManager.orientation))
+            adapter.submitList(it)
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
+    }
+
 
     fun onItemChecked(item: CollectionsEntity){
 
         item.id.let {
-            viewModel.update()
+            viewModel.update(item)
         }
 
     }
@@ -147,8 +150,39 @@ class CollectionDialog : BottomSheetDialogFragment() {
             behavior.state = BottomSheetBehavior.STATE_COLLAPSED
 
         }
+        extracted()
+
+    }
 
 
+    override fun onResume() {
+        super.onResume()
+        Log.d(TAG, "onResume")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d(TAG, "onPause")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d(TAG, "onStop")
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Log.d(TAG, "onDestroyView")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG, "onDestroy")
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        Log.d(TAG, "onDetach")
     }
 
 

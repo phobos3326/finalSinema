@@ -48,7 +48,7 @@ class ThirdFragmentViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val db = collectionEntityRepository.getAll()
 
-            val dbList = collectionEntityRepository.getCollectionList(1).collection
+            //val dbList = collectionEntityRepository.getCollectionList(1).collection
             //val dbbb =
 
      /*       val mutableDBList = dbList.toMutableList()
@@ -74,7 +74,7 @@ class ThirdFragmentViewModel @Inject constructor(
             //collectionEntityRepository.updateCollectionList (1,  mutableDBList)
 
 
-            Log.d(TAG, "list_____ $dbList")
+           // Log.d(TAG, "list_____ $dbList")
 
             _collection.value = db
 
@@ -90,6 +90,13 @@ class ThirdFragmentViewModel @Inject constructor(
 
     }
 
+    fun deleteCollection(item:CollectionsEntity){
+        viewModelScope.launch(Dispatchers.IO) {
+            val db = collectionEntityRepository.getAll()
+            collectionEntityRepository.delete(item )
+            _collection.value = db
+        }
+    }
 
     companion object {
         val TAG = "ThirdFragmentViewModel"
