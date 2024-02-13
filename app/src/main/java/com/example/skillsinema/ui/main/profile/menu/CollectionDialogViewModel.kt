@@ -71,6 +71,21 @@ class CollectionDialogViewModel @Inject constructor(
         }
     }
 
+    fun deleteFilmFromDB(colllection: CollectionsEntity){
+        viewModelScope.launch(Dispatchers.IO) {
+            val db = collectionEntityRepository.getAll()
+            val dbList  = collectionEntityRepository.getCollectionList(colllection.collectionName).collection
+
+            val mutableDBList = dbList.toMutableList()
+
+            if (!mutableDBList.contains(getValue())) {
+                mutableDBList.remove(getValue())
+            }
+
+            collectionEntityRepository.updateCollectionList(colllection.collectionName, mutableDBList)
+            _collection.value = db
+        }
+    }
 
 
     fun update(colllection: CollectionsEntity) {
@@ -92,38 +107,11 @@ class CollectionDialogViewModel @Inject constructor(
     fun show() {
         viewModelScope.launch(Dispatchers.IO) {
             val db = collectionEntityRepository.getAll()
-
-     /*       val dbList = collectionEntityRepository.getCollectionList(1).collection
-            //val dbbb =
-
-            val mutableDBList = dbList.toMutableList()
-
-            if (!mutableDBList.contains(getValue())) {
-                mutableDBList.add(getValue())
-            }
-
-            *//*   if(mutableDBList.contains(99)){
-
-                   mutableDBList.remove(99)
-               }*//*
-
-            collectionEntityRepository.insertCollection(
-                CollectionsEntity(
-                    0,
-                    "name",
-                    mutableDBList
-                )
-            )*/
-
-
-            //collectionEntityRepository.updateCollectionList (1,  mutableDBList)
-
-
-           // Log.d(ThirdFragmentViewModel.TAG, "list_____ $dbList")
-
             _collection.value = db
         }
-
     }
+
+
+
 
 }

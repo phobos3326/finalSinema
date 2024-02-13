@@ -38,13 +38,13 @@ class CollectionDialog : BottomSheetDialogFragment() {
     val layoutManager = LinearLayoutManager(context)
 
 
-
     class MyDialogFragment : DialogFragment() {}
 
 
-    val adapter = AddllectionAdapterTWO {
-        onItemChecked(it)
-    }
+    val adapter = AddllectionAdapterTWO(
+        onChecked = { item -> onItemChecked(item) },
+        onDelete = {item->onItemDelete(item)}
+    )
 
     val bundle = Bundle()
 
@@ -64,7 +64,6 @@ class CollectionDialog : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
 
 
         val id = arguments?.getInt("data")
@@ -98,13 +97,12 @@ class CollectionDialog : BottomSheetDialogFragment() {
             //myDialogFragment.show(manager, "myDialog")
 
 
-
             //myDialogFragment.show(transaction, "dialog")
             val transaction: FragmentTransaction = manager.beginTransaction()
             myDialogFragment.show(transaction, "dialog")
 
 
-           // viewModel.insertIdtoDB()
+            // viewModel.insertIdtoDB()
         }
 
 
@@ -120,10 +118,20 @@ class CollectionDialog : BottomSheetDialogFragment() {
     }
 
 
-    fun onItemChecked(item: CollectionsEntity){
+    fun onItemChecked(item: CollectionsEntity) {
+
 
         item.id.let {
             viewModel.update(item)
+        }
+
+
+    }
+
+    fun onItemDelete(item: CollectionsEntity) {
+
+        item.id.let {
+            viewModel.deleteFilmFromDB(item)
         }
 
     }

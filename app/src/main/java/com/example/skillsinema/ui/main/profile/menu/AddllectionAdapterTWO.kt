@@ -12,7 +12,8 @@ import com.example.skillsinema.databinding.CollectionRecyclerItemBinding
 import javax.inject.Inject
 
 class AddllectionAdapterTWO @Inject constructor(
-    private val onChecked: (CollectionsEntity) -> Unit
+    private val onChecked: (CollectionsEntity) -> Unit,
+   private val onDelete:(CollectionsEntity)->Unit
 ) : ListAdapter<CollectionsEntity, RecyclerView.ViewHolder>(DiffUtilCallback()) {
 
     private val checkedItems = SparseBooleanArray()
@@ -69,15 +70,20 @@ class AddllectionAdapterTWO @Inject constructor(
 
             binding.checkBox.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
-                    checkedItems.put(adapterPosition, true)
+                    checkedItems.put(absoluteAdapterPosition, true)
+                    binding.checkBox.setOnCheckedChangeListener { _, isChecked ->
+
+                        onChecked(item)
+                    }
+
                 } else {
-                    checkedItems.delete(adapterPosition)
+                    checkedItems.delete(absoluteAdapterPosition)
+                    binding.checkBox.setOnCheckedChangeListener { _, isChecked ->
+                        onDelete(item)
+                    }
                 }
             }
-            binding.checkBox.setOnCheckedChangeListener { _, isChecked ->
 
-                onChecked(item)
-            }
 
         }
     }
