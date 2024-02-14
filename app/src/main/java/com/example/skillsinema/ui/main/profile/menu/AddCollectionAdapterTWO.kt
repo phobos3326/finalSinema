@@ -1,6 +1,5 @@
 package com.example.skillsinema.ui.main.profile.menu
 
-import android.os.Parcelable
 import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -11,7 +10,7 @@ import com.example.skillsinema.dao.CollectionsEntity
 import com.example.skillsinema.databinding.CollectionRecyclerItemBinding
 import javax.inject.Inject
 
-class AddllectionAdapterTWO @Inject constructor(
+class AddCollectionAdapterTWO @Inject constructor(
     private val onChecked: (CollectionsEntity) -> Unit,
    private val onDelete:(CollectionsEntity)->Unit
 ) : ListAdapter<CollectionsEntity, RecyclerView.ViewHolder>(DiffUtilCallback()) {

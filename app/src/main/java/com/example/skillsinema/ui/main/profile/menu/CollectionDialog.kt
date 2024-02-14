@@ -41,7 +41,7 @@ class CollectionDialog : BottomSheetDialogFragment() {
     class MyDialogFragment : DialogFragment() {}
 
 
-    val adapter = AddllectionAdapterTWO(
+    val adapter = AddCollectionAdapterTWO(
         onChecked = { item -> onItemChecked(item) },
         onDelete = {item->onItemDelete(item)}
     )
