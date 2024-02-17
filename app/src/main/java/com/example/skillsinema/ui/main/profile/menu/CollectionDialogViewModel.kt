@@ -16,7 +16,8 @@ import javax.inject.Inject
 @HiltViewModel
 class CollectionDialogViewModel @Inject constructor(
     private var collectionEntityRepository: CollectionEntityRepository,
-    private var dataRepository: DataRepository
+    private var dataRepository: DataRepository,
+    private var collectionsUiModel: CollectionsUiModel
 ) : ViewModel() {
 
     private val _collection = MutableStateFlow<List<CollectionsEntity>>(emptyList())
