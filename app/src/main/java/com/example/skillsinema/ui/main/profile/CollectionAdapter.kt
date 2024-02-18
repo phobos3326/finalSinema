@@ -37,7 +37,7 @@ class CollectionAdapter @Inject constructor(
         val close = binding.imageViewClose
         fun bind(item: CollectionsEntity){
             binding.textView4.text = item.collectionName
-            binding.itemsCountTextView.text = item.collection.size.toString()
+            binding.itemsCountTextView.text = item.collection?.size.toString()
         }
     }
 

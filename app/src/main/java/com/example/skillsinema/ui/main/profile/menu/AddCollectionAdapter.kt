@@ -71,7 +71,7 @@ class AddCollectionAdapter @Inject constructor(
 
             //binding.checkBox.text = item.collectionName
             //checkedItems.put(bindingAdapterPosition, isChecked)
-            binding.collectionSizeTextView.text = item.collection.size.toString()
+            binding.collectionSizeTextView.text = item.collection?.size.toString()
             binding.collectionNameTextView.text = item.collectionName
 
            binding.checkBox.isChecked = checkedItems.get(adapterPosition, false)

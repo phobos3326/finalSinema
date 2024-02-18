@@ -11,24 +11,24 @@ import com.example.skillsinema.databinding.CollectionRecyclerItemBinding
 import javax.inject.Inject
 
 class AddCollectionAdapterTWO @Inject constructor(
-    private val onChecked: (CollectionsEntity) -> Unit,
-   private val onDelete:(CollectionsEntity)->Unit
-) : ListAdapter<CollectionsEntity, RecyclerView.ViewHolder>(DiffUtilCallback()) {
+    private val onChecked: (CollectionsUiModel) -> Unit,
+    //private val onDelete:(CollectionsEntity)->Unit
+) : ListAdapter<CollectionsUiModel, RecyclerView.ViewHolder>(DiffUtilCallback()) {
 
     private val checkedItems = SparseBooleanArray()
 
 
-    class DiffUtilCallback : DiffUtil.ItemCallback<CollectionsEntity>() {
+    class DiffUtilCallback : DiffUtil.ItemCallback<CollectionsUiModel>() {
         override fun areItemsTheSame(
-            oldItem: CollectionsEntity,
-            newItem: CollectionsEntity
+            oldItem: CollectionsUiModel,
+            newItem: CollectionsUiModel
         ): Boolean {
             return oldItem == newItem
         }
 
         override fun areContentsTheSame(
-            oldItem: CollectionsEntity,
-            newItem: CollectionsEntity
+            oldItem: CollectionsUiModel,
+            newItem: CollectionsUiModel
         ): Boolean {
             return oldItem == newItem
         }
@@ -53,7 +53,7 @@ class AddCollectionAdapterTWO @Inject constructor(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         (holder as ViewHolder)
         val item = getItem(position)
-        holder.bind(item, isChecked(position))
+        holder.bind(item)
 
 
     }
@@ -62,31 +62,17 @@ class AddCollectionAdapterTWO @Inject constructor(
     inner class ViewHolder(private val binding: CollectionRecyclerItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: CollectionsEntity, isChecked: Boolean) {
+        fun bind(item: CollectionsUiModel) {
             binding.collectionNameTextView.text = item.collectionName
-            binding.collectionSizeTextView.text=item.collection.size.toString()
-            binding.checkBox.isChecked = false
-
+            binding.collectionSizeTextView.text = item.collection?.size.toString()
+            binding.checkBox.isChecked = item.isChecked
 
 
 
 
             binding.checkBox.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
-
-                    binding.checkBox.setOnCheckedChangeListener { _, isChecked ->
-                        checkedItems.put(absoluteAdapterPosition, true)
-                        onChecked(item)
-                    }
-
-                } else {
-                    checkedItems.delete(absoluteAdapterPosition)
-                    binding.checkBox.setOnCheckedChangeListener { _, isChecked ->
-                        onDelete(item)
-                    }
-                }
+                onChecked(item)
             }
-
 
         }
     }

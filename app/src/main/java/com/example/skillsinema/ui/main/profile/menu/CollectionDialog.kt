@@ -43,7 +43,7 @@ class CollectionDialog : BottomSheetDialogFragment() {
 
     val adapter = AddCollectionAdapterTWO(
         onChecked = { item -> onItemChecked(item) },
-        onDelete = {item->onItemDelete(item)}
+        //onDelete = {item->onItemDelete(item)}
     )
 
     val bundle = Bundle()
@@ -109,7 +109,7 @@ class CollectionDialog : BottomSheetDialogFragment() {
     }
 
     private fun extracted() {
-        viewModel.collection.onEach {
+        viewModel.collectionUi.onEach {
             binding.recyclerView.adapter = adapter
             binding.recyclerView.layoutManager = LinearLayoutManager(context)
             //binding.recyclerView.addItemDecoration(DividerItemDecoration(context, layoutManager.orientation))
@@ -118,7 +118,7 @@ class CollectionDialog : BottomSheetDialogFragment() {
     }
 
 
-    fun onItemChecked(item: CollectionsEntity) {
+    fun onItemChecked(item: CollectionsUiModel) {
 
 
         item.id.let {

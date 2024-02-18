@@ -1,5 +1,6 @@
 package com.example.skillsinema.dao
 
+import androidx.annotation.Nullable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -16,6 +17,7 @@ data class CollectionsEntity(
     val collectionName: String,
 
     //@TypeConverters(Converter::class)
+
     @ColumnInfo(name = "collection")
     val collection: List<Int>,
 

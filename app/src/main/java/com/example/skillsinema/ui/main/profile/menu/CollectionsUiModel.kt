@@ -4,7 +4,10 @@ import javax.inject.Inject
 
 data class CollectionsUiModel @Inject constructor(
     val id: Int,
-    val collectionName: String,
-    val collection: List<Int>,
-    val isChecked: Boolean,
-)
+    val collectionName:String,
+    var collection: List<Int>,
+    var isChecked: Boolean,
+
+    ){
+    constructor() : this(0, "", listOf(), false)
+}
