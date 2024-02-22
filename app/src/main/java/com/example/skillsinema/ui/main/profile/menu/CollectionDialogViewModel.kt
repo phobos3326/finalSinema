@@ -99,53 +99,61 @@ class CollectionDialogViewModel @Inject constructor(
     }
 
 
-  /*  fun update(collectionItem: CollectionsUiModel) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val db = _collectionUi.value.toMutableList()
-            var mList = mutableListOf<Int>(1)
-          if ( !collectionItem.collection?.contains(getValue())!!){
+    /*  fun update(collectionItem: CollectionsUiModel) {
+          viewModelScope.launch(Dispatchers.IO) {
+              val db = _collectionUi.value.toMutableList()
+              var mList = mutableListOf<Int>(1)
+            if ( !collectionItem.collection?.contains(getValue())!!){
 
-              mList.addAll(collectionItem.collection!!)
-              mList.add(getValue())
-              collectionItem.collection = mList
-          }
-            db.forEach {collectionsUiModel ->
-                if (collectionsUiModel.id== collectionItem.id){
-                    collectionsUiModel.collection = collectionItem.collection
-                }
+                mList.addAll(collectionItem.collection!!)
+                mList.add(getValue())
+                collectionItem.collection = mList
             }
+              db.forEach {collectionsUiModel ->
+                  if (collectionsUiModel.id== collectionItem.id){
+                      collectionsUiModel.collection = collectionItem.collection
+                  }
+              }
 
-            var UIModelList = mutableListOf<CollectionsEntity>()
+              var UIModelList = mutableListOf<CollectionsEntity>()
 
 
-            db.forEach {
+              db.forEach {
+                  collectionEntityRepository.updateCollectionList(
+                      it.collectionName,
+                      mList
+                  )
+              }
+
+              _collectionUi.value = db
+
+          }
+          show()
+      }*/
+
+
+    fun update(uiModel: CollectionsUiModel) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val updatedCollection = uiModel.collection.toMutableList()
+            var entity = mapUiModelToEntity(uiModel)
+            if (!uiModel.collection.contains(getValue()) && !uiModel.isChecked) {
+                updatedCollection.add(getValue())
+                val updatedModel = uiModel.copy(collection = updatedCollection, isChecked = true)
+                 entity = mapUiModelToEntity(updatedModel)
                 collectionEntityRepository.updateCollectionList(
-                    it.collectionName,
-                    mList
+                    entity.collectionName,
+                    entity.collection
+                )
+            } else {
+                 updatedCollection.remove(getValue())
+                val updatedModel = uiModel.copy(collection = updatedCollection, isChecked = false)
+                entity = mapUiModelToEntity(updatedModel)
+                collectionEntityRepository.updateCollectionList(
+                    entity.collectionName,
+                    entity.collection
                 )
             }
-
-            _collectionUi.value = db
-
         }
-        show()
-    }*/
-
-
-    fun update(uiModel: CollectionsUiModel){
-        viewModelScope.launch(Dispatchers.IO) {
-        if (!uiModel.collection.contains(getValue())){
-            val updatedCollection = uiModel.collection.toMutableList()
-            updatedCollection.add(getValue())
-            val updatedModel = uiModel.copy(collection = updatedCollection, isChecked = true)
-            val entity = mapUiModelToEntity(updatedModel)
-
-
-            collectionEntityRepository.updateCollectionList(
-                entity.collectionName,
-                entity.collection
-            )
-        }}
 
         show()
     }
@@ -156,28 +164,28 @@ class CollectionDialogViewModel @Inject constructor(
             uiModel.collectionName,
             uiModel.collection,
 
-        )
+            )
     }
 
-      /* fun update(colllection: CollectionsEntity) {
-           viewModelScope.launch(Dispatchers.IO) {
-               val db = collectionEntityRepository.getAll()
-               val dbList =
-                   collectionEntityRepository.getCollectionList(colllection.collectionName).collection
+    /* fun update(colllection: CollectionsEntity) {
+         viewModelScope.launch(Dispatchers.IO) {
+             val db = collectionEntityRepository.getAll()
+             val dbList =
+                 collectionEntityRepository.getCollectionList(colllection.collectionName).collection
 
-               val mutableDBList = dbList?.toMutableList()
+             val mutableDBList = dbList?.toMutableList()
 
-               if (!mutableDBList?.contains(getValue())!!) {
-                   mutableDBList?.add(getValue())
-               }
+             if (!mutableDBList?.contains(getValue())!!) {
+                 mutableDBList?.add(getValue())
+             }
 
-               collectionEntityRepository.updateCollectionList(
-                   colllection.collectionName,
-                   mutableDBList
-               )
-               _collection.value = db
-           }
-       }*/
+             collectionEntityRepository.updateCollectionList(
+                 colllection.collectionName,
+                 mutableDBList
+             )
+             _collection.value = db
+         }
+     }*/
 
     fun show() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -198,7 +206,7 @@ class CollectionDialogViewModel @Inject constructor(
         }
     }
 
-    fun toDB(){
+    fun toDB() {
 
     }
 
@@ -212,11 +220,11 @@ class CollectionDialogViewModel @Inject constructor(
     }
 
 
-    fun CollectionsUiModel.toCollectionEntity(isChecked: Boolean = false):CollectionsEntity{
+    fun CollectionsUiModel.toCollectionEntity(isChecked: Boolean = false): CollectionsEntity {
         return CollectionsEntity(
             id = this.id,
             collectionName = this.collectionName,
-            collection= this.collection
+            collection = this.collection
 
         )
     }
