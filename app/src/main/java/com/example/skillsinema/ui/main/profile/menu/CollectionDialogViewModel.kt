@@ -99,7 +99,7 @@ class CollectionDialogViewModel @Inject constructor(
     }
 
 
-    fun update(collectionItem: CollectionsUiModel) {
+  /*  fun update(collectionItem: CollectionsUiModel) {
         viewModelScope.launch(Dispatchers.IO) {
             val db = _collectionUi.value.toMutableList()
             var mList = mutableListOf<Int>(1)
@@ -129,6 +129,34 @@ class CollectionDialogViewModel @Inject constructor(
 
         }
         show()
+    }*/
+
+
+    fun update(uiModel: CollectionsUiModel){
+        viewModelScope.launch(Dispatchers.IO) {
+        if (!uiModel.collection.contains(getValue())){
+            val updatedCollection = uiModel.collection.toMutableList()
+            updatedCollection.add(getValue())
+            val updatedModel = uiModel.copy(collection = updatedCollection, isChecked = true)
+            val entity = mapUiModelToEntity(updatedModel)
+
+
+            collectionEntityRepository.updateCollectionList(
+                entity.collectionName,
+                entity.collection
+            )
+        }}
+
+        show()
+    }
+
+    fun mapUiModelToEntity(uiModel: CollectionsUiModel): CollectionsEntity {
+        return CollectionsEntity(
+            uiModel.id,
+            uiModel.collectionName,
+            uiModel.collection,
+
+        )
     }
 
       /* fun update(colllection: CollectionsEntity) {

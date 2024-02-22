@@ -51,17 +51,20 @@ class AddCollectionAdapterTWO @Inject constructor(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        (holder as ViewHolder)
         val item = getItem(position)
-        holder.bind(item)
+        (holder as ViewHolder).bind(getItem(position))
+        holder.checkbox.setOnCheckedChangeListener { _, isChecked ->
+            onChecked(item)
+        }
+
 
 
     }
 
 
-    inner class ViewHolder(private val binding: CollectionRecyclerItemBinding) :
+    class ViewHolder(private val binding: CollectionRecyclerItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
+        val checkbox = binding.checkBox
         fun bind(item: CollectionsUiModel) {
             binding.collectionNameTextView.text = item.collectionName
             binding.collectionSizeTextView.text = item.collection?.size.toString()
@@ -70,9 +73,9 @@ class AddCollectionAdapterTWO @Inject constructor(
 
 
 
-            binding.checkBox.setOnCheckedChangeListener { _, isChecked ->
+           /* binding.checkBox.setOnCheckedChangeListener { _, isChecked ->
                 onChecked(item)
-            }
+            }*/
 
         }
     }
