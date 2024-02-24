@@ -114,6 +114,7 @@ class CollectionDialog : BottomSheetDialogFragment() {
             binding.recyclerView.layoutManager = LinearLayoutManager(context)
             //binding.recyclerView.addItemDecoration(DividerItemDecoration(context, layoutManager.orientation))
             adapter.submitList(it)
+
         }.launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
@@ -123,6 +124,7 @@ class CollectionDialog : BottomSheetDialogFragment() {
 
         item.id.let {
             viewModel.update(item)
+
         }
 
 

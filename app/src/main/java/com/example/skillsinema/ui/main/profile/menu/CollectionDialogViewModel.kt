@@ -144,6 +144,8 @@ class CollectionDialogViewModel @Inject constructor(
                     entity.collectionName,
                     entity.collection
                 )
+
+                show()
             } else {
                  updatedCollection.remove(getValue())
                 val updatedModel = uiModel.copy(collection = updatedCollection, isChecked = false)
@@ -151,11 +153,14 @@ class CollectionDialogViewModel @Inject constructor(
                 collectionEntityRepository.updateCollectionList(
                     entity.collectionName,
                     entity.collection
+
                 )
+
+                show()
             }
         }
 
-        show()
+
     }
 
     fun mapUiModelToEntity(uiModel: CollectionsUiModel): CollectionsEntity {

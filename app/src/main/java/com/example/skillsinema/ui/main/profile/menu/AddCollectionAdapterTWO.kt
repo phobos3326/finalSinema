@@ -55,8 +55,9 @@ class AddCollectionAdapterTWO @Inject constructor(
         (holder as ViewHolder).bind(getItem(position))
         holder.checkbox.setOnCheckedChangeListener { _, isChecked ->
             onChecked(item)
-        }
 
+
+        }
 
 
     }
@@ -71,11 +72,9 @@ class AddCollectionAdapterTWO @Inject constructor(
             binding.checkBox.isChecked = item.isChecked
 
 
-
-
-           /* binding.checkBox.setOnCheckedChangeListener { _, isChecked ->
-                onChecked(item)
-            }*/
+            /* binding.checkBox.setOnCheckedChangeListener { _, isChecked ->
+                 onChecked(item)
+             }*/
 
         }
     }
