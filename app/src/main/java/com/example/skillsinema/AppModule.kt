@@ -21,6 +21,6 @@ class AppModule {
     @Provides
     @Singleton
     fun provideCollectionsUiModel(): CollectionsUiModel {
-        return CollectionsUiModel(0, "", listOf(), false) // Replace the default values with the actual values you want to provide
+        return CollectionsUiModel(0, "", emptyList<Int>(), false) // Replace the default values with the actual values you want to provide
     }
 }

@@ -72,7 +72,7 @@ interface CollectionDao {
     suspend fun insert(item: CollectionsEntity)
 
     @Query("UPDATE collections  SET collection = :collection WHERE collectionName = :name ")
-    suspend fun updateList(collection: List<Int>, name: String)
+    suspend fun updateList(collection: List<Int>?, name: String)
 
     @Delete
     fun delete(item:CollectionsEntity)

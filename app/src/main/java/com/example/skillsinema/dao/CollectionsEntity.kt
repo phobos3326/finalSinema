@@ -17,10 +17,9 @@ data class CollectionsEntity(
     val collectionName: String,
 
     //@TypeConverters(Converter::class)
-
+    @Nullable
     @ColumnInfo(name = "collection")
-    val collection: List<Int>,
-
+    val collection: List<Int>?,
 
 
     )

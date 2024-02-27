@@ -22,7 +22,7 @@ class CollectionEntityRepository @Inject constructor(
        return collectionDao.getCollectionList(name)
     }
 
-    suspend fun updateCollectionList(name: String,list:List<Int>){
+    suspend fun updateCollectionList(name: String,list:List<Int>?){
         collectionDao.updateList(list, name)
     }
 

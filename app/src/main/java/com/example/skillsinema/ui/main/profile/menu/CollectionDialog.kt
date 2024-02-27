@@ -100,7 +100,7 @@ class CollectionDialog : BottomSheetDialogFragment() {
             //myDialogFragment.show(transaction, "dialog")
             val transaction: FragmentTransaction = manager.beginTransaction()
             myDialogFragment.show(transaction, "dialog")
-
+            extracted()
 
             // viewModel.insertIdtoDB()
         }

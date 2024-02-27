@@ -10,15 +10,21 @@ import java.io.Serializable
 class Converter {
 
     @TypeConverter
-    fun fromString(value: String): List<Int> {
-        val type = object : TypeToken<List<Int>>() {}.type
-       // return Gson().fromJson(value, type)
-        return Gson().fromJson(value, Array<Int>::class.java).toList()
+    fun fromString(value: String?): List<Int>? {
+       return if (value == null) {
+            listOf<Int>()
+        } else {
+            val type = object : TypeToken<List<Int>>() {}.type
+            return Gson().fromJson(value, Array<Int>::class.java)?.toList()
+        }
+
+
+
     }
 
     @TypeConverter
-    fun fromArray(list: List<Int>): String? {
-        return if (list.isEmpty()){
+    fun fromArray(list: List<Int>?): String? {
+        return if (list?.isEmpty() == true){
             null
         } else {
             Gson().toJson(list)

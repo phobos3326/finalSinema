@@ -47,44 +47,7 @@ class ThirdFragmentViewModel @Inject constructor(
     fun wantToSee() {
         viewModelScope.launch(Dispatchers.IO) {
             val db = collectionEntityRepository.getAll()
-
-            //val dbList = collectionEntityRepository.getCollectionList(1).collection
-            //val dbbb =
-
-     /*       val mutableDBList = dbList.toMutableList()
-
-            if (!mutableDBList.contains(6)) {
-                mutableDBList.add(6)
-            }
-
-         *//*   if(mutableDBList.contains(99)){
-
-                mutableDBList.remove(99)
-            }*//*
-
-                collectionEntityRepository.insertCollection(
-                    CollectionsEntity(
-                        0,
-                        "name",
-                        mutableDBList
-                    )
-                )*/
-
-
-            //collectionEntityRepository.updateCollectionList (1,  mutableDBList)
-
-
-           // Log.d(TAG, "list_____ $dbList")
-
             _collection.value = db
-
-            /*Log.d(TAG, "list ${db}")
-
-            for (i in db) {
-                Log.d(TAG, "list ${i.id}, ${i.collection.joinToString(",")}, ${i.collectionName}")
-            }*/
-
-
         }
 
 
@@ -95,6 +58,8 @@ class ThirdFragmentViewModel @Inject constructor(
             val db = collectionEntityRepository.getAll()
             collectionEntityRepository.delete(item )
             _collection.value = db
+
+            wantToSee()
         }
     }
 

@@ -6,12 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.skillsinema.R
 import com.example.skillsinema.dao.CollectionsEntity
 import com.example.skillsinema.databinding.FragmentItemInfoBinding
 import com.example.skillsinema.databinding.FragmentThirdBinding
+import com.example.skillsinema.ui.main.profile.menu.AlertDialogFragment
 import com.example.skillsinema.ui.main.profile.menu.CollectionDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
@@ -61,12 +63,32 @@ class ThirdFragment : Fragment() {
 
         }
 
+        extracted()
+
+
+        binding.createCollectionTextView.setOnClickListener {
+
+            val myDialogFragment = AlertDialogFragment()
+            val manager = requireActivity().supportFragmentManager
+            //myDialogFragment.show(manager, "myDialog")
+
+
+            //myDialogFragment.show(transaction, "dialog")
+            val transaction: FragmentTransaction = manager.beginTransaction()
+            myDialogFragment.show(transaction, "dialog")
+
+
+            // viewModel.insertIdtoDB()
+        }
+
+
+    }
+
+    private fun extracted() {
         viewModel.collection.onEach {
             binding.collectionRecycler.adapter = adapter
             adapter.submitList(it)
         }.launchIn(viewLifecycleOwner.lifecycleScope)
-
-
     }
 
     fun onDelete(item:CollectionsEntity){
