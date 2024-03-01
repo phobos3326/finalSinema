@@ -44,6 +44,7 @@ class CollectionAdapter @Inject constructor(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding = CollectionItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
+
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {

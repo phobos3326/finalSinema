@@ -63,6 +63,7 @@ class CollectionDialogViewModel @Inject constructor(
                 val db = collectionEntityRepository.getAll()
 
                 _collection.value = db
+                _collection.emit(db)
 
             }
 
@@ -91,13 +92,11 @@ class CollectionDialogViewModel @Inject constructor(
     }
 
 
-
-
     fun update(uiModel: CollectionsUiModel) {
         viewModelScope.launch(Dispatchers.IO) {
             var updatedCollection = uiModel.collection?.toMutableList()
             var entity = mapUiModelToEntity(uiModel)
-            if(uiModel.collection?.isEmpty() ?: true && !uiModel.isChecked ){
+            if (uiModel.collection?.isEmpty() ?: true && !uiModel.isChecked) {
                 updatedCollection = mutableListOf()
                 updatedCollection?.add(getValue())
                 val updatedModel = uiModel.copy(collection = updatedCollection, isChecked = true)
@@ -108,11 +107,10 @@ class CollectionDialogViewModel @Inject constructor(
                 )
 
                 show()
-            }
-           else if (uiModel.collection?.contains(getValue()) != true && !uiModel.isChecked) {
+            } else if (uiModel.collection?.contains(getValue()) != true && !uiModel.isChecked) {
                 updatedCollection?.add(getValue())
                 val updatedModel = uiModel.copy(collection = updatedCollection, isChecked = true)
-                 entity = mapUiModelToEntity(updatedModel)
+                entity = mapUiModelToEntity(updatedModel)
                 collectionEntityRepository.updateCollectionList(
                     entity.collectionName,
                     entity.collection
@@ -120,7 +118,7 @@ class CollectionDialogViewModel @Inject constructor(
 
                 show()
             } else {
-                 updatedCollection?.remove(getValue())
+                updatedCollection?.remove(getValue())
                 val updatedModel = uiModel.copy(collection = updatedCollection, isChecked = false)
                 entity = mapUiModelToEntity(updatedModel)
                 collectionEntityRepository.updateCollectionList(
@@ -169,7 +167,7 @@ class CollectionDialogViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val db = collectionEntityRepository.getAll()
             var UIModelList = emptyList<CollectionsUiModel>().toMutableList()
-            if (UIModelList.isEmpty()){
+            if (UIModelList.isEmpty()) {
                 UIModelList = mutableListOf()
             }
             db.forEach {

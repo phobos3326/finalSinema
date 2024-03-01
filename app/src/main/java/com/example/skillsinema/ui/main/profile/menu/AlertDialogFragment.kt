@@ -12,6 +12,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.example.skillsinema.R
 import com.example.skillsinema.dao.CollectionsEntity
+import com.example.skillsinema.ui.main.profile.CollectionAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 // TODO: Rename parameter arguments, choose names that match
@@ -22,7 +23,8 @@ private const val ARG_PARAM2 = "param2"
 @AndroidEntryPoint
 class AlertDialogFragment : DialogFragment() {
     // TODO: Rename and change types of parameters
-    val viewModel : CollectionDialogViewModel by viewModels()
+    val viewModel: CollectionDialogViewModel by viewModels()
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
             val input = EditText(requireContext())
@@ -32,8 +34,7 @@ class AlertDialogFragment : DialogFragment() {
                 .setView(input)
                 .setMessage("Покормите кота!")
 
-                .setPositiveButton("ОК, иду на кухню") {
-                        dialog, id ->
+                .setPositiveButton("ОК, иду на кухню") { dialog, id ->
                     val enteredText = input.text.toString()
                     viewModel.insertIdtoDB(enteredText)
 

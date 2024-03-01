@@ -32,7 +32,8 @@ class MainFragment @Inject constructor() : Fragment() {
 
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
-    private val adapter = MyAdapter { onItemClick(it) }
+    private val adapter = MyAdapter {
+        onItemClick(it) }
 
 
     private val adapterBestFilms = AdapterBestFilm {
