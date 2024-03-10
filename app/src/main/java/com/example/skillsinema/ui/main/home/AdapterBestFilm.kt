@@ -23,9 +23,12 @@ import com.example.skillsinema.databinding.SecondItemBinding
 import javax.inject.Inject
 
 class AdapterBestFilm @Inject constructor(
-    private val onClick: (Film) -> Unit
+    private val onClick: (Film) -> Unit,
+    private val onClickShowAll:(TypeOfAdapter) ->Unit
 
 ) : ListAdapter<Film, RecyclerView.ViewHolder>(DiffUtilCallback()) {
+
+    val type = TypeOfAdapter.WITHOUTPAGING
 
     private var onClickListener: OnClickListener? = null
 
@@ -62,7 +65,8 @@ class AdapterBestFilm @Inject constructor(
         } else {
             (holder as MyViewHolder2).bind()
             holder.itemView.setOnClickListener {
-                it.findNavController().navigate(R.id.action_home_fragment_to_showAllFragment)
+                //it.findNavController().navigate(R.id.action_home_fragment_to_showAllFragment)
+                onClickShowAll(type)
             }
         }
     }

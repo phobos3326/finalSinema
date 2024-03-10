@@ -24,6 +24,7 @@ import com.example.skillsinema.entity.Film
 import com.example.skillsinema.entity.ModelFilmDetails
 import com.example.skillsinema.entity.ModelStaff
 import com.example.skillsinema.ui.main.home.AdapterBestFilm
+import com.example.skillsinema.ui.main.home.TypeOfAdapter
 import com.example.skillsinema.ui.main.profile.menu.CollectionDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -50,9 +51,13 @@ class ItemInfoFragment : Fragment() {
         onItemActorClick(it)
     }
     val galerieAdapter = GalerieAdapter()
-    val similarFilmAdapter = AdapterBestFilm {
-        onItemDetailClick(it)
-    }
+    val similarFilmAdapter =  AdapterBestFilm (
+
+        onClick = {item-> onItemDetailClick(item)},
+
+        onClickShowAll = {type->onClickShowAll(type) }
+
+    )
 
     val bundle = Bundle()
 
@@ -286,7 +291,24 @@ class ItemInfoFragment : Fragment() {
     }
 
 
+    private fun onClickShowAll(type: TypeOfAdapter) {
 
+
+        when(type){
+            TypeOfAdapter.WITHOUTPAGING -> {
+                bundle.putSerializable("Arg2", TypeOfAdapter.WITHOUTPAGING)
+            }
+            TypeOfAdapter.WITHPAGING->{
+                bundle.putSerializable("Arg2", TypeOfAdapter.WITHPAGING)
+            }
+        }
+
+
+
+
+
+        findNavController().navigate(R.id.action_home_fragment_to_showAllFragment, bundle)
+    }
 
 
     companion object {

@@ -48,6 +48,7 @@ class ShowAllFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val dapterType = arguments?.getSerializable("Arg2")
 
         viewModel.pagedFilms.onEach {
             binding.SHOWALLRecyclerView.adapter = adapterPagedFilm

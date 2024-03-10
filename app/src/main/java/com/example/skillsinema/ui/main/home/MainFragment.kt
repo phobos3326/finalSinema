@@ -33,12 +33,17 @@ class MainFragment @Inject constructor() : Fragment() {
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
     private val adapter = MyAdapter {
-        onItemClick(it) }
-
-
-    private val adapterBestFilms = AdapterBestFilm {
-        onItemDetailClick(it)
+        onItemClick(it)
     }
+
+
+    private val adapterBestFilms = AdapterBestFilm (
+
+        onClick = {item-> onItemDetailClick(item)},
+
+        onClickShowAll = {type->onClickShowAll(type) }
+
+    )
 
     private val adapterFilteredFilms = AdapterFilteredFilms {
         onItemDetailClick(it)
@@ -62,8 +67,9 @@ class MainFragment @Inject constructor() : Fragment() {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
 
         binding.SHOWALL.setOnClickListener { View ->
-            onClickShowAll()
+            //onClickShowAll()
         }
+
 
         //mainViewModel.getFilters()
         return binding.root
@@ -112,11 +118,30 @@ class MainFragment @Inject constructor() : Fragment() {
 
         Log.d(TAG, "onViewCreated");
 
+
+
+
+
     }
 
 
-    private fun onClickShowAll() {
-        findNavController().navigate(R.id.action_home_fragment_to_showAllFragment)
+    private fun onClickShowAll(type:TypeOfAdapter) {
+
+
+        when(type){
+            TypeOfAdapter.WITHOUTPAGING -> {
+                bundle.putSerializable("Arg2", TypeOfAdapter.WITHOUTPAGING)
+            }
+            TypeOfAdapter.WITHPAGING->{
+                bundle.putSerializable("Arg2", TypeOfAdapter.WITHPAGING)
+            }
+        }
+
+
+
+
+
+        findNavController().navigate(R.id.action_home_fragment_to_showAllFragment, bundle)
     }
 
     private fun onItemClick(item: Model.Item) {
@@ -138,8 +163,6 @@ class MainFragment @Inject constructor() : Fragment() {
 
 
     }
-
-
 
 
     fun ContentFragment() {
@@ -193,5 +216,6 @@ class MainFragment @Inject constructor() : Fragment() {
     }
 
     private val TAG = "ContentFragment"
+    private val TAG2 = "TypeAdapter"
 
 }
