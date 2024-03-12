@@ -18,9 +18,13 @@ import javax.inject.Inject
 
 class AdapterFilteredFilms @Inject constructor(
     private val onClick: (Film) -> Unit,
+    private val onClickShowAll:(TypeOfAdapter) ->Unit,
+    private val typeRV: (RVDataSource) -> RVDataSource,
 
-    ) : PagingDataAdapter<Film, RecyclerView.ViewHolder>(DiffUtilCallback()) {
 
+) : PagingDataAdapter<Film, RecyclerView.ViewHolder>(DiffUtilCallback()) {
+
+    private val type = TypeOfAdapter.WITHPAGING
 
     class DiffUtilCallback : DiffUtil.ItemCallback<Film>() {
         override fun areItemsTheSame(oldItem: Film, newItem: Film): Boolean = oldItem == newItem
@@ -33,7 +37,7 @@ class AdapterFilteredFilms @Inject constructor(
         // val binding2 = SecondItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
         val binding2 = SecondItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return if (viewType ==NOEND) {
+        return if (viewType == NOEND) {
             return MyViewHolder(binding)
         } else {
             MyViewHolder2(binding2)
@@ -58,7 +62,8 @@ class AdapterFilteredFilms @Inject constructor(
         } else {
             (holder as MyViewHolder2).bind()
             holder.itemView.setOnClickListener {
-                it.findNavController().navigate(R.id.action_home_fragment_to_showAllFragment)
+                typeRV
+                onClickShowAll(type)
             }
         }
 
@@ -105,7 +110,7 @@ class AdapterFilteredFilms @Inject constructor(
         private var binding1: ItemBinding
     ) : RecyclerView.ViewHolder(binding1.root) {
         fun bind(film: Film) {
-           binding1.title.text = film.nameRu
+            binding1.title.text = film.nameRu
             binding1.textViewRating.text = film.ratingImdb.toString()
             film.let {
                 Glide.with(binding1.poster)

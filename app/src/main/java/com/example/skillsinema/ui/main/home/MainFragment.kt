@@ -37,21 +37,28 @@ class MainFragment @Inject constructor() : Fragment() {
     }
 
 
-    private val adapterBestFilms = AdapterBestFilm (
+    private val adapterBestFilms = AdapterBestFilm(
 
-        onClick = {item-> onItemDetailClick(item)},
+        onClick = { item -> onItemDetailClick(item) },
 
-        onClickShowAll = {type->onClickShowAll(type) }
+        onClickShowAll = { type -> onClickShowAll(type) },
+        typeRV = { typeOfRecycler -> typeOfRecycler(RVDataSource.TOP250) }
+
+
 
     )
 
-    private val adapterFilteredFilms = AdapterFilteredFilms {
-        onItemDetailClick(it)
-    }
+    private val adapterFilteredFilms = AdapterFilteredFilms (
+        onClick = { item -> onItemDetailClick(item) },
+        onClickShowAll = { type -> onClickShowAll(type) },
+        typeRV = { typeOfRecycler -> typeOfRecycler(RVDataSource.COUNTRYWITHGENRE) }
+    )
 
-    private val adapterSerials = AdapterFilteredFilms {
-        onItemDetailClick(it)
-    }
+    private val adapterSerials = AdapterFilteredFilms (
+        onClick = { item -> onItemDetailClick(item) },
+        onClickShowAll = { type -> onClickShowAll(type) },
+        typeRV = { typeOfRecycler -> typeOfRecycler(RVDataSource.SERIALS) }
+    )
 
 
     private val mainViewModel: MainViewModel by viewModels()
@@ -89,6 +96,8 @@ class MainFragment @Inject constructor() : Fragment() {
             binding.TopFilmsRecyclerView.adapter = adapterBestFilms
 
             adapterBestFilms.submitList(it)
+
+
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
 
@@ -119,29 +128,31 @@ class MainFragment @Inject constructor() : Fragment() {
         Log.d(TAG, "onViewCreated");
 
 
-
-
-
     }
 
 
-    private fun onClickShowAll(type:TypeOfAdapter) {
+    private fun onClickShowAll(type: TypeOfAdapter) {
 
-
-        when(type){
+        when (type) {
             TypeOfAdapter.WITHOUTPAGING -> {
-                bundle.putSerializable("Arg2", TypeOfAdapter.WITHOUTPAGING)
+
+                bundle.putSerializable("Arg2", type)
+
+                findNavController().navigate(R.id.action_home_fragment_to_showAllFragment, bundle)
             }
-            TypeOfAdapter.WITHPAGING->{
-                bundle.putSerializable("Arg2", TypeOfAdapter.WITHPAGING)
+
+            TypeOfAdapter.WITHPAGING -> {
+                bundle.putSerializable("Arg2", type)
+
+                findNavController().navigate(R.id.action_home_fragment_to_showAllFragment, bundle)
             }
         }
 
+    }
 
-
-
-
-        findNavController().navigate(R.id.action_home_fragment_to_showAllFragment, bundle)
+    private fun typeOfRecycler(typeRV: RVDataSource): RVDataSource {
+        Log.d("TYPERV", "typeRV")
+        return typeRV
     }
 
     private fun onItemClick(item: Model.Item) {

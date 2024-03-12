@@ -2,6 +2,7 @@ package com.example.skillsinema.ui.main.actorInfo
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +19,8 @@ import com.example.skillsinema.databinding.FragmentMainBinding
 import com.example.skillsinema.entity.Film
 import com.example.skillsinema.ui.main.home.AdapterBestFilm
 import com.example.skillsinema.ui.main.home.AdapterFilteredFilms
+import com.example.skillsinema.ui.main.home.RVDataSource
+import com.example.skillsinema.ui.main.home.TypeOfAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -34,9 +37,12 @@ class ActorInfoFragment @Inject constructor() : Fragment() {
     /* companion object {
          fun newInstance() = ActorInfoFragment()
      }*/
-    val adapter = AdapterFilteredFilms {
-        onItemDetailClick(it)
-    }
+    val adapter = AdapterFilteredFilms (
+        onClick = { item -> onItemDetailClick(item) },
+        onClickShowAll = { type -> onClickShowAll(type) },
+        typeRV = { typeOfRecycler -> typeOfRecycler(RVDataSource.SERIALS) }
+    )
+
     val bundle = Bundle()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -101,5 +107,29 @@ class ActorInfoFragment @Inject constructor() : Fragment() {
          // TODO: Use the ViewModel
      }*/
 
+
+    private fun onClickShowAll(type: TypeOfAdapter) {
+
+
+        when(type){
+            TypeOfAdapter.WITHOUTPAGING -> {
+                bundle.putSerializable("Arg2", TypeOfAdapter.WITHOUTPAGING)
+            }
+            TypeOfAdapter.WITHPAGING->{
+                bundle.putSerializable("Arg2", TypeOfAdapter.WITHPAGING)
+            }
+        }
+
+
+
+
+
+        findNavController().navigate(R.id.action_home_fragment_to_showAllFragment, bundle)
+    }
+
+    private fun typeOfRecycler(typeRV: RVDataSource): RVDataSource {
+        Log.d("TYPERV", "typeRV")
+        return typeRV
+    }
 
 }

@@ -24,6 +24,7 @@ import com.example.skillsinema.entity.Film
 import com.example.skillsinema.entity.ModelFilmDetails
 import com.example.skillsinema.entity.ModelStaff
 import com.example.skillsinema.ui.main.home.AdapterBestFilm
+import com.example.skillsinema.ui.main.home.RVDataSource
 import com.example.skillsinema.ui.main.home.TypeOfAdapter
 import com.example.skillsinema.ui.main.profile.menu.CollectionDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -54,7 +55,7 @@ class ItemInfoFragment : Fragment() {
     val similarFilmAdapter =  AdapterBestFilm (
 
         onClick = {item-> onItemDetailClick(item)},
-
+        typeRV = { typeOfRecycler -> typeOfRecycler(RVDataSource.SERIALS) },
         onClickShowAll = {type->onClickShowAll(type) }
 
     )
@@ -77,6 +78,8 @@ class ItemInfoFragment : Fragment() {
 
         }
     }
+
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
@@ -308,6 +311,11 @@ class ItemInfoFragment : Fragment() {
 
 
         findNavController().navigate(R.id.action_home_fragment_to_showAllFragment, bundle)
+    }
+
+    private fun typeOfRecycler(typeRV: RVDataSource): RVDataSource {
+        Log.d("TYPERV", "typeRV")
+        return typeRV
     }
 
 

@@ -13,6 +13,7 @@ import com.example.skillsinema.R
 import com.example.skillsinema.entity.Film
 
 import com.example.skillsinema.databinding.FragmentShowAllBinding
+import com.example.skillsinema.ui.main.home.AdapterFilteredFilms
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -30,6 +31,7 @@ class ShowAllFragment : Fragment() {
     val bundle =Bundle()
 
     private val adapterPagedFilm =AdapterPagedFilm {onItemClick(it)}
+    //private val pagingAdapter = AdapterFilteredFilms{onItemClick(it)}
 
     companion object {
         //fun newInstance() = ShowAllFragment()

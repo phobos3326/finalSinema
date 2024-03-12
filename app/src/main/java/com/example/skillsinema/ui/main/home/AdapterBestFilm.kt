@@ -24,11 +24,12 @@ import javax.inject.Inject
 
 class AdapterBestFilm @Inject constructor(
     private val onClick: (Film) -> Unit,
-    private val onClickShowAll:(TypeOfAdapter) ->Unit
+    private val onClickShowAll:(TypeOfAdapter) ->Unit,
+    private val typeRV:(RVDataSource) -> Unit
 
 ) : ListAdapter<Film, RecyclerView.ViewHolder>(DiffUtilCallback()) {
 
-    val type = TypeOfAdapter.WITHOUTPAGING
+   private val type = TypeOfAdapter.WITHPAGING
 
     private var onClickListener: OnClickListener? = null
 
