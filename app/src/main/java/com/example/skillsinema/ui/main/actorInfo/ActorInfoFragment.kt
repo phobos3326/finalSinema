@@ -18,6 +18,8 @@ import com.example.skillsinema.databinding.FragmentMainBinding
 import com.example.skillsinema.entity.Film
 import com.example.skillsinema.ui.main.home.AdapterBestFilm
 import com.example.skillsinema.ui.main.home.AdapterFilteredFilms
+import com.example.skillsinema.ui.main.home.RVDataType
+import com.example.skillsinema.ui.main.home.TypeOfAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -34,9 +36,11 @@ class ActorInfoFragment @Inject constructor() : Fragment() {
     /* companion object {
          fun newInstance() = ActorInfoFragment()
      }*/
-    val adapter = AdapterFilteredFilms {
-        onItemDetailClick(it)
-    }
+    val adapter = AdapterFilteredFilms (
+        onClick = {item-> onItemDetailClick(item)},
+
+        onClickShowAll = {type, rvType->onClickShowAll(type, rvType) }
+    )
     val bundle = Bundle()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,6 +90,35 @@ class ActorInfoFragment @Inject constructor() : Fragment() {
 
     }
 
+    private fun onClickShowAll(type: TypeOfAdapter, rvType: RVDataType) {
+
+
+        when(type){
+            TypeOfAdapter.WITHOUTPAGING -> {
+                bundle.putSerializable("Arg2", TypeOfAdapter.WITHOUTPAGING)
+            }
+            TypeOfAdapter.WITHPAGING->{
+                bundle.putSerializable("Arg2", TypeOfAdapter.WITHPAGING)
+            }
+        }
+
+        when(rvType){
+            RVDataType.TOP250->{
+                bundle.putSerializable("Arg3", RVDataType.TOP250)
+            }
+            RVDataType.COUNTRYWITHGENRE->{
+                bundle.putSerializable("Arg3", RVDataType.COUNTRYWITHGENRE)
+            }
+            RVDataType.PREMIERES->{
+                bundle.putSerializable("Arg3", RVDataType.PREMIERES)
+            }
+            RVDataType.SERIALS->{
+                bundle.putSerializable("Arg3", RVDataType.SERIALS)
+            }
+        }
+
+        findNavController().navigate(R.id.action_home_fragment_to_showAllFragment, bundle)
+    }
 
     private fun onItemDetailClick(item: Film) {
         if (item.kinopoiskId == null) {

@@ -35,4 +35,11 @@ class DataRepository @Inject constructor(
     var keyword: String = ""
 
     var seriesID: Int?   = null
+
+
+    var rndGenre = 0
+    var rndCountry = 0
+    var rndCountryLabel = ""
+    var rndGenreLabel = ""
+
 }

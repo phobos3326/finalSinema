@@ -18,9 +18,12 @@ import javax.inject.Inject
 
 class AdapterFilteredFilms @Inject constructor(
     private val onClick: (Film) -> Unit,
+    private val onClickShowAll:(TypeOfAdapter, RVDataType) ->Unit
 
     ) : PagingDataAdapter<Film, RecyclerView.ViewHolder>(DiffUtilCallback()) {
 
+    val type = TypeOfAdapter.WITHPAGING
+    var rvType = RVDataType.COUNTRYWITHGENRE
 
     class DiffUtilCallback : DiffUtil.ItemCallback<Film>() {
         override fun areItemsTheSame(oldItem: Film, newItem: Film): Boolean = oldItem == newItem
@@ -58,7 +61,7 @@ class AdapterFilteredFilms @Inject constructor(
         } else {
             (holder as MyViewHolder2).bind()
             holder.itemView.setOnClickListener {
-                it.findNavController().navigate(R.id.action_home_fragment_to_showAllFragment)
+                onClickShowAll(type, rvType)
             }
         }
 

@@ -24,6 +24,7 @@ import com.example.skillsinema.entity.Film
 import com.example.skillsinema.entity.ModelFilmDetails
 import com.example.skillsinema.entity.ModelStaff
 import com.example.skillsinema.ui.main.home.AdapterBestFilm
+import com.example.skillsinema.ui.main.home.RVDataType
 import com.example.skillsinema.ui.main.home.TypeOfAdapter
 import com.example.skillsinema.ui.main.profile.menu.CollectionDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -55,7 +56,7 @@ class ItemInfoFragment : Fragment() {
 
         onClick = {item-> onItemDetailClick(item)},
 
-        onClickShowAll = {type->onClickShowAll(type) }
+        onClickShowAll = {type, rvType->onClickShowAll(type, rvType) }
 
     )
 
@@ -143,13 +144,7 @@ class ItemInfoFragment : Fragment() {
         }
 
         lifecycleScope.launch {
-
-
-
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-
-
-
+           lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect {
                     when (it) {
                         StateItemFilmInfo.FilmState -> {
@@ -291,7 +286,7 @@ class ItemInfoFragment : Fragment() {
     }
 
 
-    private fun onClickShowAll(type: TypeOfAdapter) {
+    private fun onClickShowAll(type:TypeOfAdapter, rvType: RVDataType) {
 
 
         when(type){
@@ -303,12 +298,24 @@ class ItemInfoFragment : Fragment() {
             }
         }
 
-
-
-
+        when(rvType){
+            RVDataType.TOP250->{
+                bundle.putSerializable("Arg3", RVDataType.TOP250)
+            }
+            RVDataType.COUNTRYWITHGENRE->{
+                bundle.putSerializable("Arg3", RVDataType.COUNTRYWITHGENRE)
+            }
+            RVDataType.PREMIERES->{
+                bundle.putSerializable("Arg3", RVDataType.PREMIERES)
+            }
+            RVDataType.SERIALS->{
+                bundle.putSerializable("Arg3", RVDataType.SERIALS)
+            }
+        }
 
         findNavController().navigate(R.id.action_home_fragment_to_showAllFragment, bundle)
     }
+
 
 
     companion object {

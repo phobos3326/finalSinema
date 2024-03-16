@@ -41,17 +41,21 @@ class MainFragment @Inject constructor() : Fragment() {
 
         onClick = {item-> onItemDetailClick(item)},
 
-        onClickShowAll = {type->onClickShowAll(type) }
+        onClickShowAll = {type, rvType->onClickShowAll(type, rvType) }
 
     )
 
-    private val adapterFilteredFilms = AdapterFilteredFilms {
-        onItemDetailClick(it)
-    }
+    private val adapterFilteredFilms = AdapterFilteredFilms (
+        onClick = {item-> onItemDetailClick(item)},
 
-    private val adapterSerials = AdapterFilteredFilms {
-        onItemDetailClick(it)
-    }
+        onClickShowAll = {type, rvType->onClickShowAll(type, rvType) }
+    )
+
+    private val adapterSerials = AdapterFilteredFilms (
+        onClick = {item-> onItemDetailClick(item)},
+
+        onClickShowAll = {type, rvType->onClickShowAll(type, rvType) }
+    )
 
 
     private val mainViewModel: MainViewModel by viewModels()
@@ -108,7 +112,7 @@ class MainFragment @Inject constructor() : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             mainViewModel.serials.onEach {
                 binding.serialsRecyclerView.adapter = adapterSerials
-                //binding.filtered1.text = dataRepository.countryLabel
+                adapterSerials.rvType=RVDataType.SERIALS
                 adapterSerials.submitData(it)
                 Log.d("PDATA", "$it")
 
@@ -125,7 +129,7 @@ class MainFragment @Inject constructor() : Fragment() {
     }
 
 
-    private fun onClickShowAll(type:TypeOfAdapter) {
+    private fun onClickShowAll(type:TypeOfAdapter, rvType:RVDataType) {
 
 
         when(type){
@@ -137,12 +141,25 @@ class MainFragment @Inject constructor() : Fragment() {
             }
         }
 
-
-
-
+        when(rvType){
+            RVDataType.TOP250->{
+                bundle.putSerializable("Arg3", RVDataType.TOP250)
+            }
+            RVDataType.COUNTRYWITHGENRE->{
+                bundle.putSerializable("Arg3", RVDataType.COUNTRYWITHGENRE)
+            }
+            RVDataType.PREMIERES->{
+                bundle.putSerializable("Arg3", RVDataType.PREMIERES)
+            }
+            RVDataType.SERIALS->{
+                bundle.putSerializable("Arg3", RVDataType.SERIALS)
+            }
+        }
 
         findNavController().navigate(R.id.action_home_fragment_to_showAllFragment, bundle)
     }
+
+
 
     private fun onItemClick(item: Model.Item) {
 

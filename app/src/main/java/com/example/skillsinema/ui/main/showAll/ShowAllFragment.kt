@@ -7,15 +7,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.skillsinema.R
 import com.example.skillsinema.entity.Film
 
 import com.example.skillsinema.databinding.FragmentShowAllBinding
+import com.example.skillsinema.entity.Model
+import com.example.skillsinema.ui.main.home.AdapterBestFilm
+import com.example.skillsinema.ui.main.home.AdapterFilteredFilms
+import com.example.skillsinema.ui.main.home.RVDataType
+import com.example.skillsinema.ui.main.home.TypeOfAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -29,7 +37,14 @@ class ShowAllFragment : Fragment() {
 
     val bundle =Bundle()
 
-    private val adapterPagedFilm =AdapterPagedFilm {onItemClick(it)}
+    private val adapterPagedFilm =AdapterPagedFilm {onItemDetailClick(it)}
+    private val adapterBestFilms = AdapterBestFilm (
+
+        onClick = {item-> onItemDetailClick(item)},
+
+        onClickShowAll = {type, rvType->onClickShowAll(type, rvType) }
+
+    )
 
     companion object {
         //fun newInstance() = ShowAllFragment()
@@ -47,19 +62,142 @@ class ShowAllFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        arguments?.let {
+           val arg2 = it.getSerializable("Arg2") as? TypeOfAdapter
+            arg2?.let { it1 -> viewModel.setState(it1) }
+            val arg3 =it.getSerializable("Arg3") as RVDataType
+            viewModel.setStateType(arg3)
+        }
 
-        val dapterType = arguments?.getSerializable("Arg2")
+       /* viewModel.adapterType = arguments?.getSerializable("Arg2") as TypeOfAdapter?
+        viewModel.RVDataType = arguments?.getSerializable("Arg3") as RVDataType?*/
 
-        viewModel.pagedFilms.onEach {
-            binding.SHOWALLRecyclerView.adapter = adapterPagedFilm
-            //dapterBestFilms.loading = false
 
-            adapterPagedFilm.submitData(it)
-            //adapterBestFilms.loading =true
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModel.state.collect{
+                    when(it){
+                        TypeOfAdapter.WITHPAGING->{
+                            binding.SHOWALLRecyclerView.adapter = adapterPagedFilm
+                        }
+                        TypeOfAdapter.WITHOUTPAGING->{
+                            binding.SHOWALLRecyclerView.adapter = adapterPagedFilm
+                        }
+                    }
+                }
+            }
+        }
 
-        }.launchIn(viewLifecycleOwner.lifecycleScope)
+
+        lifecycleScope.launch{
+           lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+               viewModel.stateRVDataType.collect{
+                   when(it){
+                       RVDataType.TOP250->{
+                           binding.textView.text="ТОП 250"
+                           viewModel.pagedFilms.onEach {
+                               binding.SHOWALLRecyclerView.adapter = adapterPagedFilm
+                               //dapterBestFilms.loading = false
+
+                               adapterPagedFilm.submitData(it)
+                               //adapterBestFilms.loading =true
+
+                           }.launchIn(viewLifecycleOwner.lifecycleScope)
+                       }
+                       RVDataType.PREMIERES->{
+
+                       }
+                       RVDataType.SERIALS->{
+
+                           binding.textView.text="сериалы"
+                           viewLifecycleOwner.lifecycleScope.launch {
+                               viewModel.serials.onEach {
+                                   binding.SHOWALLRecyclerView.adapter=adapterPagedFilm
+                                   adapterPagedFilm.submitData(it)
+                               }.launchIn(viewLifecycleOwner.lifecycleScope)
+                           }
+
+                       }
+                       RVDataType.COUNTRYWITHGENRE->{
+                           binding.textView.text="страна и жанр"
+                           viewLifecycleOwner.lifecycleScope.launch {
+                               viewModel.getFilters().onEach {
+                                   binding.SHOWALLRecyclerView.adapter=adapterPagedFilm
+                                   adapterPagedFilm.submitData(it)
+                               }.launchIn(viewLifecycleOwner.lifecycleScope)
+                           }
+
+                       }
+                   }
+               }
+           }
+        }
+
+
+
+
+
 
     }
+
+
+
+
+
+
+    private fun onClickShowAll(type:TypeOfAdapter, rvType:RVDataType) {
+
+
+        when(type){
+            TypeOfAdapter.WITHOUTPAGING -> {
+                bundle.putSerializable("Arg2", TypeOfAdapter.WITHOUTPAGING)
+            }
+            TypeOfAdapter.WITHPAGING->{
+                bundle.putSerializable("Arg2", TypeOfAdapter.WITHPAGING)
+            }
+        }
+
+        when(rvType){
+            RVDataType.TOP250->{
+                bundle.putSerializable("Arg3", RVDataType.TOP250)
+            }
+            RVDataType.COUNTRYWITHGENRE->{
+                bundle.putSerializable("Arg3", RVDataType.COUNTRYWITHGENRE)
+            }
+            RVDataType.PREMIERES->{
+                bundle.putSerializable("Arg3", RVDataType.PREMIERES)
+            }
+            RVDataType.SERIALS->{
+                bundle.putSerializable("Arg3", RVDataType.SERIALS)
+            }
+        }
+
+        findNavController().navigate(R.id.action_home_fragment_to_showAllFragment, bundle)
+    }
+
+
+
+
+
+    private fun onItemDetailClick(item: Film) {
+        if (item.kinopoiskId == null) {
+            item.filmId?.let { bundle.putInt("Arg", it) }
+            item.filmId?.let { viewModel.insertItem(it) }
+        } else {
+            item.kinopoiskId.let { bundle.putInt("Arg", it) }
+
+        }
+        findNavController().navigate(R.id.action_showAllFragment_to_itemInfoFragment, bundle)
+
+
+    }
+
+
+
+
+
+
+
 
 
     private fun onItemClick(item: Film) {

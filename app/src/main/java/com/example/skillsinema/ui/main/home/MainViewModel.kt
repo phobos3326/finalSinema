@@ -216,14 +216,17 @@ class MainViewModel @Inject constructor(
         genre = response(this@MainViewModel).body()?.genres?.subList(0, 17)
         country = response(this@MainViewModel).body()?.countries?.subList(0, 34)
         rndGenre = (0 until genre!!.size).random() + 1
+        dataRepository.rndGenre=rndGenre
         rndCountry = (0 until country!!.size).random() + 1
+        dataRepository.rndCountry=rndCountry
         rndCountryLabel = country!![rndCountry - 1].country
+        dataRepository.rndCountryLabel = rndCountryLabel
         rndGenreLabel = genre!![rndGenre - 1].genre
+        dataRepository.rndGenreLabel = rndGenreLabel
         Log.d(
             TAG,
             "genre: ${genre},\n  country: ${country},\n rndGenre: ${rndGenre}, \n rndCountry: ${rndCountry}, \n rndCountryLabel: ${rndCountryLabel},\n rndGenreLabel: ${rndGenreLabel}"
         )
-
     }
 
 
