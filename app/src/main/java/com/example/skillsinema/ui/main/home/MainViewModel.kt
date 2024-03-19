@@ -69,7 +69,7 @@ class MainViewModel @Inject constructor(
 
     //private val navController: NavController
 ) : AndroidViewModel(application) {
-    private val _premiereModel = MutableStateFlow<List<Model.Item>>(emptyList())
+    private val _premiereModel = MutableStateFlow<List<Film>>(emptyList())
     val modelPremiere = _premiereModel.asStateFlow()
 
     private var _topFilmModel = MutableStateFlow<List<Film>>(emptyList())
@@ -139,10 +139,12 @@ class MainViewModel @Inject constructor(
         //navController.navigate(R.id.action_mainFragment_to_itemInfoFragment, bundle)
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching {
-                data.executeGetPremiere(currentYear.toInt(), monthName).items
+                data.executeGetPremiere(currentYear.toInt(), monthName)
             }.fold(
                 onSuccess = {
-                    _premiereModel.value = it
+                     val a =it
+
+                    _premiereModel.value = it.subList(0,19)
 
                     Log.d(TAG, it.toString())
                 },

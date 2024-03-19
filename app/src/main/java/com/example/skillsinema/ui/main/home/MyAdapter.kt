@@ -1,3 +1,4 @@
+/*
 package com.example.skillsinema.ui.main.home
 
 import android.util.Log
@@ -21,7 +22,7 @@ import javax.inject.Inject
 class MyAdapter @Inject constructor(private val onClick: (Model.Item) -> Unit) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var premiere: List<Model.Item> = emptyList()
+    private var premiere: List<Film> = emptyList()
     //private var bestFilms: List<BestFilms.Film> = emptyList()
 
     var myViewType = MyViewType(0, 1, "0", HasEnd.FALSE, "", "", 0)
@@ -134,11 +135,13 @@ class MyAdapter @Inject constructor(private val onClick: (Model.Item) -> Unit) :
 
             }
 
-            /* binding1.root.setOnClickListener {
+            */
+/* binding1.root.setOnClickListener {
                  myViewType.let {
                      onClick(it.item)
                  }
-             }*/
+             }*//*
+
 
         }
 
@@ -190,3 +193,4 @@ class MyAdapter @Inject constructor(private val onClick: (Model.Item) -> Unit) :
 
 
 
+*/

@@ -34,15 +34,14 @@ class ShowAllFragment : Fragment() {
     private val binding get() = _binding!!
 
 
+    val bundle = Bundle()
 
-    val bundle =Bundle()
+    private val adapterPagedFilm = AdapterPagedFilm { onItemDetailClick(it) }
+    private val adapterBestFilms = AdapterBestFilm(
 
-    private val adapterPagedFilm =AdapterPagedFilm {onItemDetailClick(it)}
-    private val adapterBestFilms = AdapterBestFilm (
+        onClick = { item -> onItemDetailClick(item) },
 
-        onClick = {item-> onItemDetailClick(item)},
-
-        onClickShowAll = {type, rvType->onClickShowAll(type, rvType) }
+        onClickShowAll = { type, rvType -> onClickShowAll(type, rvType) }
 
     )
 
@@ -56,32 +55,33 @@ class ShowAllFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding= FragmentShowAllBinding.inflate(inflater, container, false)
+        _binding = FragmentShowAllBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         arguments?.let {
-           val arg2 = it.getSerializable("Arg2") as? TypeOfAdapter
+            val arg2 = it.getSerializable("Arg2") as? TypeOfAdapter
             arg2?.let { it1 -> viewModel.setState(it1) }
-            val arg3 =it.getSerializable("Arg3") as RVDataType
+            val arg3 = it.getSerializable("Arg3") as RVDataType
             viewModel.setStateType(arg3)
         }
 
-       /* viewModel.adapterType = arguments?.getSerializable("Arg2") as TypeOfAdapter?
-        viewModel.RVDataType = arguments?.getSerializable("Arg3") as RVDataType?*/
+        /* viewModel.adapterType = arguments?.getSerializable("Arg2") as TypeOfAdapter?
+         viewModel.RVDataType = arguments?.getSerializable("Arg3") as RVDataType?*/
 
 
         lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModel.state.collect{
-                    when(it){
-                        TypeOfAdapter.WITHPAGING->{
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.state.collect {
+                    when (it) {
+                        TypeOfAdapter.WITHPAGING -> {
                             binding.SHOWALLRecyclerView.adapter = adapterPagedFilm
                         }
-                        TypeOfAdapter.WITHOUTPAGING->{
-                            binding.SHOWALLRecyclerView.adapter = adapterPagedFilm
+
+                        TypeOfAdapter.WITHOUTPAGING -> {
+                            binding.SHOWALLRecyclerView.adapter = adapterBestFilms
                         }
                     }
                 }
@@ -89,94 +89,95 @@ class ShowAllFragment : Fragment() {
         }
 
 
-        lifecycleScope.launch{
-           lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-               viewModel.stateRVDataType.collect{
-                   when(it){
-                       RVDataType.TOP250->{
-                           binding.textView.text="ТОП 250"
-                           viewModel.pagedFilms.onEach {
-                               binding.SHOWALLRecyclerView.adapter = adapterPagedFilm
-                               //dapterBestFilms.loading = false
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.stateRVDataType.collect {
+                    when (it) {
+                        RVDataType.TOP250 -> {
+                            binding.textView.text = "ТОП 250"
+                            viewModel.pagedFilms.onEach {
+                                binding.SHOWALLRecyclerView.adapter = adapterPagedFilm
+                                //dapterBestFilms.loading = false
 
-                               adapterPagedFilm.submitData(it)
-                               //adapterBestFilms.loading =true
+                                adapterPagedFilm.submitData(it)
+                                //adapterBestFilms.loading =true
 
-                           }.launchIn(viewLifecycleOwner.lifecycleScope)
-                       }
-                       RVDataType.PREMIERES->{
+                            }.launchIn(viewLifecycleOwner.lifecycleScope)
+                        }
 
-                       }
-                       RVDataType.SERIALS->{
+                        RVDataType.PREMIERES -> {
 
-                           binding.textView.text="сериалы"
-                           viewLifecycleOwner.lifecycleScope.launch {
-                               viewModel.serials.onEach {
-                                   binding.SHOWALLRecyclerView.adapter=adapterPagedFilm
-                                   adapterPagedFilm.submitData(it)
-                               }.launchIn(viewLifecycleOwner.lifecycleScope)
-                           }
+                            viewModel.modelPremiere.onEach {
+                                binding.SHOWALLRecyclerView.adapter =adapterBestFilms
+                                adapterBestFilms.submitList(it)
+                            }.launchIn(viewLifecycleOwner.lifecycleScope)
 
-                       }
-                       RVDataType.COUNTRYWITHGENRE->{
-                           binding.textView.text="страна и жанр"
-                           viewLifecycleOwner.lifecycleScope.launch {
-                               viewModel.getFilters().onEach {
-                                   binding.SHOWALLRecyclerView.adapter=adapterPagedFilm
-                                   adapterPagedFilm.submitData(it)
-                               }.launchIn(viewLifecycleOwner.lifecycleScope)
-                           }
+                        }
 
-                       }
-                   }
-               }
-           }
+                        RVDataType.SERIALS -> {
+
+                            binding.textView.text = "сериалы"
+                            viewLifecycleOwner.lifecycleScope.launch {
+                                viewModel.serials.onEach {
+                                    binding.SHOWALLRecyclerView.adapter = adapterPagedFilm
+                                    adapterPagedFilm.submitData(it)
+                                }.launchIn(viewLifecycleOwner.lifecycleScope)
+                            }
+
+                        }
+
+                        RVDataType.COUNTRYWITHGENRE -> {
+                            binding.textView.text = "страна и жанр"
+                            viewLifecycleOwner.lifecycleScope.launch {
+                                viewModel.getFilters().onEach {
+                                    binding.SHOWALLRecyclerView.adapter = adapterPagedFilm
+                                    adapterPagedFilm.submitData(it)
+                                }.launchIn(viewLifecycleOwner.lifecycleScope)
+                            }
+
+                        }
+                    }
+                }
+            }
         }
-
-
-
-
 
 
     }
 
 
+    private fun onClickShowAll(type: TypeOfAdapter, rvType: RVDataType) {
 
 
-
-
-    private fun onClickShowAll(type:TypeOfAdapter, rvType:RVDataType) {
-
-
-        when(type){
+        when (type) {
             TypeOfAdapter.WITHOUTPAGING -> {
                 bundle.putSerializable("Arg2", TypeOfAdapter.WITHOUTPAGING)
             }
-            TypeOfAdapter.WITHPAGING->{
+
+            TypeOfAdapter.WITHPAGING -> {
                 bundle.putSerializable("Arg2", TypeOfAdapter.WITHPAGING)
             }
         }
 
-        when(rvType){
-            RVDataType.TOP250->{
+        when (rvType) {
+            RVDataType.TOP250 -> {
                 bundle.putSerializable("Arg3", RVDataType.TOP250)
             }
-            RVDataType.COUNTRYWITHGENRE->{
+
+            RVDataType.COUNTRYWITHGENRE -> {
                 bundle.putSerializable("Arg3", RVDataType.COUNTRYWITHGENRE)
             }
-            RVDataType.PREMIERES->{
+
+            RVDataType.PREMIERES -> {
                 bundle.putSerializable("Arg3", RVDataType.PREMIERES)
             }
-            RVDataType.SERIALS->{
+
+            RVDataType.SERIALS -> {
                 bundle.putSerializable("Arg3", RVDataType.SERIALS)
             }
         }
 
         findNavController().navigate(R.id.action_home_fragment_to_showAllFragment, bundle)
     }
-
-
-
 
 
     private fun onItemDetailClick(item: Film) {
@@ -191,13 +192,6 @@ class ShowAllFragment : Fragment() {
 
 
     }
-
-
-
-
-
-
-
 
 
     private fun onItemClick(item: Film) {

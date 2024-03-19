@@ -6,9 +6,9 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 interface Model {
-    val items: List<Item>
+    val items: List<Film>
 
-    data class Item(
+/*    data class Item(
         @Json(name = "countries")
         val countries: List<Country>,
         @Json(name = "duration")
@@ -41,5 +41,5 @@ interface Model {
             @Json(name = "genre")
             val genre: String
         )
-    }
+    }*/
 }

@@ -37,9 +37,9 @@ class Repository @Inject constructor(
 
 
     @Provides
-    suspend fun getPremiere(year: Int, month: String): Model {
+    suspend fun getPremiere(year: Int, month: String): List<Film> {
         //delay(2000)
-        return retrofitInstance().getFilms(year, month)
+        return retrofitInstance().getFilms(year, month).items
     }
 
     @Provides

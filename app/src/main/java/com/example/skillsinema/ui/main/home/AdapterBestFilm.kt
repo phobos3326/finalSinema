@@ -29,7 +29,7 @@ class AdapterBestFilm @Inject constructor(
 ) : ListAdapter<Film, RecyclerView.ViewHolder>(DiffUtilCallback()) {
 
     val type = TypeOfAdapter.WITHOUTPAGING
-    val rvType = RVDataType.TOP250
+    var rvType = RVDataType.TOP250
 
     private var onClickListener: OnClickListener? = null
 

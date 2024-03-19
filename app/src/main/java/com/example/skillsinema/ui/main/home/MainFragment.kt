@@ -32,9 +32,13 @@ class MainFragment @Inject constructor() : Fragment() {
 
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
-    private val adapter = MyAdapter {
-        onItemClick(it)
-    }
+    private val adapter = AdapterBestFilm (
+
+        onClick = {item-> onItemDetailClick(item)},
+
+        onClickShowAll = {type, rvType->onClickShowAll(type, rvType) }
+
+    )
 
 
     private val adapterBestFilms = AdapterBestFilm (
@@ -85,7 +89,8 @@ class MainFragment @Inject constructor() : Fragment() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             mainViewModel.modelPremiere.collect {
                 binding.viewPager.adapter = adapter
-                adapter.addToList(it)
+                adapter.rvType=RVDataType.PREMIERES
+                adapter.submitList(it)
             }
         }
 
@@ -161,12 +166,12 @@ class MainFragment @Inject constructor() : Fragment() {
 
 
 
-    private fun onItemClick(item: Model.Item) {
+   /* private fun onItemClick(item: Model.Item) {
 
         bundle.putInt("Arg", item.kinopoiskId)
         findNavController().navigate(R.id.action_mainFragment_to_itemInfoFragment, bundle)
         item.kinopoiskId?.let { mainViewModel.insertItem(it) }
-    }
+    }*/
 
     private fun onItemDetailClick(item: Film) {
         if (item.kinopoiskId == null) {

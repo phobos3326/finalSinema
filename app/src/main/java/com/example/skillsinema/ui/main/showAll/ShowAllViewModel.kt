@@ -1,6 +1,8 @@
 package com.example.skillsinema.ui.main.showAll
 
 import android.app.Application
+import android.icu.text.DateFormatSymbols
+import android.icu.text.SimpleDateFormat
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -28,11 +30,15 @@ import com.example.skillsinema.ui.main.home.MainViewModel
 import com.example.skillsinema.ui.main.home.RVDataType
 import com.example.skillsinema.ui.main.home.TypeOfAdapter
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import retrofit2.Response
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -40,7 +46,7 @@ class ShowAllViewModel @Inject constructor(
     private var pagingSource: FilmPagingSourse,
     private val itemRepository: ItemRepository,
     private val serialsPagingSourse: SerialsPagingSourse,
-
+    private val data: GetPremiereUseCase,
     private var dataRepository: DataRepository,
 
 
@@ -62,6 +68,9 @@ class ShowAllViewModel @Inject constructor(
     private val _stateRVDataType = MutableStateFlow<RVDataType>(RVDataType.SERIALS)
     val stateRVDataType = _stateRVDataType.asStateFlow()
 
+    private val _premiereModel = MutableStateFlow<List<Film>>(emptyList())
+    val modelPremiere = _premiereModel.asStateFlow()
+
     private var genre: List<ModelFilter.Genre>? = emptyList()
     private var country: List<ModelFilter.Country>? = emptyList()
 
@@ -69,6 +78,7 @@ class ShowAllViewModel @Inject constructor(
         viewModelScope.launch {
             pagedFilms
             load()
+            loadPremieres()
         }
     }
 
@@ -93,7 +103,28 @@ class ShowAllViewModel @Inject constructor(
         }
     }
 
+    private fun loadPremieres() {
+        val calendar = Calendar.getInstance()
+        val monthNumber = calendar.get(Calendar.MONTH)
+        val monthName = DateFormatSymbols(Locale.ENGLISH).months[monthNumber]
+        val year = SimpleDateFormat("yyyy")
+        val currentYear = year.format(Date())
 
+        Log.d("MONTH", "$monthName, $currentYear")
+
+        viewModelScope.launch(Dispatchers.IO) {
+            kotlin.runCatching {
+                data.executeGetPremiere(currentYear.toInt(), monthName)
+            }.fold(
+                onSuccess = {
+                    _premiereModel.value = it
+
+                    Log.d(MainViewModel.TAG, it.toString())
+                },
+                onFailure = { Log.d(MainViewModel.TAG, it.message ?: "not load") }
+            )
+        }
+    }
 
   //  var adapterType:TypeOfAdapter? = null
   //  var rvType:RVDataType? = null
