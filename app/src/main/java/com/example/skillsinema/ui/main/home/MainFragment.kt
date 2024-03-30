@@ -32,33 +32,33 @@ class MainFragment @Inject constructor() : Fragment() {
 
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
-    private val adapter = AdapterBestFilm (
+    private val adapter = AdapterBestFilm(
 
-        onClick = {item-> onItemDetailClick(item)},
+        onClick = { item -> onItemDetailClick(item) },
 
-        onClickShowAll = {type, rvType->onClickShowAll(type, rvType) }
-
-    )
-
-
-    private val adapterBestFilms = AdapterBestFilm (
-
-        onClick = {item-> onItemDetailClick(item)},
-
-        onClickShowAll = {type, rvType->onClickShowAll(type, rvType) }
+        onClickShowAll = { type, rvType -> onClickShowAll(type, rvType) }
 
     )
 
-    private val adapterFilteredFilms = AdapterFilteredFilms (
-        onClick = {item-> onItemDetailClick(item)},
 
-        onClickShowAll = {type, rvType->onClickShowAll(type, rvType) }
+    private val adapterBestFilms = AdapterBestFilm(
+
+        onClick = { item -> onItemDetailClick(item) },
+
+        onClickShowAll = { type, rvType -> onClickShowAll(type, rvType) }
+
     )
 
-    private val adapterSerials = AdapterFilteredFilms (
-        onClick = {item-> onItemDetailClick(item)},
+    private val adapterFilteredFilms = AdapterFilteredFilms(
+        onClick = { item -> onItemDetailClick(item) },
 
-        onClickShowAll = {type, rvType->onClickShowAll(type, rvType) }
+        onClickShowAll = { type, rvType -> onClickShowAll(type, rvType) }
+    )
+
+    private val adapterSerials = AdapterFilteredFilms(
+        onClick = { item -> onItemDetailClick(item) },
+
+        onClickShowAll = { type, rvType -> onClickShowAll(type, rvType) }
     )
 
 
@@ -89,7 +89,7 @@ class MainFragment @Inject constructor() : Fragment() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             mainViewModel.modelPremiere.collect {
                 binding.viewPager.adapter = adapter
-                adapter.rvType=RVDataType.PREMIERES
+                adapter.rvType = RVDataType.PREMIERES
                 adapter.submitList(it)
             }
         }
@@ -117,7 +117,7 @@ class MainFragment @Inject constructor() : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             mainViewModel.serials.onEach {
                 binding.serialsRecyclerView.adapter = adapterSerials
-                adapterSerials.rvType=RVDataType.SERIALS
+                adapterSerials.rvType = RVDataType.SERIALS
                 adapterSerials.submitData(it)
                 Log.d("PDATA", "$it")
 
@@ -128,50 +128,55 @@ class MainFragment @Inject constructor() : Fragment() {
         Log.d(TAG, "onViewCreated");
 
 
-
-
-
     }
 
 
-    private fun onClickShowAll(type:TypeOfAdapter, rvType:RVDataType) {
+    private fun onClickShowAll(type: TypeOfAdapter, rvType: RVDataType) {
 
 
-        when(type){
+        when (type) {
             TypeOfAdapter.WITHOUTPAGING -> {
                 bundle.putSerializable("Arg2", TypeOfAdapter.WITHOUTPAGING)
             }
-            TypeOfAdapter.WITHPAGING->{
+
+            TypeOfAdapter.WITHPAGING -> {
                 bundle.putSerializable("Arg2", TypeOfAdapter.WITHPAGING)
             }
         }
 
-        when(rvType){
-            RVDataType.TOP250->{
+        when (rvType) {
+            RVDataType.TOP250 -> {
                 bundle.putSerializable("Arg3", RVDataType.TOP250)
             }
-            RVDataType.COUNTRYWITHGENRE->{
+
+            RVDataType.COUNTRYWITHGENRE -> {
                 bundle.putSerializable("Arg3", RVDataType.COUNTRYWITHGENRE)
             }
-            RVDataType.PREMIERES->{
+
+            RVDataType.PREMIERES -> {
                 bundle.putSerializable("Arg3", RVDataType.PREMIERES)
             }
-            RVDataType.SERIALS->{
+
+            RVDataType.SERIALS -> {
                 bundle.putSerializable("Arg3", RVDataType.SERIALS)
             }
+
+            RVDataType.COLLECTION -> {
+                bundle.putSerializable("Arg3", RVDataType.COLLECTION)
+            }
+
         }
 
         findNavController().navigate(R.id.action_home_fragment_to_showAllFragment, bundle)
     }
 
 
+    /* private fun onItemClick(item: Model.Item) {
 
-   /* private fun onItemClick(item: Model.Item) {
-
-        bundle.putInt("Arg", item.kinopoiskId)
-        findNavController().navigate(R.id.action_mainFragment_to_itemInfoFragment, bundle)
-        item.kinopoiskId?.let { mainViewModel.insertItem(it) }
-    }*/
+         bundle.putInt("Arg", item.kinopoiskId)
+         findNavController().navigate(R.id.action_mainFragment_to_itemInfoFragment, bundle)
+         item.kinopoiskId?.let { mainViewModel.insertItem(it) }
+     }*/
 
     private fun onItemDetailClick(item: Film) {
         if (item.kinopoiskId == null) {

@@ -1,13 +1,9 @@
 package com.example.skillsinema
 
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 //import android.view.MenuItem
-import androidx.appcompat.app.ActionBar
-import androidx.core.graphics.toColor
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.findNavController
@@ -16,7 +12,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.skillsinema.databinding.ActivityMainBinding
-import com.example.skillsinema.ui.main.profile.menu.CollectionDialog
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -69,7 +64,7 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment)
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.home_fragment, R.id.find_fragment, R.id.person_fragment
+                R.id.home_fragment, R.id.find_fragment, R.id.fragment_third
             )
 
 

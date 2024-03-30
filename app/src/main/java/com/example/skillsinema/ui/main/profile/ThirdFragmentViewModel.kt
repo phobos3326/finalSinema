@@ -48,6 +48,8 @@ class ThirdFragmentViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val db = collectionEntityRepository.getAll()
             _collection.value = db
+
+
         }
 
 
@@ -62,6 +64,9 @@ class ThirdFragmentViewModel @Inject constructor(
             wantToSee()
         }
     }
+
+
+
 
     companion object {
         val TAG = "ThirdFragmentViewModel"

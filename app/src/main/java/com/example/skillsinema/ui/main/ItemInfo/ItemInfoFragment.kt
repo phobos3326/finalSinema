@@ -311,6 +311,9 @@ class ItemInfoFragment : Fragment() {
             RVDataType.SERIALS->{
                 bundle.putSerializable("Arg3", RVDataType.SERIALS)
             }
+            RVDataType.COLLECTION -> {
+                bundle.putSerializable("Arg3", RVDataType.COLLECTION)
+            }
         }
 
         findNavController().navigate(R.id.action_home_fragment_to_showAllFragment, bundle)

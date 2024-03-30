@@ -48,10 +48,14 @@
             app:destination="@id/itemInfoFragment" />
     </fragment>
     <fragment
-        android:id="@+id/person_fragment"
+        android:id="@+id/fragment_third"
         android:name="com.example.skillsinema.ui.main.profile.ThirdFragment"
         android:label="fragment_third"
-        tools:layout="@layout/fragment_third" />
+        tools:layout="@layout/fragment_third" >
+        <action
+            android:id="@+id/action_fragment_third_to_showAllFragment"
+            app:destination="@id/showAllFragment" />
+    </fragment>
     <fragment
         android:id="@+id/showAllFragment"
         android:name="com.example.skillsinema.ui.main.showAll.ShowAllFragment"

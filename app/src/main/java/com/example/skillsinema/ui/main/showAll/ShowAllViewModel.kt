@@ -8,8 +8,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.*
+import androidx.viewpager.widget.PagerTitleStrip
 import com.example.skillsinema.DataRepository
 import com.example.skillsinema.R
+import com.example.skillsinema.dao.CollectionEntityRepository
+import com.example.skillsinema.dao.CollectionsEntity
 import com.example.skillsinema.dao.ItemDao
 import com.example.skillsinema.dao.ItemFilm
 import com.example.skillsinema.dao.ItemRepository
@@ -20,9 +23,11 @@ import com.example.skillsinema.datasource.FilteredFilmPagingSourceAll
 import com.example.skillsinema.datasource.SerialsPagingSourse
 import com.example.skillsinema.domain.FilteredFilmsUsecase
 import com.example.skillsinema.domain.FiltersUseCase
+import com.example.skillsinema.domain.GetFilmDetailUseCase
 import com.example.skillsinema.domain.GetPremiereUseCase
 import com.example.skillsinema.domain.GetSeasonsUseCase
 import com.example.skillsinema.domain.GetTopFilmsUseCase
+import com.example.skillsinema.entity.ModelFilmDetails
 import com.example.skillsinema.entity.ModelFilter
 import com.example.skillsinema.repository.RepositoryStaff
 import com.example.skillsinema.ui.main.ItemInfo.StateItemFilmInfo
@@ -48,7 +53,8 @@ class ShowAllViewModel @Inject constructor(
     private val serialsPagingSourse: SerialsPagingSourse,
     private val data: GetPremiereUseCase,
     private var dataRepository: DataRepository,
-
+    private var getFilm: GetFilmDetailUseCase,
+    private var collectionEntityRepository: CollectionEntityRepository,
 
     private val filteredFilmPagingSource: FilteredFilmPagingSourceAll,
 
@@ -57,10 +63,7 @@ class ShowAllViewModel @Inject constructor(
     private val itemDao: ItemDao,
 
 
-
-
-    application: Application
-) : ViewModel() {
+    ) : ViewModel() {
 
     private var _state = MutableStateFlow<TypeOfAdapter>(TypeOfAdapter.WITHOUTPAGING)
     val state = _state.asStateFlow()
@@ -71,8 +74,12 @@ class ShowAllViewModel @Inject constructor(
     private val _premiereModel = MutableStateFlow<List<Film>>(emptyList())
     val modelPremiere = _premiereModel.asStateFlow()
 
+    private val _collection = MutableStateFlow<List<Film>>(emptyList())
+    val collection = _collection.asStateFlow()
+
     private var genre: List<ModelFilter.Genre>? = emptyList()
     private var country: List<ModelFilter.Country>? = emptyList()
+    private var collectionList: List<Int>? = emptyList()
 
     init {
         viewModelScope.launch {
@@ -126,16 +133,18 @@ class ShowAllViewModel @Inject constructor(
         }
     }
 
-  //  var adapterType:TypeOfAdapter? = null
-  //  var rvType:RVDataType? = null
+    //  var adapterType:TypeOfAdapter? = null
+    //  var rvType:RVDataType? = null
 
-    fun setState(adapterType:TypeOfAdapter){
-        _state.value= adapterType!!
+    fun setState(adapterType: TypeOfAdapter) {
+        _state.value = adapterType!!
     }
 
 
-    fun setStateType(rvType:RVDataType){
-        _stateRVDataType.value= rvType!!
+    fun setStateType(rvType: RVDataType?) {
+        if (rvType != null) {
+            _stateRVDataType.value = rvType
+        }
     }
 
     val serials: Flow<PagingData<Film>> = Pager(
@@ -185,7 +194,63 @@ class ShowAllViewModel @Inject constructor(
     }
 
 
+    /* private fun loadFilmsInCollection() {
+         viewModelScope.launch(Dispatchers.IO) {
+             kotlin.runCatching {
+                 topFilmsUseCase.executeTopFilm()
+             }.fold(
+                 onSuccess = {
+                     _topFilmModel.value = isViewed(it)
+                 },
+                 onFailure = { Log.d(MainViewModel.TAG, it.message ?: "not load") }
+             )
+         }
+     }*/
 
+
+    fun showCollection(name: String?) {
+        val listFilm = mutableListOf<Film>()
+        viewModelScope.launch(Dispatchers.IO) {
+            val db = collectionEntityRepository.getAll()
+            db.forEach { collectionEntity ->
+                if (collectionEntity.collectionName == name) {
+                    collectionList = collectionEntity.collection
+                    collectionList?.forEach {
+                        val filmDetail = getFilm.executeGetFilm(it)
+
+                        listFilm.add(filmDetail.toFilm())
+
+                    }
+                }
+                _collection.value = listFilm
+            }
+        }
+    }
+
+
+    fun ModelFilmDetails.toFilm(): Film {
+        return Film(
+            countries = this.countries,
+            description = description,
+            filmId = this.kinopoiskId,
+            filmLength = this.filmLength.toString(),
+            genres = this.genres,
+            nameEn = this.nameEn,
+            nameRu = this.nameRu,
+            posterUrl = this.posterUrl,
+            posterUrlPreview = this.posterUrlPreview,
+            rating = this.ratingKinopoisk.toString(),
+            ratingVoteCount = this.ratingKinopoiskVoteCount,
+            type = this.type,
+            year = this.year.toString(),
+            kinopoiskId = this.kinopoiskId,
+            ratingImdb = this.ratingImdb.toString(),
+            isViewed = null,
+            isLiked = null
+
+
+        )
+    }
 
     companion object {
         val TAG = "MainViewModel"

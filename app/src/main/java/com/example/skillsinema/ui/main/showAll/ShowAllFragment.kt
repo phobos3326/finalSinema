@@ -61,11 +61,15 @@ class ShowAllFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        var collectionName=""
         arguments?.let {
             val arg2 = it.getSerializable("Arg2") as? TypeOfAdapter
             arg2?.let { it1 -> viewModel.setState(it1) }
-            val arg3 = it.getSerializable("Arg3") as RVDataType
+            val arg3 = it.getSerializable("Arg3") as RVDataType?
             viewModel.setStateType(arg3)
+
+             collectionName = it.getString("CollectionName").toString()
+            viewModel.showCollection(collectionName)
         }
 
         /* viewModel.adapterType = arguments?.getSerializable("Arg2") as TypeOfAdapter?
@@ -108,7 +112,7 @@ class ShowAllFragment : Fragment() {
                         RVDataType.PREMIERES -> {
 
                             viewModel.modelPremiere.onEach {
-                                binding.SHOWALLRecyclerView.adapter =adapterBestFilms
+                                binding.SHOWALLRecyclerView.adapter = adapterBestFilms
                                 adapterBestFilms.submitList(it)
                             }.launchIn(viewLifecycleOwner.lifecycleScope)
 
@@ -135,6 +139,16 @@ class ShowAllFragment : Fragment() {
                                 }.launchIn(viewLifecycleOwner.lifecycleScope)
                             }
 
+                        }
+
+                        RVDataType.COLLECTION -> {
+                            binding.textView.text = collectionName
+                            viewLifecycleOwner.lifecycleScope.launch {
+                                viewModel.collection.onEach {
+                                    binding.SHOWALLRecyclerView.adapter = adapterBestFilms
+                                    adapterBestFilms.submitList(it)
+                                }.launchIn(viewLifecycleOwner.lifecycleScope)
+                            }
                         }
                     }
                 }
@@ -174,6 +188,10 @@ class ShowAllFragment : Fragment() {
             RVDataType.SERIALS -> {
                 bundle.putSerializable("Arg3", RVDataType.SERIALS)
             }
+
+            RVDataType.COLLECTION -> {
+                bundle.putSerializable("Arg3", RVDataType.COLLECTION)
+            }
         }
 
         findNavController().navigate(R.id.action_home_fragment_to_showAllFragment, bundle)
@@ -192,6 +210,8 @@ class ShowAllFragment : Fragment() {
 
 
     }
+
+
 
 
     private fun onItemClick(item: Film) {

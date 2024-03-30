@@ -8,12 +8,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.skillsinema.dao.CollectionsEntity
 import com.example.skillsinema.databinding.CollectionItemBinding
 import com.example.skillsinema.ui.main.ItemInfo.AdapterEpisodes
+import com.example.skillsinema.ui.main.home.RVDataType
 import javax.inject.Inject
 
 class CollectionAdapter @Inject constructor(
-    private val onClick:(CollectionsEntity)-> Unit
+    private val onClick:(CollectionsEntity, RVDataType)-> Unit,
+    private val onDelete:(CollectionsEntity)->Unit
 ) :
     ListAdapter<CollectionsEntity, RecyclerView.ViewHolder>(DiffUtilCallback()) {
+
+    var rvType = RVDataType.COLLECTION
     class DiffUtilCallback : DiffUtil.ItemCallback<CollectionsEntity>() {
         override fun areItemsTheSame(
             oldItem: CollectionsEntity,
@@ -52,9 +56,12 @@ class CollectionAdapter @Inject constructor(
         (holder as ViewHolder).bind(getItem(position))
         //val viewHolder= holder as ViewHolder
        holder.close.setOnClickListener {
-            onClick(item)
+            onDelete(item)
         }
 
+        holder.itemView.setOnClickListener{
+            onClick(item, rvType)
+        }
 
 
 

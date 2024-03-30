@@ -33,25 +33,17 @@ class ActorInfoFragment @Inject constructor() : Fragment() {
     private var _binding: FragmentActorInfoBinding? = null
     private val binding get() = _binding!!
 
-    /* companion object {
-         fun newInstance() = ActorInfoFragment()
-     }*/
-    val adapter = AdapterFilteredFilms (
-        onClick = {item-> onItemDetailClick(item)},
 
-        onClickShowAll = {type, rvType->onClickShowAll(type, rvType) }
+    val adapter = AdapterFilteredFilms(
+        onClick = { item -> onItemDetailClick(item) },
+
+        onClickShowAll = { type, rvType -> onClickShowAll(type, rvType) }
     )
     val bundle = Bundle()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // myComponentManager.create()
-        /* val myComponent =myComponentManager.get()
-         val dataRepository=EntryPoints.get(myComponent,MyEntryPoint::class.java).getDataRepository()
-         */
         arguments?.let {
-
-
         }
     }
 
@@ -87,33 +79,40 @@ class ActorInfoFragment @Inject constructor() : Fragment() {
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
 
-
     }
 
     private fun onClickShowAll(type: TypeOfAdapter, rvType: RVDataType) {
 
 
-        when(type){
+        when (type) {
             TypeOfAdapter.WITHOUTPAGING -> {
                 bundle.putSerializable("Arg2", TypeOfAdapter.WITHOUTPAGING)
             }
-            TypeOfAdapter.WITHPAGING->{
+
+            TypeOfAdapter.WITHPAGING -> {
                 bundle.putSerializable("Arg2", TypeOfAdapter.WITHPAGING)
             }
         }
 
-        when(rvType){
-            RVDataType.TOP250->{
+        when (rvType) {
+            RVDataType.TOP250 -> {
                 bundle.putSerializable("Arg3", RVDataType.TOP250)
             }
-            RVDataType.COUNTRYWITHGENRE->{
+
+            RVDataType.COUNTRYWITHGENRE -> {
                 bundle.putSerializable("Arg3", RVDataType.COUNTRYWITHGENRE)
             }
-            RVDataType.PREMIERES->{
+
+            RVDataType.PREMIERES -> {
                 bundle.putSerializable("Arg3", RVDataType.PREMIERES)
             }
-            RVDataType.SERIALS->{
+
+            RVDataType.SERIALS -> {
                 bundle.putSerializable("Arg3", RVDataType.SERIALS)
+            }
+
+            RVDataType.COLLECTION -> {
+                bundle.putSerializable("Arg3", RVDataType.COLLECTION)
             }
         }
 

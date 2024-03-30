@@ -8,7 +8,7 @@ import com.squareup.moshi.JsonClass
     @Json(name = "completed")
         val completed: Boolean?,
     @Json(name = "countries")
-        val countries: List<Country>?,
+        val countries: List<Film.Country>?,
     @Json(name = "coverUrl")
         val coverUrl: String?,
     @Json(name = "description")
@@ -20,7 +20,7 @@ import com.squareup.moshi.JsonClass
     @Json(name = "filmLength")
         val filmLength: Int?,
     @Json(name = "genres")
-        val genres: List<Genre>?,
+        val genres: List<Film.Genre>?,
     @Json(name = "has3D")
         val has3D: Boolean?,
     @Json(name = "hasImax")

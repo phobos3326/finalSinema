@@ -1,22 +1,19 @@
 package com.example.skillsinema.ui.main.profile
 
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.skillsinema.R
 import com.example.skillsinema.dao.CollectionsEntity
-import com.example.skillsinema.databinding.FragmentItemInfoBinding
 import com.example.skillsinema.databinding.FragmentThirdBinding
+import com.example.skillsinema.ui.main.home.RVDataType
 import com.example.skillsinema.ui.main.profile.menu.AlertDialogFragment
-import com.example.skillsinema.ui.main.profile.menu.CollectionDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -33,15 +30,16 @@ class ThirdFragment : Fragment() {
 
     }
 
-
+    val bundle = Bundle()
     private var _binding: FragmentThirdBinding? = null
     private val binding get() = _binding!!
 
     val viewModel: ThirdFragmentViewModel by viewModels()
 
-    val adapter = CollectionAdapter {
-        onDelete(it)
-    }
+    val adapter = CollectionAdapter(
+        onClick = { item, rvType -> onClickShowCollection(item, rvType) },
+        onDelete = { item -> onDelete(item) }
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -94,12 +92,40 @@ class ThirdFragment : Fragment() {
         }.launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
+
+    private fun onClickShowCollection(item: CollectionsEntity, rvType:RVDataType) {
+        item.collectionName.let { bundle.putString("CollectionName", it) }
+        when (rvType) {
+            RVDataType.TOP250 -> {
+                bundle.putSerializable("Arg3", RVDataType.TOP250)
+            }
+
+            RVDataType.COUNTRYWITHGENRE -> {
+                bundle.putSerializable("Arg3", RVDataType.COUNTRYWITHGENRE)
+            }
+
+            RVDataType.PREMIERES -> {
+                bundle.putSerializable("Arg3", RVDataType.PREMIERES)
+            }
+
+            RVDataType.SERIALS -> {
+                bundle.putSerializable("Arg3", RVDataType.SERIALS)
+            }
+
+            RVDataType.COLLECTION -> {
+                bundle.putSerializable("Arg3", RVDataType.COLLECTION)
+            }
+
+        }
+        findNavController().navigate(R.id.action_fragment_third_to_showAllFragment, bundle)
+    }
+
     fun onDelete(item: CollectionsEntity) {
         viewModel.deleteCollection(item)
     }
 
 
-    override fun onAttach(context: Context) {
+    /*override fun onAttach(context: Context) {
         super.onAttach(context)
         Log.d(TAG, "onAttach")
     }
@@ -146,6 +172,6 @@ class ThirdFragment : Fragment() {
     }
 
     private val TAG = "ThirdFragment"
-
+*/
 
 }

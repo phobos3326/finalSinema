@@ -160,6 +160,11 @@
                                 <LayoutPositions />
                               </value>
                             </entry>
+                            <entry key="action_itemInfoFragment_to_collectionDialog">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                             <entry key="action_itemInfoFragment_to_galerieFragment">
                               <value>
                                 <LayoutPositions />
@@ -187,18 +192,6 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="person_fragment">
-                    <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="230" />
-                            <option name="y" value="12" />
-                          </Point>
-                        </option>
-                      </LayoutPositions>
-                    </value>
-                  </entry>
                   <entry key="showAllFragment">
                     <value>
                       <LayoutPositions>
@@ -211,6 +204,27 @@
                         <option name="myPositions">
                           <map>
                             <entry key="action_showAllFragment_to_itemInfoFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="show_all_frafment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="989" />
+                            <option name="y" value="254" />
+                          </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_show_all_frafment_to_showAllFragment">
                               <value>
                                 <LayoutPositions />
                               </value>
