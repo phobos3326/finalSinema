@@ -86,6 +86,7 @@ class ShowAllViewModel @Inject constructor(
             pagedFilms
             load()
             loadPremieres()
+
         }
     }
 
@@ -221,11 +222,14 @@ class ShowAllViewModel @Inject constructor(
                         listFilm.add(filmDetail.toFilm())
 
                     }
+                    _collection.value = listFilm
                 }
-                _collection.value = listFilm
+
             }
         }
     }
+
+
 
 
     fun ModelFilmDetails.toFilm(): Film {

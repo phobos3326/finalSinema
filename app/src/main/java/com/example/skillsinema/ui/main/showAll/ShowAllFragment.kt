@@ -1,7 +1,9 @@
 package com.example.skillsinema.ui.main.showAll
 
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -32,7 +34,7 @@ class ShowAllFragment : Fragment() {
 
     private var _binding: FragmentShowAllBinding? = null
     private val binding get() = _binding!!
-
+    var collectionName=""
 
     val bundle = Bundle()
 
@@ -61,7 +63,7 @@ class ShowAllFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        var collectionName=""
+
         arguments?.let {
             val arg2 = it.getSerializable("Arg2") as? TypeOfAdapter
             arg2?.let { it1 -> viewModel.setState(it1) }
@@ -172,7 +174,7 @@ class ShowAllFragment : Fragment() {
             }
         }
 
-        when (rvType) {
+       /* when (rvType) {
             RVDataType.TOP250 -> {
                 bundle.putSerializable("Arg3", RVDataType.TOP250)
             }
@@ -192,7 +194,7 @@ class ShowAllFragment : Fragment() {
             RVDataType.COLLECTION -> {
                 bundle.putSerializable("Arg3", RVDataType.COLLECTION)
             }
-        }
+        }*/
 
         findNavController().navigate(R.id.action_home_fragment_to_showAllFragment, bundle)
     }
@@ -219,5 +221,56 @@ class ShowAllFragment : Fragment() {
         findNavController().navigate(R.id.action_showAllFragment_to_itemInfoFragment, bundle)
 
     }
+
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        Log.d(TAG, "onAttach")
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        Log.d(TAG, "onViewStateRestored")
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d(TAG, "onStart")
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        Log.d(TAG, "onResume")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d(TAG, "onPause")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d(TAG, "onStop")
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Log.d(TAG, "onDestroyView")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG, "onDestroy")
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        Log.d(TAG, "onDetach")
+    }
+
+    private val TAG = "ShowAllFragment"
+
+
 
 }
