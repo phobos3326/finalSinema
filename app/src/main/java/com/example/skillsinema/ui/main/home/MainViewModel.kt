@@ -103,7 +103,7 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             loadPremieres()
             loadTopFilms()
-            pagedFilms
+            //pagedFilms
             load()
             Log.d("FILTERED", "${pagedFilteredFilms}")
         }
