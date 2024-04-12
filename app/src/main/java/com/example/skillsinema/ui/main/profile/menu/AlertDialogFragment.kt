@@ -30,11 +30,11 @@ class AlertDialogFragment : DialogFragment() {
             val input = EditText(requireContext())
             val builder = AlertDialog.Builder(it)
 
-            builder.setTitle("Важное сообщение!")
+            builder.setTitle("Придумайте название для вашей новой коллекции!")
                 .setView(input)
-                .setMessage("Покормите кота!")
+                //.setMessage("Покормите кота!")
 
-                .setPositiveButton("ОК, иду на кухню") { dialog, id ->
+                .setPositiveButton("Готово") { dialog, id ->
                     val enteredText = input.text.toString()
                     viewModel.insertIdtoDB(enteredText)
 
