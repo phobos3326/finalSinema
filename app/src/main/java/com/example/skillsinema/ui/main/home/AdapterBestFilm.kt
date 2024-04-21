@@ -118,8 +118,14 @@ class AdapterBestFilm @Inject constructor(
             }
             film.let {
                 Glide.with(binding1.poster)
+
                     .load(it.posterUrlPreview)
+                    //.addListener()
                     .into(binding1.poster)
+
+
+
+
             }
         }
     }

@@ -1,3 +1,4 @@
+/*
 package com.example.skillsinema.ui.main.profile.menu
 
 import androidx.lifecycle.ViewModel
@@ -143,7 +144,8 @@ class CollectionDialogViewModel @Inject constructor(
             )
     }
 
-    /* fun update(colllection: CollectionsEntity) {
+    */
+/* fun update(colllection: CollectionsEntity) {
          viewModelScope.launch(Dispatchers.IO) {
              val db = collectionEntityRepository.getAll()
              val dbList =
@@ -161,7 +163,8 @@ class CollectionDialogViewModel @Inject constructor(
              )
              _collection.value = db
          }
-     }*/
+     }*//*
+
 
     private fun show() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -208,4 +211,4 @@ class CollectionDialogViewModel @Inject constructor(
         )
     }
 
-}
+}*/

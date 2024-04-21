@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.skillsinema.R
 import com.example.skillsinema.dao.CollectionsEntity
 import com.example.skillsinema.databinding.BottomSheetDialogLayoutBinding
+import com.example.skillsinema.ui.main.ItemInfo.ItemInfoViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,7 +33,7 @@ class CollectionDialog : BottomSheetDialogFragment() {
     private val binding get() = _binding!!
 
     //val viewModel: ThirdFragmentViewModel by viewModels()
-    val viewModel: CollectionDialogViewModel by viewModels()
+    val viewModel: ItemInfoViewModel by viewModels()
 
     // lateinit var binding: BottomSheetDialogLayoutBinding
     val layoutManager = LinearLayoutManager(context)

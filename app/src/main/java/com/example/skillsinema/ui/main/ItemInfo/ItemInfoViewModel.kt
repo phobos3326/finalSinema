@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.*
 import com.example.skillsinema.DataRepository
 
@@ -17,12 +18,14 @@ import com.example.skillsinema.datasource.GalerieDataSource
 import com.example.skillsinema.entity.ModelFilmDetails
 import com.example.skillsinema.domain.GetFilmDetailUseCase
 import com.example.skillsinema.domain.GetStaffUseCase
+import com.example.skillsinema.domain.LoadItemToDB
 import com.example.skillsinema.domain.SimilarFilmsUsecase
 import com.example.skillsinema.entity.Film
 
 
 import com.example.skillsinema.entity.ModelGalerie
 import com.example.skillsinema.entity.ModelStaff
+import com.example.skillsinema.ui.main.profile.menu.CollectionsUiModel
 
 
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -48,9 +51,10 @@ class ItemInfoViewModel @Inject constructor(
     private val dataRepository: DataRepository,
     private val similarFilmsUsecase: SimilarFilmsUsecase,
     private val likedFilmRepository: LikedFilmRepository,
-    private val collectionEntityRepository: CollectionEntityRepository
+    private val collectionEntityRepository: CollectionEntityRepository,
+    private val loadItemToDB: LoadItemToDB
 
-    ) :
+) :
     ViewModel() {
 
 
@@ -76,11 +80,24 @@ class ItemInfoViewModel @Inject constructor(
     private var _similar = MutableStateFlow<List<Film>>(emptyList())
     val similar = _similar.asStateFlow()
 
+
+    private val _collection = MutableStateFlow<List<CollectionsEntity>>(emptyList())
+    val collection = _collection.asStateFlow()
+
+
+    private val _collectionUi = MutableStateFlow<List<CollectionsUiModel>>(emptyList())
+    val collectionUi = _collectionUi.asStateFlow()
+
+    private val _id = MutableStateFlow<Int>(0)
+    val id = _id.asStateFlow()
+
+
     private val taskComplieted = Channel<Unit>()
 
     var noActorList = mutableListOf<ModelStaff.ModelStaffItem>()
 
     fun getValue(): Int {
+        _id.value = dataRepository.id
         return dataRepository.id
     }
 
@@ -101,8 +118,15 @@ class ItemInfoViewModel @Inject constructor(
             loadSimilarFilm()
             _state.value = StateItemFilmInfo.FilmState
             loadFilm()
-            sharedJob.join()
+            //sharedJob.join()
+            show()
+            withContext(Dispatchers.IO){
+                loadItemToDB.getItemToDB(getValue())
+            }
+
         }
+
+
     }
 
 
@@ -118,11 +142,17 @@ class ItemInfoViewModel @Inject constructor(
         }
     }
 
-    fun insertCollection(){
+    fun insertCollection() {
         viewModelScope.launch {
-        //val list= collectionEntityRepository.getListFilmFromCollection("name")
+            //val list= collectionEntityRepository.getListFilmFromCollection("name")
 
-         collectionEntityRepository.insertCollection(CollectionsEntity(0,"name",  listOf(1,2, 3, 4, 5)))
+            collectionEntityRepository.insertCollection(
+                CollectionsEntity(
+                    0,
+                    "name",
+                    listOf(1, 2, 3, 4, 5)
+                )
+            )
 
         }
     }
@@ -209,6 +239,169 @@ class ItemInfoViewModel @Inject constructor(
         ),
         pagingSourceFactory = { galerieDataSource }
     ).flow.cachedIn(viewModelScope)
+
+
+    fun insertIdtoDB(nameCollection: String) {
+        viewModelScope.launch() {
+
+
+            collectionEntityRepository.insertCollection(
+                CollectionsEntity(
+                    0,
+                    nameCollection,
+                    emptyList()
+                )
+
+            )
+
+            withContext(Dispatchers.IO) {
+                val db = collectionEntityRepository.getAll()
+
+                _collection.value = db
+                _collection.emit(db)
+
+            }
+
+        }
+
+    }
+
+    fun deleteFilmFromDB(colllection: CollectionsEntity) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val db = collectionEntityRepository.getAll()
+            val dbList =
+                collectionEntityRepository.getCollectionList(colllection.collectionName).collection
+
+            val mutableDBList = dbList?.toMutableList()
+
+            if (!mutableDBList?.contains(getValue())!!) {
+                mutableDBList?.remove(getValue())
+            }
+
+            collectionEntityRepository.updateCollectionList(
+                colllection.collectionName,
+                mutableDBList
+            )
+            _collection.value = db
+        }
+    }
+
+
+    fun update(uiModel: CollectionsUiModel) {
+        viewModelScope.launch(Dispatchers.IO) {
+            var updatedCollection = uiModel.collection?.toMutableList()
+            var entity = mapUiModelToEntity(uiModel)
+            if (uiModel.collection?.isEmpty() ?: true && !uiModel.isChecked) {
+                updatedCollection = mutableListOf()
+                updatedCollection?.add(getValue())
+                val updatedModel = uiModel.copy(collection = updatedCollection, isChecked = true)
+                entity = mapUiModelToEntity(updatedModel)
+                collectionEntityRepository.updateCollectionList(
+                    entity.collectionName,
+                    entity.collection
+                )
+
+                show()
+            } else if (uiModel.collection?.contains(getValue()) != true && !uiModel.isChecked) {
+                updatedCollection?.add(getValue())
+                val updatedModel = uiModel.copy(collection = updatedCollection, isChecked = true)
+                entity = mapUiModelToEntity(updatedModel)
+                collectionEntityRepository.updateCollectionList(
+                    entity.collectionName,
+                    entity.collection
+                )
+
+                show()
+            } else {
+                updatedCollection?.remove(getValue())
+                val updatedModel = uiModel.copy(collection = updatedCollection, isChecked = false)
+                entity = mapUiModelToEntity(updatedModel)
+                collectionEntityRepository.updateCollectionList(
+                    entity.collectionName,
+                    entity.collection
+
+                )
+
+                show()
+            }
+        }
+
+
+    }
+
+    private fun mapUiModelToEntity(uiModel: CollectionsUiModel): CollectionsEntity {
+        return CollectionsEntity(
+            uiModel.id,
+            uiModel.collectionName,
+            uiModel.collection,
+
+            )
+    }
+
+    /* fun update(colllection: CollectionsEntity) {
+         viewModelScope.launch(Dispatchers.IO) {
+             val db = collectionEntityRepository.getAll()
+             val dbList =
+                 collectionEntityRepository.getCollectionList(colllection.collectionName).collection
+
+             val mutableDBList = dbList?.toMutableList()
+
+             if (!mutableDBList?.contains(getValue())!!) {
+                 mutableDBList?.add(getValue())
+             }
+
+             collectionEntityRepository.updateCollectionList(
+                 colllection.collectionName,
+                 mutableDBList
+             )
+             _collection.value = db
+         }
+     }*/
+
+    private fun show() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val db = collectionEntityRepository.getAll()
+            var UIModelList = emptyList<CollectionsUiModel>().toMutableList()
+            if (UIModelList.isEmpty()) {
+                UIModelList = mutableListOf()
+            }
+            db.forEach {
+                UIModelList.add(it.toUiModel())
+
+            }
+            val colllectionList = listOf<Int>().toMutableList()
+
+            UIModelList.forEach { collectionsUiModel ->
+                if (collectionsUiModel.collection?.contains(getValue()) == true)
+                    collectionsUiModel.isChecked = true
+
+            }
+            _collectionUi.value = UIModelList
+        }
+    }
+
+    fun toDB() {
+
+    }
+
+    fun CollectionsEntity.toUiModel(isChecked: Boolean = false): CollectionsUiModel {
+        return CollectionsUiModel(
+            id = this.id,
+            collectionName = this.collectionName,
+            collection = this.collection,
+            isChecked = isChecked
+        )
+    }
+
+
+    fun CollectionsUiModel.toCollectionEntity(isChecked: Boolean = false): CollectionsEntity {
+        return CollectionsEntity(
+            id = this.id,
+            collectionName = this.collectionName,
+            collection = this.collection
+
+        )
+    }
 
 
 }

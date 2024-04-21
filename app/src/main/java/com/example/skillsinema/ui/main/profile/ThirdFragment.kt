@@ -1,6 +1,8 @@
 package com.example.skillsinema.ui.main.profile
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -125,7 +127,7 @@ class ThirdFragment : Fragment() {
     }
 
 
-    /*override fun onAttach(context: Context) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         Log.d(TAG, "onAttach")
     }
@@ -133,16 +135,18 @@ class ThirdFragment : Fragment() {
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
         Log.d(TAG, "onViewStateRestored")
+        extracted()
     }
 
     override fun onStart() {
         super.onStart()
+        extracted()
         Log.d(TAG, "onStart")
     }
 
     override fun onResume() {
         super.onResume()
-
+        extracted()
         Log.d(TAG, "onResume")
     }
 
@@ -172,6 +176,5 @@ class ThirdFragment : Fragment() {
     }
 
     private val TAG = "ThirdFragment"
-*/
 
 }
