@@ -29,6 +29,7 @@ import com.example.skillsinema.domain.FiltersUseCase
 import com.example.skillsinema.domain.GetPremiereUseCase
 import com.example.skillsinema.domain.GetSeasonsUseCase
 import com.example.skillsinema.domain.GetTopFilmsUseCase
+import com.example.skillsinema.domain.LoadItemToDB
 import com.example.skillsinema.entity.*
 
 import com.example.skillsinema.repository.RepositoryStaff
@@ -62,6 +63,7 @@ class MainViewModel @Inject constructor(
     private val itemDao: ItemDao,
     private val serialsPagingSourse: SerialsPagingSourse,
     private val seasonsUseCase: GetSeasonsUseCase,
+    private val loadItemToDB: LoadItemToDB,
 
 
     application: Application
@@ -83,7 +85,6 @@ class MainViewModel @Inject constructor(
 
     private var _filteredFilms = MutableStateFlow<List<ModelFilteredFilms1>>(emptyList())
     val filteredFilms = _filteredFilms.asStateFlow()
-
 
 
     var bundle = Bundle()
@@ -109,6 +110,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
+
     fun insertItem(id: Int) {
         viewModelScope.launch {
             itemRepository.insertItem((ItemFilm(id = id)))
@@ -118,6 +120,15 @@ class MainViewModel @Inject constructor(
     fun setValue(value: Int) {
         dataRepository.genreID = value
     }
+
+
+    fun isertItemToDb(type: TypeItem, id: Int) {
+        viewModelScope.launch {
+            loadItemToDB.getItemToDB(type, id)
+        }
+
+    }
+
 
     val pagedFilms: Flow<PagingData<Film>> = Pager(
         config = PagingConfig(
@@ -142,9 +153,9 @@ class MainViewModel @Inject constructor(
                 data.executeGetPremiere(currentYear.toInt(), monthName)
             }.fold(
                 onSuccess = {
-                     val a =it
+                    val a = it
 
-                    _premiereModel.value = it.subList(0,19)
+                    _premiereModel.value = it.subList(0, 19)
 
                     Log.d(TAG, it.toString())
                 },
@@ -197,7 +208,6 @@ class MainViewModel @Inject constructor(
     }
 
 
-
     private val pagedFilteredFilms: Flow<PagingData<Film>> = Pager(
         config = PagingConfig(
             pageSize = 20,
@@ -218,9 +228,9 @@ class MainViewModel @Inject constructor(
         genre = response(this@MainViewModel).body()?.genres?.subList(0, 17)
         country = response(this@MainViewModel).body()?.countries?.subList(0, 34)
         rndGenre = (0 until genre!!.size).random() + 1
-        dataRepository.rndGenre=rndGenre
+        dataRepository.rndGenre = rndGenre
         rndCountry = (0 until country!!.size).random() + 1
-        dataRepository.rndCountry=rndCountry
+        dataRepository.rndCountry = rndCountry
         rndCountryLabel = country!![rndCountry - 1].country
         dataRepository.rndCountryLabel = rndCountryLabel
         rndGenreLabel = genre!![rndGenre - 1].genre

@@ -12,9 +12,11 @@ import com.example.skillsinema.DataRepository
 import com.example.skillsinema.datasource.BestActorFilmPagingSource
 import com.example.skillsinema.domain.GetActorFilmUseCase
 import com.example.skillsinema.domain.GetActorUseCase
+import com.example.skillsinema.domain.LoadItemToDB
 import com.example.skillsinema.entity.Film
 import com.example.skillsinema.entity.ModelActorInfo
 import com.example.skillsinema.entity.ModelStaff
+import com.example.skillsinema.ui.main.home.TypeItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,7 +30,8 @@ class ActorInfoViewModel @Inject constructor(
     private val useCase: GetActorUseCase,
     private val useCaseActorFilm: GetActorFilmUseCase,
     private val dataRepository: DataRepository,
-    private val pagingSource: BestActorFilmPagingSource
+    private val pagingSource: BestActorFilmPagingSource,
+    private val loadItemToDB: LoadItemToDB
 ) : ViewModel() {
     private var _actor = MutableLiveData<ModelActorInfo>()
     val actor = _actor
@@ -48,6 +51,14 @@ class ActorInfoViewModel @Inject constructor(
             loadActor()
             pagedFilms
         }
+    }
+
+
+    fun isertItemToDb(type: TypeItem, id: Int) {
+        viewModelScope.launch {
+            loadItemToDB.getItemToDB(type, id)
+        }
+
     }
 
     private fun loadActor() {

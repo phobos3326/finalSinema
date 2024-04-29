@@ -14,15 +14,16 @@ import com.example.skillsinema.entity.Film
 
 import com.example.skillsinema.databinding.ItemBinding
 import com.example.skillsinema.databinding.SecondItemBinding
+import com.example.skillsinema.ui.main.home.TypeItem
 
 import javax.inject.Inject
 
 class AdapterPagedFilm @Inject constructor(
-    private val onClick: (Film) -> Unit,
+    private val onClick: (Film, TypeItem) -> Unit,
 
     ) : PagingDataAdapter<Film, RecyclerView.ViewHolder>(DiffUtilCallback()) {
 
-
+    val typeItem = TypeItem.FILM
     class DiffUtilCallback : DiffUtil.ItemCallback<Film>() {
         override fun areItemsTheSame(oldItem: Film, newItem: Film): Boolean = oldItem == newItem
 
@@ -44,7 +45,7 @@ class AdapterPagedFilm @Inject constructor(
             val item = getItem(position)
             (holder as MyViewHolder).bind(item!!)
             holder.itemView.setOnClickListener {
-                                       onClick(item)
+                                       onClick(item, typeItem )
 
             }
 

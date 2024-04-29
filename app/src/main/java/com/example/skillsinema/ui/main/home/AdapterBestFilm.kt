@@ -23,13 +23,14 @@ import com.example.skillsinema.databinding.SecondItemBinding
 import javax.inject.Inject
 
 class AdapterBestFilm @Inject constructor(
-    private val onClick: (Film) -> Unit,
+    private val onClick: (Film, TypeItem) -> Unit,
     private val onClickShowAll:(TypeOfAdapter, RVDataType) ->Unit
 
 ) : ListAdapter<Film, RecyclerView.ViewHolder>(DiffUtilCallback()) {
 
     val type = TypeOfAdapter.WITHOUTPAGING
     var rvType = RVDataType.TOP250
+    val typeItem = TypeItem.FILM
 
     private var onClickListener: OnClickListener? = null
 
@@ -59,7 +60,7 @@ class AdapterBestFilm @Inject constructor(
                 (holder as MyViewHolder).bind(item)
             }
             holder.itemView.setOnClickListener {
-                onClick(item!!)
+                onClick(item!!, typeItem)
 
 
             }

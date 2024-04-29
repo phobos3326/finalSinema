@@ -78,3 +78,14 @@ interface CollectionDao {
     fun delete(item:CollectionsEntity)
 
 }
+
+
+@Dao
+interface InterestedItemDao  {
+
+    @Query("SELECT * FROM INTERESTEDITEMTABLE")
+    fun getAllInterestedItem():List<InterestedItemEntity>
+
+    @Insert(entity = InterestedItemEntity::class, onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertInterestedItem(item:InterestedItemEntity)
+}

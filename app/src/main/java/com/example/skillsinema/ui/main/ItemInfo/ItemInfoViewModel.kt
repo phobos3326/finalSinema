@@ -25,6 +25,7 @@ import com.example.skillsinema.entity.Film
 
 import com.example.skillsinema.entity.ModelGalerie
 import com.example.skillsinema.entity.ModelStaff
+import com.example.skillsinema.ui.main.home.TypeItem
 import com.example.skillsinema.ui.main.profile.menu.CollectionsUiModel
 
 
@@ -121,7 +122,7 @@ class ItemInfoViewModel @Inject constructor(
             //sharedJob.join()
             show()
             withContext(Dispatchers.IO){
-                loadItemToDB.getItemToDB(getValue())
+               // loadItemToDB.getItemToDB(type = "film", getValue())
             }
 
         }
@@ -129,6 +130,13 @@ class ItemInfoViewModel @Inject constructor(
 
     }
 
+
+    fun isertItemToDb(type: TypeItem, id: Int) {
+        viewModelScope.launch {
+            loadItemToDB.getItemToDB(type, id)
+        }
+
+    }
 
     fun insertItemIsLiked(id: Int) {
         viewModelScope.launch() {

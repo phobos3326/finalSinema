@@ -19,6 +19,7 @@ import com.example.skillsinema.entity.Film
 import com.example.skillsinema.ui.main.home.AdapterBestFilm
 import com.example.skillsinema.ui.main.home.AdapterFilteredFilms
 import com.example.skillsinema.ui.main.home.RVDataType
+import com.example.skillsinema.ui.main.home.TypeItem
 import com.example.skillsinema.ui.main.home.TypeOfAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
@@ -35,7 +36,7 @@ class ActorInfoFragment @Inject constructor() : Fragment() {
 
 
     val adapter = AdapterFilteredFilms(
-        onClick = { item -> onItemDetailClick(item) },
+        onClick = { item , typeItem-> onItemDetailClick(item, typeItem) },
 
         onClickShowAll = { type, rvType -> onClickShowAll(type, rvType) }
     )
@@ -119,9 +120,10 @@ class ActorInfoFragment @Inject constructor() : Fragment() {
         findNavController().navigate(R.id.action_home_fragment_to_showAllFragment, bundle)
     }
 
-    private fun onItemDetailClick(item: Film) {
+    private fun onItemDetailClick(item: Film, type: TypeItem) {
         if (item.kinopoiskId == null) {
             item.filmId?.let { bundle.putInt("Arg", it) }
+            item.filmId?.let { viewModel.isertItemToDb(type, it) }
         } else {
             item.kinopoiskId.let { bundle.putInt("Arg", it) }
         }

@@ -42,5 +42,11 @@ object RoomModule {
     fun provideCollectionsDao(itemDB: ItemDataBase) : CollectionDao{
         return  itemDB.collectionDao()
     }
+
+    @Provides
+    fun provideInterestedItem(itemDB: ItemDataBase): InterestedItemDao{
+        return itemDB.interestedItemDao()
+    }
+
 }
 

@@ -4,7 +4,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
-@Database(entities = [ItemFilm::class, LikedFilms::class, WantToSeeFilm::class, CollectionsEntity::class], version = 1)
+@Database(entities = [ItemFilm::class, LikedFilms::class, WantToSeeFilm::class, CollectionsEntity::class, InterestedItemEntity::class], version = 1)
 @TypeConverters(Converter::class)
 abstract class ItemDataBase :RoomDatabase() {
 
@@ -13,6 +13,8 @@ abstract class ItemDataBase :RoomDatabase() {
     abstract fun wantToSeeFilmDao():WantToSeeDao
 
     abstract fun collectionDao():CollectionDao
+
+    abstract fun interestedItemDao():InterestedItemDao
 
     /*companion object {
         @Volatile

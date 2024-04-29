@@ -27,12 +27,14 @@ import com.example.skillsinema.domain.GetFilmDetailUseCase
 import com.example.skillsinema.domain.GetPremiereUseCase
 import com.example.skillsinema.domain.GetSeasonsUseCase
 import com.example.skillsinema.domain.GetTopFilmsUseCase
+import com.example.skillsinema.domain.LoadItemToDB
 import com.example.skillsinema.entity.ModelFilmDetails
 import com.example.skillsinema.entity.ModelFilter
 import com.example.skillsinema.repository.RepositoryStaff
 import com.example.skillsinema.ui.main.ItemInfo.StateItemFilmInfo
 import com.example.skillsinema.ui.main.home.MainViewModel
 import com.example.skillsinema.ui.main.home.RVDataType
+import com.example.skillsinema.ui.main.home.TypeItem
 import com.example.skillsinema.ui.main.home.TypeOfAdapter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -59,7 +61,7 @@ class ShowAllViewModel @Inject constructor(
     private val filteredFilmPagingSource: FilteredFilmPagingSourceAll,
 
     private val useCase: FiltersUseCase,
-
+    private val loadItemToDB: LoadItemToDB,
     private val itemDao: ItemDao,
 
 
@@ -109,6 +111,13 @@ class ShowAllViewModel @Inject constructor(
         viewModelScope.launch {
             itemRepository.insertItem((ItemFilm(id = id)))
         }
+    }
+
+    fun isertItemToDb(type: TypeItem, id: Int) {
+        viewModelScope.launch {
+            loadItemToDB.getItemToDB(type, id)
+        }
+
     }
 
     private fun loadPremieres() {

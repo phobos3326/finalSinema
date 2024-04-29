@@ -25,6 +25,7 @@ import com.example.skillsinema.entity.ModelFilmDetails
 import com.example.skillsinema.entity.ModelStaff
 import com.example.skillsinema.ui.main.home.AdapterBestFilm
 import com.example.skillsinema.ui.main.home.RVDataType
+import com.example.skillsinema.ui.main.home.TypeItem
 import com.example.skillsinema.ui.main.home.TypeOfAdapter
 import com.example.skillsinema.ui.main.profile.menu.CollectionDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -54,7 +55,7 @@ class ItemInfoFragment : Fragment() {
     val galerieAdapter = GalerieAdapter()
     val similarFilmAdapter =  AdapterBestFilm (
 
-        onClick = {item-> onItemDetailClick(item)},
+        onClick = {item , typeItem-> onItemDetailClick(item, typeItem)},
 
         onClickShowAll = {type, rvType->onClickShowAll(type, rvType) }
 
@@ -263,11 +264,13 @@ class ItemInfoFragment : Fragment() {
     }
 
 
-    private fun onItemDetailClick(item: Film) {
+    private fun onItemDetailClick(item: Film, type: TypeItem) {
         if (item.kinopoiskId == null) {
             item.filmId?.let { bundle.putInt("Arg", it) }
+            item.filmId?.let { viewModel.isertItemToDb(type, it) }
         } else {
             item.kinopoiskId.let { bundle.putInt("Arg", it) }
+            item.kinopoiskId?.let { viewModel.isertItemToDb(type, it) }
         }
         findNavController().navigate(R.id.action_itemInfoFragment_self, bundle)
     }

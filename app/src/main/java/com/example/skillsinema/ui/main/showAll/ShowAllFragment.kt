@@ -21,6 +21,7 @@ import com.example.skillsinema.entity.Model
 import com.example.skillsinema.ui.main.home.AdapterBestFilm
 import com.example.skillsinema.ui.main.home.AdapterFilteredFilms
 import com.example.skillsinema.ui.main.home.RVDataType
+import com.example.skillsinema.ui.main.home.TypeItem
 import com.example.skillsinema.ui.main.home.TypeOfAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
@@ -38,10 +39,12 @@ class ShowAllFragment : Fragment() {
 
     val bundle = Bundle()
 
-    private val adapterPagedFilm = AdapterPagedFilm { onItemDetailClick(it) }
+    private val adapterPagedFilm = AdapterPagedFilm (
+        onClick = { item , typeItem-> onItemDetailClick(item, typeItem) }
+    )
     private val adapterBestFilms = AdapterBestFilm(
 
-        onClick = { item -> onItemDetailClick(item) },
+        onClick = { item , typeItem-> onItemDetailClick(item, typeItem) },
 
         onClickShowAll = { type, rvType -> onClickShowAll(type, rvType) }
 
@@ -200,12 +203,14 @@ class ShowAllFragment : Fragment() {
     }
 
 
-    private fun onItemDetailClick(item: Film) {
+    private fun onItemDetailClick(item: Film, type: TypeItem) {
         if (item.kinopoiskId == null) {
             item.filmId?.let { bundle.putInt("Arg", it) }
             item.filmId?.let { viewModel.insertItem(it) }
+            item.filmId?.let { viewModel.isertItemToDb(type, it) }
         } else {
             item.kinopoiskId.let { bundle.putInt("Arg", it) }
+            item.kinopoiskId?.let { viewModel.isertItemToDb(type, it) }
 
         }
         findNavController().navigate(R.id.action_showAllFragment_to_itemInfoFragment, bundle)

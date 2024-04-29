@@ -17,13 +17,14 @@ import javax.inject.Inject
 
 
 class AdapterFilteredFilms @Inject constructor(
-    private val onClick: (Film) -> Unit,
+    private val onClick: (Film, TypeItem) -> Unit,
     private val onClickShowAll:(TypeOfAdapter, RVDataType) ->Unit
 
     ) : PagingDataAdapter<Film, RecyclerView.ViewHolder>(DiffUtilCallback()) {
 
     val type = TypeOfAdapter.WITHPAGING
     var rvType = RVDataType.COUNTRYWITHGENRE
+    val typeItem = TypeItem.FILM
 
     class DiffUtilCallback : DiffUtil.ItemCallback<Film>() {
         override fun areItemsTheSame(oldItem: Film, newItem: Film): Boolean = oldItem == newItem
@@ -54,7 +55,7 @@ class AdapterFilteredFilms @Inject constructor(
                 (holder as MyViewHolder).bind(item)
             }
             holder.itemView.setOnClickListener {
-                onClick(item!!)
+                onClick(item!!, typeItem)
 
 
             }

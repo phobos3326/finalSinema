@@ -34,7 +34,7 @@ class MainFragment @Inject constructor() : Fragment() {
     private val binding get() = _binding!!
     private val adapter = AdapterBestFilm(
 
-        onClick = { item -> onItemDetailClick(item) },
+        onClick = { item , typeItem-> onItemDetailClick(item, typeItem) },
 
         onClickShowAll = { type, rvType -> onClickShowAll(type, rvType) }
 
@@ -43,20 +43,20 @@ class MainFragment @Inject constructor() : Fragment() {
 
     private val adapterBestFilms = AdapterBestFilm(
 
-        onClick = { item -> onItemDetailClick(item) },
+        onClick = { item , typeItem-> onItemDetailClick(item, typeItem) },
 
         onClickShowAll = { type, rvType -> onClickShowAll(type, rvType) }
 
     )
 
     private val adapterFilteredFilms = AdapterFilteredFilms(
-        onClick = { item -> onItemDetailClick(item) },
+        onClick = { item , typeItem-> onItemDetailClick(item, typeItem) },
 
         onClickShowAll = { type, rvType -> onClickShowAll(type, rvType) }
     )
 
     private val adapterSerials = AdapterFilteredFilms(
-        onClick = { item -> onItemDetailClick(item) },
+        onClick = { item , typeItem-> onItemDetailClick(item, typeItem) },
 
         onClickShowAll = { type, rvType -> onClickShowAll(type, rvType) }
     )
@@ -178,12 +178,14 @@ class MainFragment @Inject constructor() : Fragment() {
          item.kinopoiskId?.let { mainViewModel.insertItem(it) }
      }*/
 
-    private fun onItemDetailClick(item: Film) {
+    private fun onItemDetailClick(item: Film, type:TypeItem) {
         if (item.kinopoiskId == null) {
             item.filmId?.let { bundle.putInt("Arg", it) }
             item.filmId?.let { mainViewModel.insertItem(it) }
+            item.filmId?.let { mainViewModel.isertItemToDb(type, it) }
         } else {
             item.kinopoiskId.let { bundle.putInt("Arg", it) }
+            item.kinopoiskId?.let { mainViewModel.isertItemToDb(type, it) }
 
         }
         findNavController().navigate(R.id.action_mainFragment_to_itemInfoFragment, bundle)
