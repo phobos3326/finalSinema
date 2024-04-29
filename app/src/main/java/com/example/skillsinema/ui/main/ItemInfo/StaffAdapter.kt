@@ -18,14 +18,15 @@ import com.example.skillsinema.entity.ModelStaff
 
 import com.example.skillsinema.ui.main.ItemInfo.StaffAdapter.Const.END
 import com.example.skillsinema.ui.main.ItemInfo.StaffAdapter.Const.NOEND
+import com.example.skillsinema.ui.main.home.TypeItem
 import javax.inject.Inject
 
 class StaffAdapter @Inject constructor(
-    private val onClick: (ModelStaff.ModelStaffItem) -> Unit
+    private val onClick: (ModelStaff.ModelStaffItem, TypeItem) -> Unit
 )    :ListAdapter<ModelStaff.ModelStaffItem, RecyclerView.ViewHolder>(DiffUtilCallback()) {
 
     //private var onClickListener: View.OnClickListener? = null
-
+    val typeItem = TypeItem.PERSON
     class DiffUtilCallback : DiffUtil.ItemCallback<ModelStaff.ModelStaffItem>() {
         override fun areItemsTheSame(oldItem: ModelStaff.ModelStaffItem, newItem: ModelStaff.ModelStaffItem): Boolean = oldItem == newItem
 
@@ -52,7 +53,7 @@ class StaffAdapter @Inject constructor(
                 (holder as MyViewHolder).bind(item)
             }
             holder.itemView.setOnClickListener {
-                onClick(item!!)
+                onClick(item!!,typeItem )
 
 
             }

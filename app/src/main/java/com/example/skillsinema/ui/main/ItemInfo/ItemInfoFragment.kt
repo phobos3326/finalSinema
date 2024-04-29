@@ -46,12 +46,16 @@ class ItemInfoFragment : Fragment() {
 
     val viewModel: ItemInfoViewModel by viewModels()
 
-    val adapterActor = StaffAdapter {
-        onItemActorClick(it)
-    }
-    val adapterNoActor = StaffAdapter {
-        onItemActorClick(it)
-    }
+    val adapterActor = StaffAdapter (
+        //onItemActorClick(it)
+
+        onClick = { modelStaffItem , typeItem-> onItemActorClick(modelStaffItem, typeItem) },
+    )
+    val adapterNoActor =StaffAdapter (
+        //onItemActorClick(it)
+
+        onClick = { modelStaffItem , typeItem-> onItemActorClick(modelStaffItem, typeItem) },
+    )
     val galerieAdapter = GalerieAdapter()
     val similarFilmAdapter =  AdapterBestFilm (
 
@@ -275,9 +279,10 @@ class ItemInfoFragment : Fragment() {
         findNavController().navigate(R.id.action_itemInfoFragment_self, bundle)
     }
 
-    private fun onItemActorClick(item: ModelStaff.ModelStaffItem) {
+    private fun onItemActorClick(item: ModelStaff.ModelStaffItem, type: TypeItem) {
 
         item.staffId?.let { bundle.putInt("ArgActor", it) }
+        item.staffId?.let { viewModel.isertItemToDb(type, it) }
 
         findNavController().navigate(R.id.action_itemInfoFragment_to_actorInfoFragment, bundle)
     }
