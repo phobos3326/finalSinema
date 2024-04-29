@@ -78,7 +78,7 @@ class LoadItemToDB @Inject constructor(
         return InterestedItemEntity(
             id = kinopoiskId,
             idItem = kinopoiskId,
-            typeItem = type.toString(),
+            typeItem = type,
             nameENItem = nameEn,
             nameRUItem = nameRu,
             posterItem = poster,
@@ -90,7 +90,7 @@ class LoadItemToDB @Inject constructor(
         return InterestedItemEntity(
             id = personId,
             idItem = personId,
-            typeItem = type.toString(),
+            typeItem = type,
             nameENItem = nameEn,
             nameRUItem = nameRu,
             posterItem = poster,

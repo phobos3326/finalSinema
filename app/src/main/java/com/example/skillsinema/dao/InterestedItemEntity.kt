@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.skillsinema.ui.main.home.TypeItem
 
 @Entity(tableName = "InterestedItemTable")
 data class InterestedItemEntity(
@@ -14,7 +15,7 @@ data class InterestedItemEntity(
     val idItem: Int,
 
     @ColumnInfo(name = "typeItem")
-    val typeItem: String,
+    val typeItem: TypeItem,
 
     @ColumnInfo(name = "nameRUItem")
     var nameRUItem: String?,
