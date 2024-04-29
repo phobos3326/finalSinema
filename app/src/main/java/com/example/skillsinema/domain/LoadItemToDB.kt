@@ -1,6 +1,8 @@
 package com.example.skillsinema.domain
 
 import android.content.Context
+import android.graphics.Bitmap
+import com.bumptech.glide.Glide
 import com.example.skillsinema.dao.InterestedItemEntity
 import com.example.skillsinema.dao.InterestedItemPerository
 import com.example.skillsinema.entity.ModelActorInfo
@@ -9,6 +11,11 @@ import com.example.skillsinema.repository.Repository
 import com.example.skillsinema.repository.RepositoryActorInfo
 import com.example.skillsinema.ui.main.home.TypeItem
 import com.example.skillsinema.ui.main.profile.menu.CollectionsUiModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 import kotlin.reflect.typeOf
 
@@ -22,86 +29,71 @@ class LoadItemToDB @Inject constructor(
     suspend fun getItemToDB(type: TypeItem, id: Int) {
 
 
+        CoroutineScope(Dispatchers.IO).launch {
+            if (type == TypeItem.FILM) {
+                val modelFilmDetails = repository.getFilmDetails(id)
+
+                val bitmap = Glide.with(context)
+                    .asBitmap()
+                    .load(modelFilmDetails.posterUrlPreview)
+                    .submit()
+                    .get()
+
+                val byteArrayOutputStream = ByteArrayOutputStream()
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+                val imageBytes = byteArrayOutputStream.toByteArray()
 
 
-
-        /*val bitmap = Glide.with(context)
-                .asBitmap()
-                .load(it.posterUrlPreview)
-                .submit()
-                .get()*/
+                interestedItemPerository.insertInterestedItem(
+                    modelFilmDetails.toItemToDB(type, imageBytes)
+                )
 
 
-         /* ItemToDB(
-                id = it.kinopoiskId,
-                nameRU = it.nameRu,
-                nameEN = it.nameEn,
-             //   poster = bitmap,
-                rating = it.ratingAwaitCount)*/
+            } else if (type == TypeItem.PERSON) {
+                val modelActorInfo = repositoryActorInfo.getActor(id)
 
-        if (type ==  TypeItem.FILM){
-            val modelFilmDetails = repository.getFilmDetails(id)
-            interestedItemPerository.insertInterestedItem(
-                /*InterestedItemEntity(
-                    id = 0,
-                    idItem = a.kinopoiskId,
-                    typeItem = "film",
-                    nameENItem = a.nameEn,
-                    nameRUItem = a.nameRu,
-                    ratingItem = a.ratingKinopoisk?.toInt()
-                )*/
+                val bitmap = Glide.with(context)
+                    .asBitmap()
+                    .load(modelActorInfo.posterUrl)
+                    .submit()
+                    .get()
 
-                modelFilmDetails.toItemToDB(type)
-            )
+                val byteArrayOutputStream = ByteArrayOutputStream()
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+                val imageBytes = byteArrayOutputStream.toByteArray()
 
+                interestedItemPerository.insertInterestedItem(
+                    modelActorInfo.toItemToDB(type, imageBytes)
+                )
 
-        } else if (type == TypeItem.PERSON){
-            val modelActorInfo = repositoryActorInfo.getActor(id)
-            interestedItemPerository.insertInterestedItem(
-                /*InterestedItemEntity(
-                    id = 0,
-                    idItem = a.kinopoiskId,
-                    typeItem = "film",
-                    nameENItem = a.nameEn,
-                    nameRUItem = a.nameRu,
-                    ratingItem = a.ratingKinopoisk?.toInt()
-                )*/
-
-                 modelActorInfo.toItemToDB(type )
-            )
+            }
 
         }
-
-
-
-
-
-
-
-
     }
 
-    fun ModelFilmDetails.toItemToDB(type: TypeItem): InterestedItemEntity {
+    private fun ModelFilmDetails.toItemToDB(
+        type: TypeItem,
+        poster: ByteArray
+    ): InterestedItemEntity {
         return InterestedItemEntity(
-
-            id = 0,
+            id = kinopoiskId,
             idItem = kinopoiskId,
             typeItem = type.toString(),
             nameENItem = nameEn,
             nameRUItem = nameRu,
+            posterItem = poster,
             ratingItem = ratingKinopoisk?.toInt()
-
         )
     }
 
-    fun ModelActorInfo.toItemToDB(type: TypeItem): InterestedItemEntity {
+    fun ModelActorInfo.toItemToDB(type: TypeItem, poster: ByteArray): InterestedItemEntity {
         return InterestedItemEntity(
-
-            id = 0,
+            id = personId,
             idItem = personId,
             typeItem = type.toString(),
             nameENItem = nameEn,
             nameRUItem = nameRu,
+            posterItem = poster,
             ratingItem = 0
 
         )
@@ -111,12 +103,3 @@ class LoadItemToDB @Inject constructor(
 }
 
 
-/*
-data class ItemToDB(
-    var id: Int,
-    var nameRU: String?,
-    var nameEN: String?,
-    //var poster:Bitmap?,
-    var rating: Int?
-
-)*/

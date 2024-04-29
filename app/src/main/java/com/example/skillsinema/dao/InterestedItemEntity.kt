@@ -22,8 +22,8 @@ data class InterestedItemEntity(
     @ColumnInfo(name = "nameENItem")
     var nameENItem: String?,
 
-   /* @ColumnInfo(name = "posterItem")
-    var posterItem: Bitmap?,*/
+    @ColumnInfo(name = "posterItem")
+    var posterItem: ByteArray?,
 
     @ColumnInfo(name = "ratingItem")
     var ratingItem: Int?
