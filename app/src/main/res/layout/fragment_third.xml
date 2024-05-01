@@ -1,64 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.main.profile.ThirdFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment_third" />
+        android:layout_height="match_parent">
 
-
-
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="80dp">
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:text="Просмотрено"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-            </androidx.recyclerview.widget.RecyclerView>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Коллекции"
-                android:layout_marginStart="16dp"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView8"
+        tools:listitem="@layout/item">
 
-            <TextView
-                android:id="@+id/create_collection_textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:text="+  Создать свою коллекцию"
-                android:textSize="24sp" />
+    </androidx.recyclerview.widget.RecyclerView>
+
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:text="Коллекции"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerView2" />
+
+    <TextView
+        android:id="@+id/create_collection_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:text="+  Создать свою коллекцию"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/collectionRecycler"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="300dp"
 
-                android:layout_gravity="center"
-                android:layout_marginTop="8dp"
+
+                android:layout_marginTop="16dp"
                 android:orientation="vertical"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                app:layout_constraintTop_toBottomOf="@+id/featuredInTheFilm"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/create_collection_textView"
                 app:spanCount="2"
-                tools:layout_editor_absoluteX="-11dp"
                 tools:listitem="@layout/collection_item" />
 
-        </LinearLayout>
+            <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:text="Вам было интересно"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/collectionRecycler" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/TopFilmsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView10"
+        tools:listitem="@layout/item" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-</FrameLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
