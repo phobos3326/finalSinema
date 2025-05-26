@@ -12,13 +12,19 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.skillsinema.R
 import com.example.skillsinema.databinding.FullGalerieItemBinding
 import com.example.skillsinema.databinding.SecondItemBinding
+import com.example.skillsinema.entity.Film
 import com.example.skillsinema.entity.ModelGalerie
 import com.example.skillsinema.ui.main.galerie.FullGalerieAdapter.Const.END
 import com.example.skillsinema.ui.main.galerie.FullGalerieAdapter.Const.NOEND
+import com.example.skillsinema.ui.main.home.TypeItem
 import javax.inject.Inject
 
 
-class FullGalerieAdapter @Inject constructor() : PagingDataAdapter<ModelGalerie.Item, RecyclerView.ViewHolder>(DiffUtilCallback()) {
+class FullGalerieAdapter @Inject constructor(
+    private val onClick: (ModelGalerie.Item) -> Unit,
+
+    ) :
+    PagingDataAdapter<ModelGalerie.Item, RecyclerView.ViewHolder>(DiffUtilCallback()) {
 
 
     class DiffUtilCallback : DiffUtil.ItemCallback<ModelGalerie.Item>() {
@@ -51,7 +57,7 @@ class FullGalerieAdapter @Inject constructor() : PagingDataAdapter<ModelGalerie.
         (holder as MyViewHolder).bind(item!!)
 
         holder.itemView.setOnClickListener {
-            //   onClick(item!!)
+               onClick(item)
 
 
         }
@@ -59,35 +65,7 @@ class FullGalerieAdapter @Inject constructor() : PagingDataAdapter<ModelGalerie.
 
     }
 
-    /*  override fun submitList(list: List<Film>?) {
-          val newList = list?.toMutableList()
-          if ((newList?.size ?: 0) >= 19) {
-              val lastItem = list?.get(19)
-              if (lastItem != null) {
-                  newList?.add(lastItem)
-              }
-          }
 
-          super.submitList(list)
-      }*/
-
-    /*override fun getItemViewType(position: Int): Int {
-        return if (position == itemCount - 1 && itemCount >= 19) {
-            END
-        } else {
-            NOEND
-        }
-    }*/
-
-
-    /* override fun getItemCount(): Int {
-         val itemCount = super.getItemCount()
-         return if (itemCount >= 20) {
-             itemCount + 1
-         } else {
-             itemCount
-         }
-     }*/
     override fun getItemViewType(position: Int): Int {
         return if (position == itemCount - 1 && itemCount >= 19) {
             END
@@ -107,18 +85,10 @@ class FullGalerieAdapter @Inject constructor() : PagingDataAdapter<ModelGalerie.
                     .load(it.previewUrl)
                     .placeholder(R.drawable.a4___1)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-
-
                     //.preload(10,10)
                     .into(binding1.poster11)
             }
-
-
         }
-
-
-
-
     }
 
 

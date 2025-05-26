@@ -28,13 +28,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-        val actionBar= supportActionBar
+      /*  val actionBar= supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
        // actionBar?.setBackgroundDrawable(ColorDrawable(Color.alpha(90)))
         actionBar?.let {
             it.setTitle("1111")
 
-        }
+        }*/
 
 
        // CollectionDialog().show(supportFragmentManager, "bottomSheetDialogFragment.tag")

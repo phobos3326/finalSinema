@@ -31,6 +31,7 @@ import com.example.skillsinema.domain.GetSeasonsUseCase
 import com.example.skillsinema.domain.GetTopFilmsUseCase
 import com.example.skillsinema.domain.LoadItemToDB
 import com.example.skillsinema.entity.*
+import com.example.skillsinema.repository.RepositoryKeyWord
 
 import com.example.skillsinema.repository.RepositoryStaff
 
@@ -64,6 +65,7 @@ class MainViewModel @Inject constructor(
     private val serialsPagingSourse: SerialsPagingSourse,
     private val seasonsUseCase: GetSeasonsUseCase,
     private val loadItemToDB: LoadItemToDB,
+
 
 
     application: Application
@@ -109,6 +111,7 @@ class MainViewModel @Inject constructor(
             Log.d("FILTERED", "${pagedFilteredFilms}")
         }
     }
+
 
 
     fun insertItem(id: Int) {

@@ -13,12 +13,14 @@ import com.example.skillsinema.dao.ItemFilm
 import com.example.skillsinema.dao.ItemRepository
 import com.example.skillsinema.datasource.SearchPagingSource
 import com.example.skillsinema.domain.FiltersUseCase
+import com.example.skillsinema.domain.LoadItemToDB
 
 import com.example.skillsinema.domain.SearchFilmUseCase
 
 import com.example.skillsinema.entity.Film
 import com.example.skillsinema.entity.ModelFilter
 import com.example.skillsinema.ui.main.home.MainViewModel
+import com.example.skillsinema.ui.main.home.TypeItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
@@ -40,6 +42,7 @@ class SearchViewmodel @Inject constructor(
     private val searchFilmUseCase: SearchFilmUseCase,
     private val itemRepository: ItemRepository,
     private val useCase: FiltersUseCase,
+    private val loadItemToDB: LoadItemToDB,
 ) : ViewModel() {
 
 
@@ -122,10 +125,18 @@ class SearchViewmodel @Inject constructor(
     var list = emptyList<Film>()
 
 
-    fun insertItem(id: Int) {
+  /*  fun insertItem(type: TypeItem, id: Int) {
         viewModelScope.launch {
             itemRepository.insertItem((ItemFilm(id = id)))
         }
+    }
+*/
+
+    fun isertItemToDb(type: TypeItem, id: Int) {
+        viewModelScope.launch {
+            loadItemToDB.getItemToDB(type, id)
+        }
+
     }
 
 

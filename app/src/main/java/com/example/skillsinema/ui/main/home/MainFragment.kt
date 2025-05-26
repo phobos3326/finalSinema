@@ -6,8 +6,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.skillsinema.DataRepository
@@ -30,8 +32,12 @@ class MainFragment @Inject constructor() : Fragment() {
     lateinit var dataRepository: DataRepository
 
 
+
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
+
+
+
     private val adapter = AdapterBestFilm(
 
         onClick = { item , typeItem-> onItemDetailClick(item, typeItem) },
@@ -71,12 +77,16 @@ class MainFragment @Inject constructor() : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
+
+
         Log.d(TAG, "onCreateView")
         _binding = FragmentMainBinding.inflate(inflater, container, false)
 
         binding.SHOWALL.setOnClickListener { View ->
             //onClickShowAll()
         }
+
+        (activity as? AppCompatActivity)?.supportActionBar?.title = "Skillcinema"
 
 
         //mainViewModel.getFilters()
@@ -86,6 +96,11 @@ class MainFragment @Inject constructor() : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+        (activity as? AppCompatActivity)?.supportActionBar?.title = "Skillcinema"
+
+
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             mainViewModel.modelPremiere.collect {
                 binding.viewPager.adapter = adapter
@@ -126,6 +141,7 @@ class MainFragment @Inject constructor() : Fragment() {
 
 
         Log.d(TAG, "onViewCreated");
+
 
 
     }
@@ -210,6 +226,7 @@ class MainFragment @Inject constructor() : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        (activity as? AppCompatActivity)?.supportActionBar?.title = "Skillcinema"
         Log.d(TAG, "onStart")
     }
 

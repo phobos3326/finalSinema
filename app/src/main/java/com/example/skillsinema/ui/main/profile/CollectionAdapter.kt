@@ -51,6 +51,8 @@ class CollectionAdapter @Inject constructor(
 
     }
 
+
+
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = getItem(position)
         (holder as ViewHolder).bind(getItem(position))

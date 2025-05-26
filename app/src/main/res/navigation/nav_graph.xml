@@ -55,6 +55,12 @@
         <action
             android:id="@+id/action_fragment_third_to_showAllFragment"
             app:destination="@id/showAllFragment" />
+        <action
+            android:id="@+id/action_fragment_third_to_actorInfoFragment"
+            app:destination="@id/actorInfoFragment" />
+        <action
+            android:id="@+id/action_fragment_third_to_itemInfoFragment"
+            app:destination="@id/itemInfoFragment" />
     </fragment>
     <fragment
         android:id="@+id/showAllFragment"
@@ -81,7 +87,11 @@
         android:id="@+id/galerieFragment"
         android:name="com.example.skillsinema.ui.main.galerie.GalerieFragment"
         android:label="fragment_galerie"
-        tools:layout="@layout/fragment_galerie" />
+        tools:layout="@layout/fragment_galerie" >
+        <action
+            android:id="@+id/action_galerieFragment_to_showImageFragment"
+            app:destination="@id/showImageFragment" />
+    </fragment>
     <fragment
         android:id="@+id/itemserialInfoFragment"
         android:name="com.example.skillsinema.ui.main.ItemInfo.ItemSerialInfoFragment"
@@ -96,6 +106,11 @@
         android:id="@+id/collectionDialog"
         android:name="com.example.skillsinema.ui.main.profile.menu.CollectionDialog"
         android:label="CollectionDialog" />
+    <fragment
+        android:id="@+id/showImageFragment"
+        android:name="com.example.skillsinema.ui.main.galerie.ShowImageFragment"
+        android:label="fragment_show_image"
+        tools:layout="@layout/fragment_show_image" />
     <!--<fragment
         android:id="@+id/second_fragment"
         android:name="com.example.skillsinema.ui.main.find.SecondFragment"

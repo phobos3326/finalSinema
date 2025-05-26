@@ -22,4 +22,14 @@
         <item name="android:background">@drawable/bottom_sheet_background</item>
     </style>
 
+
+    <style name="MyChipStyle" parent="Widget.MaterialComponents.Chip.Entry">
+        <item name="chipBackgroundColor">@color/chip_selector</item>
+
+        <item name="chipStrokeWidth">1dp</item>
+        <item name="checkedIconVisible">false</item> <!-- Скрыть иконку при выборе -->
+        <item name="closeIconVisible">false</item> <!-- Скрыть иконку закрытия -->
+        <!-- Другие атрибуты, если необходимо -->
+    </style>
+
 </resources>

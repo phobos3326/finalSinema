@@ -10,4 +10,8 @@
     <color name="gray">#272727</color>
     <color name="light_gray">#838391</color>
     <color name="blue">#3D3BFF</color>
+
+    <color name="chip_selected_color">#FF4081</color> <!-- Example selected color -->
+    <color name="chip_unselected_color">#E0E0E0</color> <!-- Example unselected color -->
+
 </resources>

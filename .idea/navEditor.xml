@@ -101,6 +101,37 @@
                       </LayoutPositions>
                     </value>
                   </entry>
+                  <entry key="fragment_third">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="12" />
+                            <option name="y" value="12" />
+                          </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_fragment_third_to_actorInfoFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="action_fragment_third_to_itemInfoFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="action_fragment_third_to_showAllFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
                   <entry key="galerieFragment">
                     <value>
                       <LayoutPositions>
@@ -109,6 +140,15 @@
                             <option name="x" value="1106" />
                             <option name="y" value="697" />
                           </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_galerieFragment_to_showImageFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
                         </option>
                       </LayoutPositions>
                     </value>
@@ -144,8 +184,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="884" />
-                            <option name="y" value="699" />
+                            <option name="x" value="809" />
+                            <option name="y" value="631" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -213,23 +253,14 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="show_all_frafment">
+                  <entry key="showImageFragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="989" />
-                            <option name="y" value="254" />
+                            <option name="x" value="1078" />
+                            <option name="y" value="343" />
                           </Point>
-                        </option>
-                        <option name="myPositions">
-                          <map>
-                            <entry key="action_show_all_frafment_to_showAllFragment">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                          </map>
                         </option>
                       </LayoutPositions>
                     </value>

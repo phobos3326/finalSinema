@@ -11,9 +11,9 @@ data class ModelActorInfo(
     @Json(name = "age")
     val age: Int,
     @Json(name = "birthday")
-    val birthday: String,
+    val birthday: String?,
     @Json(name = "birthplace")
-    val birthplace: String,
+    val birthplace: String?,
     @Json(name = "death")
     val death: Any?,
     @Json(name = "deathplace")

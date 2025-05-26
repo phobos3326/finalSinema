@@ -9,16 +9,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.skillsinema.R
 import com.example.skillsinema.dao.CollectionsEntity
+import com.example.skillsinema.dao.InterestedItemEntity
 import com.example.skillsinema.databinding.FragmentThirdBinding
+import com.example.skillsinema.ui.main.home.FilmographyFragment
 import com.example.skillsinema.ui.main.home.RVDataType
+import com.example.skillsinema.ui.main.home.TypeItem
 import com.example.skillsinema.ui.main.profile.menu.AlertDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -37,6 +43,10 @@ class ThirdFragment : Fragment() {
     private val binding get() = _binding!!
 
     val viewModel: ThirdFragmentViewModel by viewModels()
+
+    val adapterInterestedItem = AdapterInterestedItem(
+        onClick = { item, typeItem -> omClickInterestedItem(item, typeItem) }
+    )
 
     val adapter = CollectionAdapter(
         onClick = { item, rvType -> onClickShowCollection(item, rvType) },
@@ -65,6 +75,14 @@ class ThirdFragment : Fragment() {
         }
 
         extracted()
+        viewModel.interestedCollection.onEach {
+            binding.recyclerView2.adapter = adapterInterestedItem
+            adapterInterestedItem.submitList(it)
+            adapterInterestedItem.notifyDataSetChanged()
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
+
+
+
 
 
         binding.createCollectionTextView.setOnClickListener {
@@ -83,6 +101,12 @@ class ThirdFragment : Fragment() {
         }
 
 
+        /*viewModel.interestedCollection.onEach {
+            binding.recyclerView2.adapter= adapterInterestedItem
+            adapterInterestedItem.submitList(it)
+        }*/
+
+
     }
 
     private fun extracted() {
@@ -91,11 +115,33 @@ class ThirdFragment : Fragment() {
             adapter.submitList(it)
 
 
-        }.launchIn(viewLifecycleOwner.lifecycleScope)
+        }.launchIn(viewLifecycleOwner.lifecycleScope, )
     }
 
 
-    private fun onClickShowCollection(item: CollectionsEntity, rvType:RVDataType) {
+    private fun omClickInterestedItem(item: InterestedItemEntity, typeItem: TypeItem) {
+        when (typeItem) {
+            TypeItem.FILM -> {
+                bundle.putInt("Arg", item.idItem)
+                findNavController().navigate(R.id.action_fragment_third_to_itemInfoFragment, bundle)
+            }
+
+            TypeItem.PERSON -> {
+                bundle.putInt("ArgActor", item.idItem)
+                findNavController().navigate(
+                    R.id.action_fragment_third_to_actorInfoFragment,
+                    bundle
+                )
+            }
+
+            TypeItem.SERIES -> {
+                bundle.putInt("Arg", item.idItem)
+                findNavController().navigate(R.id.action_fragment_third_to_itemInfoFragment, bundle)
+            }
+        }
+    }
+
+    private fun onClickShowCollection(item: CollectionsEntity, rvType: RVDataType) {
         item.collectionName.let { bundle.putString("CollectionName", it) }
         when (rvType) {
             RVDataType.TOP250 -> {
@@ -147,6 +193,17 @@ class ThirdFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         extracted()
+
+        /*lifecycleScope.launch {
+            viewModel.interestedCollection
+                .flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED)
+                .collect { items ->
+                    adapterInterestedItem.submitList(items)
+                }
+        }*/
+
+    //adapterInterestedItem.submitList(viewModel.showInterestedCollection())
+   viewModel.showInterestedCollection()
         Log.d(TAG, "onResume")
     }
 

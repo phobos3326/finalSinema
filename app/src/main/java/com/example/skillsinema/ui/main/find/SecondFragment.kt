@@ -75,6 +75,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.fragment.findNavController
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.example.skillsinema.ui.main.home.TypeItem
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -244,7 +245,7 @@ class SecondFragment : Fragment() {
     }
 
     @Composable
-    fun FilmListItem(viewModel: SearchViewmodel, film: Film) {
+    fun FilmListItem(viewModel: SearchViewmodel,  film: Film) {
         Card(
             modifier = Modifier
                 .padding(horizontal = 8.dp, vertical = 8.dp)
@@ -258,7 +259,7 @@ class SecondFragment : Fragment() {
             Row(
                 modifier = Modifier
                     .clickable {
-                        onItemDetailClick(viewModel, film)
+                        onItemDetailClick(viewModel,  film)
                     }
             ) {
                 FilmImage(film)
@@ -396,6 +397,13 @@ class SecondFragment : Fragment() {
                     ) { index ->
                         val film = lazyPagingItems[index]
                         if (film != null) {
+                            /*if (film.type=="TV_SERIES"){
+                               val typeItem =TypeItem.SERIES
+                                FilmListItem(viewModel, typeItem, film)
+                            } else{
+                                val typeItem =TypeItem.FILM
+                                FilmListItem(viewModel, typeItem, film)
+                            }*/
                             FilmListItem(viewModel, film)
                         }
                     }
@@ -404,13 +412,33 @@ class SecondFragment : Fragment() {
         }
     }
 
-    private fun onItemDetailClick(viewModel: SearchViewmodel, item: Film) {
-        if (item.kinopoiskId == null) {
-            item.filmId?.let { bundle.putInt("Arg", it) }
-            item.filmId?.let { viewModel.insertItem(it) }
-        } else {
-            item.kinopoiskId.let { bundle.putInt("Arg", it) }
+    private fun onItemDetailClick(viewModel: SearchViewmodel,  item: Film) {
 
+        /*var typeItem = if (item.type == "TV_SERIES") {
+            TypeItem.SERIES
+        } else {
+            TypeItem.FILM
+        }*/
+
+        var typeItem =TypeItem.FILM
+        when (item.type){
+            "TV_SERIES" -> typeItem = TypeItem.FILM
+            "FILM" -> typeItem = TypeItem.FILM
+             "PERSON" -> typeItem = TypeItem.PERSON
+        }
+
+
+        if (item.kinopoiskId == null) {
+
+
+            item.filmId?.let { bundle.putInt("Arg", it) }
+            item.filmId?.let { viewModel.isertItemToDb(typeItem, it) }
+        } else {
+
+            item.kinopoiskId.let { bundle.putInt("Arg", it) }
+            item.kinopoiskId.let { viewModel.isertItemToDb(typeItem, it) }
+
+//viewModel.insertItem()
         }
         findNavController().navigate(R.id.action_find_fragment_to_itemInfoFragment, bundle)
 
@@ -425,6 +453,7 @@ class SecondFragment : Fragment() {
         // BarkHomeContent()
         //ImageWithOverlay()
         //FilmListItem1()
+
     }
 
 
