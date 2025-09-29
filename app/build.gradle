@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
+    id 'org.jetbrains.kotlin.plugin.compose'
 }
 
 android {
@@ -94,16 +95,16 @@ dependencies {
     annotationProcessor("com.squareup.moshi:moshi-kotlin-codegen:1.14.0")
 
     //Glide
-    implementation 'com.github.bumptech.glide:glide:4.15.1'
+    implementation 'com.github.bumptech.glide:glide:5.0.5'
     // Skip this if you don't want to use integration libraries or configure Glide.
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.15.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:5.0.5'
 
 
     /*  implementation 'com.google.dagger:dagger:2.45'
       kapt 'com.google.dagger:dagger-compiler:2.45'*/
 
-    implementation "com.google.dagger:hilt-android:2.44"
-    kapt "com.google.dagger:hilt-compiler:2.44"
+    implementation "com.google.dagger:hilt-android:2.57.2"
+    kapt "com.google.dagger:hilt-compiler:2.57.2"
    // implementation "androidx.hilt:hilt-navigation-compose:2.44"
 
     // implementation 'androidx.hilt:hilt-navigation-fragment:1.0.0'
@@ -112,16 +113,13 @@ dependencies {
     kapt 'androidx.hilt:hilt-compiler:1.0.0'*/
 
 
-    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.10.0"))
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:5.1.0"))
 
     // define any required OkHttp artifacts without version
     implementation("com.squareup.okhttp3:okhttp")
     implementation("com.squareup.okhttp3:logging-interceptor")
 
-//Glide
-    implementation 'com.github.bumptech.glide:glide:4.15.1'
-    // Skip this if you don't want to use integration libraries or configure Glide.
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.15.1'
+
 
 
     implementation "com.github.chrisbanes:PhotoView:2.3.0"
@@ -210,18 +208,18 @@ dependencies {
  */
     //room
 
-    implementation 'com.google.code.gson:gson:2.8.7'
+    implementation 'com.google.code.gson:gson:2.13.2'
 
-    def roomVersion = "2.5.2"
+    def roomVersion = "2.8.1"
 
     implementation "androidx.room:room-runtime:$roomVersion"
     implementation "androidx.room:room-ktx:$roomVersion"
     kapt "androidx.room:room-compiler:$roomVersion"
     kapt "androidx.room:room-runtime:$roomVersion"
-    implementation "androidx.room:room-rxjava2:2.5.2"
+    implementation "androidx.room:room-rxjava2:2.8.1"
 
 
-    implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.4.4'
+    implementation group: 'org.modelmapper', name: 'modelmapper', version: '3.2.4'
 
 
 
