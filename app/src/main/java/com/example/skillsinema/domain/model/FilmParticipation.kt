@@ -1,0 +1,12 @@
+package com.example.skillsinema.domain.model
+
+data class FilmParticipation(
+    val filmId: Int,
+    val nameRu: String?,
+    val nameEn: String?,
+    val rating: String?,
+    val general: Boolean?,
+    val description: String?,
+    val professionText: String?,
+    val professionKey: String?
+)
