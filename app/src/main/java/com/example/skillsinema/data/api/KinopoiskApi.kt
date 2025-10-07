@@ -54,4 +54,10 @@ interface KinopoiskApi {
     @Headers("X-API-KEY: $API_KEY")
     @GET("films/filters")
     suspend fun getFilters(): Response<FiltersDto>
+
+    @Headers("X-API-KEY: $API_KEY")
+    @GET("films/{id}/seasons")
+    suspend fun getSeasons(
+        @Path("id") filmId: Int
+    ): SeasonsDto
 }
