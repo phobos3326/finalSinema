@@ -1,4 +1,4 @@
-package com.example.skillsinema.data.local.paging
+package com.example.skillsinema.data.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
@@ -36,13 +36,10 @@ class FilteredFilmPagingSource(
         }
     }
 
-
-
-
     override fun getRefreshKey(state: PagingState<Int, Film>): Int? {
-        val anchorPosition = state.anchorPosition ?: return null
-        val anchorPage = state.closestPageToPosition(anchorPosition)
-        return anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
+        return state.anchorPosition?.let { anchorPosition ->
+            val anchorPage = state.closestPageToPosition(anchorPosition)
+            anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
+        }
     }
-
 }
