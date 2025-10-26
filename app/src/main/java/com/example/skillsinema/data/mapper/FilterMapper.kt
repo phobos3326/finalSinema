@@ -12,8 +12,8 @@ class FilterMapper @Inject constructor() {
 
     fun mapFiltersDto(dto: FiltersDto): ModelFilter {
         return ModelFilter(
-            genres = dto.genres.map { mapGenreDto(it) },
-            countries = dto.countries.map { mapCountryDto(it) }
+            genres = dto.genres.map { Genre(id = it.id, genre = it.genre) },
+            countries = dto.countries.map { Country(id = it.id, country = it.country) }
         )
     }
 

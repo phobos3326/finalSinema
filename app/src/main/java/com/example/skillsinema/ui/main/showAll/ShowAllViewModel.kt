@@ -28,6 +28,8 @@ import com.example.skillsinema.domain.GetPremiereUseCase
 import com.example.skillsinema.domain.GetSeasonsUseCase
 import com.example.skillsinema.domain.GetTopFilmsUseCase
 import com.example.skillsinema.domain.LoadItemToDB
+import com.example.skillsinema.domain.model.Country
+import com.example.skillsinema.domain.model.Genre
 import com.example.skillsinema.entity.ModelFilmDetails
 import com.example.skillsinema.entity.ModelFilter
 import com.example.skillsinema.repository.RepositoryStaff
@@ -79,8 +81,8 @@ class ShowAllViewModel @Inject constructor(
     private val _collection = MutableStateFlow<List<Film>>(emptyList())
     val collection = _collection.asStateFlow()
 
-    private var genre: List<ModelFilter.Genre>? = emptyList()
-    private var country: List<ModelFilter.Country>? = emptyList()
+    private var genre: List<Genre>? = emptyList()
+    private var country: List<Country>? = emptyList()
     private var collectionList: List<Int>? = emptyList()
 
     init {

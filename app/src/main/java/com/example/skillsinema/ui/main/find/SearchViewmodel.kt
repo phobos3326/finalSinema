@@ -16,6 +16,8 @@ import com.example.skillsinema.domain.FiltersUseCase
 import com.example.skillsinema.domain.LoadItemToDB
 
 import com.example.skillsinema.domain.SearchFilmUseCase
+import com.example.skillsinema.domain.model.Country
+import com.example.skillsinema.domain.model.Genre
 
 import com.example.skillsinema.entity.Film
 import com.example.skillsinema.entity.ModelFilter
@@ -51,20 +53,20 @@ class SearchViewmodel @Inject constructor(
 
 
     val defCountry = mutableListOf(
-        ModelFilter.Country("Россия", 34),
-        ModelFilter.Country("Великобритания", 5),
-        ModelFilter.Country("Германия", 9),
-        ModelFilter.Country("США", 1),
-        ModelFilter.Country("Франция", 3),
+        Country("Россия", 34),
+        Country("Великобритания", 5),
+        Country("Германия", 9),
+        Country("США", 1),
+        Country("Франция", 3),
     )
 
 
     val defGenre = mutableListOf(
-        ModelFilter.Genre("Комедия", 13),
-        ModelFilter.Genre("Мелодрама", 4),
-        ModelFilter.Genre("Боевик", 11),
-        ModelFilter.Genre("Вестерн", 10),
-        ModelFilter.Genre("Драма", 2),
+        Genre("Комедия", 13),
+        Genre("Мелодрама", 4),
+        Genre("Боевик", 11),
+        Genre("Вестерн", 10),
+        Genre("Драма", 2),
     )
 
     val Query = ""
@@ -76,7 +78,7 @@ class SearchViewmodel @Inject constructor(
     private var _searchGenre = MutableStateFlow(defGenre)
     var searchGenre = _searchGenre.asStateFlow()
 
-    fun getFilteredCountriesFlow(): Flow<List<ModelFilter.Country>> {
+    fun getFilteredCountriesFlow(): Flow<List<Country>> {
         return _searchCountry.map { countries ->
             countries.filter {
                 it.country.contains(Query, ignoreCase = false)
@@ -91,7 +93,7 @@ class SearchViewmodel @Inject constructor(
                 useCase.getFilters().body()?.countries
             }.fold(
                 onSuccess = {
-                    _searchCountry.value = it as MutableList<ModelFilter.Country>
+                    _searchCountry.value = it as MutableList<Country>
                 },
                 onFailure = { Log.d(MainViewModel.TAG, it.message ?: "not load") }
             )
@@ -105,7 +107,7 @@ class SearchViewmodel @Inject constructor(
                 useCase.getFilters().body()?.genres
             }.fold(
                 onSuccess = {
-                    _searchGenre.value = it as MutableList<ModelFilter.Genre>
+                    _searchGenre.value = it as MutableList<Genre>
 
                 },
                 onFailure = { Log.d(MainViewModel.TAG, it.message ?: "not load") }

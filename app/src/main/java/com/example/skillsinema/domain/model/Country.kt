@@ -1,6 +1,7 @@
 package com.example.skillsinema.domain.model
 
 data class Country(
-    val id: Int,
-    val country: String
+    val country: String,
+    val id: Int
+
 )

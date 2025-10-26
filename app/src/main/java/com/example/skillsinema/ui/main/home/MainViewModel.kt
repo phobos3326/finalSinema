@@ -93,8 +93,8 @@ class MainViewModel @Inject constructor(
 
     var listFilters = listOf<ModelFilter>()
 
-    private var genre: List<ModelFilter.Genre>? = emptyList()
-    private var country: List<ModelFilter.Country>? = emptyList()
+    private var genre: List<Genre>? = emptyList()
+    private var country: List<Country>? = emptyList()
 
     var rndGenre = 0
     var rndCountry = 0
@@ -228,8 +228,8 @@ class MainViewModel @Inject constructor(
     ).flow.cachedIn(viewModelScope)
 
     suspend fun load() {
-        genre = response(this@MainViewModel).body()?.genres?.subList(0, 17)
-        country = response(this@MainViewModel).body()?.countries?.subList(0, 34)
+        genre = response(this@MainViewModel).body()?.genres?.subList(0, 17) as List<Genre>?
+        country = response(this@MainViewModel).body()?.countries?.subList(0, 34) as List<Country>?
         rndGenre = (0 until genre!!.size).random() + 1
         dataRepository.rndGenre = rndGenre
         rndCountry = (0 until country!!.size).random() + 1
