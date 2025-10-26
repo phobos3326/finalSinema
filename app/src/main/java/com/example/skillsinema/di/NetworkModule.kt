@@ -13,12 +13,15 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
+import com.example.skillsinema.data.api.KinopoiskApi
 
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
     private const val BASE_URL = "https://kinopoiskapiunofficial.tech/api/v2.2/"
+
+
 
     @Provides
     @Singleton

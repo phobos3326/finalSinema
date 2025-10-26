@@ -7,9 +7,9 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class ModelFilter(
     @Json(name = "countries")
-    val countries: List<Country>,
+    val countries: List<com.example.skillsinema.domain.model.Country>,
     @Json(name = "genres")
-    val genres: List<Genre>
+    val genres: List<com.example.skillsinema.domain.model.Genre>
 ) {
     @JsonClass(generateAdapter = true)
     data class Country(

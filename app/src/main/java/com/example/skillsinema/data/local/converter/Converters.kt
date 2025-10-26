@@ -16,6 +16,17 @@ class Converters {
         .build()
 
     @TypeConverter
+    fun fromIntList(list: List<Int>?): String {
+        return list?.joinToString(separator = ",") ?: ""
+    }
+
+    @TypeConverter
+    fun toIntList(data: String?): List<Int> {
+        return if (data.isNullOrEmpty()) emptyList()
+        else data.split(",").mapNotNull { it.toIntOrNull() }
+    }
+
+    @TypeConverter
     fun fromGenreList(value: List<Genre>): String {
         val type = Types.newParameterizedType(List::class.java, Genre::class.java)
         val adapter: JsonAdapter<List<Genre>> = moshi.adapter(type)
