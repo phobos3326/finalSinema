@@ -19,6 +19,7 @@ import com.example.skillsinema.dao.ItemDao
 
 import com.example.skillsinema.dao.ItemFilm
 import com.example.skillsinema.dao.ItemRepository
+import com.example.skillsinema.data.model.ModelFilter
 
 import com.example.skillsinema.entity.Film
 import com.example.skillsinema.datasource.FilmPagingSourse
@@ -34,7 +35,8 @@ import com.example.skillsinema.entity.*
 import com.example.skillsinema.repository.RepositoryKeyWord
 
 import com.example.skillsinema.repository.RepositoryStaff
-
+import com.example.skillsinema.domain.model.Genre
+import com.example.skillsinema.domain.model.Country
 
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -228,8 +230,8 @@ class MainViewModel @Inject constructor(
     ).flow.cachedIn(viewModelScope)
 
     suspend fun load() {
-        genre = response(this@MainViewModel).body()?.genres?.subList(0, 17) as List<Genre>?
-        country = response(this@MainViewModel).body()?.countries?.subList(0, 34) as List<Country>?
+        genre = response(this@MainViewModel).body()?.genres?.subList(0, 17)
+        country = response(this@MainViewModel).body()?.countries?.subList(0, 34)
         rndGenre = (0 until genre!!.size).random() + 1
         dataRepository.rndGenre = rndGenre
         rndCountry = (0 until country!!.size).random() + 1

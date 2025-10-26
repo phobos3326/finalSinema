@@ -2,7 +2,7 @@ package com.example.skillsinema.datasource
 
 import android.util.Log
 import com.example.skillsinema.domain.FiltersUseCase
-import com.example.skillsinema.entity.ModelFilter
+import com.example.skillsinema.data.model.ModelFilter
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

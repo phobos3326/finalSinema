@@ -31,7 +31,7 @@ import com.example.skillsinema.domain.LoadItemToDB
 import com.example.skillsinema.domain.model.Country
 import com.example.skillsinema.domain.model.Genre
 import com.example.skillsinema.entity.ModelFilmDetails
-import com.example.skillsinema.entity.ModelFilter
+import com.example.skillsinema.data.model.ModelFilter
 import com.example.skillsinema.repository.RepositoryStaff
 import com.example.skillsinema.ui.main.ItemInfo.StateItemFilmInfo
 import com.example.skillsinema.ui.main.home.MainViewModel

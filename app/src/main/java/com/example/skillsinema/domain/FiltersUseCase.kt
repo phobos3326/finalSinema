@@ -1,7 +1,7 @@
 package com.example.skillsinema.domain
 
 import com.example.skillsinema.DataRepository
-import com.example.skillsinema.entity.ModelFilter
+import com.example.skillsinema.data.model.ModelFilter
 import com.example.skillsinema.repository.Repository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

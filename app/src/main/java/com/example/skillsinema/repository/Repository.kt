@@ -4,6 +4,7 @@ package com.example.skillsinema.repository
 import com.example.skillsinema.BuildConfig
 import com.example.skillsinema.data.BestFilmDTO
 import com.example.skillsinema.data.DataDTO
+import com.example.skillsinema.data.model.ModelFilter
 import com.example.skillsinema.entity.*
 import com.squareup.moshi.*
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory

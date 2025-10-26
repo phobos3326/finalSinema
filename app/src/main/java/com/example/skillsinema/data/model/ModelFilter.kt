@@ -1,15 +1,13 @@
-package com.example.skillsinema.entity
+package com.example.skillsinema.data.model
 
-import com.example.skillsinema.domain.model.Genre
 import com.example.skillsinema.domain.model.Country
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import com.example.skillsinema.domain.model.Genre
 
-@JsonClass(generateAdapter = true)
+//@JsonClass(generateAdapter = true)
 data class ModelFilter(
-    @Json(name = "countries")
+  //  @Json(name = "countries")
     val countries: List<Country>,
-    @Json(name = "genres")
+    //@Json(name = "genres")
     val genres: List<Genre>,
 ) /*{
     @JsonClass(generateAdapter = true)

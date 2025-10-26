@@ -5,7 +5,7 @@ import com.example.skillsinema.data.dto.GenreDto
 import com.example.skillsinema.data.dto.CountryDto
 import com.example.skillsinema.domain.model.Genre
 import com.example.skillsinema.domain.model.Country
-import com.example.skillsinema.entity.ModelFilter
+import com.example.skillsinema.data.model.ModelFilter
 import javax.inject.Inject
 
 class FilterMapper @Inject constructor() {

@@ -20,7 +20,7 @@ import com.example.skillsinema.domain.model.Country
 import com.example.skillsinema.domain.model.Genre
 
 import com.example.skillsinema.entity.Film
-import com.example.skillsinema.entity.ModelFilter
+import com.example.skillsinema.data.model.ModelFilter
 import com.example.skillsinema.ui.main.home.MainViewModel
 import com.example.skillsinema.ui.main.home.TypeItem
 import dagger.hilt.android.lifecycle.HiltViewModel
