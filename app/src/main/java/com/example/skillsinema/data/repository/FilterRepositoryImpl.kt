@@ -1,6 +1,5 @@
 package com.example.skillsinema.data.repository
 
-
 import com.example.skillsinema.data.api.KinopoiskApi
 import com.example.skillsinema.data.mapper.FilterMapper
 import com.example.skillsinema.data.model.ModelFilter
@@ -17,8 +16,8 @@ class FilterRepositoryImpl @Inject constructor(
     override suspend fun getFilters(): Response<ModelFilter> {
         val response = api.getFilters()
         return if (response.isSuccessful && response.body() != null) {
-            val mappedFilters = mapper.mapFiltersDto(response.body()!!)
-            Response.success(mappedFilters)
+            val mappedData = mapper.mapFiltersDto(response.body()!!)
+            Response.success(mappedData)
         } else {
             Response.error(response.code(), response.errorBody()!!)
         }
