@@ -6,7 +6,7 @@ import java.util.Collections.emptyList
 
 @JsonClass(generateAdapter = true)
 data class FilmDto(
-    @Json(name = "kinopoiskId") val kinopoiskId: Int,
+    @Json(name = "kinopoiskId") val kinopoiskId: Int?,
     @Json(name = "filmId") val filmId: Int?,
     @Json(name = "nameRu") val nameRu: String?,
     @Json(name = "nameEn") val nameEn: String?,

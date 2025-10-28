@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.skillsinema.R
 import com.example.skillsinema.databinding.FragmentItemInfoBinding
+import com.example.skillsinema.databinding.ItemBinding
 
 import com.example.skillsinema.domain.model.Film
 
@@ -16,22 +17,22 @@ class FilmAdapter(
 ) : ListAdapter<Film, FilmAdapter.FilmViewHolder>(FilmDiffCallback()) {
 
     inner class FilmViewHolder(
-        private val binding: FragmentItemInfoBinding
+        private val binding: ItemBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(film: Film) {
-            // Установка текста
-            binding.filmTextView .text = film.nameRu ?: film.nameEn ?: "Без названия"
-            binding.YearGenreTextView .text = film.year ?: ""
 
-            // Загрузка изображения через Coil
-            binding.filmPreviewImageView .load(film.posterUrlPreview) {
+            binding.title.text = film.nameRu ?: film.nameEn ?: "Без названия"
+            binding.textViewGenre .text = film.year ?: ""
+
+
+            binding.poster .load(film.posterUrlPreview) {
                 crossfade(true)
-               // placeholder(R.drawable.ic_placeholder) // Добавьте плейсхолдер
-              //  error(R.drawable.ic_error) // Добавьте изображение для ошибки
+               // placeholder(R.drawable.ic_placeholder)
+              //  error(R.drawable.ic_error)
             }
 
-            // Обработка клика
+
             binding.root.setOnClickListener {
                 onFilmClick(film.kinopoiskId)
             }
@@ -39,7 +40,7 @@ class FilmAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FilmViewHolder {
-        val binding = FragmentItemInfoBinding.inflate(
+        val binding = ItemBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
@@ -51,7 +52,7 @@ class FilmAdapter(
         holder.bind(getItem(position))
     }
 
-    // DiffUtil для оптимизации производительности
+
     class FilmDiffCallback : DiffUtil.ItemCallback<Film>() {
         override fun areItemsTheSame(oldItem: Film, newItem: Film): Boolean {
             return oldItem.kinopoiskId == newItem.kinopoiskId

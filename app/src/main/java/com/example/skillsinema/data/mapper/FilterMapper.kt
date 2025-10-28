@@ -12,22 +12,30 @@ class FilterMapper @Inject constructor() {
 
     fun mapFiltersDto(dto: FiltersDto): ModelFilter {
         return ModelFilter(
-            genres = dto.genres.map { Genre(id = it.id, genre = it.genre) },
-            countries = dto.countries.map { Country(id = it.id, country = it.country) }
+            genres = dto.genres.mapNotNull { mapGenreDto(it) },     // ← mapNotNull вместо map
+            countries = dto.countries.mapNotNull { mapCountryDto(it) } // ← mapNotNull вместо map
         )
     }
 
-    private fun mapGenreDto(dto: GenreDto): Genre {
-        return Genre(
-            id = dto.id,
-            genre = dto.genre
-        )
+    private fun mapGenreDto(dto: GenreDto): Genre? {
+        return if (dto.id != null) {  // ← Проверка на null
+            Genre(
+                id = dto.id,
+                genre = dto.genre
+            )
+        } else {
+            null  // ← Пропускаем элементы без id
+        }
     }
 
-    private fun mapCountryDto(dto: CountryDto): Country {
-        return Country(
-            id = dto.id,
-            country = dto.country
-        )
+    private fun mapCountryDto(dto: CountryDto): Country? {
+        return if (dto.id != null) {  // ← Проверка на null
+            Country(
+                id = dto.id,
+                country = dto.country
+            )
+        } else {
+            null  // ← Пропускаем элементы без id
+        }
     }
 }

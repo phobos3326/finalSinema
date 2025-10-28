@@ -7,22 +7,22 @@ import javax.inject.Inject
 
 class FilmMapper @Inject constructor() {
 
+    fun mapFilmList(dtos: List<FilmDto>): List<Film> {
+        return dtos.map { mapFilm(it) }
+    }
+
     fun mapFilm(dto: FilmDto): Film {
         return Film(
-            kinopoiskId = dto.filmId ?: dto.kinopoiskId,
+            kinopoiskId = dto.filmId ?: dto.kinopoiskId ?: 0,  // ← ИСПРАВЛЕНО: добавить fallback
             nameRu = dto.nameRu,
             nameEn = dto.nameEn,
             year = dto.year,
             posterUrl = dto.posterUrl,
             posterUrlPreview = dto.posterUrlPreview,
-            genres = dto.genres.map { mapGenre(it) },
-            countries = dto.countries.map { mapCountry(it) },
+            genres = dto.genres.mapNotNull { mapGenre(it) },
+            countries = dto.countries.mapNotNull { mapCountry(it) },
             rating = dto.rating
         )
-    }
-
-    fun mapFilmList(dtos: List<FilmDto>): List<Film> {
-        return dtos.map { mapFilm(it) }
     }
 
     fun mapFilmDetails(dto: FilmDetailsDto): FilmDetails {
@@ -38,8 +38,8 @@ class FilmMapper @Inject constructor() {
             posterUrlPreview = dto.posterUrlPreview,
             coverUrl = dto.coverUrl,
             logoUrl = dto.logoUrl,
-            genres = dto.genres.map { mapGenre(it) },
-            countries = dto.countries.map { mapCountry(it) },
+            genres = dto.genres.mapNotNull { mapGenre(it) },      // ← mapNotNull
+            countries = dto.countries.mapNotNull { mapCountry(it) }, // ← mapNotNull
             ratingKinopoisk = dto.ratingKinopoisk,
             ratingImdb = dto.ratingImdb,
             ratingFilmCritics = dto.ratingFilmCritics,
@@ -54,17 +54,21 @@ class FilmMapper @Inject constructor() {
         )
     }
 
-    private fun mapGenre(dto: GenreDto): Genre {
-        return Genre(
-            id = dto.id,
-            genre = dto.genre
-        )
+
+    private fun mapGenre(dto: GenreDto): Genre? {
+        return if (dto.id != null) {
+            Genre(id = dto.id, genre = dto.genre)
+        } else {
+            null
+        }
     }
 
-    private fun mapCountry(dto: CountryDto): Country {
-        return Country(
-            id = dto.id,
-            country = dto.country
-        )
+
+    private fun mapCountry(dto: CountryDto): Country? {
+        return if (dto.id != null) {
+            Country(id = dto.id, country = dto.country)
+        } else {
+            null
+        }
     }
 }
