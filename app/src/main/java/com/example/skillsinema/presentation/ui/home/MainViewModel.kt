@@ -2,6 +2,7 @@ package com.example.skillsinema.presentation.ui.home
 
 import androidx.lifecycle.viewModelScope
 import com.example.skillsinema.data.model.ModelFilter
+import com.example.skillsinema.domain.usecase.film.GetFilteredFilmsUseCase
 import com.example.skillsinema.domain.usecase.film.GetPremiereFilmsUseCase
 import com.example.skillsinema.domain.usecase.film.GetSerialsUseCase
 import com.example.skillsinema.domain.usecase.film.GetTopFilmsUseCase
@@ -26,7 +27,8 @@ class MainViewModel @Inject constructor(
     private val getTopFilms: GetTopFilmsUseCase,
     private val getSerials: GetSerialsUseCase,
     private val getFilters: GetFiltersUseCase,
-    private val getRandomFilters: GetRandomFiltersUseCase
+    private val getRandomFilters: GetRandomFiltersUseCase,
+    private val getFilteredFilms: GetFilteredFilmsUseCase
 ) : BaseViewModel() {
 
     var state = MainUiState()
@@ -56,15 +58,20 @@ class MainViewModel @Inject constructor(
 
                 // БЕЗОПАСНОЕ ПРИВЕДЕНИЕ ТИПОВ:
                 val modelFilter = filters as? ModelFilter
+                val randomFilters = getRandomFilters()
+                val filteredFilms = getFilteredFilms(randomFilters)
 
-                Quadruple(premieres, topFilms, serials, modelFilter)
+                Quintuple(premieres, topFilms, serials, filters, filteredFilms)
+
+
             }
-                .onSuccess { (premieres, top, serials, filters) ->
+                .onSuccess { (premieres, top, serials, filters, filtered) ->
                     state = state.copy(
                         premieres = premieres,
                         topFilms = top,
                         serials = serials,
-                        availableFilters = filters,  // ← Теперь ModelFilter?
+                        availableFilters = filters,
+                        filteredFilms = filtered,// ← Теперь ModelFilter?
                         isLoading = false
                     )
                 }
@@ -82,9 +89,10 @@ class MainViewModel @Inject constructor(
     }
 }
 
-data class Quadruple<A, B, C, D>(
+data class Quintuple<A, B, C, D, E>(
     val first: A,
     val second: B,
     val third: C,
-    val fourth: D
+    val fourth: D,
+    val fifth: E
 )

@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class MainFragment : Fragment() {
 
-    // ViewBinding - nullable для lifecycle safety
+
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
 
@@ -28,6 +28,7 @@ class MainFragment : Fragment() {
 
     private lateinit var premiereAdapter: FilmAdapter
     private lateinit var topFilmsAdapter: FilmAdapter
+    private lateinit var filterFilmAdapter: FilmAdapter
     private lateinit var serialsAdapter: FilmAdapter
 
     override fun onCreateView(
@@ -35,7 +36,6 @@ class MainFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // ViewBinding инициализация
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -58,6 +58,10 @@ class MainFragment : Fragment() {
             navigateToFilmDetails(filmId)
         }
 
+        filterFilmAdapter = FilmAdapter { filmId ->
+            navigateToFilmDetails(filmId)
+        }
+
         serialsAdapter = FilmAdapter { filmId ->
             navigateToFilmDetails(filmId)
         }
@@ -71,6 +75,16 @@ class MainFragment : Fragment() {
         binding.TopFilmsRecyclerView .apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = topFilmsAdapter
+        }
+
+        binding.TopFilmsRecyclerView .apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = topFilmsAdapter
+        }
+
+        binding.FilterFilmsRecyclerView.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = filterFilmAdapter
         }
 
         binding.serialsRecyclerView .apply {
@@ -102,6 +116,11 @@ class MainFragment : Fragment() {
             topFilmsAdapter.submitList(state.topFilms)
         }
 
+        if (state.filteredFilms.isNotEmpty()) {
+            filterFilmAdapter.submitList(state.filteredFilms)
+        }
+
+
         if (state.serials.isNotEmpty()) {
             serialsAdapter.submitList(state.serials)
         }
@@ -112,26 +131,26 @@ class MainFragment : Fragment() {
         }
 
         // Управление видимостью секций
-        //updateSectionVisibility(state)
+        updateSectionVisibility(state)
     }
 
- /*   private fun updateSectionVisibility(state: MainUiState) {
+    private fun updateSectionVisibility(state: MainUiState) {
         // ViewBinding обращение к View элементам
-        binding.tvPremieresLabel.visibility =
+        /*binding.tvPremieresLabel.visibility =
             if (state.premieres.isNotEmpty()) View.VISIBLE else View.GONE
         binding.rvPremieres.visibility =
-            if (state.premieres.isNotEmpty()) View.VISIBLE else View.GONE
+            if (state.premieres.isNotEmpty()) View.VISIBLE else View.GONE*/
 
-        binding.tvTopFilmsLabel.visibility =
+        binding.TopFilmsRecyclerView.visibility =
             if (state.topFilms.isNotEmpty()) View.VISIBLE else View.GONE
-        binding.rvTopFilms.visibility =
+        binding.TopFilmsRecyclerView.visibility =
             if (state.topFilms.isNotEmpty()) View.VISIBLE else View.GONE
 
-        binding.tvSerialsLabel.visibility =
+        /*binding.tvSerialsLabel.visibility =
             if (state.serials.isNotEmpty()) View.VISIBLE else View.GONE
         binding.rvSerials.visibility =
-            if (state.serials.isNotEmpty()) View.VISIBLE else View.GONE
-    }*/
+            if (state.serials.isNotEmpty()) View.VISIBLE else View.GONE*/
+    }
 
     private fun navigateToFilmDetails(filmId: Int) {
         try {
