@@ -20,16 +20,17 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class MainFragment : Fragment() {
 
-
+    // ViewBinding - nullable для lifecycle safety
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: MainViewModel by viewModels()
 
+    // Многотипные адаптеры для каждой секции
     private lateinit var premiereAdapter: FilmAdapter
     private lateinit var topFilmsAdapter: FilmAdapter
-    private lateinit var filterFilmAdapter: FilmAdapter
     private lateinit var serialsAdapter: FilmAdapter
+    private lateinit var filteredAdapter: FilmAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,53 +50,52 @@ class MainFragment : Fragment() {
     }
 
     private fun setupAdapters() {
-        // Инициализация адаптеров с лямбда-функциями
-        premiereAdapter = FilmAdapter { filmId ->
-            navigateToFilmDetails(filmId)
-        }
+        // ← Адаптеры с двумя callback (фильм + показать все)
+        premiereAdapter = FilmAdapter(
+            onFilmClick = { filmId -> navigateToFilmDetails(filmId) },
+            onShowAllClick = { category -> navigateToShowAll(category) }
+        )
 
-        topFilmsAdapter = FilmAdapter { filmId ->
-            navigateToFilmDetails(filmId)
-        }
+        topFilmsAdapter = FilmAdapter(
+            onFilmClick = { filmId -> navigateToFilmDetails(filmId) },
+            onShowAllClick = { category -> navigateToShowAll(category) }
+        )
 
-        filterFilmAdapter = FilmAdapter { filmId ->
-            navigateToFilmDetails(filmId)
-        }
+        serialsAdapter = FilmAdapter(
+            onFilmClick = { filmId -> navigateToFilmDetails(filmId) },
+            onShowAllClick = { category -> navigateToShowAll(category) }
+        )
 
-        serialsAdapter = FilmAdapter { filmId ->
-            navigateToFilmDetails(filmId)
-        }
+        filteredAdapter = FilmAdapter(
+            onFilmClick = { filmId -> navigateToFilmDetails(filmId) },
+            onShowAllClick = { category -> navigateToShowAll(category) }
+        )
 
-        // Настройка RecyclerView через ViewBinding
+        // Настройка RecyclerView
         binding.viewPager .apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = premiereAdapter
         }
 
-        binding.TopFilmsRecyclerView .apply {
+        binding.TopFilmsRecyclerView.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = topFilmsAdapter
         }
 
-        binding.TopFilmsRecyclerView .apply {
+        binding.FilterFilmsRecyclerView .apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = topFilmsAdapter
-        }
-
-        binding.FilterFilmsRecyclerView.apply {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = filterFilmAdapter
+            adapter = serialsAdapter
         }
 
         binding.serialsRecyclerView .apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = serialsAdapter
+            adapter = filteredAdapter
         }
     }
 
     private fun observeState() {
         viewLifecycleOwner.lifecycleScope.launch {
-            // Простое наблюдение за состоянием (без Flow)
+            // ← Простое наблюдение за состоянием без Flow
             while (true) {
                 renderState(viewModel.state)
                 kotlinx.coroutines.delay(100) // Проверяем каждые 100мс
@@ -104,26 +104,14 @@ class MainFragment : Fragment() {
     }
 
     private fun renderState(state: MainUiState) {
-        // Управление ProgressBar через ViewBinding
-        //binding.progressLoading.visibility = if (state.isLoading) View.VISIBLE else View.GONE
+        // Управление ProgressBar
+       // binding.progressLoading.visibility = if (state.isLoading) View.VISIBLE else View.GONE
 
-        // Обновление адаптеров
-        if (state.premieres.isNotEmpty()) {
-            premiereAdapter.submitList(state.premieres)
-        }
-
-        if (state.topFilms.isNotEmpty()) {
-            topFilmsAdapter.submitList(state.topFilms)
-        }
-
-        if (state.filteredFilms.isNotEmpty()) {
-            filterFilmAdapter.submitList(state.filteredFilms)
-        }
-
-
-        if (state.serials.isNotEmpty()) {
-            serialsAdapter.submitList(state.serials)
-        }
+        // ← ПРОСТОЕ ПРИСВОЕНИЕ готовых List<FilmListItem> из ViewModel:
+        premiereAdapter.submitList(state.premiereItems)
+        topFilmsAdapter.submitList(state.topFilmItems)
+        serialsAdapter.submitList(state.serialItems)
+        filteredAdapter.submitList(state.filteredItems)
 
         // Показ ошибок
         state.error?.let { error ->
@@ -131,26 +119,34 @@ class MainFragment : Fragment() {
         }
 
         // Управление видимостью секций
-        updateSectionVisibility(state)
+       // updateSectionVisibility(state)
     }
 
-    private fun updateSectionVisibility(state: MainUiState) {
-        // ViewBinding обращение к View элементам
-        /*binding.tvPremieresLabel.visibility =
-            if (state.premieres.isNotEmpty()) View.VISIBLE else View.GONE
+    /*private fun updateSectionVisibility(state: MainUiState) {
+        // Премьеры
+        binding.tvPremieresLabel.visibility =
+            if (state.premiereItems.isNotEmpty()) View.VISIBLE else View.GONE
         binding.rvPremieres.visibility =
-            if (state.premieres.isNotEmpty()) View.VISIBLE else View.GONE*/
+            if (state.premiereItems.isNotEmpty()) View.VISIBLE else View.GONE
 
-        binding.TopFilmsRecyclerView.visibility =
-            if (state.topFilms.isNotEmpty()) View.VISIBLE else View.GONE
-        binding.TopFilmsRecyclerView.visibility =
-            if (state.topFilms.isNotEmpty()) View.VISIBLE else View.GONE
+        // Топ фильмы
+        binding.tvTopFilmsLabel.visibility =
+            if (state.topFilmItems.isNotEmpty()) View.VISIBLE else View.GONE
+        binding.rvTopFilms.visibility =
+            if (state.topFilmItems.isNotEmpty()) View.VISIBLE else View.GONE
 
-        /*binding.tvSerialsLabel.visibility =
-            if (state.serials.isNotEmpty()) View.VISIBLE else View.GONE
+        // Сериалы
+        binding.tvSerialsLabel.visibility =
+            if (state.serialItems.isNotEmpty()) View.VISIBLE else View.GONE
         binding.rvSerials.visibility =
-            if (state.serials.isNotEmpty()) View.VISIBLE else View.GONE*/
-    }
+            if (state.serialItems.isNotEmpty()) View.VISIBLE else View.GONE
+
+        // Подборка по фильтрам
+        binding.tvFilteredLabel.visibility =
+            if (state.filteredItems.isNotEmpty()) View.VISIBLE else View.GONE
+        binding.rvFilteredFilms.visibility =
+            if (state.filteredItems.isNotEmpty()) View.VISIBLE else View.GONE
+    }*/
 
     private fun navigateToFilmDetails(filmId: Int) {
         try {
@@ -168,7 +164,6 @@ class MainFragment : Fragment() {
     }
 
     private fun showError(message: String) {
-        // Snackbar через ViewBinding
         Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG)
             .setAction("OK") { /* dismiss */ }
             .show()
@@ -189,8 +184,8 @@ class MainFragment : Fragment() {
     }
 
     private fun setupClickListeners() {
-        // ViewBinding для onClick
-        binding.viewPager.setOnClickListener {
+        // Клики по заголовкам дублируют функциональность кнопок "Показать все"
+        binding.viewPager .setOnClickListener {
             navigateToShowAll("premieres")
         }
 
@@ -198,14 +193,17 @@ class MainFragment : Fragment() {
             navigateToShowAll("top_films")
         }
 
-        binding.serialsRecyclerView .setOnClickListener {
+        binding.FilterFilmsRecyclerView .setOnClickListener {
             navigateToShowAll("serials")
+        }
+
+        binding.serialsRecyclerView .setOnClickListener {
+            navigateToShowAll("filtered")
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        // Очистка ViewBinding для предотвращения утечек памяти
         _binding = null
     }
 }

@@ -2,6 +2,7 @@ package com.example.skillsinema.presentation.ui.home
 
 import androidx.lifecycle.viewModelScope
 import com.example.skillsinema.data.model.ModelFilter
+import com.example.skillsinema.domain.model.Film
 import com.example.skillsinema.domain.usecase.film.GetFilteredFilmsUseCase
 import com.example.skillsinema.domain.usecase.film.GetPremiereFilmsUseCase
 import com.example.skillsinema.domain.usecase.film.GetSerialsUseCase
@@ -10,6 +11,7 @@ import com.example.skillsinema.domain.usecase.filter.GetFiltersUseCase
 import com.example.skillsinema.domain.usecase.filter.GetRandomFiltersUseCase
 import com.example.skillsinema.presentation.base.BaseViewModel
 import com.example.skillsinema.presentation.base.UiEvent
+import com.example.skillsinema.presentation.ui.adapters.FilmListItem
 import com.example.skillsinema.repository.Repository_GetFiltersFactory.getFilters
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -54,27 +56,24 @@ class MainViewModel @Inject constructor(
                 val premieres = getPremieres(year, month)
                 val topFilms = getTopFilms()
                 val serials = getSerials()
-                val filters = getFilters()  // ← Может возвращать Any?
-
-                // БЕЗОПАСНОЕ ПРИВЕДЕНИЕ ТИПОВ:
-                val modelFilter = filters as? ModelFilter
+                val filters = getFilters()
                 val randomFilters = getRandomFilters()
                 val filteredFilms = getFilteredFilms(randomFilters)
 
-                Quintuple(premieres, topFilms, serials, filters, filteredFilms)
+                // ← БИЗНЕС-ЛОГИКА В ViewModel:
+                val premiereItems = prepareFilmList(premieres, "premieres")
+                val topFilmItems = prepareFilmList(topFilms, "top_films")
+                val serialItems = prepareFilmList(serials, "serials")
+                val filteredItems = prepareFilmList(filteredFilms, "filtered")
 
-
+                state = state.copy(
+                    premiereItems = premiereItems,
+                    topFilmItems = topFilmItems,
+                    serialItems = serialItems,
+                    filteredItems = filteredItems,
+                    isLoading = false
+                )
             }
-                .onSuccess { (premieres, top, serials, filters, filtered) ->
-                    state = state.copy(
-                        premieres = premieres,
-                        topFilms = top,
-                        serials = serials,
-                        availableFilters = filters,
-                        filteredFilms = filtered,// ← Теперь ModelFilter?
-                        isLoading = false
-                    )
-                }
                 .onFailure {
                     state = state.copy(
                         isLoading = false,
@@ -82,6 +81,11 @@ class MainViewModel @Inject constructor(
                     )
                 }
         }
+    }
+
+    private fun prepareFilmList(films: List<Film>, category: String): List<FilmListItem> {
+        return films.take(20).map { FilmListItem.FilmItem(it) } +
+                FilmListItem.ShowAllItem(category)
     }
 
     fun refresh() {
