@@ -10,23 +10,24 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.skillsinema.R
-
 import com.example.skillsinema.databinding.FragmentMainBinding
 import com.example.skillsinema.presentation.ui.adapters.FilmAdapter
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+
+
+
+
 @AndroidEntryPoint
 class MainFragment : Fragment() {
 
-    // ViewBinding - nullable для lifecycle safety
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: MainViewModel by viewModels()
 
-    // Многотипные адаптеры для каждой секции
     private lateinit var premiereAdapter: FilmAdapter
     private lateinit var topFilmsAdapter: FilmAdapter
     private lateinit var serialsAdapter: FilmAdapter
@@ -43,130 +44,135 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setupAdapters()
+        setupSwipeRefresh()
         observeState()
-        setupClickListeners()
     }
 
     private fun setupAdapters() {
-        // ← Адаптеры с двумя callback (фильм + показать все)
+        // Адаптер для премьер
         premiereAdapter = FilmAdapter(
             onFilmClick = { filmId -> navigateToFilmDetails(filmId) },
             onShowAllClick = { category -> navigateToShowAll(category) }
         )
-
-        topFilmsAdapter = FilmAdapter(
-            onFilmClick = { filmId -> navigateToFilmDetails(filmId) },
-            onShowAllClick = { category -> navigateToShowAll(category) }
-        )
-
-        serialsAdapter = FilmAdapter(
-            onFilmClick = { filmId -> navigateToFilmDetails(filmId) },
-            onShowAllClick = { category -> navigateToShowAll(category) }
-        )
-
-        filteredAdapter = FilmAdapter(
-            onFilmClick = { filmId -> navigateToFilmDetails(filmId) },
-            onShowAllClick = { category -> navigateToShowAll(category) }
-        )
-
-        // Настройка RecyclerView
-        binding.viewPager .apply {
+        binding.rvPremieres.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = premiereAdapter
         }
 
-        binding.TopFilmsRecyclerView.apply {
+        // Адаптер для топ фильмов
+        topFilmsAdapter = FilmAdapter(
+            onFilmClick = { filmId -> navigateToFilmDetails(filmId) },
+            onShowAllClick = { category -> navigateToShowAll(category) }
+        )
+        binding.rvTopFilms.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = topFilmsAdapter
         }
 
-        binding.FilterFilmsRecyclerView .apply {
+        // Адаптер для сериалов
+        serialsAdapter = FilmAdapter(
+            onFilmClick = { filmId -> navigateToFilmDetails(filmId) },
+            onShowAllClick = { category -> navigateToShowAll(category) }
+        )
+        binding.rvSerials.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = serialsAdapter
         }
 
-        binding.serialsRecyclerView .apply {
+        // Адаптер для фильтрованных
+        filteredAdapter = FilmAdapter(
+            onFilmClick = { filmId -> navigateToFilmDetails(filmId) },
+            onShowAllClick = { category -> navigateToShowAll(category) }
+        )
+        binding.rvFiltered.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = filteredAdapter
         }
     }
 
+    private fun setupSwipeRefresh() {
+        // Если у вас есть SwipeRefreshLayout
+        // binding.swipeRefresh.setOnRefreshListener {
+        //     viewModel.refresh()
+        // }
+    }
+
+    // ✅ НАБЛЮДАЕМ ЗА StateFlow
     private fun observeState() {
         viewLifecycleOwner.lifecycleScope.launch {
-            // ← Простое наблюдение за состоянием без Flow
-            while (true) {
-                renderState(viewModel.state)
-                kotlinx.coroutines.delay(100) // Проверяем каждые 100мс
+            viewModel.state.collect { state ->
+                renderState(state)
             }
         }
     }
 
+    // ✅ ПРОСТАЯ renderState - просто передаем готовые данные
     private fun renderState(state: MainUiState) {
-        // Управление ProgressBar
-       // binding.progressLoading.visibility = if (state.isLoading) View.VISIBLE else View.GONE
+        // Прогресс загрузки
+        binding.progressLoading.visibility = if (state.isLoading) View.VISIBLE else View.GONE
 
-        // ← ПРОСТОЕ ПРИСВОЕНИЕ готовых List<FilmListItem> из ViewModel:
-        premiereAdapter.submitList(state.premiereItems)
-        topFilmsAdapter.submitList(state.topFilmItems)
-        serialsAdapter.submitList(state.serialItems)
-        filteredAdapter.submitList(state.filteredItems)
+        // Останавливаем SwipeRefresh если есть
+        // binding.swipeRefresh.isRefreshing = false
 
-        // Показ ошибок
+        // Премьеры
+        if (state.premiereItems.isNotEmpty()) {
+            premiereAdapter.submitList(state.premiereItems)
+            binding.tvPremieresLabel.visibility = View.VISIBLE
+            binding.rvPremieres.visibility = View.VISIBLE
+        } else {
+            binding.tvPremieresLabel.visibility = View.GONE
+            binding.rvPremieres.visibility = View.GONE
+        }
+
+        // Топ фильмы
+        if (state.topFilmItems.isNotEmpty()) {
+            topFilmsAdapter.submitList(state.topFilmItems)
+            binding.tvTopFilmsLabel.visibility = View.VISIBLE
+            binding.rvTopFilms.visibility = View.VISIBLE
+        } else {
+            binding.tvTopFilmsLabel.visibility = View.GONE
+            binding.rvTopFilms.visibility = View.GONE
+        }
+
+        // Сериалы
+        if (state.serialItems.isNotEmpty()) {
+            serialsAdapter.submitList(state.serialItems)
+            binding.tvSerialsLabel.visibility = View.VISIBLE
+            binding.rvSerials.visibility = View.VISIBLE
+        } else {
+            binding.tvSerialsLabel.visibility = View.GONE
+            binding.rvSerials.visibility = View.GONE
+        }
+
+        // Фильтрованные
+        if (state.filteredItems.isNotEmpty()) {
+            filteredAdapter.submitList(state.filteredItems)
+            binding.tvFilteredLabel.visibility = View.VISIBLE
+            binding.rvFiltered.visibility = View.VISIBLE
+        } else {
+            binding.tvFilteredLabel.visibility = View.GONE
+            binding.rvFiltered.visibility = View.GONE
+        }
+
+        // Показываем ошибку
         state.error?.let { error ->
             showError(error)
         }
-
-        // Управление видимостью секций
-       // updateSectionVisibility(state)
     }
-
-    /*private fun updateSectionVisibility(state: MainUiState) {
-        // Премьеры
-        binding.tvPremieresLabel.visibility =
-            if (state.premiereItems.isNotEmpty()) View.VISIBLE else View.GONE
-        binding.rvPremieres.visibility =
-            if (state.premiereItems.isNotEmpty()) View.VISIBLE else View.GONE
-
-        // Топ фильмы
-        binding.tvTopFilmsLabel.visibility =
-            if (state.topFilmItems.isNotEmpty()) View.VISIBLE else View.GONE
-        binding.rvTopFilms.visibility =
-            if (state.topFilmItems.isNotEmpty()) View.VISIBLE else View.GONE
-
-        // Сериалы
-        binding.tvSerialsLabel.visibility =
-            if (state.serialItems.isNotEmpty()) View.VISIBLE else View.GONE
-        binding.rvSerials.visibility =
-            if (state.serialItems.isNotEmpty()) View.VISIBLE else View.GONE
-
-        // Подборка по фильтрам
-        binding.tvFilteredLabel.visibility =
-            if (state.filteredItems.isNotEmpty()) View.VISIBLE else View.GONE
-        binding.rvFilteredFilms.visibility =
-            if (state.filteredItems.isNotEmpty()) View.VISIBLE else View.GONE
-    }*/
 
     private fun navigateToFilmDetails(filmId: Int) {
         try {
             val bundle = Bundle().apply {
                 putInt("film_id", filmId)
             }
-
             findNavController().navigate(
                 R.id.action_mainFragment_to_itemInfoFragment,
                 bundle
             )
         } catch (e: Exception) {
-            showError("Ошибка навигации: ${e.message}")
+            showError(e.message ?: "Ошибка навигации")
         }
-    }
-
-    private fun showError(message: String) {
-        Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG)
-            .setAction("OK") { /* dismiss */ }
-            .show()
     }
 
     private fun navigateToShowAll(category: String) {
@@ -179,27 +185,14 @@ class MainFragment : Fragment() {
                 bundle
             )
         } catch (e: Exception) {
-            showError("Ошибка перехода к списку: ${e.message}")
+            showError(e.message ?: "Ошибка навигации")
         }
     }
 
-    private fun setupClickListeners() {
-        // Клики по заголовкам дублируют функциональность кнопок "Показать все"
-        binding.viewPager .setOnClickListener {
-            navigateToShowAll("premieres")
-        }
-
-        binding.TopFilmsRecyclerView .setOnClickListener {
-            navigateToShowAll("top_films")
-        }
-
-        binding.FilterFilmsRecyclerView .setOnClickListener {
-            navigateToShowAll("serials")
-        }
-
-        binding.serialsRecyclerView .setOnClickListener {
-            navigateToShowAll("filtered")
-        }
+    private fun showError(message: String) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG)
+            .setAction("OK") { }
+            .show()
     }
 
     override fun onDestroyView() {

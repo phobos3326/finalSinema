@@ -1,167 +1,241 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:tag="home_fragment"
-    tools:context=".ui.main.home.MainFragment">
+    tools:context=".presentation.ui.home.MainFragment">
 
+    <!-- Progress Bar для загрузки -->
+    <ProgressBar
+        android:id="@+id/progressLoading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:paddingBottom="16dp">
 
+            <!-- Заголовок приложения -->
             <TextView
                 android:id="@+id/message"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="4dp"
-                android:text="@string/app_name"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.02" />
-
-            <TextView
-                android:id="@+id/premiere"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="4dp"
-                android:text="Премьеры"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/message"
-                app:layout_constraintVertical_bias="0.02" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/viewPager"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/premiere"
-                tools:listitem="@layout/item" />
-
-            <TextView
-                android:id="@+id/top250"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:text="ТОП 250"
+                android:layout_marginEnd="16dp"
+                android:text="@string/app_name"
+                android:textAppearance="?attr/textAppearanceHeadline6"
                 android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/viewPager"
-                app:layout_constraintVertical_bias="0.065" />
-
-            <TextView
-                android:id="@+id/SHOW_ALL"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="216dp"
-
-                android:text="показать все"
-                android:textColor="@color/purple_700"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/top250"
-                app:layout_constraintTop_toBottomOf="@+id/viewPager"
-                app:layout_constraintVertical_bias="0.012" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/TopFilmsRecyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="56dp"
-
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- СЕКЦИЯ ПРЕМЬЕРЫ -->
+            <TextView
+                android:id="@+id/tvPremieresLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="8dp"
+                android:text="Премьеры"
+                android:textAppearance="?attr/textAppearanceSubtitle1"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/tvPremieresShowAll"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/viewPager"
-                tools:listitem="@layout/item" />
+                app:layout_constraintTop_toBottomOf="@+id/message" />
 
             <TextView
-                android:id="@+id/filtered1"
-                android:layout_width="0dp"
+                android:id="@+id/tvPremieresShowAll"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:text="фильтрованые фильмы"
+                android:layout_marginEnd="16dp"
+                android:text="Показать все"
+                android:textColor="@color/purple_700"
                 android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/TopFilmsRecyclerView"
-                app:layout_constraintVertical_bias="0.065" />
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground"
+                android:padding="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/tvPremieresLabel"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tvPremieresLabel" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/FilterFilmsRecyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/filtered1"
-                app:layout_constraintVertical_bias="0.0"
-                tools:listitem="@layout/item" />
-
-            <TextView
-                android:id="@+id/seials"
+                android:id="@+id/rvPremieres"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="сериалы"
-                android:layout_marginStart="16dp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/FilterFilmsRecyclerView"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintTop_toBottomOf="@+id/tvPremieresLabel"
+                tools:listitem="@layout/item_film" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/serialsRecyclerView"
-                android:layout_width="match_parent"
+            <!-- СЕКЦИЯ ТОП 250 -->
+            <TextView
+                android:id="@+id/tvTopFilmsLabel"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="8dp"
+                android:text="ТОП 250"
+                android:textAppearance="?attr/textAppearanceSubtitle1"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/tvTopFilmsShowAll"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/seials"
-                app:layout_constraintVertical_bias="0.0"
+                app:layout_constraintTop_toBottomOf="@+id/rvPremieres" />
+
+            <TextView
+                android:id="@+id/tvTopFilmsShowAll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:text="Показать все"
+                android:textColor="@color/purple_700"
+                android:textStyle="bold"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground"
+                android:padding="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/tvTopFilmsLabel"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tvTopFilmsLabel" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvTopFilms"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvTopFilmsLabel"
                 tools:listitem="@layout/item" />
 
+            <!-- СЕКЦИЯ ФИЛЬТРОВАННЫЕ -->
+            <TextView
+                android:id="@+id/tvFilteredLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="8dp"
+                android:text="Фильтрованные фильмы"
+                android:textAppearance="?attr/textAppearanceSubtitle1"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/tvFilteredShowAll"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rvTopFilms" />
+
+            <TextView
+                android:id="@+id/tvFilteredShowAll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:text="Показать все"
+                android:textColor="@color/purple_700"
+                android:textStyle="bold"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground"
+                android:padding="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/tvFilteredLabel"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tvFilteredLabel" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvFiltered"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvFilteredLabel"
+                tools:listitem="@layout/item" />
+
+            <!-- СЕКЦИЯ СЕРИАЛЫ -->
+            <TextView
+                android:id="@+id/tvSerialsLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="8dp"
+                android:text="Сериалы"
+                android:textAppearance="?attr/textAppearanceSubtitle1"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/tvSerialsShowAll"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rvFiltered" />
+
+            <TextView
+                android:id="@+id/tvSerialsShowAll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:text="Показать все"
+                android:textColor="@color/purple_700"
+                android:textStyle="bold"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground"
+                android:padding="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/tvSerialsLabel"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tvSerialsLabel" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvSerials"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvSerialsLabel"
+                tools:listitem="@layout/item" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     </ScrollView>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

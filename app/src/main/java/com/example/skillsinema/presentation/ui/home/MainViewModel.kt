@@ -14,6 +14,9 @@ import com.example.skillsinema.presentation.base.UiEvent
 import com.example.skillsinema.presentation.ui.adapters.FilmListItem
 import com.example.skillsinema.repository.Repository_GetFiltersFactory.getFilters
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.text.DateFormatSymbols
 import java.text.SimpleDateFormat
@@ -21,6 +24,7 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
+
 
 
 @HiltViewModel
@@ -33,8 +37,9 @@ class MainViewModel @Inject constructor(
     private val getFilteredFilms: GetFilteredFilmsUseCase
 ) : BaseViewModel() {
 
-    var state = MainUiState()
-        private set
+    // ✅ИСПОЛЬЗУЕМ StateFlow вместо var
+    private val _state = MutableStateFlow(MainUiState())
+    val state: StateFlow<MainUiState> = _state.asStateFlow()
 
     init {
         loadData()
@@ -50,9 +55,12 @@ class MainViewModel @Inject constructor(
     }
 
     fun load(year: Int, month: String) {
-        state = state.copy(isLoading = true, error = null)
+        // Обновляем через _state.value
+        _state.value = _state.value.copy(isLoading = true, error = null)
+
         viewModelScope.launch {
             runCatching {
+                // Загружаем все данные
                 val premieres = getPremieres(year, month)
                 val topFilms = getTopFilms()
                 val serials = getSerials()
@@ -60,32 +68,39 @@ class MainViewModel @Inject constructor(
                 val randomFilters = getRandomFilters()
                 val filteredFilms = getFilteredFilms(randomFilters)
 
-                // ← БИЗНЕС-ЛОГИКА В ViewModel:
+                // Подготавливаем списки с кнопкой "Показать все"
                 val premiereItems = prepareFilmList(premieres, "premieres")
                 val topFilmItems = prepareFilmList(topFilms, "top_films")
                 val serialItems = prepareFilmList(serials, "serials")
                 val filteredItems = prepareFilmList(filteredFilms, "filtered")
 
-                state = state.copy(
+                // ✅ Обновляем state
+                _state.value = MainUiState(
                     premiereItems = premiereItems,
                     topFilmItems = topFilmItems,
                     serialItems = serialItems,
                     filteredItems = filteredItems,
-                    isLoading = false
+                    isLoading = false,
+                    error = null
+                )
+            }.onFailure { exception ->
+                //  Обрабатываем ошибку
+                _state.value = _state.value.copy(
+                    isLoading = false,
+                    error = exception.message ?: "Ошибка загрузки данных"
                 )
             }
-                .onFailure {
-                    state = state.copy(
-                        isLoading = false,
-                        error = it.message ?: "Error loading data"
-                    )
-                }
         }
     }
 
+    //  Подготовка списка: первые 20 фильмов + кнопка "Показать все"
     private fun prepareFilmList(films: List<Film>, category: String): List<FilmListItem> {
-        return films.take(20).map { FilmListItem.FilmItem(it) } +
-                FilmListItem.ShowAllItem(category)
+        return if (films.isNotEmpty()) {
+            films.take(20).map { FilmListItem.FilmItem(it) } +
+                    FilmListItem.ShowAllItem(category)
+        } else {
+            emptyList()
+        }
     }
 
     fun refresh() {
@@ -93,10 +108,12 @@ class MainViewModel @Inject constructor(
     }
 }
 
-data class Quintuple<A, B, C, D, E>(
-    val first: A,
-    val second: B,
-    val third: C,
-    val fourth: D,
-    val fifth: E
+// ✅ State содержит готовые списки FilmListItem
+data class MainUiState(
+    val premiereItems: List<FilmListItem> = emptyList(),
+    val topFilmItems: List<FilmListItem> = emptyList(),
+    val serialItems: List<FilmListItem> = emptyList(),
+    val filteredItems: List<FilmListItem> = emptyList(),
+    val isLoading: Boolean = false,
+    val error: String? = null
 )

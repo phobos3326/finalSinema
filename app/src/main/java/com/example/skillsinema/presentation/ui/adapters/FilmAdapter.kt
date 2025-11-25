@@ -13,15 +13,6 @@ import com.example.skillsinema.databinding.SecondItemBinding
 
 import com.example.skillsinema.domain.model.Film
 
-
-
-
-
-
-
-
-
-
 class FilmAdapter(
     private val onFilmClick: (Int) -> Unit,
     private val onShowAllClick: (String) -> Unit
@@ -42,7 +33,6 @@ class FilmAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             TYPE_FILM -> {
-                // ← ViewBinding (НЕ DataBinding):
                 val binding = ItemBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
@@ -51,7 +41,6 @@ class FilmAdapter(
                 FilmViewHolder(binding)
             }
             TYPE_SHOW_ALL -> {
-                // ← ViewBinding (НЕ DataBinding):
                 val binding = SecondItemBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
@@ -74,56 +63,47 @@ class FilmAdapter(
         }
     }
 
-    // ViewHolder для фильма с ViewBinding
+    // ViewHolder для фильма
     inner class FilmViewHolder(
-        private val binding: ItemBinding  // ← ViewBinding
+        private val binding: ItemBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(film: Film) {
-            // ← Прямое обращение к View через ViewBinding:
-            binding.title .text = film.nameRu ?: film.nameEn ?: "Без названия"
-            binding.textViewGenre .text = (film.genres ?: "") as CharSequence?
+            binding.title.text = film.nameRu ?: film.nameEn ?: "Без названия"
+            binding.textViewGenre .text = film.year ?: ""
 
-            // ← Загрузка изображения через ViewBinding:
+            // Правильная обработка жанров
+            val genresText = when {
+                film.genres.isNotEmpty() -> film.genres.joinToString(", ") { it.genre }
+                else -> ""
+            }
+            // Если есть tvGenres в layout
+             binding.textViewGenre .text = genresText
+
             binding.poster .load(film.posterUrlPreview) {
                 crossfade(true)
-               /* placeholder(R.drawable.ic_placeholder)
+                /*placeholder(R.drawable.ic_placeholder)
                 error(R.drawable.ic_error)*/
             }
 
-            // ← Клик через ViewBinding:
             binding.root.setOnClickListener {
                 onFilmClick(film.kinopoiskId)
             }
         }
     }
 
-    // ViewHolder для кнопки "Показать все" с ViewBinding
+    // ViewHolder для кнопки "Показать все"
     inner class ShowAllViewHolder(
-        private val binding: SecondItemBinding  // ← ViewBinding
+        private val binding: SecondItemBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(category: String) {
-            val categoryText = when (category) {
-                "premieres" -> "премьеры"
-                "top_films" -> "топ"
-                "serials" -> "сериалы"
-                "filtered" -> "подборку"
-                else -> category
-            }
-
-            // ← Обращение к TextView через ViewBinding:
-            //binding. .text = "Показать все"
-           // binding.tvCategory.text = categoryText
-
-            // ← Клик через ViewBinding:
             binding.root.setOnClickListener {
                 onShowAllClick(category)
             }
         }
     }
 
-    // DiffUtil для оптимизации
     class FilmDiffCallback : DiffUtil.ItemCallback<FilmListItem>() {
         override fun areItemsTheSame(oldItem: FilmListItem, newItem: FilmListItem): Boolean {
             return when {

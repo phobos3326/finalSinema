@@ -16,6 +16,7 @@ import com.example.skillsinema.presentation.ui.adapters.FilmListItem
     val error: String? = null
 )*/
 
+/*
 data class MainUiState(
     val premiereItems: List<FilmListItem> = emptyList(),
     val topFilmItems: List<FilmListItem> = emptyList(),
@@ -23,4 +24,4 @@ data class MainUiState(
     val filteredItems: List<FilmListItem> = emptyList(),
     val isLoading: Boolean = false,
     val error: String? = null
-)
+)*/
