@@ -28,7 +28,7 @@ class ShowAllViewModel @Inject constructor(
     private val _state = MutableStateFlow(ShowAllUiState())
     val state: StateFlow<ShowAllUiState> = _state.asStateFlow()
 
-    fun loadFilms(category: String) {
+    fun loadFilms(category: String, page: Int = 1) { // Добавлен параметр page с дефолтным значением
         viewModelScope.launch {
             _state.value = _state.value.copy(isLoading = true, error = null)
 
@@ -37,13 +37,14 @@ class ShowAllViewModel @Inject constructor(
                     "premieres" -> {
                         val calendar = Calendar.getInstance()
                         val monthNumber = calendar.get(Calendar.MONTH)
-                        val monthName = DateFormatSymbols(Locale.ENGLISH).months[monthNumber]
+                        // Приводим название месяца к верхнему регистру
+                        val monthName = DateFormatSymbols(Locale.ENGLISH).months[monthNumber].uppercase(Locale.ENGLISH)
                         val year = SimpleDateFormat("yyyy", Locale.getDefault()).format(Date()).toInt()
                         getPremieresUseCase(year, monthName)
                     }
                     "top_films" -> getTopFilmsUseCase()
                     "serials" -> getSerialsUseCase()
-                    "filtered" -> getFilteredFilmsUseCase()
+                    "filtered" -> getFilteredFilmsUseCase.getFilteredFilms(page) // Передаем параметр page
                     else -> emptyList()
                 }
 
@@ -62,7 +63,9 @@ class ShowAllViewModel @Inject constructor(
     }
 
     fun refresh(category: String) {
-        loadFilms(category)
+        // При вызове refresh, если нужно, можно передавать актуальную страницу
+        // или загружать с первой, как здесь
+        loadFilms(category, page = 1)
     }
 }
 
