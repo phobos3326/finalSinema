@@ -1,6 +1,7 @@
 package com.example.skillsinema.ui.main.showAll
 
 import androidx.lifecycle.viewModelScope
+import com.example.skillsinema.data.model.ModelFilter
 import com.example.skillsinema.domain.model.Film
 import com.example.skillsinema.domain.usecase.film.GetPremiereFilmsUseCase
 import com.example.skillsinema.domain.usecase.film.GetTopFilmsUseCase
@@ -44,7 +45,7 @@ class ShowAllViewModel @Inject constructor(
                     }
                     "top_films" -> getTopFilmsUseCase()
                     "serials" -> getSerialsUseCase()
-                    "filtered" -> getFilteredFilmsUseCase.getFilteredFilms(page) // Передаем параметр page
+                    "filtered" -> getFilteredFilmsUseCase.getFilteredFilms(page, _state.value.filterParams)
                     else -> emptyList()
                 }
 
@@ -73,5 +74,6 @@ data class ShowAllUiState(
     val films: List<Film> = emptyList(),
     val category: String = "",
     val isLoading: Boolean = false,
-    val error: String? = null
+    val error: String? = null,
+    val filterParams: ModelFilter = ModelFilter()
 )
