@@ -10,15 +10,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.skillsinema.R
+
 import com.example.skillsinema.databinding.FragmentMainBinding
 import com.example.skillsinema.presentation.ui.adapters.FilmAdapter
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-
-
-
-
 
 @AndroidEntryPoint
 class MainFragment : Fragment() {
@@ -45,12 +42,10 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupAdapters()
-        setupSwipeRefresh()
         observeState()
     }
 
     private fun setupAdapters() {
-        // Адаптер для премьер
         premiereAdapter = FilmAdapter(
             onFilmClick = { filmId -> navigateToFilmDetails(filmId) },
             onShowAllClick = { category -> navigateToShowAll(category) }
@@ -60,7 +55,6 @@ class MainFragment : Fragment() {
             adapter = premiereAdapter
         }
 
-        // Адаптер для топ фильмов
         topFilmsAdapter = FilmAdapter(
             onFilmClick = { filmId -> navigateToFilmDetails(filmId) },
             onShowAllClick = { category -> navigateToShowAll(category) }
@@ -70,7 +64,6 @@ class MainFragment : Fragment() {
             adapter = topFilmsAdapter
         }
 
-        // Адаптер для сериалов
         serialsAdapter = FilmAdapter(
             onFilmClick = { filmId -> navigateToFilmDetails(filmId) },
             onShowAllClick = { category -> navigateToShowAll(category) }
@@ -80,7 +73,6 @@ class MainFragment : Fragment() {
             adapter = serialsAdapter
         }
 
-        // Адаптер для фильтрованных
         filteredAdapter = FilmAdapter(
             onFilmClick = { filmId -> navigateToFilmDetails(filmId) },
             onShowAllClick = { category -> navigateToShowAll(category) }
@@ -91,14 +83,6 @@ class MainFragment : Fragment() {
         }
     }
 
-    private fun setupSwipeRefresh() {
-        // Если у вас есть SwipeRefreshLayout
-        // binding.swipeRefresh.setOnRefreshListener {
-        //     viewModel.refresh()
-        // }
-    }
-
-    // ✅ НАБЛЮДАЕМ ЗА StateFlow
     private fun observeState() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.state.collect { state ->
@@ -107,15 +91,9 @@ class MainFragment : Fragment() {
         }
     }
 
-    // ✅ ПРОСТАЯ renderState - просто передаем готовые данные
     private fun renderState(state: MainUiState) {
-        // Прогресс загрузки
         binding.progressLoading.visibility = if (state.isLoading) View.VISIBLE else View.GONE
 
-        // Останавливаем SwipeRefresh если есть
-        // binding.swipeRefresh.isRefreshing = false
-
-        // Премьеры
         if (state.premiereItems.isNotEmpty()) {
             premiereAdapter.submitList(state.premiereItems)
             binding.tvPremieresLabel.visibility = View.VISIBLE
@@ -125,7 +103,6 @@ class MainFragment : Fragment() {
             binding.rvPremieres.visibility = View.GONE
         }
 
-        // Топ фильмы
         if (state.topFilmItems.isNotEmpty()) {
             topFilmsAdapter.submitList(state.topFilmItems)
             binding.tvTopFilmsLabel.visibility = View.VISIBLE
@@ -135,7 +112,6 @@ class MainFragment : Fragment() {
             binding.rvTopFilms.visibility = View.GONE
         }
 
-        // Сериалы
         if (state.serialItems.isNotEmpty()) {
             serialsAdapter.submitList(state.serialItems)
             binding.tvSerialsLabel.visibility = View.VISIBLE
@@ -145,7 +121,6 @@ class MainFragment : Fragment() {
             binding.rvSerials.visibility = View.GONE
         }
 
-        // Фильтрованные
         if (state.filteredItems.isNotEmpty()) {
             filteredAdapter.submitList(state.filteredItems)
             binding.tvFilteredLabel.visibility = View.VISIBLE
@@ -155,9 +130,24 @@ class MainFragment : Fragment() {
             binding.rvFiltered.visibility = View.GONE
         }
 
-        // Показываем ошибку
         state.error?.let { error ->
             showError(error)
+        }
+    }
+
+    // ✅ Передаем только категорию!
+    private fun navigateToShowAll(category: String) {
+        try {
+            val bundle = Bundle().apply {
+                putString("category", category)
+            }
+
+            findNavController().navigate(
+                R.id.action_home_fragment_to_showAllFragment,
+                bundle
+            )
+        } catch (e: Exception) {
+            showError(e.message ?: "Ошибка навигации")
         }
     }
 
@@ -168,20 +158,6 @@ class MainFragment : Fragment() {
             }
             findNavController().navigate(
                 R.id.action_mainFragment_to_itemInfoFragment,
-                bundle
-            )
-        } catch (e: Exception) {
-            showError(e.message ?: "Ошибка навигации")
-        }
-    }
-
-    private fun navigateToShowAll(category: String) {
-        try {
-            val bundle = Bundle().apply {
-                putString("category", category)
-            }
-            findNavController().navigate(
-                R.id.action_home_fragment_to_showAllFragment,
                 bundle
             )
         } catch (e: Exception) {
