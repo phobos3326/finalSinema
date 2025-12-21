@@ -4,7 +4,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-interface BestFilms {
+data class BestFilms {
     @Json(name = "films")
     val films: List<Film>
 
