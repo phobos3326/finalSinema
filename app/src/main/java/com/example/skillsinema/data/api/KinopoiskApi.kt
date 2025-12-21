@@ -1,63 +1,63 @@
-package com.example.skillsinema.data.api
+package com.example.skillsinema.data.remote
 
-import com.example.skillsinema.data.dto.*
+import com.example.skillsinema.data.remote.response.*
+import com.example.skillsinema.domain.model.FilmDetails
+import com.example.skillsinema.domain.model.FiltersResponse
 import retrofit2.Response
-import retrofit2.http.*
+import retrofit2.http.GET
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface KinopoiskApi {
 
-    companion object {
-        const val API_KEY = "c3252e89-6d89-480c-b5bd-7c97cdffdd5c"
-    }
+    // ✅ Получение фильтров
+    @GET("v2.2/films/filters")
+    suspend fun getFilters(): Response<FiltersResponse>
 
-    @Headers("X-API-KEY: $API_KEY")
-    @GET("films/premieres")
+    // ✅ Получение фильмов с фильтрацией
+    @GET("v2.2/films")
+    suspend fun getFilteredFilms(
+        @Query("countries") countries: String?,
+        @Query("genres") genres: String?,
+        @Query("order") order: String,
+        @Query("type") type: String,
+        @Query("ratingFrom") ratingFrom: Int,
+        @Query("ratingTo") ratingTo: Int,
+        @Query("yearFrom") yearFrom: Int,
+        @Query("yearTo") yearTo: Int,
+        @Query("page") page: Int
+    ): Response<FilmsResponse>
+
+    // ✅ Получение премьер
+    @GET("v2.2/films/premieres")
     suspend fun getPremieres(
         @Query("year") year: Int,
         @Query("month") month: String
-    ): PremiereResponseDto
+    ): Response<PremieresResponse>
 
-    @Headers("X-API-KEY: $API_KEY")
-    @GET("films/{id}")
-    suspend fun getFilmDetails(
-        @Path("id") id: Int
-    ): FilmDetailsDto
-
-    @Headers("X-API-KEY: $API_KEY")
-    @GET("films/top")
+    // ✅ Получение топ фильмов
+    @GET("v2.2/films/top")
     suspend fun getTopFilms(
-        @Query("type") type: String = "TOP_250_BEST_FILMS",
-        @Query("page") page: Int = 1
-    ): TopFilmsResponseDto
+        @Query("type") type: String,
+        @Query("page") page: Int
+    ): Response<TopFilmsResponse>
 
-    @Headers("X-API-KEY: $API_KEY")
-    @GET("films")
-    suspend fun getFilteredFilms(
-        @Query("page") page: Int,
-        @Query("countries") countries: Int?,
-        @Query("genres") genres: Int?,
-        @Query("ratingFrom") ratingFrom: Int,
-        @Query("ratingTo") ratingTo: Int,
-        @Query("yearFrom") yearFrom: Int?,
-        @Query("yearTo") yearTo: Int?,
-        @Query("order") order: String?,
-        @Query("type") type: String?,
-        @Query("keyword") keyword: String?
-    ): FilteredFilmsResponseDto
+    // ✅ Получение деталей фильма
+    @GET("v2.2/films/{id}")
+    suspend fun getFilmById(
+        @Path("id") filmId: Int
+    ): Response<FilmDetails>
 
-    @Headers("X-API-KEY: $API_KEY")
-    @GET("films/{id}/similars")
+    // ✅ Поиск фильмов
+    @GET("v2.1/films/search-by-keyword")
+    suspend fun searchFilms(
+        @Query("keyword") keyword: String,
+        @Query("page") page: Int
+    ): Response<SearchResponse>
+
+    // ✅ Получение похожих фильмов
+    @GET("v2.2/films/{id}/similars")
     suspend fun getSimilarFilms(
         @Path("id") filmId: Int
-    ): SimilarFilmsResponseDto
-
-    @Headers("X-API-KEY: $API_KEY")
-    @GET("films/filters")
-    suspend fun getFilters(): Response<FiltersDto>
-
-    @Headers("X-API-KEY: $API_KEY")
-    @GET("films/{id}/seasons")
-    suspend fun getSeasons(
-        @Path("id") filmId: Int
-    ): SeasonsDto
+    ): Response<SimilarFilmsResponse>
 }

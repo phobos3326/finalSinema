@@ -1,85 +1,123 @@
 package com.example.skillsinema.data.repository
 
-import com.example.skillsinema.data.api.KinopoiskApi
-import com.example.skillsinema.data.mapper.FilmMapper
-import com.example.skillsinema.data.mapper.FilterMapper
-import com.example.skillsinema.data.model.ModelFilter
+
+import com.example.skillsinema.data.remote.KinopoiskApi
 import com.example.skillsinema.domain.model.*
 import com.example.skillsinema.domain.repository.FilmRepository
-
-import retrofit2.Response
 import javax.inject.Inject
 
 class FilmRepositoryImpl @Inject constructor(
-    private val api: KinopoiskApi,
-    private val filmMapper: FilmMapper,
-    private val filterMapper: FilterMapper
+    private val api: KinopoiskApi
 ) : FilmRepository {
 
-    override suspend fun getPremieres(year: Int, month: String): List<Film> {
-        val response = api.getPremieres(year, month)
-        return filmMapper.mapFilmList(response.items)
+    // ✅ Получение фильтров (жанры и страны)
+    override suspend fun getFilters(): FiltersResponse {
+        val response = api.getFilters()
+
+        return if (response.isSuccessful) {
+            response.body() ?: throw Exception("Empty filters response")
+        } else {
+            throw Exception("Failed to load filters: ${response.code()} ${response.message()}")
+        }
     }
 
-    override suspend fun getFilmDetails(id: Int): FilmDetails {
-        val response = api.getFilmDetails(id)
-        return filmMapper.mapFilmDetails(response)
-    }
-
-    override suspend fun getTopFilms(): List<Film> {
-        val response = api.getTopFilms()
-        return filmMapper.mapFilmList(response.films)
-    }
-
+    // ✅ Получение фильтрованных фильмов
     override suspend fun getFilteredFilms(filterParams: FilterParams): List<Film> {
         val response = api.getFilteredFilms(
-            page = filterParams.page,
             countries = filterParams.countries,
             genres = filterParams.genres,
+            order = filterParams.order ?: "RATING",
+            type = filterParams.type ?: "FILM",
             ratingFrom = filterParams.ratingFrom ?: 0,
             ratingTo = filterParams.ratingTo ?: 10,
-            yearFrom = filterParams.yearFrom,
-            yearTo = filterParams.yearTo,
-            order = filterParams.order,
-            type = filterParams.filmType,
-            keyword = null
+            yearFrom = filterParams.yearFrom ?: 1000,
+            yearTo = filterParams.yearTo ?: 3000,
+            page = filterParams.page
         )
-        return filmMapper.mapFilmList(response.items)
+
+        return if (response.isSuccessful) {
+            response.body()?.items ?: emptyList()
+        } else {
+            throw Exception("Failed to load filtered films: ${response.code()} ${response.message()}")
+        }
     }
 
-    override suspend fun getSimilarFilms(filmId: Int): List<Film> {
-        TODO("Not yet implemented")
+    // ✅ Получение премьер
+    override suspend fun getPremieres(year: Int, month: String): List<Film> {
+        val response = api.getPremieres(year, month)
+
+        return if (response.isSuccessful) {
+            response.body()?.items ?: emptyList()
+        } else {
+            throw Exception("Failed to load premieres: ${response.code()} ${response.message()}")
+        }
     }
 
-    // ← ДОБАВИТЬ НЕДОСТАЮЩИЕ МЕТОДЫ:
+    // ✅ Получение топ 250 фильмов
+    override suspend fun getTopFilms(): List<Film> {
+        val response = api.getTopFilms(
+            type = "TOP_250_BEST_FILMS",
+            page = 1
+        )
 
+        return if (response.isSuccessful) {
+            response.body()?.films ?: emptyList()
+        } else {
+            throw Exception("Failed to load top films: ${response.code()} ${response.message()}")
+        }
+    }
+
+    // ✅ Получение сериалов
     override suspend fun getSerials(): List<Film> {
         val response = api.getFilteredFilms(
-            page = 1,
             countries = null,
             genres = null,
-            ratingFrom = 0,
+            order = "RATING",
+            type = "TV_SERIES", // ← Тип: сериалы
+            ratingFrom = 7,
             ratingTo = 10,
-            yearFrom = null,
-            yearTo = null,
-            order = null,
-            type = "TV_SERIES",  // ← Фильтр для сериалов
-            keyword = null
+            yearFrom = 2000,
+            yearTo = 2024,
+            page = 1
         )
-        return filmMapper.mapFilmList(response.items)
+
+        return if (response.isSuccessful) {
+            response.body()?.items ?: emptyList()
+        } else {
+            throw Exception("Failed to load serials: ${response.code()} ${response.message()}")
+        }
     }
 
-    override suspend fun getFilters(): Response<ModelFilter> {
-        return try {
-            val response = api.getFilters()
-            if (response.isSuccessful && response.body() != null) {
-                val mappedFilters = filterMapper.mapFiltersDto(response.body()!!)
-                Response.success(mappedFilters)
-            } else {
-                Response.error(response.code(), response.errorBody()!!)
-            }
-        } catch (e: Exception) {
-            Response.error(500, okhttp3.ResponseBody.create(null, e.message ?: "Unknown error"))
+    // ✅ Получение деталей фильма по ID
+    override suspend fun getFilmById(filmId: Int): FilmDetails {
+        val response = api.getFilmById(filmId)
+
+        return if (response.isSuccessful) {
+            response.body() ?: throw Exception("Film not found")
+        } else {
+            throw Exception("Failed to load film details: ${response.code()} ${response.message()}")
+        }
+    }
+
+    // ✅ Поиск фильмов
+    override suspend fun searchFilms(query: String, page: Int): List<Film> {
+        val response = api.searchFilms(query, page)
+
+        return if (response.isSuccessful) {
+            response.body()?.films ?: emptyList()
+        } else {
+            throw Exception("Failed to search films: ${response.code()} ${response.message()}")
+        }
+    }
+
+    // ✅ Получение похожих фильмов
+    override suspend fun getSimilarFilms(filmId: Int): List<Film> {
+        val response = api.getSimilarFilms(filmId)
+
+        return if (response.isSuccessful) {
+            response.body()?.items ?: emptyList()
+        } else {
+            throw Exception("Failed to load similar films: ${response.code()} ${response.message()}")
         }
     }
 }

@@ -5,7 +5,7 @@ import retrofit2.http.*
 
 interface SearchApi {
 
-    @Headers("X-API-KEY: ${KinopoiskApi.API_KEY}")
+  //  @Headers("X-API-KEY: ${KinopoiskApi.API_KEY}")
     @GET("films/search-by-keyword")
     suspend fun searchFilms(
         @Query("keyword") keyword: String,

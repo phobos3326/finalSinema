@@ -1,18 +1,18 @@
 package com.example.skillsinema.domain.repository
 
-import com.example.skillsinema.data.model.ModelFilter
 import com.example.skillsinema.domain.model.Film
-import com.example.skillsinema.domain.model.FilmDetails
 import com.example.skillsinema.domain.model.FilterParams
-import retrofit2.Response
 
+
+import com.example.skillsinema.domain.model.*
 
 interface FilmRepository {
-    suspend fun getPremieres(year: Int, month: String): List<Film>
-    suspend fun getFilmDetails(id: Int): FilmDetails
-    suspend fun getTopFilms(): List<Film>
+    suspend fun getFilters(): FiltersResponse
     suspend fun getFilteredFilms(filterParams: FilterParams): List<Film>
-    suspend fun getSimilarFilms(filmId: Int): List<Film>
+    suspend fun getPremieres(year: Int, month: String): List<Film>
+    suspend fun getTopFilms(): List<Film>
     suspend fun getSerials(): List<Film>
-    suspend fun getFilters(): Response<ModelFilter>
+    suspend fun getFilmById(filmId: Int): FilmDetails
+    suspend fun searchFilms(query: String, page: Int): List<Film>
+    suspend fun getSimilarFilms(filmId: Int): List<Film>
 }

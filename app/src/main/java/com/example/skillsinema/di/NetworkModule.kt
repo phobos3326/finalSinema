@@ -1,8 +1,9 @@
 package com.example.skillsinema.di
 
-import com.example.skillsinema.data.api.*
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import com.example.skillsinema.BuildConfig
+import com.example.skillsinema.data.remote.KinopoiskApi
+import com.example.skillsinema.data.repository.FilmRepositoryImpl
+import com.example.skillsinema.domain.repository.FilmRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -11,74 +12,74 @@ import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
-import com.example.skillsinema.data.api.KinopoiskApi
 
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    private const val BASE_URL = "https://kinopoiskapiunofficial.tech/api/v2.2/"
+    private const val BASE_URL = "https://kinopoiskapiunofficial.tech/api/"
 
-
-
+    // ✅ Interceptor для добавления API ключа
     @Provides
     @Singleton
-    fun provideApiKeyInterceptor(): Interceptor = Interceptor { chain ->
-        val request = chain.request().newBuilder()
-            .addHeader("X-API-KEY", KinopoiskApi.API_KEY)
-            .build()
-        chain.proceed(request)
+    fun provideApiKeyInterceptor(): Interceptor {
+        return Interceptor { chain ->
+            val request = chain.request().newBuilder()
+                .addHeader("X-API-KEY", BuildConfig.API_KEY) // ✅ Берем из BuildConfig
+                .build()
+            chain.proceed(request)
+        }
     }
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(apiKeyInterceptor: Interceptor): OkHttpClient {
-        val logging = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
+    fun provideLoggingInterceptor(): HttpLoggingInterceptor {
+        return HttpLoggingInterceptor().apply {
+            level = if (BuildConfig.DEBUG) {
+                HttpLoggingInterceptor.Level.BODY
+            } else {
+                HttpLoggingInterceptor.Level.NONE
+            }
+        }
+    }
+
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(
+        apiKeyInterceptor: Interceptor,
+        loggingInterceptor: HttpLoggingInterceptor
+    ): OkHttpClient {
         return OkHttpClient.Builder()
-            .addInterceptor(apiKeyInterceptor)
-            .addInterceptor(logging)
+            .addInterceptor(apiKeyInterceptor) // ✅ API ключ добавляется здесь
+            .addInterceptor(loggingInterceptor)
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
             .build()
     }
 
     @Provides
     @Singleton
-    fun provideMoshi(): Moshi = Moshi.Builder()
-        .add(KotlinJsonAdapterFactory())
-        .build()
-
-    @Provides
-    @Singleton
-    fun provideRetrofit(client: OkHttpClient, moshi: Moshi): Retrofit =
-        Retrofit.Builder()
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .client(client)
-            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
+    }
 
     @Provides
     @Singleton
-    fun provideKinopoiskApi(retrofit: Retrofit): KinopoiskApi =
-        retrofit.create(KinopoiskApi::class.java)
+    fun provideKinopoiskApi(retrofit: Retrofit): KinopoiskApi {
+        return retrofit.create(KinopoiskApi::class.java)
+    }
 
     @Provides
     @Singleton
-    fun provideStaffApi(retrofit: Retrofit): StaffApi =
-        retrofit.create(StaffApi::class.java)
-
-    @Provides
-    @Singleton
-    fun provideActorApi(retrofit: Retrofit): ActorApi =
-        retrofit.create(ActorApi::class.java)
-
-    @Provides
-    @Singleton
-    fun provideGalleryApi(retrofit: Retrofit): GalleryApi =
-        retrofit.create(GalleryApi::class.java)
-
-    @Provides
-    @Singleton
-    fun provideSearchApi(retrofit: Retrofit): SearchApi =
-        retrofit.create(SearchApi::class.java)
+    fun provideFilmRepository(api: KinopoiskApi): FilmRepository {
+        return FilmRepositoryImpl(api)
+    }
 }
