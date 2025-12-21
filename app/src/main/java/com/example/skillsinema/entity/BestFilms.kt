@@ -3,15 +3,11 @@ package com.example.skillsinema.entity
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
-@JsonClass(generateAdapter = true)
-data class BestFilms {
-    @Json(name = "films")
-    val films: List<Film>
 
-    @Json(name = "pagesCount")
+interface BestFilms {
+    val films: List<Film>
     val pagesCount: Int
 }
-
 
 
 /*@JsonClass(generateAdapter = true)
