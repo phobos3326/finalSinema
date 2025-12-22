@@ -19,8 +19,8 @@ class GetRandomFiltersUseCase @Inject constructor(
         val randomCountry = countries.randomOrNull()
 
         return FilterParams(
-            countries = randomCountry?.id,
-            genres = randomGenre?.id
+            countries = randomCountry?.id?.toString(),
+            genres = randomGenre?.id?.toString()
         )
     }
 }

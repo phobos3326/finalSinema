@@ -1,4 +1,4 @@
-package com.example.skillsinema.data.remote
+package com.example.skillsinema.data.api
 
 import com.example.skillsinema.data.remote.response.*
 import com.example.skillsinema.domain.model.FilmDetails

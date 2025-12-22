@@ -6,7 +6,6 @@ import com.example.skillsinema.domain.repository.FilmRepository
 import com.example.skillsinema.domain.usecase.GetRandomFiltersUseCase
 import kotlinx.coroutines.flow.*
 import java.text.DateFormatSymbols
-import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -16,26 +15,61 @@ class FilmsDataSource @Inject constructor(
     private val filmRepository: FilmRepository,
     private val getRandomFilters: GetRandomFiltersUseCase
 ) {
+    // Premieres Flow
+    private val _premieresFlow = MutableSharedFlow<List<Film>>(replay = 1)
+    val premieresFlow: SharedFlow<List<Film>> = _premieresFlow.asSharedFlow()
+
+    // Top Films Flow
+    private val _topFilmsFlow = MutableSharedFlow<List<Film>>(replay = 1)
+    val topFilmsFlow: SharedFlow<List<Film>> = _topFilmsFlow.asSharedFlow()
+
+    // Serials Flow
+    private val _serialsFlow = MutableSharedFlow<List<Film>>(replay = 1)
+    val serialsFlow: SharedFlow<List<Film>> = _serialsFlow.asSharedFlow()
+
+    // Filtered Films Flow
     private val _filteredFilmsFlow = MutableSharedFlow<List<Film>>(replay = 1)
     val filteredFilmsFlow: SharedFlow<List<Film>> = _filteredFilmsFlow.asSharedFlow()
 
-    // ✅ Кэшируем параметры фильтров
     private var cachedFilterParams: FilterParams? = null
 
+    suspend fun loadPremieres() {
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val monthSymbols = DateFormatSymbols(Locale.ENGLISH)
+        val month = monthSymbols.months[calendar.get(Calendar.MONTH)].uppercase()
+
+        val films = filmRepository.getPremieres(year, month)
+        _premieresFlow.emit(films)
+    }
+
+    suspend fun loadTopFilms() {
+        val films = filmRepository.getTopFilms()
+        _topFilmsFlow.emit(films)
+    }
+
+    suspend fun loadSerials() {
+        val films = filmRepository.getSerials()
+        _serialsFlow.emit(films)
+    }
+
     suspend fun loadFilteredFilms() {
-        // ✅ Генерируем фильтры только один раз
         if (cachedFilterParams == null) {
             cachedFilterParams = getRandomFilters()
         }
-
         val films = filmRepository.getFilteredFilms(cachedFilterParams!!)
         _filteredFilmsFlow.emit(films)
     }
 
-    // Получить текущие параметры (для отображения в UI)
+    suspend fun loadAll() {
+        loadPremieres()
+        loadTopFilms()
+        loadSerials()
+        loadFilteredFilms()
+    }
+
     fun getCurrentFilterParams(): FilterParams? = cachedFilterParams
 
-    // Сброс кэша (для генерации новых фильтров)
     fun clearFilterCache() {
         cachedFilterParams = null
     }

@@ -1,7 +1,7 @@
 package com.example.skillsinema.data.repository
 
 
-import com.example.skillsinema.data.remote.KinopoiskApi
+import com.example.skillsinema.data.api.KinopoiskApi
 import com.example.skillsinema.domain.model.*
 import com.example.skillsinema.domain.repository.FilmRepository
 import javax.inject.Inject

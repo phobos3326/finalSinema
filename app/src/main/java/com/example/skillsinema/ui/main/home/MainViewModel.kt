@@ -1,3 +1,4 @@
+/*
 package com.example.skillsinema.presentation.ui.home
 
 import androidx.lifecycle.viewModelScope
@@ -88,3 +89,4 @@ private data class MainDataResult(
     val serials: List<Film>,
     val filtered: List<Film>
 )
+*/

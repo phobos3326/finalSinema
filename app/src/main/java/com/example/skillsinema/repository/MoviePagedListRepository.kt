@@ -2,6 +2,7 @@ package com.example.skillsinema.repository
 
 
 
+/*
 import com.example.skillsinema.entity.Film
 import dagger.Module
 import dagger.Provides
@@ -17,3 +18,4 @@ class MoviePagedListRepository @Inject constructor() {
         return retrofit.topList(page).films
     }
 }
+*/

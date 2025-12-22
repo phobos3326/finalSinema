@@ -18,19 +18,20 @@ interface MovieListApi {
     @GET("films/premieres")
     suspend fun movies(@Query("year") year: Int, @Query("month") month: String): MovieList*/
 
-    @Headers("X-API-KEY: $api_key")
+   // @Headers("X-API-KEY: $api_key")
     @GET("films/top?type=TOP_250_BEST_FILMS")
     suspend fun topList(
         @Query("page") page: Int
     ): PagedMovieList
 
 
-    private companion object {
+  /*  private companion object {
         private const val api_key = "1006c25a-038b-47b4-b9f9-341f208b4ac3"
     }
-
+*/
 }
 
+/*
 val retrofit = Retrofit
     .Builder()
     .client(
@@ -41,4 +42,4 @@ val retrofit = Retrofit
     .baseUrl("https://kinopoiskapiunofficial.tech/api/v2.2/")
     .addConverterFactory(GsonConverterFactory.create())
     .build()
-    .create(MovieListApi::class.java)
+    .create(MovieListApi::class.java)*/

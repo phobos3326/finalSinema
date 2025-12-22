@@ -1,9 +1,8 @@
 package com.example.skillsinema.di
 
-import com.example.skillsinema.BuildConfig
-import com.example.skillsinema.data.remote.KinopoiskApi
-import com.example.skillsinema.data.repository.FilmRepositoryImpl
-import com.example.skillsinema.domain.repository.FilmRepository
+import com.example.skillsinema.data.api.KinopoiskApi
+
+import com.example.skillsinema.repository.MovieListApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,22 +12,24 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
+import retrofit2.converter.moshi.MoshiConverterFactory
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    private const val BASE_URL = "https://kinopoiskapiunofficial.tech/api/"
+    private const val BASE_URL = "https://kinopoiskapiunofficial.tech/api/v2.2/"
+    private const val API_KEY = "1006c25a-038b-47b4-b9f9-341f208b4ac3" // Лучше хранить в BuildConfig
 
-    // ✅ Interceptor для добавления API ключа
     @Provides
     @Singleton
     fun provideApiKeyInterceptor(): Interceptor {
         return Interceptor { chain ->
             val request = chain.request().newBuilder()
-                .addHeader("X-API-KEY", BuildConfig.API_KEY) // ✅ Берем из BuildConfig
+                .addHeader("X-API-KEY", API_KEY)
                 .build()
             chain.proceed(request)
         }
@@ -36,13 +37,9 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideLoggingInterceptor(): HttpLoggingInterceptor {
+    fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
         return HttpLoggingInterceptor().apply {
-            level = if (BuildConfig.DEBUG) {
-                HttpLoggingInterceptor.Level.BODY
-            } else {
-                HttpLoggingInterceptor.Level.NONE
-            }
+            level = HttpLoggingInterceptor.Level.BODY
         }
     }
 
@@ -53,21 +50,30 @@ object NetworkModule {
         loggingInterceptor: HttpLoggingInterceptor
     ): OkHttpClient {
         return OkHttpClient.Builder()
-            .addInterceptor(apiKeyInterceptor) // ✅ API ключ добавляется здесь
+            .addInterceptor(apiKeyInterceptor)
             .addInterceptor(loggingInterceptor)
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
-            .writeTimeout(30, TimeUnit.SECONDS)
             .build()
     }
 
     @Provides
     @Singleton
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+    fun provideMoshi(): Moshi {
+        return Moshi.Builder()
+            .add(KotlinJsonAdapterFactory())
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideRetrofit(
+        okHttpClient: OkHttpClient,
+        moshi: Moshi
+    ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .addConverterFactory(GsonConverterFactory.create()) // Если нужен Gson
             .build()
     }
 
@@ -79,7 +85,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideFilmRepository(api: KinopoiskApi): FilmRepository {
-        return FilmRepositoryImpl(api)
+    fun provideMovieListApi(retrofit: Retrofit): MovieListApi {
+        return retrofit.create(MovieListApi::class.java)
     }
 }
