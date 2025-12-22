@@ -20,9 +20,9 @@ import com.example.skillsinema.domain.model.Country
 import com.example.skillsinema.domain.model.Genre
 
 import com.example.skillsinema.entity.Film
-import com.example.skillsinema.data.model.ModelFilter
-import com.example.skillsinema.ui.main.home.MainViewModel
+
 import com.example.skillsinema.ui.main.home.TypeItem
+import com.example.skillsinema.ui.main.profile.ThirdFragmentViewModel.Companion.TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
@@ -95,7 +95,7 @@ class SearchViewmodel @Inject constructor(
                 onSuccess = {
                     _searchCountry.value = it as MutableList<Country>
                 },
-                onFailure = { Log.d(MainViewModel.TAG, it.message ?: "not load") }
+                onFailure = { Log.d(TAG, it.message ?: "not load") }
             )
         }
     }
@@ -110,7 +110,7 @@ class SearchViewmodel @Inject constructor(
                     _searchGenre.value = it as MutableList<Genre>
 
                 },
-                onFailure = { Log.d(MainViewModel.TAG, it.message ?: "not load") }
+                onFailure = { Log.d(TAG, it.message ?: "not load") }
             )
         }
 
