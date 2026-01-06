@@ -7,7 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.skillsinema.DataRepository
 import com.example.skillsinema.domain.GetSeasonsUseCase
 import com.example.skillsinema.entity.ModelSeasons
-import com.example.skillsinema.ui.main.home.MainViewModel
+import com.example.skillsinema.presentation.ui.home.MainViewModel
+
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -57,7 +58,7 @@ class SerialSeasonsViewModel @Inject constructor(
                     showEpisodes()
 
                 },
-                onFailure = { Log.d(MainViewModel.TAG, it.message ?: "not load") }
+                onFailure = { }
             )
         }
     }
@@ -83,7 +84,7 @@ class SerialSeasonsViewModel @Inject constructor(
                     showEpisodes()
                     _seasons.value = it.items
                 },
-                onFailure = { Log.d(MainViewModel.TAG, it.message ?: "not load") }
+                onFailure = {  }
             )
         }
     }
