@@ -12,7 +12,7 @@ import com.example.skillsinema.entity.Film
 import com.example.skillsinema.entity.ModelSeasons
 import javax.inject.Inject
 
-class AdapterSeasons @Inject constructor(
+class AdapterSeasons (
     private val onClick: (ModelSeasons.Item) -> Unit
 ) :
     ListAdapter<ModelSeasons.Item, RecyclerView.ViewHolder>(DiffUtilCallback()) {
@@ -52,7 +52,7 @@ class AdapterSeasons @Inject constructor(
         }
     }
 
-    class ViewHolder @Inject constructor(
+    class ViewHolder (
         private val binding: SeasonItemBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 

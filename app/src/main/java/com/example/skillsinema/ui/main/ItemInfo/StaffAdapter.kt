@@ -21,7 +21,7 @@ import com.example.skillsinema.ui.main.ItemInfo.StaffAdapter.Const.NOEND
 import com.example.skillsinema.ui.main.home.TypeItem
 import javax.inject.Inject
 
-class StaffAdapter @Inject constructor(
+class StaffAdapter (
     private val onClick: (ModelStaff.ModelStaffItem, TypeItem) -> Unit
 )    :ListAdapter<ModelStaff.ModelStaffItem, RecyclerView.ViewHolder>(DiffUtilCallback()) {
 
@@ -100,7 +100,7 @@ class StaffAdapter @Inject constructor(
     }
 
 
-    class MyViewHolder @Inject constructor(
+    class MyViewHolder (
         private var binding1: ActorItemBinding
     ) : RecyclerView.ViewHolder(binding1.root) {
         fun bind(film: ModelStaff.ModelStaffItem) {
@@ -115,7 +115,7 @@ class StaffAdapter @Inject constructor(
     }
 
 
-    class MyViewHolder2 @Inject constructor(
+    class MyViewHolder2 (
         private var binding2: SecondItemBinding
     ) : RecyclerView.ViewHolder(binding2.root) {
         fun bind() {

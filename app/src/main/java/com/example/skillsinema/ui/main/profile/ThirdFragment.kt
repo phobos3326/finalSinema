@@ -9,22 +9,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.skillsinema.R
 import com.example.skillsinema.dao.CollectionsEntity
 import com.example.skillsinema.dao.InterestedItemEntity
 import com.example.skillsinema.databinding.FragmentThirdBinding
-import com.example.skillsinema.ui.main.home.FilmographyFragment
 import com.example.skillsinema.ui.main.home.RVDataType
 import com.example.skillsinema.ui.main.home.TypeItem
+
 import com.example.skillsinema.ui.main.profile.menu.AlertDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint

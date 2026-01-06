@@ -20,7 +20,7 @@ import com.example.skillsinema.ui.main.home.TypeItem
 import javax.inject.Inject
 
 
-class FullGalerieAdapter @Inject constructor(
+class FullGalerieAdapter (
     private val onClick: (ModelGalerie.Item) -> Unit,
 
     ) :
@@ -74,7 +74,7 @@ class FullGalerieAdapter @Inject constructor(
         }
     }
 
-    class MyViewHolder @Inject constructor(
+    class MyViewHolder (
         private var binding1: FullGalerieItemBinding
     ) : RecyclerView.ViewHolder(binding1.root) {
         fun bind(film: ModelGalerie.Item) {
@@ -92,7 +92,7 @@ class FullGalerieAdapter @Inject constructor(
     }
 
 
-    class MyViewHolder2 @Inject constructor(
+    class MyViewHolder2 (
         private var binding2: SecondItemBinding
     ) : RecyclerView.ViewHolder(binding2.root) {
         fun bind() {

@@ -1,8 +1,9 @@
 package com.example.skillsinema.ui.main.home
 
-enum class RVDataSource {
+enum class RVDataType {
     PREMIERES,
     TOP250,
     COUNTRYWITHGENRE,
-    SERIALS
+    SERIALS,
+    COLLECTION
 }
