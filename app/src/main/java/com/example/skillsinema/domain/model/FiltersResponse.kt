@@ -7,11 +7,13 @@ data class FiltersResponse(
 )
 
 data class Genre(
+
+    val genre: String,
     val id: Int,
-    val genre: String
 )
 
 data class Country(
+
+    val country: String,
     val id: Int,
-    val country: String
 )
