@@ -1,4 +1,4 @@
-/*
+package com.example.skillsinema.ui.main.home/*
 package com.example.skillsinema.presentation.ui.home
 
 import androidx.lifecycle.viewModelScope
