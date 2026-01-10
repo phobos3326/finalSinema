@@ -21,7 +21,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    private const val BASE_URL = "https://kinopoiskapiunofficial.tech/api/v2.2/"
+    private const val BASE_URL = "https://kinopoiskapiunofficial.tech/api/"
     private const val API_KEY = "1006c25a-038b-47b4-b9f9-341f208b4ac3" // Лучше хранить в BuildConfig
 
     @Provides

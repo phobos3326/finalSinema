@@ -1,5 +1,7 @@
-package com.example.skillsinema.ui.main.home/*
-package com.example.skillsinema.presentation.ui.home
+/*
+package com.example.skillsinema.ui.main.home
+
+
 
 import androidx.lifecycle.viewModelScope
 import com.example.skillsinema.domain.model.Film
@@ -7,6 +9,7 @@ import com.example.skillsinema.domain.usecase.GetFilmsByCategoryUseCase
 import com.example.skillsinema.domain.usecase.GetRandomFiltersUseCase
 import com.example.skillsinema.presentation.base.BaseViewModel
 import com.example.skillsinema.presentation.ui.adapters.FilmListItem
+import com.example.skillsinema.presentation.ui.home.MainUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch

@@ -1,5 +1,6 @@
 package com.example.skillsinema.domain.datasource
 
+import android.util.Log
 import com.example.skillsinema.domain.model.Film
 import com.example.skillsinema.domain.model.FilterParams
 import com.example.skillsinema.domain.repository.FilmRepository
@@ -36,8 +37,10 @@ class FilmsDataSource @Inject constructor(
     suspend fun loadPremieres() {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
+
         val monthSymbols = DateFormatSymbols(Locale.ENGLISH)
         val month = monthSymbols.months[calendar.get(Calendar.MONTH)].uppercase()
+        Log.d("PREMIERES", "year=$year month=$month")
 
         val films = filmRepository.getPremieres(year, month)
         _premieresFlow.emit(films)

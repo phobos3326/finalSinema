@@ -26,6 +26,7 @@ class FilterMapper @Inject constructor() {
         }
     }
 
+
     private fun mapCountryDto(dto: Country): Country? {
         return if (dto.id != null) {  // ← Проверка на null
             Country(

@@ -134,7 +134,7 @@ class Repository @Inject constructor(
     interface ApiInterface {
         @Headers("X-API-KEY: $api_key")
 
-        @GET("films/premieres?")
+        @GET("films/premieres")
         suspend fun getFilms(
             @Query("year") year: Int,
             @Query("month") month: String
