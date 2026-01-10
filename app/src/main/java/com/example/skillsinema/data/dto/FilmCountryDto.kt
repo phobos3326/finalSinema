@@ -4,7 +4,6 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class GenreDto(
-    @Json(name = "id") val id: Int? = null,
-    @Json(name = "genre") val genre: String? = null
+data class FilmCountryDto(
+    @Json(name="country") val country: String? = null
 )

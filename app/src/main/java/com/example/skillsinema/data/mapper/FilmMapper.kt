@@ -55,20 +55,9 @@ class FilmMapper @Inject constructor() {
     }
 
 
-    private fun mapGenre(dto: GenreDto): Genre? {
-        return if (dto.id != null) {
-            Genre(id = dto.id, genre = dto.genre)
-        } else {
-            null
-        }
-    }
+    private fun mapGenre(dto: FilmGenreDto): Genre? =
+        dto.genre?.let { Genre(id = 0, genre = it) }
 
-
-    private fun mapCountry(dto: CountryDto): Country? {
-        return if (dto.id != null) {
-            Country(id = dto.id, country = dto.country)
-        } else {
-            null
-        }
-    }
+    private fun mapCountry(dto: FilmCountryDto): Country? =
+        dto.country?.let { Country(id = 0, country = it) }
 }
