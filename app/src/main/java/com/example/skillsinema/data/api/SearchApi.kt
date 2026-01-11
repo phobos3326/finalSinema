@@ -1,6 +1,6 @@
 package com.example.skillsinema.data.api
 
-import com.example.skillsinema.data.dto.SearchResponseDto
+import com.example.skillsinema.data.remote.response.SearchResponseDto
 import retrofit2.http.*
 
 interface SearchApi {

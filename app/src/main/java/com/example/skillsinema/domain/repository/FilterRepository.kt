@@ -1,8 +1,7 @@
 package com.example.skillsinema.domain.repository
 
-import com.example.skillsinema.data.model.ModelFilter
-import retrofit2.Response
+import com.example.skillsinema.domain.model.FiltersResponse
 
 interface FilterRepository {
-    suspend fun getFilters(): Response<ModelFilter>
+    suspend fun getFilters(): FiltersResponse
 }

@@ -1,7 +1,7 @@
 package com.example.skillsinema.data.mapper
 
 
-import com.example.skillsinema.data.dto.SearchResponseDto
+import com.example.skillsinema.data.remote.response.SearchResponseDto
 import com.example.skillsinema.domain.model.Film
 import javax.inject.Inject
 
@@ -10,6 +10,6 @@ class SearchMapper @Inject constructor(
 ) {
 
     fun mapSearchResponse(dto: SearchResponseDto): List<Film> {
-        return filmMapper.mapFilmList(dto.items)
+        return filmMapper.mapFilmList(dto.films)
     }
 }

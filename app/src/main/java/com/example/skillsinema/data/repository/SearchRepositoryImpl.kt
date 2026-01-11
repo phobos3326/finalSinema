@@ -13,6 +13,6 @@ class SearchRepositoryImpl @Inject constructor(
 
     override suspend fun searchFilms(query: String, page: Int): List<Film> {
         val response = api.searchFilms(query, page)
-        return mapper.mapFilmList(response.items)
+        return mapper.mapFilmList(response.films)
     }
 }

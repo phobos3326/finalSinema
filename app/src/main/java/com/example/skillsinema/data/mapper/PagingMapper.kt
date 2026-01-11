@@ -1,8 +1,8 @@
 package com.example.skillsinema.data.mapper
 
 import com.example.skillsinema.data.dto.PremiereResponseDto
-import com.example.skillsinema.data.dto.TopFilmsResponseDto
 import com.example.skillsinema.data.dto.FilteredFilmsResponseDto
+import com.example.skillsinema.data.remote.response.TopFilmsResponseDto
 import com.example.skillsinema.domain.model.Film
 import javax.inject.Inject
 
