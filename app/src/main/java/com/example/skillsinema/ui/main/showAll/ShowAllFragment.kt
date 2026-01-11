@@ -6,14 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.skillsinema.R
 import com.example.skillsinema.databinding.FragmentShowAllBinding
-
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -23,7 +25,7 @@ class ShowAllFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: ShowAllViewModel by viewModels()
-    private lateinit var showAllAdapter: ShowAllAdapter
+    private lateinit var showAllAdapter: AdapterPagedFilm
 
     private val category: String by lazy {
         arguments?.getString("category") ?: "premieres"
@@ -40,17 +42,14 @@ class ShowAllFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // ❌ Не настраиваем Toolbar
         setupAdapter()
-       // setupSwipeRefresh()
-        observeState()
-
-        viewModel.loadFilms(category)
+        observePaging()
     }
 
     private fun setupAdapter() {
-        showAllAdapter = ShowAllAdapter { filmId ->
-            navigateToFilmDetails(filmId)
+        showAllAdapter = AdapterPagedFilm { film, _ ->
+            // подставь реальный id из domain Film
+            navigateToFilmDetails(film.kinopoiskId)
         }
 
         binding.SHOWALLRecyclerView.apply {
@@ -59,47 +58,20 @@ class ShowAllFragment : Fragment() {
         }
     }
 
-   /* private fun setupSwipeRefresh() {
-        binding.swipeRefresh.setOnRefreshListener {
-            viewModel.loadFilms(category)
-        }
-    }*/
-
-    private fun observeState() {
+    private fun observePaging() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.state.collect { state ->
-                renderState(state)
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.filmsPaging(category).collectLatest { pagingData ->
+                    showAllAdapter.submitData(pagingData)
+                }
             }
-        }
-    }
-
-    private fun renderState(state: ShowAllUiState) {
-       /* binding.swipeRefresh.isRefreshing = false
-        binding.progressLoading.visibility = if (state.isLoading) View.VISIBLE else View.GONE*/
-
-        if (state.films.isNotEmpty()) {
-            binding.SHOWALLRecyclerView.visibility = View.VISIBLE
-           // binding.tvEmptyState.visibility = View.GONE
-            showAllAdapter.submitList(state.films)
-        } else {
-            binding.SHOWALLRecyclerView.visibility = if (state.isLoading) View.GONE else View.VISIBLE
-            //binding.tvEmptyState.visibility = if (state.isLoading) View.GONE else View.VISIBLE
-        }
-
-        state.error?.let { error ->
-            showError(error)
         }
     }
 
     private fun navigateToFilmDetails(filmId: Int) {
         try {
-            val bundle = Bundle().apply {
-                putInt("film_id", filmId)
-            }
-            findNavController().navigate(
-                R.id.action_showAllFragment_to_itemInfoFragment,
-                bundle
-            )
+            val bundle = Bundle().apply { putInt("film_id", filmId) }
+            findNavController().navigate(R.id.action_showAllFragment_to_itemInfoFragment, bundle)
         } catch (e: Exception) {
             showError(e.message ?: "Ошибка навигации")
         }
@@ -107,7 +79,7 @@ class ShowAllFragment : Fragment() {
 
     private fun showError(message: String) {
         Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG)
-            .setAction("OK") { }
+            .setAction("OK") {}
             .show()
     }
 

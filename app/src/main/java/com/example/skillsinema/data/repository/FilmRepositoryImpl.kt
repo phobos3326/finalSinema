@@ -1,20 +1,56 @@
 package com.example.skillsinema.data.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.example.skillsinema.data.api.KinopoiskApi
 import com.example.skillsinema.data.mapper.FilmMapper
 import com.example.skillsinema.data.mapper.FiltersMapper
+import com.example.skillsinema.data.paging.FilteredFilmPagingSource
+import com.example.skillsinema.data.paging.PremieresPagingSource
+import com.example.skillsinema.data.paging.SerialsPagingSource
+import com.example.skillsinema.data.paging.TopFilmsPagingSource
 import com.example.skillsinema.domain.model.Film
 import com.example.skillsinema.domain.model.FilmDetails
 import com.example.skillsinema.domain.model.FilterParams
 import com.example.skillsinema.domain.model.FiltersResponse
 import com.example.skillsinema.domain.repository.FilmRepository
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class FilmRepositoryImpl @Inject constructor(
     private val api: KinopoiskApi,
     private val filmMapper: FilmMapper,
-    private val filtersMapper: FiltersMapper
+    private val filtersMapper: FiltersMapper,
+
 ) : FilmRepository {
+
+
+
+
+    override fun getPremieresPaged(year: Int, month: String): Flow<PagingData<Film>> =
+        Pager(
+            config = PagingConfig(pageSize = 20, enablePlaceholders = false),
+            pagingSourceFactory = { PremieresPagingSource(api, filmMapper, year, month) }
+        ).flow
+
+    override fun getTopFilmsPaged(): Flow<PagingData<Film>> =
+        Pager(
+            config = PagingConfig(pageSize = 20, enablePlaceholders = false),
+            pagingSourceFactory = { TopFilmsPagingSource(api, filmMapper) }
+        ).flow
+
+    override fun getSerialsPaged(): Flow<PagingData<Film>> =
+        Pager(
+            config = PagingConfig(pageSize = 20, enablePlaceholders = false),
+            pagingSourceFactory = { SerialsPagingSource(api, filmMapper) }
+        ).flow
+
+    override fun getFilteredFilmsPaged(params: FilterParams): Flow<PagingData<Film>> =
+        Pager(
+            config = PagingConfig(pageSize = 20, enablePlaceholders = false),
+            pagingSourceFactory = { FilteredFilmPagingSource(this, params) }
+        ).flow
 
     override suspend fun getFilters(): FiltersResponse {
         val response = api.getFilters()

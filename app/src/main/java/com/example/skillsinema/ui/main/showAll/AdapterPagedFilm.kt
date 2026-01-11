@@ -10,10 +10,11 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.bumptech.glide.Glide
 
-import com.example.skillsinema.entity.Film
+//import com.example.skillsinema.entity.Film
 
 import com.example.skillsinema.databinding.ItemBinding
 import com.example.skillsinema.databinding.SecondItemBinding
+import com.example.skillsinema.domain.model.Film
 import com.example.skillsinema.ui.main.home.TypeItem
 
 import javax.inject.Inject
