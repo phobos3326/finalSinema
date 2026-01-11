@@ -23,6 +23,9 @@ import com.example.skillsinema.databinding.FragmentItemInfoBinding
 import com.example.skillsinema.entity.Film
 import com.example.skillsinema.entity.ModelFilmDetails
 import com.example.skillsinema.entity.ModelStaff
+import com.example.skillsinema.ui.main.ItemInfo.GalerieAdapter
+import com.example.skillsinema.ui.main.ItemInfo.StaffAdapter
+import com.example.skillsinema.ui.main.ItemInfo.StateItemFilmInfo
 import com.example.skillsinema.ui.main.home.AdapterBestFilm
 import com.example.skillsinema.ui.main.home.RVDataType
 import com.example.skillsinema.ui.main.home.TypeItem
@@ -46,10 +49,10 @@ class ItemInfoFragment : Fragment() {
 
     val viewModel: ItemInfoViewModel by viewModels()
 
-    val adapterActor = StaffAdapter (
+    val adapterActor = StaffAdapter(
         //onItemActorClick(it)
 
-        onClick = { modelStaffItem , typeItem-> onItemActorClick(modelStaffItem, typeItem) },
+        onClick = { modelStaffItem, typeItem -> onItemActorClick(modelStaffItem, typeItem) },
     )
     val adapterNoActor =StaffAdapter (
         //onItemActorClick(it)
@@ -108,9 +111,10 @@ class ItemInfoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val id = arguments?.getInt("Arg")
+       // val id = arguments?.getInt("Arg")
 
-
+        val id = requireArguments().getInt("film_id") // или как ты кладёшь
+        viewModel.start(id)
 
         val bottomSheetDialogFragment = BottomSheetDialogFragment()
 
@@ -145,7 +149,7 @@ class ItemInfoFragment : Fragment() {
         }
 
         binding.flagImageView.setOnClickListener {
-            viewModel.insertCollection()
+            //viewModel.insertCollection()
         }
 
         lifecycleScope.launch {

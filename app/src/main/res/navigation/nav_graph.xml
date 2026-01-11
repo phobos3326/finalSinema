@@ -19,7 +19,8 @@
     </fragment>
     <fragment
         android:id="@+id/itemInfoFragment"
-        android:name="com.example.skillsinema.ui.main.ItemInfo.ItemInfoFragment"
+
+        android:name="com.example.skillsinema.presentation.ui.itemInfoNew.ItemInfoFragment"
         android:label="fragment_item_info"
         tools:layout="@layout/fragment_item_info" >
         <action
@@ -37,6 +38,11 @@
         <action
             android:id="@+id/action_itemInfoFragment_to_collectionDialog"
             app:destination="@id/collectionDialog" />
+
+        <argument
+            android:name="filmId"
+            app:argType="integer"
+            android:defaultValue="0" />
     </fragment>
     <fragment
         android:id="@+id/find_fragment"

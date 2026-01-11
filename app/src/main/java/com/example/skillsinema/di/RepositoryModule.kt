@@ -3,6 +3,7 @@ package com.example.skillsinema.di
 import com.example.skillsinema.data.repository.*
 import com.example.skillsinema.domain.collections.CollectionsRepository
 import com.example.skillsinema.domain.repository.*
+import com.example.skillsinema.repository.CollectionsRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

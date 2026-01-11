@@ -50,6 +50,27 @@ class ItemInfoViewModel @Inject constructor(
     private val toggleFilmInCollection: ToggleFilmInCollectionUseCase,
 ) : BaseViewModel() {
 
+
+
+
+    private var started = false
+
+    fun start(filmId: Int) {
+        if (started) return
+        if (filmId <= 0) return
+        started = true
+
+        setValue(filmId)
+
+        viewModelScope.launch {
+            loadStaff()
+            loadSimilarFilm()
+            _state.value = StateItemFilmInfo.FilmState
+            loadFilm()
+            refreshCollections()
+        }
+    }
+
     // ===== Collections (UI state) =====
     private val _collectionUi = MutableStateFlow<List<CollectionsUiModel>>(emptyList())
     val collectionUi = _collectionUi.asStateFlow()
@@ -111,15 +132,7 @@ class ItemInfoViewModel @Inject constructor(
         dataRepository.seriesID = value
     }
 
-    init {
-        viewModelScope.launch {
-            loadStaff()
-            loadSimilarFilm()
-            _state.value = StateItemFilmInfo.FilmState
-            loadFilm()
-            refreshCollections()
-        }
-    }
+
 
     fun isertItemToDb(type: TypeItem, id: Int) {
         viewModelScope.launch {
