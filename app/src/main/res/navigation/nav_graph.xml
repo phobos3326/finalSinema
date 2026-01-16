@@ -22,7 +22,7 @@
 
         android:name="com.example.skillsinema.presentation.ui.itemInfoNew.ItemInfoFragment"
         android:label="fragment_item_info"
-        tools:layout="@layout/fragment_item_info" >
+        tools:layout="@layout/fragment_item_info">
         <action
             android:id="@+id/action_itemInfoFragment_self"
             app:destination="@id/itemInfoFragment" />
@@ -41,8 +41,8 @@
 
         <argument
             android:name="filmId"
-            app:argType="integer"
-            android:defaultValue="0" />
+            android:defaultValue="0"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/find_fragment"
@@ -114,15 +114,13 @@
         android:label="CollectionDialog" />
     <fragment
         android:id="@+id/showImageFragment"
-        android:name="com.example.skillsinema.ui.main.galerie.ShowImageFragment"
+        android:name="com.example.skillsinema.presentation.ui.ShowImageFragment"
         android:label="fragment_show_image"
-        tools:layout="@layout/fragment_show_image" />
-    <!--<fragment
-        android:id="@+id/second_fragment"
-        android:name="com.example.skillsinema.ui.main.find.SecondFragment"
-        tools:layout="@layout/fragment_second">
-        <action
-            android:id="@+id/second_fragment_to_itemInfoFragment"
-            app:destination="@id/itemInfoFragment" />
-    </fragment>-->
+        tools:layout="@layout/fragment_show_image">
+
+        <argument
+            android:name="imageUrl"
+            app:argType="string" />
+    </fragment>
+
 </navigation>

@@ -13,4 +13,7 @@
     <string name="back_button">Back</string>
     <string name="complete">готово</string>
 
+    <string name="full_image">Full image</string>
+    <string name="close">Close</string>
+
 </resources>
