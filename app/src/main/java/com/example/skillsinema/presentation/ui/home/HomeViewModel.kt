@@ -1,3 +1,4 @@
+/*
 package com.example.skillsinema.presentation.ui.home
 
 import androidx.lifecycle.viewModelScope
@@ -27,4 +28,4 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
-}
+}*/

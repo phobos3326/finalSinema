@@ -1,112 +1,72 @@
 package com.example.skillsinema.ui.main.galerie
 
-
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
-import com.example.skillsinema.R
-import com.example.skillsinema.databinding.FullGalerieItemBinding
-import com.example.skillsinema.databinding.SecondItemBinding
-import com.example.skillsinema.entity.Film
+import com.example.skillsinema.databinding.GalerieItemBinding
+
 import com.example.skillsinema.entity.ModelGalerie
-import com.example.skillsinema.ui.main.galerie.FullGalerieAdapter.Const.END
-import com.example.skillsinema.ui.main.galerie.FullGalerieAdapter.Const.NOEND
-import com.example.skillsinema.ui.main.home.TypeItem
-import javax.inject.Inject
 
+class FullGalerieAdapter(
+    private val onClick: (String) -> Unit
+) : PagingDataAdapter<ModelGalerie.Item, FullGalerieAdapter.ViewHolder>(DiffCallback()) {
 
-class FullGalerieAdapter (
-    private val onClick: (ModelGalerie.Item) -> Unit,
-
-    ) :
-    PagingDataAdapter<ModelGalerie.Item, RecyclerView.ViewHolder>(DiffUtilCallback()) {
-
-
-    class DiffUtilCallback : DiffUtil.ItemCallback<ModelGalerie.Item>() {
-        override fun areItemsTheSame(
-            oldItem: ModelGalerie.Item,
-            newItem: ModelGalerie.Item
-        ): Boolean = oldItem == newItem
-
-        override fun areContentsTheSame(
-            oldItem: ModelGalerie.Item,
-            newItem: ModelGalerie.Item
-        ): Boolean = oldItem == newItem
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val binding = GalerieItemBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+        return ViewHolder(binding, onClick)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val binding = FullGalerieItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        // val binding2 = SecondItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-
-        return MyViewHolder(binding)
-
-
-    }
-
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-
-
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
-
-        (holder as MyViewHolder).bind(item!!)
-
-        holder.itemView.setOnClickListener {
-               onClick(item)
-
-
-        }
-
-
-    }
-
-
-    override fun getItemViewType(position: Int): Int {
-        return if (position == itemCount - 1 && itemCount >= 19) {
-            END
-        } else {
-            NOEND
+        if (item != null) {
+            holder.bind(item)
         }
     }
 
-    class MyViewHolder (
-        private var binding1: FullGalerieItemBinding
-    ) : RecyclerView.ViewHolder(binding1.root) {
-        fun bind(film: ModelGalerie.Item) {
+    class ViewHolder(
+        private val binding: GalerieItemBinding,
+        private val onClick: (String) -> Unit
+    ) : RecyclerView.ViewHolder(binding.root) {
 
-            film.let {
-                Glide.with(binding1.poster11)
+        fun bind(item: ModelGalerie.Item) {
+            // Загружаем изображение
+            Glide.with(binding.root.context)
+                .load(item.imageUrl)
+                .centerCrop()
+                .into(binding.poster)
 
-                    .load(it.previewUrl)
-                    .placeholder(R.drawable.a4___1)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    //.preload(10,10)
-                    .into(binding1.poster11)
+            // Клик на изображение
+            binding.itemView .setOnClickListener {
+                onClick(item.imageUrl)
+            }
+
+            // Можно также сделать клик на весь элемент
+            binding.root.setOnClickListener {
+                onClick(item.imageUrl)
             }
         }
     }
 
-
-    class MyViewHolder2 (
-        private var binding2: SecondItemBinding
-    ) : RecyclerView.ViewHolder(binding2.root) {
-        fun bind() {
-            //myViewType.typePosition = END
-            //myViewType.hasImage = HasEnd.TRUE
-            // binding2.textView2.text = myViewType.title
-
+    class DiffCallback : DiffUtil.ItemCallback<ModelGalerie.Item>() {
+        override fun areItemsTheSame(
+            oldItem: ModelGalerie.Item,
+            newItem: ModelGalerie.Item
+        ): Boolean {
+            return oldItem.imageUrl == newItem.imageUrl
         }
-    }
 
-
-
-    private object Const {
-        const val END = 0 // random unique value
-        const val NOEND = 1
+        override fun areContentsTheSame(
+            oldItem: ModelGalerie.Item,
+            newItem: ModelGalerie.Item
+        ): Boolean {
+            return oldItem == newItem
+        }
     }
 }

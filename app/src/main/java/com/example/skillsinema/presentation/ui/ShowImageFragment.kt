@@ -33,11 +33,24 @@ class ShowImageFragment : Fragment() {
 
         val imageUrl = args.imageUrl
 
+        if (imageUrl.isEmpty()) {
+            findNavController().navigateUp()
+            return
+        }
+
+        // Загружаем полноэкранное изображение
         Glide.with(this)
             .load(imageUrl)
+            .fitCenter()
             .into(binding.fullImageView)
 
+        // Закрытие по кнопке
         binding.closeButton.setOnClickListener {
+            findNavController().navigateUp()
+        }
+
+        // Можно добавить закрытие по клику на изображение
+        binding.fullImageView.setOnClickListener {
             findNavController().navigateUp()
         }
     }
@@ -46,7 +59,4 @@ class ShowImageFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
-    
-
 }

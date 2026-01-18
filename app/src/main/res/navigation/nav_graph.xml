@@ -120,7 +120,9 @@
 
         <argument
             android:name="imageUrl"
-            app:argType="string" />
+            app:argType="string"
+            android:defaultValue="" />
     </fragment>
+
 
 </navigation>
