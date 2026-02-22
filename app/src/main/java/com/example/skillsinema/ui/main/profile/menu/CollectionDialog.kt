@@ -134,9 +134,7 @@ class CollectionDialog : BottomSheetDialogFragment() {
 
     fun onItemDelete(item: CollectionsEntity) {
 
-        item.id.let {
-            viewModel.deleteFilmFromDB(item)
-        }
+        viewModel.deleteFilmFromDB(item)
 
     }
 

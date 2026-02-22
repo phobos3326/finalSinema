@@ -5,9 +5,8 @@ import retrofit2.http.*
 
 interface StaffApi {
 
-   // @Headers("X-API-KEY: ${KinopoiskApi.API_KEY}")
-    @GET("films/{id}/staff")
+    @GET("v1/staff")
     suspend fun getStaff(
-        @Path("id") filmId: Int
+        @Query("filmId") filmId: Int
     ): List<StaffDto>
 }

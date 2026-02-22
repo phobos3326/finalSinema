@@ -1,6 +1,5 @@
 package com.example.skillsinema
 
-import com.example.skillsinema.domain.FiltersUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch

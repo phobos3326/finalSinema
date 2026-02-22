@@ -1,26 +1,24 @@
 package com.example.skillsinema.presentation.ui.itemInfoNew
 
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.skillsinema.DataRepository
 import com.example.skillsinema.dao.LikedFilmRepository
 import com.example.skillsinema.dao.LikedFilms
-import com.example.skillsinema.datasource.GalerieDataSource
-import com.example.skillsinema.domain.GetFilmDetailUseCase
-import com.example.skillsinema.domain.GetStaffUseCase
 import com.example.skillsinema.domain.LoadItemToDB
-import com.example.skillsinema.domain.SimilarFilmsUsecase
 import com.example.skillsinema.domain.collections.usecase.CreateCollectionUseCase
 import com.example.skillsinema.domain.collections.usecase.GetCollectionsUiUseCase
 import com.example.skillsinema.domain.collections.usecase.ToggleFilmInCollectionUseCase
+import com.example.skillsinema.domain.model.GalleryImage
+import com.example.skillsinema.domain.usecase.film.GetFilmDetailsUseCase
+import com.example.skillsinema.domain.usecase.film.GetSimilarFilmsUseCase
+import com.example.skillsinema.domain.usecase.gallery.GetGalleryImagesUseCase
+import com.example.skillsinema.domain.usecase.staff.GetStaffUseCase
+import androidx.lifecycle.MutableLiveData
 import com.example.skillsinema.entity.Film
 import com.example.skillsinema.entity.ModelFilmDetails
-import com.example.skillsinema.entity.ModelGalerie
 import com.example.skillsinema.entity.ModelStaff
 import com.example.skillsinema.presentation.base.BaseViewModel
 import com.example.skillsinema.ui.main.ItemInfo.StateItemFilmInfo
@@ -37,44 +35,79 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ItemInfoViewModel @Inject constructor(
-    private val dataFilm: GetFilmDetailUseCase,
-    private val staffUseCase: GetStaffUseCase,
-    private val galerieDataSource: GalerieDataSource,
+    private val getFilmDetails: GetFilmDetailsUseCase,
+    private val getStaff: GetStaffUseCase,
+    private val getGalleryImages: GetGalleryImagesUseCase,
+    private val getSimilarFilms: GetSimilarFilmsUseCase,
     private val dataRepository: DataRepository,
-    private val similarFilmsUsecase: SimilarFilmsUsecase,
     private val likedFilmRepository: LikedFilmRepository,
     private val loadItemToDB: LoadItemToDB,
-    // Collections (SOLID)
     private val getCollectionsUi: GetCollectionsUiUseCase,
     private val createCollection: CreateCollectionUseCase,
     private val toggleFilmInCollection: ToggleFilmInCollectionUseCase,
 ) : BaseViewModel() {
 
-
-
-
     private var started = false
+
+    // ===== Film LiveData (для совместимости с Fragment) =====
+    private val _film = MutableLiveData<ModelFilmDetails>()
+    val film = _film
+
+    // ===== Staff state =====
+    private val _staff = MutableStateFlow<List<ModelStaff.ModelStaffItem>>(emptyList())
+    val staff = _staff.asStateFlow()
+
+    private val _noActorStaff = MutableStateFlow<List<ModelStaff.ModelStaffItem>>(emptyList())
+    val noActorStaff = _noActorStaff.asStateFlow()
+
+    // ===== Similar films =====
+    private val _similar = MutableStateFlow<List<Film>>(emptyList())
+    val similar = _similar.asStateFlow()
+
+    // ===== Gallery =====
+    private val _pagedGalerie = MutableStateFlow<Flow<PagingData<GalleryImage>>?>(null)
+    val pagedGalerie = _pagedGalerie.asStateFlow()
+
+    // ===== Screen state =====
+    private val _state = MutableStateFlow<StateItemFilmInfo>(StateItemFilmInfo.FilmState)
+    val state = _state.asStateFlow()
+
+    // ===== Liked state =====
+    private val _isLikedState = MutableStateFlow(false)
+    val isLikedState = _isLikedState.asStateFlow()
+
+    // ===== Collections =====
+    private val _collectionUi = MutableStateFlow<List<CollectionsUiModel>>(emptyList())
+    val collectionUi = _collectionUi.asStateFlow()
 
     fun start(filmId: Int) {
         if (started) return
         if (filmId <= 0) return
         started = true
-
         setValue(filmId)
 
+        _pagedGalerie.value = getGalleryImages(filmId, "STILL").cachedIn(viewModelScope)
+
         viewModelScope.launch {
-            loadStaff()
-            loadSimilarFilm()
+            loadFilm(filmId)
+            loadStaff(filmId)
+            loadSimilarFilms(filmId)
             _state.value = StateItemFilmInfo.FilmState
-            loadFilm()
             refreshCollections()
         }
     }
 
-    // ===== Collections (UI state) =====
-    private val _collectionUi = MutableStateFlow<List<CollectionsUiModel>>(emptyList())
-    val collectionUi = _collectionUi.asStateFlow()
+    fun setValue(filmId: Int) {
+        dataRepository.id = filmId
+    }
 
+    fun getValue(): Int = dataRepository.id
+
+    fun setSeriesValue(value: Int) {
+        dataRepository.seriesID = value
+    }
+
+    // ===== Collections =====
     fun insertIdtoDB(nameCollection: String) {
         viewModelScope.launch {
             createCollection(nameCollection)
@@ -93,56 +126,10 @@ class ItemInfoViewModel @Inject constructor(
         _collectionUi.value = getCollectionsUi(getValue())
     }
 
-    // ===== Screen state =====
-    private val _state = MutableStateFlow<StateItemFilmInfo>(StateItemFilmInfo.FilmState)
-    val state = _state.asStateFlow()
-
-    private val _isLikedState = MutableStateFlow(false)
-    val isLikedState = _isLikedState.asStateFlow()
-
-    private val _film = MutableLiveData<ModelFilmDetails>()
-    val film = _film
-
-    private val _staff = MutableStateFlow<List<ModelStaff.ModelStaffItem>>(emptyList())
-    val staff = _staff.asStateFlow()
-
-    private val _noActorStaff = MutableStateFlow<List<ModelStaff.ModelStaffItem>>(emptyList())
-    val noActorStaff = _noActorStaff.asStateFlow()
-
-    private val _similar = MutableStateFlow<List<Film>>(emptyList())
-    val similar = _similar.asStateFlow()
-
-    private val _id = MutableStateFlow(0)
-    val id = _id.asStateFlow()
-
-    var actorList = mutableListOf<ModelStaff.ModelStaffItem>()
-    var noActorList = mutableListOf<ModelStaff.ModelStaffItem>()
-
-    fun getValue(): Int {
-        _id.value = dataRepository.id
-        return dataRepository.id
-    }
-
-    fun setValue(value: Int) {
-        dataRepository.id = value
-        _id.value = value
-    }
-
-    fun setSeriesValue(value: Int) {
-        dataRepository.seriesID = value
-    }
-
-
-
-    fun isertItemToDb(type: TypeItem, id: Int) {
-        viewModelScope.launch {
-            loadItemToDB.getItemToDB(type, id)
-        }
-    }
-
+    // ===== Liked =====
     fun insertItemIsLiked(id: Int) {
         viewModelScope.launch {
-            if (_isLikedState.value == false) {
+            if (!_isLikedState.value) {
                 _isLikedState.value = true
                 likedFilmRepository.insertLikedFilm(LikedFilms(id = id))
             } else {
@@ -152,77 +139,154 @@ class ItemInfoViewModel @Inject constructor(
         }
     }
 
-    suspend fun loadFilm() {
+    // ===== DB =====
+    fun isertItemToDb(type: TypeItem, id: Int) {
         viewModelScope.launch {
-            kotlin.runCatching {
-                dataFilm.executeGetFilm(getValue())
+            loadItemToDB.getItemToDB(type, id)
+        }
+    }
+
+    // ===== Loaders =====
+    suspend fun loadFilm(filmId: Int) {
+        viewModelScope.launch {
+            runCatching {
+                getFilmDetails(filmId)
             }.fold(
                 onSuccess = { details ->
-                    _film.value = details
-
+                    // Маппинг domain.model.FilmDetails -> entity.ModelFilmDetails
+                    _film.postValue(ModelFilmDetails(
+                        kinopoiskId = details.kinopoiskId,
+                        nameRu = details.nameRu,
+                        nameEn = details.nameEn,
+                        nameOriginal = details.nameOriginal,
+                        year = details.year,
+                        description = details.description,
+                        shortDescription = details.shortDescription,
+                        posterUrl = details.posterUrl,
+                        posterUrlPreview = details.posterUrlPreview,
+                        coverUrl = details.coverUrl,
+                        logoUrl = details.logoUrl,
+                        genres = details.genres.map { com.example.skillsinema.entity.Film.Genre(it.genre) },
+                        countries = details.countries.map { com.example.skillsinema.entity.Film.Country(it.country) },
+                        ratingKinopoisk = details.ratingKinopoisk,
+                        ratingImdb = details.ratingImdb,
+                        filmLength = details.filmLength,
+                        slogan = details.slogan,
+                        ratingAgeLimits = details.ageLimit,
+                        startYear = details.startYear,
+                        endYear = details.endYear,
+                        serial = details.serial,
+                        completed = details.completed,
+                        has3D = null,
+                        hasImax = null,
+                        imdbId = null,
+                        isTicketsAvailable = null,
+                        lastSync = null,
+                        editorAnnotation = null,
+                        productionStatus = null,
+                        ratingAwait = details.ratingAwait,
+                        ratingAwaitCount = null,
+                        ratingFilmCritics = details.ratingFilmCritics,
+                        ratingFilmCriticsVoteCount = null,
+                        ratingGoodReview = null,
+                        ratingGoodReviewVoteCount = null,
+                        ratingImdbVoteCount = null,
+                        ratingKinopoiskVoteCount = null,
+                        ratingMpaa = null,
+                        ratingRfCritics = null,
+                        ratingRfCriticsVoteCount = null,
+                        reviewsCount = null,
+                        shortFilm = null,
+                        type = null,
+                        webUrl = null,
+                        isLiked = false
+                    ))
                     _state.value = if (details.serial == false) {
                         StateItemFilmInfo.FilmState
                     } else {
                         StateItemFilmInfo.SerialState
                     }
-
                     withContext(Dispatchers.IO) {
                         val db = likedFilmRepository.getAll()
                         _isLikedState.value = db.any { it.id == details.kinopoiskId }
                     }
                 },
                 onFailure = {
-                    Log.d("ItemInfoViewModel", it.message ?: "not load")
+                    Log.d("ItemInfoViewModel", it.message ?: "not load film")
                 }
             )
         }
     }
 
-    fun loadSimilarFilm() {
+    private fun loadStaff(filmId: Int) {
         viewModelScope.launch {
-            kotlin.runCatching {
-                similarFilmsUsecase.getSimilarFilms()
-            }.fold(
-                onSuccess = {
-                    _similar.value = it
-                },
-                onFailure = {
-                    Log.d("ItemInfoViewModel", it.message ?: "not load")
-                }
-            )
-        }
-    }
-
-    private fun loadStaff() {
-        viewModelScope.launch {
-            kotlin.runCatching {
-                staffUseCase.getStaff()
+            runCatching {
+                getStaff(filmId)
             }.fold(
                 onSuccess = { list ->
-                    actorList = mutableListOf()
-                    noActorList = mutableListOf()
-
-                    list?.forEach { item ->
-                        if (item.professionKey == "ACTOR") actorList.add(item)
-                        else noActorList.add(item)
+                    val actorList = mutableListOf<ModelStaff.ModelStaffItem>()
+                    val noActorList = mutableListOf<ModelStaff.ModelStaffItem>()
+                    list.forEach { item ->
+                        val mapped = ModelStaff.ModelStaffItem(
+                            staffId = item.staffId,
+                            nameRu = item.nameRu ?: "",
+                            nameEn = item.nameEn ?: "",
+                            description = item.description,
+                            posterUrl = item.posterUrl ?: "",
+                            professionText = item.professionText ?: "",
+                            professionKey = item.professionKey ?: ""
+                        )
+                        if (item.professionKey == "ACTOR") actorList.add(mapped)
+                        else noActorList.add(mapped)
                     }
-
                     _staff.value = actorList
                     _noActorStaff.value = noActorList
                 },
                 onFailure = {
-                    Log.d("ItemInfoViewModel", it.message ?: "not load")
+                    Log.d("ItemInfoViewModel", it.message ?: "not load staff")
                 }
             )
         }
     }
 
-    val pagedGalerie: Flow<PagingData<ModelGalerie.Item>> =
-        Pager(
-            config = PagingConfig(
-                pageSize = 20,
-                enablePlaceholders = true
-            ),
-            pagingSourceFactory = { galerieDataSource }
-        ).flow.cachedIn(viewModelScope)
+    private fun loadSimilarFilms(filmId: Int) {
+        viewModelScope.launch {
+            runCatching {
+                getSimilarFilms(filmId)
+            }.fold(
+                onSuccess = { list ->
+                    _similar.value = list.map { domainFilm ->
+                        Film(
+                            kinopoiskId = domainFilm.kinopoiskId,
+                            nameRu = domainFilm.nameRu,
+                            nameEn = domainFilm.nameEn,
+                            year = domainFilm.year,
+                            rating = domainFilm.rating?.toString(),
+                            posterUrl = domainFilm.posterUrl,
+                            posterUrlPreview = domainFilm.posterUrlPreview,
+                            genres = domainFilm.genres.map { Film.Genre(it.genre) },
+                            countries = domainFilm.countries.map { Film.Country(it.country) },
+                            filmId = null,
+                            filmLength = null,
+                            ratingVoteCount = null,
+                            type = null,
+                            ratingImdb = null,
+                            isViewed = false,
+                            isLiked = false,
+                            description = null
+                        )
+                    }
+                },
+                onFailure = {
+                    Log.d("ItemInfoViewModel", it.message ?: "not load similar")
+                }
+            )
+        }
+    }
 }
+
+
+
+
+
+

@@ -6,14 +6,12 @@ import retrofit2.http.*
 
 interface ActorApi {
 
-  //  @Headers("X-API-KEY: ${KinopoiskApi.API_KEY}")
-    @GET("staff/{id}")
+    @GET("v1/staff/{id}")
     suspend fun getActorInfo(
         @Path("id") actorId: Int
     ): ActorDto
 
- //   @Headers("X-API-KEY: ${KinopoiskApi.API_KEY}")
-    @GET("staff/{id}/films")
+    @GET("v1/staff/{id}/films")
     suspend fun getActorFilms(
         @Path("id") actorId: Int
     ): List<ActorFilmsDto>

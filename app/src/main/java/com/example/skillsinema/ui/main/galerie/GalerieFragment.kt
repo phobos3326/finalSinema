@@ -52,7 +52,7 @@ class GalerieFragment : Fragment() {
 
     private fun observeGallery() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.pagedFullGalerie.collectLatest { pagingData ->
+            viewModel.getStillFlow().collectLatest { pagingData ->
                 adapter.submitData(pagingData)
             }
         }
@@ -70,3 +70,4 @@ class GalerieFragment : Fragment() {
         _binding = null
     }
 }
+

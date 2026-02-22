@@ -1,14 +1,13 @@
 package com.example.skillsinema.datasource
 
-import com.example.skillsinema.domain.GalerieUseCase
-import com.example.skillsinema.repository.GalerieRepository
+import com.example.skillsinema.data.local.paging.GalleryPagingSource
+import com.example.skillsinema.domain.repository.GalleryRepository
 import javax.inject.Inject
 
 class GalerieDataSourceFactory @Inject constructor(
-    private val repository: GalerieRepository,
-    private val useCase: GalerieUseCase
+    private val repository: GalleryRepository
 ) {
-    fun create(filmId: Int, imageType: String): GalerieDataSource {
-        return GalerieDataSource(repository, useCase)
+    fun create(filmId: Int, imageType: String): GalleryPagingSource {
+        return GalleryPagingSource(repository, filmId, imageType)
     }
 }

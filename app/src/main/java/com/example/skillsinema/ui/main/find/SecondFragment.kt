@@ -57,6 +57,7 @@ import coil.compose.rememberImagePainter
 import com.example.skillsinema.R
 import com.example.skillsinema.databinding.FragmentSecondBinding
 import com.example.skillsinema.entity.Film
+import com.example.skillsinema.domain.model.Film as DomainFilm
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ColorScheme
@@ -245,7 +246,7 @@ class SecondFragment : Fragment() {
     }
 
     @Composable
-    fun FilmListItem(viewModel: SearchViewmodel,  film: Film) {
+    fun FilmListItem(viewModel: SearchViewmodel, film: DomainFilm) {
         Card(
             modifier = Modifier
                 .padding(horizontal = 8.dp, vertical = 8.dp)
@@ -270,7 +271,7 @@ class SecondFragment : Fragment() {
                         .align(Alignment.CenterVertically)
                 ) {
                     film.nameRu?.let { Text(text = it, style = typography.h6) }
-                    Text(text = film.genres?.first()?.genre.toString(), style = typography.caption)
+                    Text(text = film.genres.firstOrNull()?.genre ?: "", style = typography.caption)
 
                 }
             }
@@ -279,7 +280,7 @@ class SecondFragment : Fragment() {
 
 
     @Composable
-    private fun FilmImage(film: Film) {
+    private fun FilmImage(film: DomainFilm) {
         Box {
             Image(
                 painter = rememberImagePainter(film.posterUrlPreview),
@@ -301,7 +302,7 @@ class SecondFragment : Fragment() {
             ) {
                 Text(
 
-                    text = film.ratingImdb.toString(),
+                    text = film.rating?.toString() ?: "",
                     fontSize = 8.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
@@ -412,7 +413,7 @@ class SecondFragment : Fragment() {
         }
     }
 
-    private fun onItemDetailClick(viewModel: SearchViewmodel,  item: Film) {
+    private fun onItemDetailClick(viewModel: SearchViewmodel, item: DomainFilm) {
 
         /*var typeItem = if (item.type == "TV_SERIES") {
             TypeItem.SERIES
@@ -420,26 +421,11 @@ class SecondFragment : Fragment() {
             TypeItem.FILM
         }*/
 
-        var typeItem =TypeItem.FILM
-        when (item.type){
-            "TV_SERIES" -> typeItem = TypeItem.FILM
-            "FILM" -> typeItem = TypeItem.FILM
-             "PERSON" -> typeItem = TypeItem.PERSON
-        }
+        var typeItem = TypeItem.FILM
 
 
-        if (item.kinopoiskId == null) {
-
-
-            item.filmId?.let { bundle.putInt("Arg", it) }
-            item.filmId?.let { viewModel.isertItemToDb(typeItem, it) }
-        } else {
-
-            item.kinopoiskId.let { bundle.putInt("Arg", it) }
-            item.kinopoiskId.let { viewModel.isertItemToDb(typeItem, it) }
-
-//viewModel.insertItem()
-        }
+        bundle.putInt("Arg", item.kinopoiskId)
+        viewModel.isertItemToDb(typeItem, item.kinopoiskId)
         findNavController().navigate(R.id.action_find_fragment_to_itemInfoFragment, bundle)
 
 
@@ -477,3 +463,6 @@ class SecondFragment : Fragment() {
                }*/
     }
 }
+
+
+

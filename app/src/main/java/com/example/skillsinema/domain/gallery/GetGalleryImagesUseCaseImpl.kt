@@ -3,26 +3,26 @@ package com.example.skillsinema.domain.gallery
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.example.skillsinema.datasource.GalerieDataSource
-import com.example.skillsinema.datasource.GalerieDataSourceFactory
-import com.example.skillsinema.entity.ModelGalerie
+import com.example.skillsinema.data.local.paging.GalleryPagingSource
+import com.example.skillsinema.domain.model.GalleryImage
+import com.example.skillsinema.domain.repository.GalleryRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetGalleryImagesUseCaseImpl @Inject constructor(
-    private val galerieDataSourceFactory: GalerieDataSourceFactory
+    private val repository: GalleryRepository
 ) : GetGalleryImagesUseCase {
 
-    override fun invoke(filmId: Int, imageType: String): Flow<PagingData<ModelGalerie.Item>> {
+    override fun invoke(filmId: Int, imageType: String): Flow<PagingData<GalleryImage>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 20,
-                enablePlaceholders = true,
+                enablePlaceholders = false,
                 prefetchDistance = 5,
                 initialLoadSize = 20
             ),
             pagingSourceFactory = {
-                galerieDataSourceFactory.create(filmId, imageType)
+                GalleryPagingSource(repository, filmId, imageType)
             }
         ).flow
     }

@@ -1,6 +1,10 @@
 package com.example.skillsinema.di
 
 import com.example.skillsinema.data.api.KinopoiskApi
+import com.example.skillsinema.data.api.GalleryApi
+import com.example.skillsinema.data.api.ActorApi
+import com.example.skillsinema.data.api.SearchApi
+import com.example.skillsinema.data.api.StaffApi
 
 import com.example.skillsinema.repository.MovieListApi
 import dagger.Module
@@ -88,4 +92,29 @@ object NetworkModule {
     fun provideMovieListApi(retrofit: Retrofit): MovieListApi {
         return retrofit.create(MovieListApi::class.java)
     }
+
+    @Provides
+    @Singleton
+    fun provideGalleryApi(retrofit: Retrofit): GalleryApi {
+        return retrofit.create(GalleryApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideActorApi(retrofit: Retrofit): ActorApi {
+        return retrofit.create(ActorApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSearchApi(retrofit: Retrofit): SearchApi {
+        return retrofit.create(SearchApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideStaffApi(retrofit: Retrofit): StaffApi {
+        return retrofit.create(StaffApi::class.java)
+    }
 }
+

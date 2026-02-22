@@ -11,15 +11,15 @@ import androidx.paging.cachedIn
 import com.example.skillsinema.DataRepository
 import com.example.skillsinema.dao.ItemFilm
 import com.example.skillsinema.dao.ItemRepository
-import com.example.skillsinema.datasource.SearchPagingSource
-import com.example.skillsinema.domain.FiltersUseCase
+import com.example.skillsinema.domain.usecase.filter.GetFiltersUseCase
 import com.example.skillsinema.domain.LoadItemToDB
 
-import com.example.skillsinema.domain.SearchFilmUseCase
+import com.example.skillsinema.domain.repository.SearchRepository
+import com.example.skillsinema.domain.usecase.search.SearchFilmsUseCase
 import com.example.skillsinema.domain.model.Country
 import com.example.skillsinema.domain.model.Genre
 
-import com.example.skillsinema.entity.Film
+import com.example.skillsinema.domain.model.Film as DomainFilm
 import com.example.skillsinema.data.model.ModelFilter
 import com.example.skillsinema.ui.main.home.TypeItem
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -40,9 +40,10 @@ import javax.inject.Inject
 @OptIn(FlowPreview::class)
 class SearchViewmodel @Inject constructor(
     private var dataRepository: DataRepository,
-    private val searchFilmUseCase: SearchFilmUseCase,
+    private val searchFilmsUseCase: SearchFilmsUseCase,
+    private val searchRepository: SearchRepository,
     private val itemRepository: ItemRepository,
-    private val useCase: FiltersUseCase,
+    private val getFiltersUseCase: GetFiltersUseCase,
     private val loadItemToDB: LoadItemToDB,
 ) : ViewModel() {
 
@@ -89,7 +90,7 @@ class SearchViewmodel @Inject constructor(
     fun loadCountries() {
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching {
-                useCase.getFilters().body()?.countries
+                getFiltersUseCase().countries
             }.fold(
                 onSuccess = {
                     _searchCountry.value = it as MutableList<Country>
@@ -103,7 +104,7 @@ class SearchViewmodel @Inject constructor(
     fun loadGenre() {
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching {
-                useCase.getFilters().body()?.genres
+                getFiltersUseCase().genres
             }.fold(
                 onSuccess = {
                     _searchGenre.value = it as MutableList<Genre>
@@ -123,7 +124,7 @@ class SearchViewmodel @Inject constructor(
         }
     }
 
-    var list = emptyList<Film>()
+    var list = emptyList<DomainFilm>()
 
 
   /*  fun insertItem(type: TypeItem, id: Int) {
@@ -145,7 +146,7 @@ class SearchViewmodel @Inject constructor(
     var searchQuery = _searchQuery.asStateFlow()
 
 
-    val searchResults: Flow<PagingData<Film>> = searchQuery
+    val searchResults: Flow<PagingData<DomainFilm>> = searchQuery
         .debounce(300)
         .flatMapLatest { query ->
             Pager(
@@ -153,7 +154,7 @@ class SearchViewmodel @Inject constructor(
                     pageSize = 20,
                     enablePlaceholders = true
                 ),
-                pagingSourceFactory = { SearchPagingSource(searchFilmUseCase, dataRepository) }
+                pagingSourceFactory = { com.example.skillsinema.data.paging.SearchPagingSource(searchRepository, query) }
             ).flow.cachedIn(viewModelScope)
         }
 
@@ -255,3 +256,7 @@ class SearchViewmodel @Inject constructor(
     }
 
 }
+
+
+
+

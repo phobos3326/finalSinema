@@ -2,58 +2,39 @@ package com.example.skillsinema.ui.main.galerie
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.example.skillsinema.datasource.ShootingGalerieDataSourse
-import com.example.skillsinema.datasource.StillGalerieDataSourse
-import com.example.skillsinema.datasource.WallpaperGalerieDataSourse
-import com.example.skillsinema.entity.ModelGalerie
+import com.example.skillsinema.DataRepository
+import com.example.skillsinema.domain.model.GalleryImage
+import com.example.skillsinema.domain.usecase.gallery.GetGalleryImagesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
 class GalerieViewModel @Inject constructor(
-    private val dataSourse: StillGalerieDataSourse,
-    private val shootingGalerieDataSourse: ShootingGalerieDataSourse,
-    private val wallpaperGalerieDataSourse: WallpaperGalerieDataSourse
+    private val getGalleryImages: GetGalleryImagesUseCase,
+    private val dataRepository: DataRepository
 ) : ViewModel() {
 
-    init {
-        viewModelScope.launch {
-          pagedFullGalerie
-        }
+    private val _filmId = MutableStateFlow(0)
+    val filmId = _filmId.asStateFlow()
+
+    fun setFilmId(id: Int) {
+        dataRepository.id = id
+        _filmId.value = id
     }
 
+    fun getFilmId(): Int = dataRepository.id
 
-    val pagedFullGalerie: Flow<PagingData<ModelGalerie.Item>> = Pager(
-        config = PagingConfig(
-            pageSize = 20,
-            enablePlaceholders = true
+    fun getStillFlow(): Flow<PagingData<GalleryImage>> =
+        getGalleryImages(dataRepository.id, "STILL").cachedIn(viewModelScope)
 
-        ),
-        pagingSourceFactory = { dataSourse }
-    ).flow.cachedIn(viewModelScope)
+    fun getShootingFlow(): Flow<PagingData<GalleryImage>> =
+        getGalleryImages(dataRepository.id, "SHOOTING").cachedIn(viewModelScope)
 
-
-    val pagesShootingGalerie : Flow<PagingData<ModelGalerie.Item>> = Pager(
-        config = PagingConfig(
-            pageSize = 20,
-            enablePlaceholders = true
-
-        ),
-        pagingSourceFactory = { shootingGalerieDataSourse }
-    ).flow.cachedIn(viewModelScope)
-
-    val pagesWallpaperGalerie : Flow<PagingData<ModelGalerie.Item>> = Pager(
-        config = PagingConfig(
-            pageSize = 20,
-            enablePlaceholders = true
-
-        ),
-        pagingSourceFactory = { wallpaperGalerieDataSourse }
-    ).flow.cachedIn(viewModelScope)
+    fun getWallpaperFlow(): Flow<PagingData<GalleryImage>> =
+        getGalleryImages(dataRepository.id, "WALLPAPER").cachedIn(viewModelScope)
 }

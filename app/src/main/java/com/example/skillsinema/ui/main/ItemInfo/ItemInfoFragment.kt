@@ -30,7 +30,9 @@ import com.example.skillsinema.ui.main.home.TypeOfAdapter
 import com.example.skillsinema.ui.main.profile.menu.CollectionDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.minutes
@@ -145,7 +147,7 @@ class ItemInfoFragment : Fragment() {
         }
 
         binding.flagImageView.setOnClickListener {
-            viewModel.insertCollection()
+            viewModel.insertIdtoDB("")
         }
 
         lifecycleScope.launch {
@@ -250,10 +252,20 @@ class ItemInfoFragment : Fragment() {
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
 
-        viewModel.pagedGalerie.onEach {
-            binding.galerieRecycler.adapter = galerieAdapter
-            galerieAdapter.submitData(it)
-        }.launchIn(viewLifecycleOwner.lifecycleScope)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(androidx.lifecycle.Lifecycle.State.STARTED) {
+                viewModel.pagedGalerie.collect { flow ->
+                    flow?.let { pagingFlow ->
+                        launch {
+                            pagingFlow.collectLatest { pagingData ->
+                                binding.galerieRecycler.adapter = galerieAdapter
+                                galerieAdapter.submitData(pagingData)
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
 
         viewModel.similar.onEach {
@@ -349,3 +361,4 @@ class ItemInfoFragment : Fragment() {
         }
     }
 }
+
