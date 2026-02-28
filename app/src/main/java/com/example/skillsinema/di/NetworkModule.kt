@@ -6,7 +6,6 @@ import com.example.skillsinema.data.api.ActorApi
 import com.example.skillsinema.data.api.SearchApi
 import com.example.skillsinema.data.api.StaffApi
 
-import com.example.skillsinema.repository.MovieListApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -85,12 +84,6 @@ object NetworkModule {
     @Singleton
     fun provideKinopoiskApi(retrofit: Retrofit): KinopoiskApi {
         return retrofit.create(KinopoiskApi::class.java)
-    }
-
-    @Provides
-    @Singleton
-    fun provideMovieListApi(retrofit: Retrofit): MovieListApi {
-        return retrofit.create(MovieListApi::class.java)
     }
 
     @Provides

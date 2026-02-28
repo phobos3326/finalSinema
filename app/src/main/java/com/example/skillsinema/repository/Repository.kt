@@ -5,6 +5,7 @@ import com.example.skillsinema.BuildConfig
 import com.example.skillsinema.data.BestFilmDTO
 import com.example.skillsinema.data.DataDTO
 import com.example.skillsinema.data.model.ModelFilter
+import com.example.skillsinema.data.dto.FilteredFilmsResponseDto
 import com.example.skillsinema.entity.*
 import com.squareup.moshi.*
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -63,7 +64,7 @@ class Repository @Inject constructor(
     }
 
     @Provides
-    suspend fun getFilteredFilm(page: Int, countries: Int, genre: Int): List<Film> {
+    suspend fun getFilteredFilm(page: Int, countries: Int, genre: Int): List<com.example.skillsinema.data.dto.FilmDto> {
         return retrofit.filteredFilms(page, countries, genre, 3, 10).items
     }
 
@@ -184,7 +185,7 @@ class Repository @Inject constructor(
             @Query("ratingFrom") ratingFrom: Int,
             @Query("ratingTo") ratingTo: Int,
 
-            ): ModelFilteredFilms1
+            ): FilteredFilmsResponseDto
 
     }
 
