@@ -87,8 +87,6 @@ class ItemInfoViewModel @Inject constructor(
             loadFilm(filmId)
             loadStaff(filmId)
             loadSimilarFilms(filmId)
-            // Сохраняем фильм в InterestedItemTable при открытии
-            isertItemToDb(com.example.skillsinema.presentation.ui.model.TypeItem.FILM, filmId)
             show()
         }
     }
@@ -142,8 +140,13 @@ class ItemInfoViewModel @Inject constructor(
     }
 
     fun isertItemToDb(type: TypeItem, id: Int) {
-        viewModelScope.launch {
-            loadItemToDB.getItemToDB(type, id)
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                loadItemToDB.getItemToDB(type, id)
+                Log.d("ItemInfoViewModel", "Successfully saved to DB")
+            } catch (e: Exception) {
+                Log.e("ItemInfoViewModel", "Error saving to DB: ${e.message}", e)
+            }
         }
     }
 

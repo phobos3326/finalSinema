@@ -48,7 +48,10 @@ class MainFragment : Fragment() {
 
     private fun setupAdapters() {
         premiereAdapter = FilmAdapter(
-            onFilmClick = { filmId -> NavigationHelper.navigateToFilmDetails(this, filmId) },
+            onFilmClick = { filmId -> 
+                viewModel.addFilmToInterested(filmId)
+                NavigationHelper.navigateToFilmDetails(this, filmId) 
+            },
             onShowAllClick = { category -> NavigationHelper.navigateToShowAll(this, category) }
         )
         binding.rvPremieres.apply {
@@ -57,7 +60,10 @@ class MainFragment : Fragment() {
         }
 
         topFilmsAdapter = FilmAdapter(
-            onFilmClick = { filmId -> NavigationHelper.navigateToFilmDetails(this, filmId) },
+            onFilmClick = { filmId -> 
+                viewModel.addFilmToInterested(filmId)
+                NavigationHelper.navigateToFilmDetails(this, filmId) 
+            },
             onShowAllClick = { category -> NavigationHelper.navigateToShowAll(this, category) }
         )
         binding.rvTopFilms.apply {
@@ -66,7 +72,10 @@ class MainFragment : Fragment() {
         }
 
         serialsAdapter = FilmAdapter(
-            onFilmClick = { filmId -> NavigationHelper.navigateToFilmDetails(this, filmId) },
+            onFilmClick = { filmId -> 
+                viewModel.addFilmToInterested(filmId)
+                NavigationHelper.navigateToFilmDetails(this, filmId) 
+            },
             onShowAllClick = { category -> NavigationHelper.navigateToShowAll(this, category) }
         )
         binding.rvSerials.apply {
@@ -75,7 +84,10 @@ class MainFragment : Fragment() {
         }
 
         filteredAdapter = FilmAdapter(
-            onFilmClick = { filmId -> NavigationHelper.navigateToFilmDetails(this, filmId) },
+            onFilmClick = { filmId -> 
+                viewModel.addFilmToInterested(filmId)
+                NavigationHelper.navigateToFilmDetails(this, filmId) 
+            },
             onShowAllClick = { category -> NavigationHelper.navigateToShowAll(this, category) }
         )
         binding.rvFiltered.apply {

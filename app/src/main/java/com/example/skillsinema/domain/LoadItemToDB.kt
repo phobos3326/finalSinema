@@ -2,6 +2,7 @@ package com.example.skillsinema.domain
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.util.Log
 import com.bumptech.glide.Glide
 import com.example.skillsinema.dao.InterestedItemEntity
 import com.example.skillsinema.dao.InterestedItemPerository
@@ -10,14 +11,10 @@ import com.example.skillsinema.entity.ModelFilmDetails
 import com.example.skillsinema.repository.Repository
 import com.example.skillsinema.repository.RepositoryActorInfo
 import com.example.skillsinema.presentation.ui.model.TypeItem
-import com.example.skillsinema.presentation.ui.profile.menu.CollectionsUiModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import javax.inject.Inject
-import kotlin.reflect.typeOf
 
 class LoadItemToDB @Inject constructor(
     private val repository: Repository,
@@ -26,12 +23,11 @@ class LoadItemToDB @Inject constructor(
     private val repositoryActorInfo: RepositoryActorInfo,
 ) {
 
-    suspend fun getItemToDB(type: TypeItem, id: Int) {
-
-
-        CoroutineScope(Dispatchers.IO).launch {
+    suspend fun getItemToDB(type: TypeItem, id: Int) = withContext(Dispatchers.IO) {
+        try {
             if (type == TypeItem.FILM) {
                 val modelFilmDetails = repository.getFilmDetails(id)
+                Log.d("LoadItemToDB", "Film: ${modelFilmDetails.nameRu}, posterUrl: ${modelFilmDetails.posterUrlPreview}")
 
                 val bitmap = Glide.with(context)
                     .asBitmap()
@@ -42,15 +38,15 @@ class LoadItemToDB @Inject constructor(
                 val byteArrayOutputStream = ByteArrayOutputStream()
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
                 val imageBytes = byteArrayOutputStream.toByteArray()
+                Log.d("LoadItemToDB", "Image size: ${imageBytes.size} bytes")
 
-
-                interestedItemPerository.insertInterestedItem(
-                    modelFilmDetails.toItemToDB(type, imageBytes)
-                )
-
+                val entity = modelFilmDetails.toItemToDB(type, imageBytes)
+                interestedItemPerository.insertInterestedItem(entity)
+                Log.d("LoadItemToDB", "Inserted to DB: ${entity.nameRUItem}")
 
             } else if (type == TypeItem.PERSON) {
                 val modelActorInfo = repositoryActorInfo.getActor(id)
+                Log.d("LoadItemToDB", "Actor: ${modelActorInfo.nameRu}")
 
                 val bitmap = Glide.with(context)
                     .asBitmap()
@@ -65,9 +61,10 @@ class LoadItemToDB @Inject constructor(
                 interestedItemPerository.insertInterestedItem(
                     modelActorInfo.toItemToDB(type, imageBytes)
                 )
-
+                Log.d("LoadItemToDB", "Inserted actor to DB")
             }
-
+        } catch (e: Exception) {
+            Log.e("LoadItemToDB", "Error saving to DB: ${e.message}", e)
         }
     }
 
@@ -98,8 +95,4 @@ class LoadItemToDB @Inject constructor(
 
         )
     }
-
-
 }
-
-

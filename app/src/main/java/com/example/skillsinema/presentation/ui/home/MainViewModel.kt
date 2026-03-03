@@ -2,10 +2,12 @@ package com.example.skillsinema.presentation.ui.home
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
+import com.example.skillsinema.domain.LoadItemToDB
 import com.example.skillsinema.domain.model.Film
 import com.example.skillsinema.domain.usecase.GetFilmsByCategoryUseCase
 import com.example.skillsinema.presentation.base.BaseViewModel
 import com.example.skillsinema.presentation.ui.adapters.FilmListItem
+import com.example.skillsinema.presentation.ui.model.TypeItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -13,7 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val getFilmsByCategory: GetFilmsByCategoryUseCase
+    private val getFilmsByCategory: GetFilmsByCategoryUseCase,
+    private val loadItemToDB: LoadItemToDB
 ) : BaseViewModel() {
 
     private val _state = MutableStateFlow(MainUiState())
@@ -85,6 +88,17 @@ class MainViewModel @Inject constructor(
 
     fun refresh() {
         loadData()
+    }
+
+    fun addFilmToInterested(filmId: Int) {
+        viewModelScope.launch {
+            try {
+                loadItemToDB.getItemToDB(TypeItem.FILM, filmId)
+                Log.d("MainViewModel", "Film $filmId added to InterestedItemTable")
+            } catch (e: Exception) {
+                Log.e("MainViewModel", "Error adding film to DB: ${e.message}", e)
+            }
+        }
     }
 }
 
