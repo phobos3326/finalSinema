@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
+import com.bumptech.glide.Glide
 import com.example.skillsinema.R
 
 import com.example.skillsinema.databinding.ItemBinding
@@ -69,6 +69,7 @@ class FilmAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(film: Film) {
+            android.util.Log.d("FilmAdapter", "bind: kinopoiskId=${film.kinopoiskId}, posterUrlPreview=${film.posterUrlPreview}")
             binding.title.text = film.nameRu ?: film.nameEn ?: "Без названия"
             binding.textViewGenre .text = film.year ?: ""
 
@@ -80,11 +81,9 @@ class FilmAdapter(
             // Если есть tvGenres в layout
              binding.textViewGenre .text = genresText
 
-            binding.poster .load(film.posterUrlPreview) {
-                crossfade(true)
-                /*placeholder(R.drawable.ic_placeholder)
-                error(R.drawable.ic_error)*/
-            }
+            Glide.with(binding.poster)
+                .load(film.posterUrlPreview)
+                .into(binding.poster)
 
             binding.root.setOnClickListener {
                 onFilmClick(film.kinopoiskId)
