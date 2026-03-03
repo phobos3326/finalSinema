@@ -42,9 +42,9 @@ class FullGalerieAdapter(
     }
 
     class DiffCallback : DiffUtil.ItemCallback<GalleryImage>() {
-        override fun areItemsTheSame(oldItem: GalleryImage, newItem: GalleryImage) =
+        override fun areItemsTheSame(oldItem: GalleryImage, newItem: GalleryImage): Boolean =
             oldItem.imageUrl == newItem.imageUrl
-        override fun areContentsTheSame(oldItem: GalleryImage, newItem: GalleryImage) =
-            oldItem == newItem
+        override fun areContentsTheSame(oldItem: GalleryImage, newItem: GalleryImage): Boolean =
+            oldItem.imageUrl == newItem.imageUrl
     }
 }
