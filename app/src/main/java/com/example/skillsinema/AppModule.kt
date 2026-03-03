@@ -2,7 +2,7 @@ package com.example.skillsinema
 
 import android.app.Application
 import android.content.Context
-import com.example.skillsinema.ui.main.profile.menu.CollectionsUiModel
+import com.example.skillsinema.presentation.ui.profile.menu.CollectionsUiModel
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

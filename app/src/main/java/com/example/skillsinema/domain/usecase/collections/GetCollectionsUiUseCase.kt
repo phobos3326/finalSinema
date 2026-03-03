@@ -1,7 +1,7 @@
 package com.example.skillsinema.domain.collections.usecase
 
 import com.example.skillsinema.domain.collections.CollectionsRepository
-import com.example.skillsinema.ui.main.profile.menu.CollectionsUiModel
+import com.example.skillsinema.presentation.ui.profile.menu.CollectionsUiModel
 import javax.inject.Inject
 
 class GetCollectionsUiUseCase @Inject constructor(

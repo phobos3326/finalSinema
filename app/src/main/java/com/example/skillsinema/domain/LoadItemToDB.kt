@@ -9,8 +9,8 @@ import com.example.skillsinema.entity.ModelActorInfo
 import com.example.skillsinema.entity.ModelFilmDetails
 import com.example.skillsinema.repository.Repository
 import com.example.skillsinema.repository.RepositoryActorInfo
-import com.example.skillsinema.ui.main.home.TypeItem
-import com.example.skillsinema.ui.main.profile.menu.CollectionsUiModel
+import com.example.skillsinema.presentation.ui.model.TypeItem
+import com.example.skillsinema.presentation.ui.profile.menu.CollectionsUiModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope

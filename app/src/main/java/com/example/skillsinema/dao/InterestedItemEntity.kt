@@ -4,7 +4,7 @@ import android.graphics.Bitmap
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.skillsinema.ui.main.home.TypeItem
+import com.example.skillsinema.presentation.ui.model.TypeItem
 
 @Entity(tableName = "InterestedItemTable")
 data class InterestedItemEntity(

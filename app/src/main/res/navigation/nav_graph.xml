@@ -46,7 +46,7 @@
     </fragment>
     <fragment
         android:id="@+id/find_fragment"
-        android:name="com.example.skillsinema.ui.main.find.SecondFragment"
+        android:name="com.example.skillsinema.presentation.ui.find.SecondFragment"
         android:label="fragment_second"
         tools:layout="@layout/fragment_second" >
         <action
@@ -55,7 +55,7 @@
     </fragment>
     <fragment
         android:id="@+id/fragment_third"
-        android:name="com.example.skillsinema.ui.main.profile.ThirdFragment"
+        android:name="com.example.skillsinema.presentation.ui.profile.ThirdFragment"
         android:label="fragment_third"
         tools:layout="@layout/fragment_third" >
         <action
@@ -70,7 +70,7 @@
     </fragment>
     <fragment
         android:id="@+id/showAllFragment"
-        android:name="com.example.skillsinema.ui.main.showAll.ShowAllFragment"
+        android:name="com.example.skillsinema.presentation.ui.showAll.ShowAllFragment"
         android:label="fragment_show_all"
         tools:layout="@layout/fragment_show_all" >
         <action
@@ -79,7 +79,7 @@
     </fragment>
     <fragment
         android:id="@+id/actorInfoFragment"
-        android:name="com.example.skillsinema.ui.main.actorInfo.ActorInfoFragment"
+        android:name="com.example.skillsinema.presentation.ui.actorInfo.ActorInfoFragment"
         android:label="fragment_actor_info"
         tools:layout="@layout/fragment_actor_info" >
         <action
@@ -91,7 +91,7 @@
     </fragment>
     <fragment
         android:id="@+id/galerieFragment"
-        android:name="com.example.skillsinema.ui.main.galerie.GalerieFragment"
+        android:name="com.example.skillsinema.presentation.ui.galerie.GalerieFragment"
         android:label="fragment_galerie"
         tools:layout="@layout/fragment_galerie" >
         <action
@@ -100,17 +100,17 @@
     </fragment>
     <fragment
         android:id="@+id/itemserialInfoFragment"
-        android:name="com.example.skillsinema.ui.main.ItemInfo.ItemSerialInfoFragment"
+        android:name="com.example.skillsinema.presentation.ui.itemInfo.ItemSerialInfoFragment"
         android:label="fragment_itemserial_info_fragment"
         tools:layout="@layout/fragment_itemserial_info_fragment" />
     <fragment
         android:id="@+id/filmographyFragment"
-        android:name="com.example.skillsinema.ui.main.home.FilmographyFragment"
+        android:name="com.example.skillsinema.presentation.ui.home.FilmographyFragment"
         android:label="fragment_filmography"
         tools:layout="@layout/fragment_filmography" />
     <fragment
         android:id="@+id/collectionDialog"
-        android:name="com.example.skillsinema.ui.main.profile.menu.CollectionDialog"
+        android:name="com.example.skillsinema.presentation.ui.profile.menu.CollectionDialog"
         android:label="CollectionDialog" />
     <fragment
         android:id="@+id/showImageFragment"

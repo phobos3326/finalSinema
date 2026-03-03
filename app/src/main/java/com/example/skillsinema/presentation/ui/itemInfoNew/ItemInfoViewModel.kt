@@ -21,9 +21,9 @@ import com.example.skillsinema.entity.Film
 import com.example.skillsinema.entity.ModelFilmDetails
 import com.example.skillsinema.entity.ModelStaff
 import com.example.skillsinema.presentation.base.BaseViewModel
-import com.example.skillsinema.ui.main.ItemInfo.StateItemFilmInfo
-import com.example.skillsinema.ui.main.home.TypeItem
-import com.example.skillsinema.ui.main.profile.menu.CollectionsUiModel
+import com.example.skillsinema.presentation.ui.itemInfo.StateItemFilmInfo
+import com.example.skillsinema.presentation.ui.model.TypeItem
+import com.example.skillsinema.presentation.ui.profile.menu.CollectionsUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
