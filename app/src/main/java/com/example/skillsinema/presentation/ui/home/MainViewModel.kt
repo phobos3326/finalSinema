@@ -1,5 +1,6 @@
 package com.example.skillsinema.presentation.ui.home
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.skillsinema.domain.model.Film
 import com.example.skillsinema.domain.usecase.GetFilmsByCategoryUseCase
@@ -23,11 +24,13 @@ class MainViewModel @Inject constructor(
     }
 
     fun loadData() {
+        Log.d("MainViewModel", "loadData started")
         _state.value = _state.value.copy(isLoading = true, error = null)
 
         viewModelScope.launch {
             runCatching {
                 // ✅ Загружаем все данные один раз
+                Log.d("MainViewModel", "loadAll started")
                 getFilmsByCategory.loadAll()
 
                 // ✅ Подписываемся на все потоки
@@ -37,6 +40,7 @@ class MainViewModel @Inject constructor(
                     getFilmsByCategory("serials"),
                     getFilmsByCategory("filtered")
                 ) { premieres, topFilms, serials, filtered ->
+                    Log.d("MainViewModel", "combine received: premieres=${premieres.size}, top=${topFilms.size}, serials=${serials.size}, filtered=${filtered.size}")
                     MainDataResult(
                         premieres = premieres,
                         topFilms = topFilms,
@@ -44,11 +48,13 @@ class MainViewModel @Inject constructor(
                         filtered = filtered
                     )
                 }.collect { result ->
+                    Log.d("MainViewModel", "collect received result")
                     val premiereItems = prepareFilmList(result.premieres, "premieres")
                     val topFilmItems = prepareFilmList(result.topFilms, "top_films")
                     val serialItems = prepareFilmList(result.serials, "serials")
                     val filteredItems = prepareFilmList(result.filtered, "filtered")
 
+                    Log.d("MainViewModel", "submitting state: premiereItems=${premiereItems.size}, topFilmItems=${topFilmItems.size}")
                     _state.value = MainUiState(
                         premiereItems = premiereItems,
                         topFilmItems = topFilmItems,
@@ -59,6 +65,7 @@ class MainViewModel @Inject constructor(
                     )
                 }
             }.onFailure { exception ->
+                Log.e("MainViewModel", "loadData failed", exception)
                 _state.value = _state.value.copy(
                     isLoading = false,
                     error = exception.message ?: "Ошибка загрузки данных"
