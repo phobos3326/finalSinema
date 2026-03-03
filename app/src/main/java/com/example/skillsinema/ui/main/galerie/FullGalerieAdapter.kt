@@ -21,7 +21,7 @@ class FullGalerieAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        getItem(position)?.let { holder.bind(it) }
+        getItem(position)?.let { holder.bind(it) } ?: holder.clear()
     }
 
     class ViewHolder(
@@ -30,14 +30,19 @@ class FullGalerieAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: GalleryImage) {
-            Glide.with(binding.root.context)
-                .load(item.imageUrl)
+            Glide.with(binding.poster)
+                .load(item.previewUrl ?: item.imageUrl)
                 .centerCrop()
+                .placeholder(android.R.drawable.ic_dialog_info)
                 .into(binding.poster)
 
             binding.root.setOnClickListener {
                 onClick(item.imageUrl)
             }
+        }
+        
+        fun clear() {
+            Glide.with(binding.poster.context).clear(binding.poster)
         }
     }
 

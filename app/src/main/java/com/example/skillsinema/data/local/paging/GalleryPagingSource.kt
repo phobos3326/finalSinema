@@ -11,16 +11,28 @@ class GalleryPagingSource(
     private val imageType: String
 ) : PagingSource<Int, GalleryImage>() {
 
+    private val seenImageUrls = mutableSetOf<String>()
+
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, GalleryImage> {
         return try {
             val page = params.key ?: 1
 
             val items = repository.getGallery(filmId, imageType)
+            
+            // Фильтрация дубликатов по imageUrl
+            val uniqueItems = items.filter { image ->
+                if (image.imageUrl in seenImageUrls) {
+                    false
+                } else {
+                    seenImageUrls.add(image.imageUrl)
+                    true
+                }
+            }
 
             LoadResult.Page(
-                data = items,
+                data = uniqueItems,
                 prevKey = if (page == 1) null else page - 1,
-                nextKey = if (items.isEmpty()) null else page + 1
+                nextKey = if (uniqueItems.isEmpty()) null else page + 1
             )
         } catch (exception: Exception) {
             LoadResult.Error(exception)

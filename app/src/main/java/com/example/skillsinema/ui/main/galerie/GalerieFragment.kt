@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.skillsinema.databinding.FragmentGalerieBinding
+import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -39,6 +40,7 @@ class GalerieFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupRecyclerView()
+        setupChipGroup()
         observeGallery()
     }
 
@@ -50,12 +52,40 @@ class GalerieFragment : Fragment() {
         }
     }
 
-    private fun observeGallery() {
+    private fun setupChipGroup() {
+        binding.apply {
+            chip1.setOnClickListener {
+                observeGalleryType("STILL")
+                chip1.isChecked = true
+            }
+            chip2.setOnClickListener {
+                observeGalleryType("SHOOTING")
+                chip2.isChecked = true
+            }
+            chip3.setOnClickListener {
+                observeGalleryType("WALLPAPER")
+                chip3.isChecked = true
+            }
+        }
+    }
+
+    private fun observeGalleryType(type: String) {
+        val flow = when (type) {
+            "STILL" -> viewModel.getStillFlow()
+            "SHOOTING" -> viewModel.getShootingFlow()
+            "WALLPAPER" -> viewModel.getWallpaperFlow()
+            else -> viewModel.getStillFlow()
+        }
+
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.getStillFlow().collectLatest { pagingData ->
+            flow.collectLatest { pagingData ->
                 adapter.submitData(pagingData)
             }
         }
+    }
+
+    private fun observeGallery() {
+        observeGalleryType("STILL")
     }
 
     private fun onImageClick(imageUrl: String) {
