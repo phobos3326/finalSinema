@@ -7,11 +7,11 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="gray">#272727</color>
+    <color name="gray">#808080</color>
     <color name="light_gray">#838391</color>
     <color name="blue">#3D3BFF</color>
 
-    <color name="chip_selected_color">#FF4081</color> <!-- Example selected color -->
-    <color name="chip_unselected_color">#E0E0E0</color> <!-- Example unselected color -->
+    <color name="chip_selected_color">#FF4081</color>
+    <color name="chip_unselected_color">#E0E0E0</color>
 
 </resources>

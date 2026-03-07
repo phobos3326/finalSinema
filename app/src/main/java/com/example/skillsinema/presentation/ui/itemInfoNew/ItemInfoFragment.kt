@@ -51,6 +51,9 @@ class ItemInfoFragment : Fragment() {
 
     val viewModel: ItemInfoViewModel by viewModels()
 
+    // Переменная для хранения текущего фильма
+    private var currentFilm: ModelFilmDetails? = null
+
     val adapterActor = StaffAdapter(
         //onItemActorClick(it)
 
@@ -143,9 +146,19 @@ class ItemInfoFragment : Fragment() {
         }
 
         binding.dottedLineImageView.setOnClickListener {
+            // Передаем данные о фильме в CollectionDialog
+            val filmBundle = Bundle().apply {
+                putInt("data", id!!)
+                currentFilm?.let { film ->
+                    putString("film_name", film.nameRu ?: film.nameEn ?: "Без названия")
+                    putString("film_rating", film.ratingKinopoisk?.toString() ?: "")
+                    putString("film_poster_url", film.posterUrlPreview ?: "")
+                }
+            }
+            val collectionDialog = CollectionDialog()
+            collectionDialog.arguments = filmBundle
             fragmentManager?.let {
-                CollectionDialog().show(it,"bottomSheetDialogFragment.tag")
-
+                collectionDialog.show(it, "bottomSheetDialogFragment.tag")
             }
 
         }
@@ -220,6 +233,7 @@ class ItemInfoFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.setValue(id!!)
             viewModel.film.observe(viewLifecycleOwner, Observer<ModelFilmDetails> {
+                currentFilm = it // Сохраняем текущий фильм
                 binding.filmTextView.text = "${it.ratingKinopoisk ?: ""} ${it.nameRu}"
                 binding.YearGenreTextView.text =
                     "${it.year.toString()}, ${it.genres?.joinToString(", ") { it.genre.toString() }}"
