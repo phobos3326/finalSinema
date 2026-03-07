@@ -13,16 +13,10 @@ import java.io.InputStream
 @GlideModule
 class CustomGlideModule : AppGlideModule() {
     override fun registerComponents(context: Context, glide: Glide, registry: Registry) {
-        // Создаем OkHttpClient с заголовком API ключа
+        // Создаем OkHttpClient без API-ключа для изображений
         val okHttpClient = OkHttpClient.Builder()
-            .addInterceptor { chain ->
-                val request = chain.request().newBuilder()
-                    .addHeader("X-API-KEY", "1006c25a-038b-47b4-b9f9-341f208b4ac3")
-                    .build()
-                chain.proceed(request)
-            }
             .build()
-        
+
         registry.replace(
             GlideUrl::class.java,
             InputStream::class.java,

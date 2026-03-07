@@ -1,8 +1,6 @@
 package com.example.skillsinema.presentation.ui.itemInfo
 
-/*import com.example.skillsinema.MyComponentManager
-import com.example.skillsinema.MyEntryPoint*/
-//import com.example.skillsinema.entity.ModelFilmDetails
+
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -49,6 +47,9 @@ class ItemInfoFragment : Fragment() {
     private val binding get() = _binding!!
 
     val viewModel: ItemInfoViewModel by viewModels()
+
+    // Переменная для хранения текущего фильма
+    private var currentFilm: ModelFilmDetails? = null
 
     val adapterActor = StaffAdapter (
         //onItemActorClick(it)
@@ -124,9 +125,9 @@ class ItemInfoFragment : Fragment() {
 
 
 
-       /* findNavController().navigate(
+        findNavController().navigate(
            R.id.action_itemInfoFragment_to_collectionDialog, bundle
-        )*/
+        )
         Log.d("FRAGMENT ITEM", id.toString())
 
 
@@ -141,11 +142,28 @@ class ItemInfoFragment : Fragment() {
         }
 
         binding.dottedLineImageView.setOnClickListener {
-            fragmentManager?.let {
-                CollectionDialog().show(it,"bottomSheetDialogFragment.tag")
-
+            Log.d("ItemInfoFragment", "dottedLineImageView clicked")
+            Log.d("ItemInfoFragment", "currentFilm=$currentFilm")
+            // Передаем данные о фильме в CollectionDialog
+            val filmBundle = Bundle().apply {
+                putInt("data", id!!)
+                currentFilm?.let { film ->
+                    putString("film_name", film.nameRu ?: film.nameEn ?: "Без названия")
+                    putString("film_rating", film.ratingKinopoisk?.toString() ?: "")
+                    putString("film_poster_url", film.posterUrlPreview ?: "")
+                    Log.d("ItemInfoFragment", "Bundle created: name=${film.nameRu ?: film.nameEn}, poster=${film.posterUrlPreview}")
+                } ?: run {
+                   Log.d("ItemInfoFragment", "currentFilm is null")
+                }
             }
-
+            Log.d("ItemInfoFragment", "filmBundle=$filmBundle")
+            val collectionDialog = CollectionDialog()
+            collectionDialog.arguments = filmBundle
+            Log.d("ItemInfoFragment", "collectionDialog.arguments=${collectionDialog.arguments}")
+            fragmentManager?.let {
+                collectionDialog.show(it, "bottomSheetDialogFragment.tag")
+               Log.d("ItemInfoFragment", "collectionDialog shown")
+            }
         }
 
         binding.flagImageView.setOnClickListener {
@@ -218,6 +236,7 @@ class ItemInfoFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.setValue(id!!)
             viewModel.film.observe(viewLifecycleOwner, Observer<ModelFilmDetails> {
+                currentFilm = it // Сохраняем текущий фильм
                 binding.filmTextView.text = "${it.ratingKinopoisk ?: ""} ${it.nameRu}"
                 binding.YearGenreTextView.text =
                     "${it.year.toString()}, ${it.genres?.joinToString(", ") { it.genre.toString() }}"

@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.example.skillsinema.R
 import com.example.skillsinema.databinding.BottomSheetDialogLayoutBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -24,7 +25,7 @@ private const val COLLAPSED_HEIGHT = 300
 @AndroidEntryPoint
 class CollectionDialog : BottomSheetDialogFragment() {
 
-    private val TAG = "ContentFragment"
+    private val TAG = "CollectionDialog"
 
     private var _binding: BottomSheetDialogLayoutBinding? = null
     private val binding get() = _binding!!
@@ -43,23 +44,53 @@ class CollectionDialog : BottomSheetDialogFragment() {
 
     override fun getTheme() = R.style.AppBottomSheetDialogTheme
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        android.util.Log.d(TAG, "onCreate: arguments=$arguments")
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        android.util.Log.d(TAG, "onCreateView")
         _binding = BottomSheetDialogLayoutBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        android.util.Log.d(TAG, "onViewCreated started")
+        android.util.Log.d(TAG, "onViewCreated: arguments=$arguments")
 
-        val id = arguments?.getInt("data")
+        val filmId = arguments?.getInt("data")
+        val filmName = arguments?.getString("film_name")
+        val filmRating = arguments?.getString("film_rating")
+        val filmPosterUrl = arguments?.getString("film_poster_url")
 
-        Log.d(TAG, "onViewCreated   $id")
+        android.util.Log.d(TAG, "onViewCreated: filmId=$filmId, filmName=$filmName, filmRating=$filmRating, filmPosterUrl=$filmPosterUrl")
 
         extracted()
+
+        // Устанавливаем данные после инициализации адаптера
+        android.util.Log.d(TAG, "Setting title to: $filmName")
+        binding.title.text = filmName ?: "Без названия"
+        
+        android.util.Log.d(TAG, "Setting rating to: $filmRating")
+        filmRating?.let { binding.textViewRating.text = it }
+        
+        android.util.Log.d(TAG, "Loading poster from URL: $filmPosterUrl")
+        if (filmPosterUrl != null) {
+            Glide.with(this)
+                .load(filmPosterUrl)
+                .centerCrop()
+                .placeholder(android.R.drawable.ic_dialog_info)
+                .error(android.R.drawable.ic_menu_report_image)
+                .into(binding.poster)
+        } else {
+            binding.poster.setImageResource(android.R.drawable.ic_dialog_info)
+        }
 
         binding.createCollectionTextView.setOnClickListener {
             val myDialogFragment = AlertDialogFragment()
